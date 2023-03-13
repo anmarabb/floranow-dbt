@@ -1,7 +1,7 @@
 version: 2
 sources: 
-  - name: floranow
-    database: erp_prod
+  - name: erp_prod
+    database: floranow
     tables:
       - name: users
       - name: user_categories
