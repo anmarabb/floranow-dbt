@@ -27,14 +27,14 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   floranow:
     # Applies to all files under models/example/
-    1- staging:
+    staging:
       +enabled: true
       +materialized: table
-      +schema: stg_floranow
+      +schema: stg
 
-   3- warehouse:
+    warehouse:
       +enabled: true
       +materialized: table
-      +schema: dwh_floranow
+      +schema: dwh
 
 
