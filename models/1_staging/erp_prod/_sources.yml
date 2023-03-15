@@ -19,6 +19,13 @@ sources:
       - name: order_payloads
       - name: standing_orders 
       - name: line_items
+        columns:
+          - name: categorization
+            test:
+             - unique
+             - not_null
+             
+            
 
       - name: packing_lists
       - name: packing_box_items

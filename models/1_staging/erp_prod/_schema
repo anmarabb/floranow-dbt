@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_line_items
+    columns:
+      - name: json_categorization
+         config:
+           type: JSON
+           encode: zstd # Redshift only
+           primary_key: false

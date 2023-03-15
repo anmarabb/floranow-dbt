@@ -1,0 +1,4 @@
+
+{% macro markup(order_selling_price, order_cost_price) %)
+({{order_selling_price}} - {{order_cost_price}})/{{order_cost_price}}
+{% endmacro %}
