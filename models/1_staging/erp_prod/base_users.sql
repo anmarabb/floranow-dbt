@@ -1,21 +1,9 @@
 
 with
-  prep_countryas as (
-    select
-      distinct country_iso_code as code,
-      country_name
-    from
-      `floranow.erp_prod.country`
-  ),
-  base_manageable_accounts_user as (
-    select
-      account_manager_id,
-      manageable_id,
-    from
-      `floranow.erp_prod.manageable_accounts`
-    where
-      manageable_type = 'User'
-  )
+  prep_countryas as (select distinct country_iso_code as code, country_name from `floranow.erp_prod.country`),
+  base_manageable_accounts_user as (select account_manager_id, manageable_id, from `floranow.erp_prod.manageable_accounts` where manageable_type = 'User')
+
+
 select
 
   u.* EXCEPT (country),
@@ -26,7 +14,7 @@ select
   pt.name as payment_term,
 
 
-FROM
+
   from {{ source('erp_prod', 'users') }} as u
   left join prep_countryas as c on u.country = c.code
   left join base_manageable_accounts_user as mau on mau.manageable_id = u.id

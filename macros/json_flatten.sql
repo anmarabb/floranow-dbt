@@ -3,7 +3,7 @@ select distinct
 json.key as column_name
 from {{ source('erp_prod' , 'line_items')}},
 
-lateral flatten(input => artist_data) json
+lateral flatten(input => categorization) json
 {% endset %}
 
 {% set results = run_query(json_column_query) %}
