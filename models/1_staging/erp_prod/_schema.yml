@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: stg_line_item
+    description: "A table of all page views on Lightdash webpages."
+    columns:
+      - name: delivery_date
+        description: "The source of the page view: the demo site, docs site, or lightdash.com"
+
+      
+      - name: departure_date
+      - name: completed_at
+
+      - name: quantity
+      - name: unit_fob_price
+      - name: unit_landed_cost
+      - name: total_price_without_tax
+
+      - name: reseller_id
+      - name: supplier_id
+      - name: customer_id
