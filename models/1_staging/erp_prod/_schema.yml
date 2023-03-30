@@ -1,6 +1,6 @@
 version: 2
 models:
-  - name: stg_line_item
+  - name: stg_line_items
     description: "A table of all page views on Lightdash webpages."
     columns:
       - name: delivery_date
