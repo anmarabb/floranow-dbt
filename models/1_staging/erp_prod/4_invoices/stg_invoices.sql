@@ -3,10 +3,8 @@ With source as (
 )
 select 
 
-*
+*,
+current_timestamp() as ingestion_timestamp
 
-
-
-
-
-from source as i
+ 
+from source as i 

@@ -1,5 +1,13 @@
+with
 
+source as ( 
+        
+select     
 
-order_selling_price,
-order_cost_price,
-profit,
+count(*)
+from {{ ref('stg_product_incidents')}} as pi
+left join {{ ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
+
+    )
+
+select * from source
