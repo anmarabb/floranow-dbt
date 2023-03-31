@@ -12,8 +12,11 @@ li.order_number,
 li.order_type, --online,offline,standing
 
 li.customer,
---supplier,
+li.user,
 
+
+
+--supplier,
 --order R123432, ordared for UAE market on 5/3/2023 for delvery date  7/3/2023 and delvered on  7/3/2023 so it was on time delvery with out any incedint 
 --the order was form Experess stock same day delivery. and the orginal supplier is fontana,
 
