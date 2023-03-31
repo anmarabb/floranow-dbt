@@ -23,11 +23,12 @@ With source as
             REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') AS product_category,
             REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){2}([^/]+)') AS product_subcategory,
            -- REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){3}([^/]+)') AS column4,
+           
 
            
 
         
-        * 
+        *
         
         
         from {{ source('erp_prod', 'line_items') }} as li

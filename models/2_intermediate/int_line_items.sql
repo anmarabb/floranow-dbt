@@ -14,7 +14,11 @@ prep_picking_products.id as picking_products_id,
 customer.name as customer,
 user.name as user,
 
-li.*,
+li.order_type as row_order_type,
+
+li.* EXCEPT(order_type),
+
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.id 
 
