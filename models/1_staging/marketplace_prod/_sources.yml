@@ -1,0 +1,66 @@
+version: 2
+sources: 
+  - name: marketplace_prod
+    database: floranow
+    tables:
+      - name: spree_users
+      - name: spree_user_categories
+      - name: spree_user_regions
+      - name: spree_roles
+      - name: spree_role_users
+      - name: spree_user_price_groups
+      - name: spree_user_notification_emails
+      
+      - name: spree_vendors
+      - name: spree_user_vendors
+      - name: spree_growers
+
+      - name: spree_feeds
+      - name: spree_feed_regions
+
+
+      - name: spree_countries
+      - name: spree_zones
+      - name: spree_regions
+
+
+      - name: spree_exchange_rates
+      - name: spree_price_formulas
+      - name: spree_prices
+      - name: spree_price_groups
+      - name: spree_tax_rates
+
+
+      - name: spree_products_taxons
+      - name: spree_product_properties
+      - name: spree_product_masks
+      - name: spree_product_growers
+      - name: spree_variants
+
+
+      - name: spree_products
+      - name: spree_orders
+      - name: spree_line_items
+
+      - name: spree_pages
+      - name: spree_parcel_notifications
+      - name: spree_properties
+
+      - name: spree_property_translations
+      - name: spree_serving_regions
+      - name: spree_shipment_rates
+      - name: spree_states
+      - name: spree_static_costs
+      - name: spree_static_pages
+      - name: spree_stock_items
+
+      - name: spree_stock_locations
+      - name: spree_stores
+      - name: spree_tag_managers
+      - name: spree_tax_categories
+      - name: spree_taxon_translations
+      - name: spree_taxonomies
+      - name: spree_taxonomy_translations
+      - name: spree_taxons
+
+

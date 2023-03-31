@@ -1,0 +1,32 @@
+with 
+
+prep_countryas as (select distinct country_iso_code  as code, country_name from `floranow.erp_prod.country` ),
+base_manageable_accounts_supplier as 
+
+(
+select
+account_manager_id,
+manageable_id,
+
+from `floranow.erp_prod.manageable_accounts` 
+where manageable_type = 'Supplier'
+)
+
+
+
+select 
+
+s.*,
+u2.name as account_manager ,
+
+
+--s.country as row_country,
+c.country_name as supplier_region,
+
+current_timestamp() as ingestion_timestamp,
+
+from {{ source('erp_prod', 'suppliers') }} as s
+left join prep_countryas as c on s.country = c.code
+left join base_manageable_accounts_supplier as mas on mas.manageable_id = s.id 
+left join {{ source('erp_prod', 'account_managers') }} as account_m on mas.account_manager_id = account_m.id
+left join {{ source('erp_prod', 'users') }} as u2 on u2.id = account_m.user_id

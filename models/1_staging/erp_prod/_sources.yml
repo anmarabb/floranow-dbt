@@ -1,0 +1,90 @@
+version: 2
+sources: 
+  - name: erp_prod
+    database: floranow
+    tables:
+      - name: users
+      - name: user_categories
+      - name: account_managers
+      - name: manageable_accounts
+      - name: financial_administrations
+      
+      - name: suppliers
+      - name: feed_source_regions
+      - name: feed_sources
+
+      - name: order_requests
+      - name: orders
+      - name: order_builders
+      - name: order_payloads
+      - name: standing_orders 
+      - name: line_items
+        columns:
+          - name: categorization
+            test:
+             - unique
+             - not_null
+             
+            
+
+      - name: packing_lists
+      - name: packing_box_items
+      - name: packages
+      - name: package_line_items
+
+      - name: shipments
+      - name: master_shipments
+      - name: shipment_cut_off_times
+      - name: shipment_documents
+
+      - name: products
+      - name: product_locations
+      - name: product_movements
+      - name: stock_movements
+      - name: warehouses
+      - name: stocks
+      - name: locations
+      - name: sections
+
+      - name: proof_of_deliveries
+      - name: picking_products
+      - name: routes
+
+      - name: invoices
+      - name: invoice_items
+      - name: invoice_templates
+      - name: payments
+      - name: payment_transactions
+      - name: payment_terms
+      - name: statement_of_accounts
+
+      - name: product_incidents
+
+
+
+
+      - name: active_storage_attachments
+      - name: active_storage_blobs
+      - name: active_storage_variant_records
+      - name: additional_items_reports
+      - name: applied_discounts
+      - name: assets_categories
+      - name: assets_resources
+      - name: bank_accounts
+      - name: companies
+      - name: consolidation_hubs
+      - name: contacts
+      - name: discounts
+      - name: due_options
+      - name: event_progress_trackings
+      - name: inventory_cycle_checks
+      - name: model_archives
+      - name: product_units
+      - name: released_items
+      - name: reserved_items
+      - name: shopping_carts
+      - name: system_settings_settings
+
+      - name: country
+      - name: budget
+      - name: collection
