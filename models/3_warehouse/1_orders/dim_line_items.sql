@@ -10,9 +10,8 @@ li.line_item_type,
 li.order_number,
 
 li.order_type, --online,offline,standing
---order_type_2, --d2c,r2st,st2st,st2c
 
---customer,
+li.customer,
 --supplier,
 
 --order R123432, ordared for UAE market on 5/3/2023 for delvery date  7/3/2023 and delvered on  7/3/2023 so it was on time delvery with out any incedint 

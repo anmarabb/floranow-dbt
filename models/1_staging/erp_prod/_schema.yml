@@ -4,17 +4,22 @@ models:
     description: "A table of all page views on Lightdash webpages."
     columns:
       - name: delivery_date
-        description: "The source of the page view: the demo site, docs site, or lightdash.com"
-
-      
+        description: --
       - name: departure_date
+        description: --
       - name: completed_at
-
+        description: --
       - name: quantity
+        description: --
       - name: unit_fob_price
+        description: --
       - name: unit_landed_cost
+        description: --
       - name: total_price_without_tax
-
+        description: --
       - name: reseller_id
+        description: --
       - name: supplier_id
+        description: --
       - name: customer_id
+        description: --

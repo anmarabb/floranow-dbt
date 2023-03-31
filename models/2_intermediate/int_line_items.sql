@@ -4,10 +4,17 @@ prep_product_locations as (select  pl.locationable_id, max(pl.id) as id from {{ 
 prep_picking_products as (select  pk.line_item_id, max(pk.id) as id from {{ ref('stg_picking_products') }} as pk group by 1)
 
 SELECT
-li.*,
+
+
+case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
+
+
 prep_ploc.id as product_locations_id,
 prep_picking_products.id as picking_products_id,
+customer.name as customer,
+user.name as user,
 
+li.*,
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.id 
 
