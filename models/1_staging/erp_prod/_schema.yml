@@ -33,6 +33,11 @@ models:
     description: "A table of all page views on Lightdash webpages."
     columns:
       - name: line_item_id
+        meta:
+          metrics:
+            record_count:
+              type: count_distinct
+
       - name: line_item_type
       - name: order_type
       - name: Customer
@@ -43,3 +48,7 @@ models:
       - name: Crop
       - name: product_category
       - name: product_subcategory
+
+
+
+
