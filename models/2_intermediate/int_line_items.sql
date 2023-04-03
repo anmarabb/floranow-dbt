@@ -9,31 +9,115 @@ SELECT
 case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
 
 
+
+
+
+
 prep_ploc.id as product_locations_id,
 prep_picking_products.id as picking_products_id,
+
 customer.name as customer,
 user.name as user,
 
+dispatched_by.name as dispatched_by,
+returned_by.name as returned_by,
+created_by.name as created_by,
+split_by.name as split_by,
+order_requested_by.name as order_requested_by,
+
+
 li.order_type as row_order_type,
+
+
+
+
+pi.incidents_count,
+
+case when li.line_item_type in ('Reselling Purchase Orders', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
 li.* EXCEPT(order_type),
 
 
+{% set  x = ['missing_quantity', 'delivered_quantity','inventory_quantity','warehoused_quantity','picked_quantity','fulfilled_quantity','received_quantity','quantity','returned_quantity','splitted_quantity','replaced_quantity','extra_quantity','damaged_quantity','published_canceled_quantity'] %}
+{% for x in x %}
+case 
+    when li.{{x}} > 0 then '{{x}}'
+    when li.{{x}} = 0 then '--'
+end as ch_{{x}}
+        {%- if not loop. last -%}
+        ,
+        {%- endif -%}
+        {% endfor -%},
+
+
+{% set  x = ['updated_at', 'created_at','completed_at','departure_date','delivery_date','deleted_at','split_at','canceled_at','delivered_at','dispatched_at','returned_at','order_id','offer_id','root_shipment_id','shipment_id','source_shipment_id','split_source_id','replace_for_id','feed_source_id','customer_master_id','customer_id','user_id','reseller_id','supplier_id','created_by_id','split_by_id','returned_by_id','canceled_by_id','dispatched_by_id','supplier_product_id','order_request_id','order_payload_id','source_invoice_id','invoice_id','proof_of_delivery_id','parent_line_item_id','source_line_item_id','id','sequence_number','number','variety_mask','product_mask','barcode','previous_moved_proof_of_deliveries','previous_split_proof_of_deliveries','previous_shipments'] %}
+{% for x in x %}
+case 
+    when li.{{x}} is not null then '{{x}}'
+    when li.{{x}} is null then '--'
+end as ch_{{x}}
+        {%- if not loop. last -%}
+        ,
+        {%- endif -%}
+        {% endfor -%},  
+
+
+
+
+s.name as supplier_name,
+
+CASE
+    WHEN s.country   IN ('EC') THEN 'Ecuador' 
+    WHEN s.country   IN ('SA') THEN 'Saudi' 
+    WHEN s.country   IN ('ZA') THEN 'South Africa' 
+    WHEN s.country   IN ('MY') THEN 'Malaysia' 
+    WHEN s.country   IN ('ET') THEN 'Ethiopia' 
+    WHEN s.country   IN ('TH') THEN 'Thailand' 
+    WHEN s.country   IN ('NL') THEN 'Holland' 
+    WHEN s.country   IN ('AE') THEN 'UAE' 
+    WHEN s.country   IN ('CO') THEN 'Colombia' 
+    WHEN s.country   IN ('KE') THEN 'Kenya' 
+    WHEN s.country   IN ('LK') THEN 'Sri Lanka' 
+    WHEN s.country   IN ('ES') THEN 'Spain' 
+    WHEN s.country   IN ('TR') THEN 'Turkey' 
+   WHEN s.country   IN ('CN') THEN 'China' 
+   WHEN s.country   IN ('EG') THEN 'Egypt' 
+   WHEN s.country   IN ('JO') THEN 'Jordan' 
+   WHEN s.country   IN ('KW') THEN 'Kuwait' 
+   WHEN s.country   IN ('PE') THEN 'Peru' 
+   WHEN s.country   IN ('TW') THEN 'Taiwan' 
+   WHEN s.country   IN ('VN') THEN 'Viatnam' 
+    ELSE s.country
+    END as supplier_region,
+
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.id 
+left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
+
 
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as user on user.id = li.user_id
+left join {{ref('base_users')}} as dispatched_by on dispatched_by.id = li.dispatched_by_id
+left join {{ref('base_users')}} as returned_by on returned_by.id = li.returned_by_id
+left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_id
+left join {{ref('base_users')}} as split_by on split_by.id = li.split_by_id
+left join {{ref('base_users')}} as order_requested_by on order_requested_by.id = orr.created_by_id
+
+left join {{ref('base_suppliers')}} as s on s.id = li.supplier_id
+
 
 left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.id
 
 left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.id
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.id
-left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
 left join {{ref('stg_stocks')}} as stock on p.stock_id = stock.id 
 left join {{ref('stg_warehouses')}} as w on w.id = customer.warehouse_id
 
+
+left join {{ ref('int_purchase_line_item') }} as parent_purchase_line_item on parent_purchase_line_item.id = li.parent_line_item_id
+left join {{ ref('fct_product_incidents_groupby_order_line') }} as pi on pi.line_item_id = li.id
 
 
 

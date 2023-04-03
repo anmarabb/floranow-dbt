@@ -9,6 +9,8 @@ models:
         description: --
       - name: completed_at
         description: --
+
+
       - name: quantity
         description: --
       - name: unit_fob_price
@@ -17,9 +19,27 @@ models:
         description: --
       - name: total_price_without_tax
         description: --
-      - name: reseller_id
-        description: --
+
+        
+      - name: fulfillment
+        description: SUCCEED (Set on fulfilling, when adding the full quantity to location or proof of delivery), PARTIAL (Set on fulfilling, when adding the part of the quantity to location or proof of delivery), FAILED (Set on fulfilling, when full quantity is missing),UNACCOUNTED (Set on placing order till receiving)
       - name: supplier_id
         description: --
       - name: customer_id
-        description: --
+        description: The ID of the customer. This column is a foreign key reference to the customer_id column in the dim_customer table.
+  
+  
+  - name: dim_line_items
+    description: "A table of all page views on Lightdash webpages."
+    columns:
+      - name: line_item_id
+      - name: line_item_type
+      - name: order_type
+      - name: Customer
+      - name: User
+      - name: returned_by
+      - name: Supplier
+      - name: Origin
+      - name: Crop
+      - name: product_category
+      - name: product_subcategory
