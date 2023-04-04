@@ -20,6 +20,7 @@ product_crop as Crop,
 product_category,
 product_subcategory,
 
+order_number,
 current_timestamp() as insertion_timestamp, 
 
 

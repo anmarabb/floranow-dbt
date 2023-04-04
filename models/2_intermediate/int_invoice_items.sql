@@ -13,7 +13,7 @@ left join {{ ref('stg_invoices') }} as i on ii.invoice_id = i.id
 
 left join {{ ref('base_users') }} as customer on customer.id = ii.customer_id
 
-left join {{ ref('dim_line_items') }} as li on ii.line_item_id = li.line_item_id
+left join {{ ref('fct_order_items') }} as li on ii.line_item_id = li.line_item_id
 
 
 

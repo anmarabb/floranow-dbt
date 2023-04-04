@@ -8,7 +8,7 @@ li.order_number,
 sum(incidents_count) as total_order_incidents_count,
 
 
-from {{ref('dim_line_items')}} as li 
+from {{ref('fct_order_items')}} as li 
 
 group by li.order_number
 )

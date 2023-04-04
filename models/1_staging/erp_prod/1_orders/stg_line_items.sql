@@ -38,6 +38,9 @@ With source as
                 li.returned_by_id,
                 li.created_by_id,
                 li.split_by_id,
+                li.replace_for_id,
+
+                li.source_invoice_id,
 
 
             --dim
@@ -52,6 +55,7 @@ With source as
                 li.canceled_at,
                 li.split_at,
                 li.returned_at,
+                li.updated_at,
 
 
                 --order
@@ -67,6 +71,12 @@ With source as
                 li.permalink,
                 li.sequence_number,
                 li.barcode,
+                li.number,
+                li.variety_mask,
+                li.product_mask,
+                li.previous_moved_proof_of_deliveries,
+                li.previous_split_proof_of_deliveries,
+                li.previous_shipments,
 
                 
                 li.order_number,
@@ -78,7 +88,7 @@ With source as
                 li.currency,
 
                 --product
-                li.product_name as product,
+                li.product_name,
                 li.Properties,
                 li.categorization,
                 li.stem_length,
@@ -117,6 +127,7 @@ With source as
                     li.replaced_quantity,
                     li.splitted_quantity,
                     li.warehoused_quantity,
+                    li.published_canceled_quantity,
 
         case 
             when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Reselling Purchase Orders'

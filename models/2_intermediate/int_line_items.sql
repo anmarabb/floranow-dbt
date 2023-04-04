@@ -50,7 +50,7 @@ end as ch_{{x}}
         {% endfor -%},
 
 
-{% set  x = ['updated_at', 'created_at','completed_at','departure_date','delivery_date','deleted_at','split_at','canceled_at','delivered_at','dispatched_at','returned_at','order_id','offer_id','root_shipment_id','shipment_id','source_shipment_id','split_source_id','replace_for_id','feed_source_id','customer_master_id','customer_id','user_id','reseller_id','supplier_id','created_by_id','split_by_id','returned_by_id','canceled_by_id','dispatched_by_id','supplier_product_id','order_request_id','order_payload_id','source_invoice_id','invoice_id','proof_of_delivery_id','parent_line_item_id','source_line_item_id','id','sequence_number','number','variety_mask','product_mask','barcode','previous_moved_proof_of_deliveries','previous_split_proof_of_deliveries','previous_shipments'] %}
+{% set  x = ['updated_at', 'created_at','completed_at','departure_date','delivery_date','deleted_at','split_at','canceled_at','delivered_at','dispatched_at','returned_at','order_id','offer_id','root_shipment_id','shipment_id','source_shipment_id','split_source_id','replace_for_id','feed_source_id','customer_master_id','customer_id','user_id','reseller_id','supplier_id','created_by_id','split_by_id','returned_by_id','canceled_by_id','dispatched_by_id','supplier_product_id','order_request_id','order_payload_id','source_invoice_id','invoice_id','proof_of_delivery_id','parent_line_item_id','source_line_item_id','line_item_id','sequence_number','number','variety_mask','product_mask','barcode','previous_moved_proof_of_deliveries','previous_split_proof_of_deliveries','previous_shipments'] %}
 {% for x in x %}
 case 
     when li.{{x}} is not null then '{{x}}'
@@ -92,7 +92,7 @@ CASE
 
 
 from {{ref('stg_line_items')}} as li
-left join {{ ref('stg_products') }} as p on p.line_item_id = li.id 
+left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
 
 
@@ -112,15 +112,15 @@ left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id
 left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.id
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.id
-left join {{ref('stg_stocks')}} as stock on p.stock_id = stock.id 
+left join {{ref('stg_stocks')}} as stock on p.stock_id = stock.stock_id 
 left join {{ref('stg_warehouses')}} as w on w.id = customer.warehouse_id
 
 
-left join {{ ref('int_purchase_line_item') }} as parent_purchase_line_item on parent_purchase_line_item.id = li.parent_line_item_id
-left join {{ ref('fct_product_incidents_groupby_order_line') }} as pi on pi.line_item_id = li.id
+left join {{ ref('int_purchase_line_item') }} as parent_purchase_line_item on parent_purchase_line_item.line_item_id = li.parent_line_item_id
+left join {{ ref('fct_product_incidents_groupby_order_line') }} as pi on pi.line_item_id = li.line_item_id
 
 
 
 left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.id 
-left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.id
+left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.line_item_id
 left join prep_registered_clients as prep_registered_clients on prep_registered_clients.financial_administration = customer.financial_administration
