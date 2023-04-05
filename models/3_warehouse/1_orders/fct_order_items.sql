@@ -20,7 +20,20 @@ product_crop as Crop,
 product_category,
 product_subcategory,
 
-order_number,
+li.order_number,
+
+
+li.quantity,
+li.unit_price,
+li.currency,
+li.total_price_without_tax, -- (li.quantity * li.unit_price)
+
+
+
+
+
+
+
 current_timestamp() as insertion_timestamp, 
 
 

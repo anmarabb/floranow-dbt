@@ -16,11 +16,32 @@ where manageable_type = 'Supplier'
 
 select 
 
-s.*,
+s.id as supplier_id,
+s.name as supplier_name,
+s.business_type,
+s.currency,
+s.floranow_supplier_id,
+
+case when s.packing_method = 1 then 'auto_email' when s.packing_method = 0 then 'manual' when s.packing_method is null then null else 'ceack' end as packing_method,
+case when s.packing_receive_type = 0 then 'barcode' when s.packing_receive_type is null then null else 'ceack' end as packing_receive_type,
+
+case when s.has_box_number is true then 'has_box_number' else null end as has_box_number,
+s.auto_send,
+s.is_local_purchase,
+
+
+s.created_at,
+s.updated_at,
+s.deleted_at,
+--email,
+--phone_no,
+--company_name,
+--country,
+--floricode_id,
+--active,
+--resource_id,
+
 u2.name as account_manager ,
-
-
---s.country as row_country,
 c.country_name as supplier_region,
 
 current_timestamp() as ingestion_timestamp,

@@ -104,7 +104,7 @@ left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_i
 left join {{ref('base_users')}} as split_by on split_by.id = li.split_by_id
 left join {{ref('base_users')}} as order_requested_by on order_requested_by.id = orr.created_by_id
 
-left join {{ref('base_suppliers')}} as s on s.id = li.supplier_id
+left join {{ref('base_suppliers')}} as s on s.supplier_id = li.supplier_id
 
 
 left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.id
@@ -112,8 +112,9 @@ left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id
 left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.id
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.id
-left join {{ref('stg_stocks')}} as stock on p.stock_id = stock.stock_id 
-left join {{ref('stg_warehouses')}} as w on w.id = customer.warehouse_id
+left join {{ref('base_stocks')}} as stock on p.stock_id = stock.stock_id 
+
+--left join {{ref('base_warehouses')}} as w on w.id = customer.warehouse_id
 
 
 left join {{ ref('int_purchase_line_item') }} as parent_purchase_line_item on parent_purchase_line_item.line_item_id = li.parent_line_item_id
