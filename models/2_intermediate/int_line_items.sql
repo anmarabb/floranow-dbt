@@ -64,31 +64,9 @@ end as ch_{{x}}
 
 
 
-s.name as supplier_name,
+s.supplier_name,
 
-CASE
-    WHEN s.country   IN ('EC') THEN 'Ecuador' 
-    WHEN s.country   IN ('SA') THEN 'Saudi' 
-    WHEN s.country   IN ('ZA') THEN 'South Africa' 
-    WHEN s.country   IN ('MY') THEN 'Malaysia' 
-    WHEN s.country   IN ('ET') THEN 'Ethiopia' 
-    WHEN s.country   IN ('TH') THEN 'Thailand' 
-    WHEN s.country   IN ('NL') THEN 'Holland' 
-    WHEN s.country   IN ('AE') THEN 'UAE' 
-    WHEN s.country   IN ('CO') THEN 'Colombia' 
-    WHEN s.country   IN ('KE') THEN 'Kenya' 
-    WHEN s.country   IN ('LK') THEN 'Sri Lanka' 
-    WHEN s.country   IN ('ES') THEN 'Spain' 
-    WHEN s.country   IN ('TR') THEN 'Turkey' 
-   WHEN s.country   IN ('CN') THEN 'China' 
-   WHEN s.country   IN ('EG') THEN 'Egypt' 
-   WHEN s.country   IN ('JO') THEN 'Jordan' 
-   WHEN s.country   IN ('KW') THEN 'Kuwait' 
-   WHEN s.country   IN ('PE') THEN 'Peru' 
-   WHEN s.country   IN ('TW') THEN 'Taiwan' 
-   WHEN s.country   IN ('VN') THEN 'Viatnam' 
-    ELSE s.country
-    END as supplier_region,
+s.supplier_region,
 
 
 from {{ref('stg_line_items')}} as li
@@ -114,10 +92,9 @@ left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.id
 left join {{ref('base_stocks')}} as stock on p.stock_id = stock.stock_id 
 
---left join {{ref('base_warehouses')}} as w on w.id = customer.warehouse_id
+left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
 
 
-left join {{ ref('int_purchase_line_item') }} as parent_purchase_line_item on parent_purchase_line_item.line_item_id = li.parent_line_item_id
 left join {{ ref('fct_product_incidents_groupby_order_line') }} as pi on pi.line_item_id = li.line_item_id
 
 

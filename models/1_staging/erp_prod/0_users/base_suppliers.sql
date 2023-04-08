@@ -44,6 +44,8 @@ s.deleted_at,
 u2.name as account_manager ,
 c.country_name as supplier_region,
 
+
+
 current_timestamp() as ingestion_timestamp,
 
 from {{ source('erp_prod', 'suppliers') }} as s

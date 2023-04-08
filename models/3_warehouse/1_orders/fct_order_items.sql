@@ -30,7 +30,7 @@ li.total_price_without_tax, -- (li.quantity * li.unit_price)
 
 
 
-
+li.incidents_count,
 
 
 
