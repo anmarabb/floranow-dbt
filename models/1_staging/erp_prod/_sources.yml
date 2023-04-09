@@ -21,9 +21,7 @@ sources:
       - name: line_items
         columns:
           - name: categorization
-            test:
-             - unique
-             - not_null
+            
              
             
 

@@ -12,16 +12,15 @@ source_type,
 ids_count,
 pod_status,
 
-customer,
+Customer,
 warehouse,
 country,
 financial_administration,
+account_manager,
 
 
 dispatched_by,
 item_count,
-
-
 
 
 

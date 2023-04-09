@@ -9,16 +9,27 @@ li.* EXCEPT(order_type),
 
 user.name as user,
 customer.name as customer,
+customer.country,
+customer.financial_administration,
+customer.account_manager,
+
 case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
 case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
 --pli.order_type as parent_order_type,
 
 lis.supplier_region,
-w.warehouse_name,
+w.warehouse_name as warehouse,
 
 returned_by.name as returned_by,
 
 pi.incidents_count,
+date.dim_date,
+
+
+pod.source_type,
+pod.pod_status,
+pod.dispatched_by,
+
 
 /*
 
@@ -85,8 +96,6 @@ from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
 left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id and ii.invoice_type = 'invoice'
-
-
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as user on user.id = li.user_id
 left join {{ref('base_users')}} as dispatched_by on dispatched_by.id = li.dispatched_by_id
@@ -102,7 +111,7 @@ left join {{ref('stg_line_items')}} as pli on pli.line_item_id = li.parent_line_
 left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_id
 
 
-left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
+left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
 
 left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.id
@@ -120,6 +129,7 @@ left join {{ref('fct_product_incidents_groupby_order_line')}} as pi on pi.line_i
 
 left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=li.line_item_id
 
+left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
 
 
 left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.product_id 
