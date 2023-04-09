@@ -1,6 +1,6 @@
 SELECT
   FORMAT_DATE('%F', d) as id,
-  d AS full_date,
+  d AS dim_date,
   EXTRACT(YEAR FROM d) AS year,
   EXTRACT(WEEK FROM d) AS year_week,
   EXTRACT(DAY FROM d) AS year_day,

@@ -1,0 +1,76 @@
+with orders_by_user as (
+select li.customer_id,
+count (distinct li.order_id) as orders_count,
+sum (li.total_price_without_tax) as orders_total_cost
+from {{ref('stg_line_items')}} as li
+group by li.customer_id
+)
+select * from orders_by_user
+
+
+order_items_by_user as (
+select u.user_guid,
+count (distinct oi.quantity) total_items
+from {{ ref ('stg_greenery__users') }} u
+left join {{ ref('stg_greenery_ orders') }} o on u.user_guid = o.user_guid
+left join ({ ref('stg_greenery_ _orders_items') }} oi on o.order_guid = oi.order_guid
+group by u.user_guid
+),
+
+sessions_by_user as (
+select u.user_guid,
+count(distinct e.session_id) as total_sessions
+from {{ ref('stg_greenery__users') }} u
+left join {{ ref('stg_greenery__events') }) e on u.user_guid = e. user_guid
+group by u.user_guid
+
+
+
+dim_producat
+
+{{
+config (
+materialized='table'
+)
+}}
+WITH products AS (
+SELECT * FROM {{ ref('products') }}
+),
+orders AS (
+SELECT * FROM <{ ref('orders' ) 1}
+
+SELECT products. PRODUCT_GUID
+,products. PRODUCT_NAME
+products. PRODUCT_PRICE
+„IFULL (products. PRODUCT_INVENTORY, 0) AS CURRENT_ PRODUCT_INVENTORY
+,IFNULL (COUNT (DISTINCT orders, ORDER_GUID) , 0) AS DISTINCT_ORDERS
+,IFNULL(SUM(orders. QUANTITY_ORDERED) , 0) AS QUANTITY_SOLD
+,IFNULL(SUM (orders. PRODUCT_SUBTOTAL) , 0) AS PRODUCT_REVENUE
+FROM products
+LEFT JOIN orders ON products. PRODUCT_GUID = orders. PRODUCT_GUID
+GROUP BY products. PRODUCT_GUID
+products. PRODUCT NAME
+products. PRODUCT_PRICE
+„CURRENT_PRODUCT_INVENTORY
+
+
+
+
+{{
+config(
+materialized = 'table'
+}}
+with events as (
+select * from {{ ref ('stg_greenery_events") }] _events') 3)
+final as (
+select
+user_guid
+, session_guid
+sum(case when event_type = 'add_to_cart' then 1 else 8 end) as add_to_carts
+sum(case when event_type = 'checkout' then 1 else 0 end) as checkouts
+sum(case when event_type = 'package_shipped' then 1 else 0 end) as package_shippeds
+sum (case when event_type = 'page_view' then 1 else 0 end) as page_views
+from {{ ref('stg_greenery_events') }}
+group by 1,2
+)
+select * from final
