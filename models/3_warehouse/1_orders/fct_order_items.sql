@@ -12,7 +12,7 @@ Customer,
 User,
 returned_by, 
 
-supplier_name as Supplier, 
+Supplier,
 supplier_region as Origin,
 
 product_name as Product,

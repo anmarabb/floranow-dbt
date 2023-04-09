@@ -4,8 +4,8 @@ source as (
         
 select     
 
-p.id as inventory_item_id,
-concat( "https://erp.floranow.com/products/", p.id) as inventory_item_link,
+p.product_id as inventory_item_id,
+concat( "https://erp.floranow.com/products/", p.product_id) as inventory_item_link,
 
 p.product_name as product,
 p.stem_length,

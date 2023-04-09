@@ -10,7 +10,7 @@ select
     u.name,
     u.debtor_number,
     u.warehouse_id,
-    w.warehouse_name,
+    w.warehouse_name as warehouse,
 
  case
     when u.customer_type = 0 then 'reseller'

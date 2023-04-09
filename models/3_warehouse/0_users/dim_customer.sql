@@ -11,7 +11,7 @@ select
     current_timestamp() as insertion_timestamp, 
 
 from {{ ref('base_users')}} as u
-
 where u.account_type = 'External' and u.customer_type != 'reseller')
 
 select * from source
+

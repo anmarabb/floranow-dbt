@@ -10,6 +10,7 @@ select
             invoice_id,
             creditable_id,
             approved_by_id,
+            
 
             --dim
                 --date
@@ -23,7 +24,7 @@ select
                 --dim
                 source_type,
                 generation_type,
-                invoice_type,
+                case when ii.invoice_type = 1 then 'credit note' else 'invoice' end as invoice_type,
                 currency,
                 creditable_type,
                 status,
@@ -31,6 +32,12 @@ select
                 
                 product_name,
                 category,
+
+
+                --supplier
+                meta_data.supplier as meta_supplier,
+                meta_data.supplier_code as meta_supplier_code,
+                meta_data.supplier_name as meta_supplier_name,
 
                 --fct
                 quantity,
