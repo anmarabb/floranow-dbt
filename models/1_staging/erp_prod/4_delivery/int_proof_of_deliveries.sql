@@ -30,10 +30,11 @@ pod.ids_count,
 pod.pod_status,
 
 
-customer.name as customer,
+customer.name as Customer,
 customer.warehouse,
 customer.country,
 customer.financial_administration,
+customer.account_manager,
 
 
 dispatched_by.name as dispatched_by,

@@ -8,17 +8,37 @@ select
 line_item_id,
 line_item_type,
 order_type,
-Customer,
-User,
-returned_by, 
+
+delivery_date,
+created_at as order_date,
+dim_date,
+
+
+--Customer
+    Customer,
+    account_manager,
+    warehouse,
+    country,
+    financial_administration,
+    User,
+
+--pod
+    proof_of_delivery_id,
+    pod_status,
+    dispatched_by,
+    source_type,
+
+
+
 
 Supplier,
 supplier_region as Origin,
 
-product_name as Product,
-product_crop as Crop,
-product_category,
-product_subcategory,
+--product
+    product_name as Product,
+    product_crop as Crop,
+    product_category,
+    product_subcategory,
 
 li.order_number,
 
