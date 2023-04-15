@@ -18,23 +18,30 @@ select
 
 
 --status
-    record_type,
-    record_type_details,
-    order_type,
+    record_type,               -- Purchase Order, Customer Order, System
+    record_type_details,       -- Reseller Purchase Order, Customer Bulk Order, Customer Shipment Order, Customer Inventory Order, Customer Fly Order, stock2stock, EXTRA, RETURN, MOVEMENT
+    order_type,                -- ONLINE, OFFLINE, ADDITIONAL, IMPORT_INVENTORY, EXTRA, RETURN, MOVEMENT
     parent_order_type,
-    ops_status1,
-    ops_status2,
-    ops_status3,
-    ops_status4,
-    ops_status5,
 
-    state,
-    
-    fulfillment,
-    pod_status,
-    order_request_status,
-    shipments_status,
-    order_payloads_status,
+    location as loc_status,    -- pod, loc, null
+
+    ops_status1,               -- Received, Not Received
+    ops_status2,               -- Fulfilled, Not Fulfilled
+    ops_status3,               -- Prepared, Not Prepared
+    ops_status4,               -- Dispatched, Not Dispatched
+    ops_status5,               -- Signed, Not Signed
+
+    state,                     --PENDING, FULFILLED, DISPATCHED, DELIVERED, CANCELED, RETURNED
+    fulfillment,               --SUCCEED, PARTIAL, FAILED, UNACCOUNTED
+    pod_status,                --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
+    order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
+    shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
+    master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
+    order_payloads_status,     -- true, false, null
+
+
+    creation_stage,            -- SPLIT, PACKING, INVENTORY, receiving
+    ordering_stock_type,       -- INVENTORY, FLYING, null
 
 
 
@@ -49,16 +56,17 @@ select
 
     case 
 
-        when state = 'FULFILLED' then '1.fulfilled'
-        when state = 'DISPATCHED' then '2.dispatched'
-        when state = 'DELIVERED' then '3.delivered'
-        when state = 'RETURNED' then '4.returned'
+        when state = 'FULFILLED' then '1.Fulfilled'
+        when state = 'DISPATCHED' then '2.Dispatched'
+        when state = 'DELIVERED' then '3.Delivered'
+        when state = 'RETURNED' then '4.Returned'
         else '0.Not Fulfilled'
         end as order_state,
 
         fulfillment_mode,
     
     
+--fulfilled mean the item added to loc, or pod. 
     
     
     
@@ -82,6 +90,7 @@ internal_invoicing,
 
 --Customer
     Customer,
+    debtor_number,
     account_manager,
     warehouse,
     country,
