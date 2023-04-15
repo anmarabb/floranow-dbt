@@ -53,3 +53,37 @@ stg_line_items
         pod  - on proof of delivery
         loc  - on location in warehouse
         null - not fulfilled, not added to location or pod
+
+
+    Shipments
+        DRAFT
+        PACKED
+        WAREHOUSED
+        CANCELED
+        MISSING
+
+    Master Shipments
+        DRAFT
+        PACKED
+        OPENED
+        WAREHOUSED
+        CANCELED
+        MISSING
+    
+    Order Recqusts
+        REQUESTED
+        PLACED
+        PARTIALLY_PLACED
+        REJECTED
+        CANCELED
+
+
+
+    Proof Of Delivery
+        DRAFT
+        READY
+        DISPATCHED
+        DELIVERED
+        SKIPPED
+
+

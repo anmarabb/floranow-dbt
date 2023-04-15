@@ -6,7 +6,7 @@ prep_picking_products as (select  pk.line_item_id, max(pk.picking_product_id) as
 SELECT
 li.* EXCEPT(order_type),
 
-case when li.record_type_details in ('Reselling Purchase', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
+case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
 
 --funnel touchpoints 
@@ -61,8 +61,9 @@ case when li.record_type_details in ('Reselling Purchase', 'EXTRA') and li.locat
     case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
     pli.order_type as parent_order_type,
     case 
-        when li.record_type_details in ('Inventory Fly Sale','Marketplace Sale') then 'Shipment' 
-        when li.record_type_details in ('Inventory Sale') then 'Inventory'
+        when li.record_type_details in ('Customer Fly Order','Customer Shipment Order') then 'From Shipment' 
+        when li.record_type_details in ('Customer Inventory Order') then 'From Inventory'
+        when li.record_type_details in ('Reseller Purchase Order','EXTRA','RETURN') then 'To Inventory'
         else null
         end as fulfillment_mode,
 
@@ -76,6 +77,7 @@ case when li.record_type_details in ('Reselling Purchase', 'EXTRA') and li.locat
 
 --shipments
     sh.status as shipments_status, 
+    msh.status as master_shipments_status,
 
 w.warehouse_name as warehouse,
 
