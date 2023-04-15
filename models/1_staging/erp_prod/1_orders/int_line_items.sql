@@ -6,24 +6,61 @@ prep_picking_products as (select  pk.line_item_id, max(pk.picking_product_id) as
 SELECT
 li.* EXCEPT(order_type),
 
+case when li.record_type_details in ('Reselling Purchase', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
-user.name as user,
-customer.name as customer,
-customer.country,
-customer.financial_administration,
-customer.account_manager,
 
-case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
-case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
---pli.order_type as parent_order_type,
+--funnel touchpoints 
+    case when li.received_quantity > 0 then 1 else 0 end as order_received,
+    case when li.fulfilled_quantity > 0 then 1 else 0 end as order_fulfilled,
+    case when li.location = 'pod' then 1 else 0 end as order_pod_moved,
+    case when li.dispatched_at is not null then 1 else 0 end as order_dispatched,
+    case when li.state = 'DELIVERED' then 1 else 0 end as order_delivered,
+    case when li.invoice_id is not null then 1 else 0 end as invoice_created,
+    case when li.invoice_id is not null and i.printed_at is not null then 1 else 0 end as invoice_printed,
 
-lis.supplier_region,
+
+    case when li.location = 'loc' then 1 else 0 end as order_loc_moved, --order_warehoused
+    case when li.picked_quantity > 0 then 1 else 0 end as order_picked,
+
+
+
+
+
+--date
+    date.dim_date,
+
+
+--customer
+    user.name as user,
+    customer.name as customer,
+    customer.country,
+    customer.financial_administration,
+    customer.account_manager,
+    customer.debtor_number,
+    customer.customer_type,
+
+    case when customer.debtor_number in ('WANDE','95110') then 'Internal Invoicing' else 'Normal Invoicing' end as internal_invoicing,
+    case when li.state in ('PENDING','CANCELED') then 'Not Fulfilled' else 'Fulfilled' end as ops_status,
+    concat( "https://erp.floranow.com/line_items/", li.line_item_id) as line_item_link,
+
+    returned_by.name as returned_by,
+
+
+--supplier
+    case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
+    lis.supplier_region,
+
+--order 
+    case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
+    --pli.order_type as parent_order_type,
+
+
+
 w.warehouse_name as warehouse,
 
-returned_by.name as returned_by,
 
 pi.incidents_count,
-date.dim_date,
+
 
 
 pod.source_type,
@@ -56,7 +93,6 @@ li.order_type as row_order_type,
 
 
 
-case when li.line_item_type in ('Reselling Purchase Orders', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
 
 
