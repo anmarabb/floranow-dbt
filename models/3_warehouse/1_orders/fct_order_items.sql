@@ -6,7 +6,8 @@ source as (
 select 
 
 line_item_id,
-line_item_type,
+record_type,
+record_type_details,
 order_type,
 
 delivery_date,
@@ -28,6 +29,9 @@ dim_date,
     dispatched_by,
     source_type,
 
+    state,
+    fulfillment,
+
 
 
 
@@ -40,13 +44,23 @@ supplier_region as Origin,
     product_category,
     product_subcategory,
 
-li.order_number,
+--order
+    li.order_number,
+    li.currency,
 
 
-li.quantity,
-li.unit_price,
-li.currency,
-li.total_price_without_tax, -- (li.quantity * li.unit_price)
+--line order
+    line_item_link,
+    li.quantity,
+    li.unit_price,
+    li.total_price_without_tax, -- (li.quantity * li.unit_price)
+
+
+
+
+
+
+
 
 
 

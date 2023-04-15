@@ -38,6 +38,7 @@ With source as
                 li.returned_by_id,
                 li.created_by_id,
                 li.split_by_id,
+                
                 li.replace_for_id,
 
                 li.source_invoice_id,
@@ -45,12 +46,13 @@ With source as
 
             --dim
                 --date
+                                    -- we need received_at and fulfilled_at to compalte the cycle.
                 li.departure_date,
                 li.delivery_date,
-                li.created_at,
+                li.created_at,      --(order_date)
                 li.completed_at,
-                li.dispatched_at,
-                li.delivered_at,
+                li.dispatched_at,   --dispatched
+                li.delivered_at,    --delivered
                 li.deleted_at,
                 li.canceled_at,
                 li.split_at,
@@ -130,16 +132,31 @@ With source as
                     li.published_canceled_quantity,
 
         case 
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Reselling Purchase Orders'
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Bulk Orders'
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Customer Direct Sales Orders' --customer_direct_orders
-            when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is null then 'Inventory Sales Orders' --customer_inventory_orders
+            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Reselling Purchase'
+            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Bulk Sale'
+            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Marketplace Sale' --customer_direct_orders
+            when li.source_line_item_id is null and li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null then 'Inventory Sale' --customer_inventory_orders
+            when li.source_line_item_id is null and li.ordering_stock_type = 'FLYING' and li.reseller_id is null then 'Inventory Fly Sale' --customer_inventory_orders_flying
             when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is not null then 'stock2stock'
             when li.source_line_item_id is not null and li.order_type = 'EXTRA' then 'EXTRA'
             when li.source_line_item_id is not null and li.order_type = 'RETURN' then 'RETURN' 
             when li.source_line_item_id is not null and li.order_type = 'MOVEMENT' then 'MOVEMENT'
             else 'cheack_my_logic'
-            end as line_item_type,
+            end as record_type_details,
+
+   case 
+            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Purchase'
+            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Sale'
+            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Sale' --customer_direct_orders
+            when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is null then 'Sale' --customer_inventory_orders
+            when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is not null then 'System'
+            when li.source_line_item_id is not null and li.order_type = 'EXTRA' then 'System'
+            when li.source_line_item_id is not null and li.order_type = 'RETURN' then 'System' 
+            when li.source_line_item_id is not null and li.order_type = 'MOVEMENT' then 'System'
+            else 'cheack_my_logic'
+            end as record_type,
+
+
 
         REGEXP_EXTRACT(permalink, r'/([^/]+)') AS product_crop , 
         REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') AS product_category,
@@ -171,6 +188,4 @@ select
 
 current_timestamp() as ingestion_timestamp, 
 
-
 from source as li
-

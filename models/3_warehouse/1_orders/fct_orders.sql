@@ -5,7 +5,8 @@ source as (
 select
 
 li.order_number,
-max(line_item_type) as line_item_type,
+max(record_type) as record_type,
+max(record_type_details) as record_type_details,
 max(li.Customer) as Customer,
 max(li.order_id) as order_id,
 sum(li.total_price_without_tax) as Gross_item_sales_amount, 

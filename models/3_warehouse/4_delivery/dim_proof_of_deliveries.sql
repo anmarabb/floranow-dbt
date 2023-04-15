@@ -20,6 +20,17 @@ account_manager,
 
 
 dispatched_by,
+skipped_by,
+moved_by,
+split_by,
+
+case 
+    when pod_status = 'DISPATCHED' then concat('dispatched_by',': ',dispatched_by)
+    when pod_status = 'SKIPPED' then concat('skipped_by',': ',skipped_by) 
+    else null end as action_by,
+
+
+
 item_count,
 
 
@@ -27,11 +38,8 @@ item_count,
     case 
     when date_diff(date(delivery_date)  ,current_date(), month) > 1 then 'Wrong date' 
     when delivery_date > current_date() then "Future" 
-    when delivery_date = current_date()-1 then "Yesterday" 
     when delivery_date = current_date() then "Today" 
-    when date_diff(cast(current_date() as date ),cast(delivery_date as date), MONTH) = 0 then 'Month To Date'
-    when date_diff(cast(current_date() as date ),cast(delivery_date as date), MONTH) = 1 then 'Last Month'
-    when date_diff(cast(current_date() as date ),cast(delivery_date as date), YEAR) = 0 then 'Year To Date'
+    when delivery_date < current_date()-1 then "Past" 
 
     else "Past" end as select_delivery_date,
 

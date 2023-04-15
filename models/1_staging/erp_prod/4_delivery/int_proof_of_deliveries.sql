@@ -38,9 +38,9 @@ customer.account_manager,
 
 
 dispatched_by.name as dispatched_by,
---moved_by.name as moved_by,
---split_by.name as split_by,
---skipped_by.name as skipped_by,
+moved_by.name as moved_by,
+split_by.name as split_by,
+skipped_by.name as skipped_by,
 
 li.item_count, 
 
