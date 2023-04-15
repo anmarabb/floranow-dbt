@@ -40,8 +40,9 @@ case when li.record_type_details in ('Reselling Purchase', 'EXTRA') and li.locat
     customer.customer_type,
 
     case when customer.debtor_number in ('WANDE','95110') then 'Internal Invoicing' else 'Normal Invoicing' end as internal_invoicing,
-    case when li.state in ('PENDING','CANCELED') then 'Not Fulfilled' else 'Fulfilled' end as ops_status1,
-    case when li.received_quantity > 0 then 'Received' else 'Not Received' end as ops_status2,
+
+    case when li.received_quantity > 0 then 'Received' else 'Not Received' end as ops_status1,
+    case when li.state in ('PENDING','CANCELED') then 'Not Fulfilled' else 'Fulfilled' end as ops_status2,
     case when li.location = 'pod' then 'Prepared' else 'Not Prepared' end as ops_status3,
     case when li.dispatched_at is not null then 'Dispatched' else 'Not Dispatched' end as ops_status4,
     case when li.state = 'DELIVERED' then 'Signed' else 'Not Signed' end as ops_status5,
@@ -58,7 +59,12 @@ case when li.record_type_details in ('Reselling Purchase', 'EXTRA') and li.locat
 
 --order 
     case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
-    --pli.order_type as parent_order_type,
+    pli.order_type as parent_order_type,
+    case 
+        when li.record_type_details in ('Inventory Fly Sale','Marketplace Sale') then 'Shipment' 
+        when li.record_type_details in ('Inventory Sale') then 'Inventory'
+        else null
+        end as fulfillment_mode,
 
 --order requist
     orr.status as order_request_status,
