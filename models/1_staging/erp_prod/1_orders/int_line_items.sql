@@ -123,6 +123,9 @@ end as ch_{{x}}
 */
 
 
+--Metreics
+   -- count (distinct li.order_number ) as orders,
+   -- count (distinct li.line_item_id ) as line_orders,
 
 
 

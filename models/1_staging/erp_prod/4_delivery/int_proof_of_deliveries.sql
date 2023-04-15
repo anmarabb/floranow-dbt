@@ -48,6 +48,7 @@ i.invoice_count,
 
 date.dim_date,
 
+
 current_timestamp() as insertion_timestamp, 
 
  from {{ ref('stg_proof_of_deliveries') }} as pod

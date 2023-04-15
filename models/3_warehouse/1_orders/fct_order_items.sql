@@ -10,9 +10,11 @@ record_type,
 record_type_details,
 order_type,
 
-delivery_date,
-created_at as order_date,
-dim_date,
+--date
+    delivery_date,
+    departure_date,
+    created_at as order_date,
+    dim_date,
 
 
 --Customer
