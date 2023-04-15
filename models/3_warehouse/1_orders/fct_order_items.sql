@@ -8,14 +8,20 @@ select
 --line order
     line_item_id,
     line_item_link,
-    li.quantity,
     li.unit_price,
     li.total_price_without_tax, -- (li.quantity * li.unit_price)
+
+--quantity
+    li.quantity,
+    li.fulfilled_quantity,
+
+
 
 --status
     record_type,
     record_type_details,
     order_type,
+    parent_order_type,
     ops_status1,
     ops_status2,
     ops_status3,
@@ -49,6 +55,8 @@ select
         when state = 'RETURNED' then '4.returned'
         else '0.Not Fulfilled'
         end as order_state,
+
+        fulfillment_mode,
     
     
     
@@ -85,6 +93,8 @@ internal_invoicing,
     
     dispatched_by,
     source_type,
+
+    
 
     
 
