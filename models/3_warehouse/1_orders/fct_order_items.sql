@@ -43,6 +43,8 @@ select
     creation_stage,            -- SPLIT, PACKING, INVENTORY, receiving
     ordering_stock_type,       -- INVENTORY, FLYING, null
 
+    fulfillment_status,
+
 
 
     /*
