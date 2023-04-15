@@ -61,12 +61,26 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
     pli.order_type as parent_order_type,
     case 
-        when li.record_type_details in ('Customer Fly Order','Customer Shipment Order') then 'From Shipment' 
-        when li.record_type_details in ('Customer Inventory Order') then 'From Inventory'
-        when li.record_type_details in ('Reseller Purchase Order','EXTRA','RETURN') then 'To Inventory'
+        when li.record_type_details in ('Customer Fly Order','Customer Shipment Order') then 'Shipment Orders'  -- From Shipment
+        when li.record_type_details in ('Customer Inventory Order') then 'Stock-Out Orders'                     -- From Inventory
+        when li.record_type_details in ('Reseller Purchase Order','EXTRA','RETURN') then 'Stock-In Orders'      -- PO Orders (in) To Inventory
         else null
         end as fulfillment_mode,
 
+
+    case 
+     when li.location is null and li.order_type = 'IN_SHOP' and li.fulfillment = 'SUCCEED' then '5. Fulfilled - In Shop'
+     when li.location = 'loc' and li.fulfillment = 'SUCCEED' then '4. Fulfilled - Warehoused Totaly'                                          --  Moveded Totaly to Stock (Warehoused)
+     when li.location = 'loc' and li.fulfillment = 'PARTIAL' then '4. Fulfilled - Warehoused Partially (with Incidents)'                      --  Moveded Partially to Stock (Warehoused)
+     when li.location = 'pod' and li.fulfillment = 'SUCCEED' then '3. Fulfilled - Moved Totaly to POD'                                        --  Moveded Totaly to Dispatch Area (pod)
+     when li.location = 'pod' and li.fulfillment = 'PARTIAL' then '3. Fulfilled - Moved Partially to POD (with Incidents)'                    --  Moveded Partially to Dispatch Area (pod)
+     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'FAILED' then '2. Fulfilled with Full Item Incident'
+     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'UNACCOUNTED' then '1. Not Fulfilled (Investigate)'
+     else 'cheack_my_logic'  
+     end as fulfillment_status,
+             
+
+ 
 --order requist
     orr.status as order_request_status,
 
