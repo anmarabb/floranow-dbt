@@ -32,6 +32,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
 --date
     date.dim_date,
+    li.dispatched_at,
 
 
 --customer
@@ -119,7 +120,7 @@ case
     when date_diff(date(li.delivery_date)  ,current_date(), month) > 1 then 'Wrong date' 
     when li.delivery_date > current_date() then "Future" 
     when li.delivery_date = current_date() then "Today" 
-    when li.delivery_date < current_date()-1 then "Past" 
+    when li.delivery_date < current_date() then "Past" 
     else "cheak" end as select_delivery_date,
 
 /*
