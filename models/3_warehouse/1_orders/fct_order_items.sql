@@ -92,6 +92,7 @@ internal_invoicing,
 --date
     delivery_date,
     departure_date,
+    dispatched_at,
     created_at as order_date,
     select_delivery_date,
     dim_date,

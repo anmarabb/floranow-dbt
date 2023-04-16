@@ -32,7 +32,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
 --date
     date.dim_date,
-    li.dispatched_at,
+    
 
 
 --customer
