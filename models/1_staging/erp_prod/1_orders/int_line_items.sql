@@ -68,6 +68,8 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
         when li.record_type_details in ('Customer Fly Order','Customer Shipment Order') then 'Shipment Orders'  -- From Shipment External
         when li.record_type_details in ('Customer Inventory Order') then 'Inventory Orders (Stock-out)'                     -- From Inventory (stock out)
         when li.record_type_details in ('Reseller Purchase Order','EXTRA','RETURN') then 'Reselling Orders (Stock-in)'      -- PO Orders (in) To Inventory Replenishment, Restocking
+        when li.record_type_details in ('Customer In Shop Order') then 'In-Shop Order'
+
         else null
         end as fulfillment_mode,
 
