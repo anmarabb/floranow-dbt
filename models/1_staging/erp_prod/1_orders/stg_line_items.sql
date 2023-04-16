@@ -135,6 +135,7 @@ With source as
             when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Reseller Purchase Order' --from reseller to feed the stock
             when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Customer Bulk Order'
             when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Customer Shipment Order' --customer_direct_orders
+            when li.source_line_item_id is null and li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null and li.order_type = 'IN_SHOP' then 'Customer In Shop Order'
             when li.source_line_item_id is null and li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null then 'Customer Inventory Order' --customer_inventory_orders
             when li.source_line_item_id is null and li.ordering_stock_type = 'FLYING' and li.reseller_id is null then 'Customer Fly Order' --customer_inventory_orders_flying
             when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is not null then 'stock2stock'
