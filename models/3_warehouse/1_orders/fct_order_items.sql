@@ -87,6 +87,7 @@ internal_invoicing,
     delivery_date,
     departure_date,
     created_at as order_date,
+    select_delivery_date,
     dim_date,
 
 

@@ -4,7 +4,11 @@ prep_product_locations as (select  pl.locationable_id, max(pl.product_location_i
 prep_picking_products as (select  pk.line_item_id, max(pk.picking_product_id) as picking_product_id from {{ ref('stg_picking_products') }} as pk group by 1)
 
 SELECT
-li.* EXCEPT(order_type),
+li.* EXCEPT(order_type,delivery_date),
+
+case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
+case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end as delivery_date,
+
 
 case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
@@ -58,17 +62,18 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     lis.supplier_region,
 
 --order 
-    case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
     pli.order_type as parent_order_type,
+
     case 
-        when li.record_type_details in ('Customer Fly Order','Customer Shipment Order') then 'Clients External Orders'  -- From Shipment
-        when li.record_type_details in ('Customer Inventory Order') then 'Clients Inventory Orders'                     -- From Inventory (stock out)
-        when li.record_type_details in ('Reseller Purchase Order','EXTRA','RETURN') then 'Reselling Stokc In Orders'      -- PO Orders (in) To Inventory Replenishment, Restocking
+        when li.record_type_details in ('Customer Fly Order','Customer Shipment Order') then 'Shipment Orders'  -- From Shipment External
+        when li.record_type_details in ('Customer Inventory Order') then 'Inventory Orders (Stock-out)'                     -- From Inventory (stock out)
+        when li.record_type_details in ('Reseller Purchase Order','EXTRA','RETURN') then 'Reselling Orders (Stock-in)'      -- PO Orders (in) To Inventory Replenishment, Restocking
         else null
         end as fulfillment_mode,
 
 
     case 
+     when li.state = 'CANCELED' then '1. Not Fulfilled - (Canceled Orders)'
      when li.location is null and li.order_type = 'IN_SHOP' and li.fulfillment = 'SUCCEED' then '5. Fulfilled - In Shop'
      when li.location = 'loc' and li.fulfillment = 'SUCCEED' then '4. Fulfilled - Warehoused Totaly'                                          --  Moveded Totaly to Stock (Warehoused)
      when li.location = 'loc' and li.fulfillment = 'PARTIAL' then '4. Fulfilled - Warehoused Partially (with Incidents)'                      --  Moveded Partially to Stock (Warehoused)
@@ -77,7 +82,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
      when li.location = 'pod' and li.fulfillment = 'PARTIAL' then '3. Fulfilled - Moved Partially to POD (with Incidents)'                    --  Moveded Partially to Dispatch Area (pod)
      when li.location = 'pod' and li.fulfillment = 'UNACCOUNTED' then '3. Fulfilled - Moved to POD (with Process Breakdown)'
      when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'FAILED' then '2. Fulfilled - with Full Item Incident'
-     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'UNACCOUNTED' then '1. Not Fulfilled (Investigate)'
+     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'UNACCOUNTED' then '1. Not Fulfilled - (Investigate)'
      when li.location is null and li.fulfillment in ('PARTIAL','SUCCEED') then '3. Fulfilled - with Process Breakdown'
      else 'cheack_my_logic'  
      end as fulfillment_status,
@@ -107,6 +112,13 @@ pod.source_type,
 pod.pod_status,
 pod.dispatched_by,
 
+
+case 
+    when date_diff(date(li.delivery_date)  ,current_date(), month) > 1 then 'Wrong date' 
+    when li.delivery_date > current_date() then "Future" 
+    when li.delivery_date = current_date() then "Today" 
+    when li.delivery_date < current_date()-1 then "Past" 
+    else "cheak" end as select_delivery_date,
 
 /*
 
