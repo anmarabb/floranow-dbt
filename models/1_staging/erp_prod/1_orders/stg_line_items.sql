@@ -68,7 +68,7 @@ With source as
                 li.ordering_stock_type, --INVENTORY(line item created by ordering from a product while existing in the inventory), FLYING (line item created by ordering from a product while is not received yet in the warehouse), null (line item created by ordering from a external  supplier)
                 li.order_type, --ONLINE (line items created by orders placed from the marketplace), OFFLINE (line items created by orders placed by order request or standing order), ADDITIONAL (line items created by reporting additional in receiving stage or inventory stage in ERP), IMPORT_INVENTORY (line items created by importing inventory products from an Excel sheet), EXTRA (line items created by reporting extra quantity during the packing, receiving, or inventory stage), RETURN (line items created by reporting returned items after it has been delivered to the customer), MOVEMENT (line items created by moving items from internal stock to another internal stock)
 
-                li.sales_unit, -- minimum order-able quantity of the offer where this line item has been placed
+                li.sales_unit, -- minimum order-fable quantity of the offer where this line item has been placed
                 li.sales_unit_name, --piece (Per stem), bunch, box, layer, trolly
                 li.permalink,
                 li.sequence_number,

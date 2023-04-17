@@ -12,6 +12,15 @@ case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EX
 
 case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
+--actions
+    --returned_by.name as returned_by,
+    dispatched_by.name as dispatched_by,
+    --created_by.name as created_by,
+    --split_by.name as split_by,
+    --order_requested_by.name as order_requested_by,
+
+
+
 
 --funnel touchpoints 
     case when li.received_quantity > 0 then 1 else 0 end as order_received,
@@ -55,7 +64,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
     concat( "https://erp.floranow.com/line_items/", li.line_item_id) as line_item_link,
 
-    returned_by.name as returned_by,
+    
 
 
 --supplier
@@ -113,7 +122,8 @@ pi.incidents_count,
 
 pod.source_type,
 pod.pod_status,
-pod.dispatched_by,
+--pod.dispatched_by,
+
 
 
 case 
@@ -136,10 +146,6 @@ prep_ploc.id as product_locations_id,
 prep_picking_products.id as picking_products_id,
 
 
-dispatched_by.name as dispatched_by,
-created_by.name as created_by,
-split_by.name as split_by,
-order_requested_by.name as order_requested_by,
 
 
 li.order_type as row_order_type,
