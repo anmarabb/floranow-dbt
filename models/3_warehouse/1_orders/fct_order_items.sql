@@ -5,6 +5,9 @@ source as (
  
 select 
 
+--actions
+    dispatched_by,
+
 --line order
     line_item_id,
     line_item_link,
@@ -72,7 +75,7 @@ select
     case when fulfillment_status like '%Not Fulfilled%' then 'Not Fulfilled' else 'Fulfilled' end as stage_gate2,
     case when li.dispatched_at is not null then 'Dispatched' else 'Not Dispatched' end as stage_gate3,
     
-    case when fulfillment_mode not in ('Reselling Orders (Stock-in)','Customer In Shop Order') and fulfillment_status not in ('1. Not Fulfilled - (Investigate)') then pod_status else null end as pod_status2, 
+    case when fulfillment_mode not in ('Reselling Orders (Stock-in)','Customer In Shop Order') and fulfillment_status not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
     
 --fulfilled mean the item added to loc, or pod. 
     
@@ -110,7 +113,7 @@ internal_invoicing,
 --pod
     proof_of_delivery_id,
     
-    dispatched_by,
+    
     source_type,
 
     
