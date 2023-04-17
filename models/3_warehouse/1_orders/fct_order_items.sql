@@ -70,6 +70,8 @@ select
 
         fulfillment_mode,
 
+        li.location,
+
 
     fulfillment_status,
     case when fulfillment_status like '%Not Fulfilled%' then 'Not Fulfilled' else 'Fulfilled' end as stage_gate2,
@@ -77,6 +79,19 @@ select
     
     case when fulfillment_mode not in ('Reselling Orders (Stock-in)','Customer In Shop Order') and fulfillment_status not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
     
+
+   case 
+        when fulfillment_status like '%Not Fulfilled%' then 'Not Fulfilled' 
+        when fulfillment_status in ('2. Fulfilled - with Full Item Incident') then 'Fulfilled Full Incident'
+        when fulfillment_status not like '%Not Fulfilled%' and  li.dispatched_at is null then 'Fulfilled Not Dispatched'
+        when fulfillment_status not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
+        else 'cheak'
+        end as order_status,
+        
+
+
+
+
 --fulfilled mean the item added to loc, or pod. 
     
     
