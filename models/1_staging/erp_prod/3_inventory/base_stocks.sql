@@ -1,17 +1,26 @@
 
 select 
+            --PK
+                st.id as stock_id,
+            --FK
+                st.warehouse_id,
+                st.reseller_id,
+                st.out_feed_source_id,
 
-st.id as stock_id,
-st.name as stock_name,
 
-st.warehouse_id,
+--st.name as stock_name,
+
+case 
+    when st.name = 'default inventory stock' then 'Inventory Stock'
+    when st.name = 'default flying stock' then 'Flying Stock'
+    else null
+    end as stock_name,
+
+
 w.warehouse_name,
-
-
-st.reseller_id,
-
-
 re.name as reseller_name,
+fs.feed_source_name as out_feed_source_name,
+
 re.debtor_number as reseller_debtor_number,
 re.account_type,
 re.account_manager,
@@ -23,8 +32,7 @@ re.financial_administration,
 case when st.stock_type = 0 then 'inventory' else 'flying' end as stock_type,
 case when st.status = 0 then 'visible' else 'hidden' end as stock_status,
 
-st.out_feed_source_id,
-fs.feed_source_name as out_feed_source_name,
+
 
 st.availability_type,
 st.has_custom_sales_unit,

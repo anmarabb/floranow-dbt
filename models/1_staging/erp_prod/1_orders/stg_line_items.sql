@@ -115,7 +115,7 @@ With source as
                 li.unit_additional_cost, -- additional cost per unit related to bulk pricing details
 
                 --quantity
-                    li.quantity,  
+                    li.quantity,
                     li.fulfilled_quantity, 
                     li.received_quantity,
                     li.inventory_quantity,

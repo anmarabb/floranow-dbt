@@ -12,6 +12,76 @@ returned - Item has been returned
 
 (% enddocs %}
 
+
+name: user_id
+        description: "Unique identifier for a user"
+        tests:
+            - not_null
+
+- name: item_sale_price
+        description: "How much the item sold for"
+        tests:
+            - not_null
+
+- name: product_department
+        description: "Whether the item is Astra or Non Astra"
+        tests:
+            - not_null
+
+- name: product_cost #item_cost
+        description: "How much the product cost the business to purchase"
+        tests:
+            - not_null
+
+- name: product_retail_price
+        description: "How much the product retails for on the online store"
+        tests:
+            - not_null
+
+- name: item_profit
+        description: "item_sale_price minus product_cost"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "= (item_sale_price - product_cost)"
+
+- name: item_discount
+      description: "product_retail_price minus item_sale_price"
+      tests:
+        - not_null
+        - dbt_utils.expression_is_true:
+            expression: "= (product_retail_price - item_sale_price)"
+
+
+
+
+
+stg_product_incidents
+    incident_type
+        - MISSING: The line item contains a missing quantity
+        - EXTRA: The line item contains a extra quantity
+        - DAMAGED: The line item contains a damaged quantity
+        - RETURNED: The line item contains a returned quantity ( return the line item from customer )
+
+    stage
+        - PACKING: report incidents during packing stage
+        - RECEIVING: report incidents during receiving stage
+        - INVENTORY: report incidents during inventory stage ( line item in the warehouse )
+        - DELIVERY: report incidents during delivery stage
+        - AFTER_RETURN: report incidents after the line item returned from customer
+
+    incidentable_type
+        - PackageLineItem: Report incidents on package line items ( packing and receiving stage)
+        - InvoiceItem: Report incidents on invoice item ( after delivery the line item )
+        - LineItem: Report incidents on line item ( incidents on child line items )
+        - ProductLocation: Report incidents on product location ( the line item in warehouse )
+        - Product: Report incidents on product ( after sold the product and before dispatch the child)
+
+
+
+
+
+
 stg_line_items
     fulfillment
         SUCCEED - Set on fulfilling, when adding the full quantity to location or proof of delivery
