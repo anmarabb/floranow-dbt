@@ -4,11 +4,15 @@ prep_product_locations as (select  pl.locationable_id, max(pl.product_location_i
 prep_picking_products as (select  pk.line_item_id, max(pk.picking_product_id) as picking_product_id from {{ ref('stg_picking_products') }} as pk group by 1)
 
 SELECT
-li.* EXCEPT(order_type,delivery_date),
+li.* EXCEPT(order_type,delivery_date, quantity),
+
+
+li.quantity as ordered_quantity,
+
+
 
 case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
 case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end as delivery_date,
-
 
 case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
@@ -95,6 +99,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
      when li.location = 'pod' and li.fulfillment = 'UNACCOUNTED' then '3. Fulfilled - Moved to POD (with Process Breakdown)'
      when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'FAILED' then '2. Fulfilled - with Full Item Incident'
      when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'UNACCOUNTED' then '1. Not Fulfilled - (Investigate)'
+     when li.location is null and li.fulfillment in ('PARTIAL','SUCCEED') and li.reseller_id in (2061,1967,2079) then '3. Fulfilled - Other Internal Resellers'
      when li.location is null and li.fulfillment in ('PARTIAL','SUCCEED') then '3. Fulfilled - with Process Breakdown'
      else 'cheack_my_logic'  
      end as fulfillment_status,
@@ -117,6 +122,7 @@ w.warehouse_name as warehouse,
 
 
 pi.incidents_count,
+pi.incident_quantity,
 
 
 
@@ -233,7 +239,7 @@ left join {{ref('fct_product_incidents_groupby_order_line')}} as pi on pi.line_i
 left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=li.line_item_id
 
 left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
-
+ 
 
 left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.product_id 
 left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.line_item_id

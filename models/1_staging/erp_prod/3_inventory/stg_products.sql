@@ -1,5 +1,6 @@
 With source as (
  select * from {{ source('erp_prod', 'products') }}
+ where deleted_at is  null
 )
 select 
 
@@ -13,7 +14,6 @@ select
                 origin_feed_source_id, --The original feed source from which the product was ordered
                 publishing_feed_source_id, --The feed source that will appear on the product when it is published on the marketplace
                 reseller_id,
-                
                 order_id,
                 supplier_product_id,
             
@@ -41,6 +41,8 @@ select
                 number,
                 sales_unit_name,
 
+                visible,
+
                 currency,
                 fob_currency,
                 landed_currency,
@@ -60,6 +62,10 @@ select
                 age,
                 sales_unit,
                 published_sales_unit,
+
+
+concat( "https://erp.floranow.com/products/", p.id) as product_link,
+
 
         REGEXP_EXTRACT(permalink, r'/([^/]+)') as product_crop , 
         REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') as product_category,

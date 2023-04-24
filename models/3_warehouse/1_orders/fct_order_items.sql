@@ -15,7 +15,7 @@ select
     li.total_price_without_tax, -- (li.quantity * li.unit_price)
 
 --quantity
-    li.quantity,
+    li.ordered_quantity,
     li.fulfilled_quantity,
 
 
@@ -45,6 +45,9 @@ select
 
     creation_stage,            -- SPLIT, PACKING, INVENTORY, receiving
     ordering_stock_type,       -- INVENTORY, FLYING, null
+
+
+    parent_line_item_id,
 
    
 
@@ -162,7 +165,8 @@ supplier_region as Origin,
 
 
 
-li.incidents_count,
+incidents_count,
+incident_quantity,
 
 
 
