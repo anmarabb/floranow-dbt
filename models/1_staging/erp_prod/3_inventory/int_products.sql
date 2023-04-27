@@ -12,11 +12,11 @@ with
         group by p.product_id
       ),
 
-    line_items_selled as (
+    line_items_sold as (
         select
         p.product_id,
-        count(li.line_item_id) as item_selled,
-        sum(li.quantity) as selled_quantity,         
+        count(li.line_item_id) as item_sold,
+        sum(li.quantity) as sold_quantity,         
         from {{ ref('stg_line_items')}} as li
         left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
         group by 1
@@ -83,13 +83,15 @@ concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_
 s.supplier_name as Supplier,
 
 
---line_items_selled
-    lis.item_selled,
-    lis.selled_quantity,
+--line_items_sold
+    lis.item_sold,
+    lis.sold_quantity,
 
     pi.incidents_count,
     pi.incidents_quantity,
     pi.damaged_quantity,
+
+    case when li.fulfillment_status = '2. Fulfilled - with Full Item Incident' and  incidents_quantity != p.quantity then 'red_flag' else null end as full_incident_check,
 
       
       
@@ -103,6 +105,6 @@ left join {{ ref('stg_feed_sources')}} as fs on p.feed_source_id = fs.feed_sourc
 left join {{ ref('stg_feed_sources')}} as out_fs on st.out_feed_source_id = out_fs.feed_source_id 
 left join {{ ref('base_users')}} as reseller on reseller.id = p.reseller_id
 left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
-left join line_items_selled as lis on lis.product_id = p.product_id
+left join line_items_sold as lis on lis.product_id = p.product_id
 left join product_incidents as pi on pi.product_id = p.product_id
 --where p.product_id =76370

@@ -29,7 +29,7 @@ select
     ordered_quantity,
     location_quantity,
     fulfilled_quantity,
-    selled_quantity,
+    sold_quantity,
     incidents_quantity,
     damaged_quantity,
 
@@ -42,6 +42,8 @@ select
 
     age,
     Visibility,
+
+    full_incident_check,
 
 current_timestamp() as insertion_timestamp, 
 
