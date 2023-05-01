@@ -20,7 +20,6 @@ select
 
 
              --fct
-                reconciled,
                 residual,
                 prev_residual,
                 balance,
