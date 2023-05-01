@@ -60,6 +60,9 @@ case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
     li.delivery_date,
     li.User,
     li.order_type,
+    li.Shipment,
+    li.shipments_status,
+    li.master_shipments_status,
     
     case 
     when date_diff(date(li.delivery_date)  ,current_date(), month) > 1 then 'Wrong date' 
