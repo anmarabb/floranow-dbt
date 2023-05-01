@@ -38,6 +38,7 @@ select
     fulfillment,               --SUCCEED, PARTIAL, FAILED, UNACCOUNTED
     pod_status,                --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
     order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
+    Shipment,
     shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
     master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
     order_payloads_status,     -- true, false, null
@@ -48,6 +49,8 @@ select
 
 
     parent_line_item_id,
+
+    
 
    
 
