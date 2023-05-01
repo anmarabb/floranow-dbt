@@ -116,6 +116,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
 --shipments
     sh.status as shipments_status, 
+    sh.Shipment,
     msh.status as master_shipments_status,
 
 w.warehouse_name as warehouse,
@@ -138,6 +139,9 @@ case
     when li.delivery_date = current_date() then "Today" 
     when li.delivery_date < current_date() then "Past" 
     else "cheak" end as select_delivery_date,
+
+
+
 
 /*
 
@@ -222,7 +226,7 @@ left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_i
 
 left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
 
-left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.id
+left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.shipment_id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.id
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_id
 

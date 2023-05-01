@@ -157,3 +157,15 @@ stg_line_items
         SKIPPED
 
 
+stg_invoice_items
+    status 
+        draft
+        open
+        printed
+        signed
+        closed
+        canceled
+        rejected
+        voided
+
+

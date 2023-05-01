@@ -14,7 +14,7 @@ select
 
             --dim
                 --date
-                created_at,
+                created_at,  --proforma_at,
                 updated_at,
                 deleted_at,
                 delivery_date,
@@ -27,7 +27,7 @@ select
                 case when ii.invoice_type = 1 then 'credit note' else 'invoice' end as invoice_type,
                 currency,
                 creditable_type,
-                status,
+                status as invoice_status, --draft, open, printed, signed, closed, canceled, rejected, voided
                 number
                 
                 product_name,
@@ -43,12 +43,14 @@ select
                 quantity,
                 unit_price,
                 unit_tax,
-
                 total_tax,
                 price_without_tax,
                 price_without_discount,
                 price,
                 discount_amount,
+
+
+
 
 
 current_timestamp() as ingestion_timestamp,

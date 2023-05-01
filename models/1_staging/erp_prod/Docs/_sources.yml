@@ -53,6 +53,7 @@ sources:
       - name: invoice_templates
       - name: payments
       - name: payment_transactions
+      - name: move_items
       - name: payment_terms
       - name: statement_of_accounts
 
