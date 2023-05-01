@@ -45,6 +45,10 @@ select
 
     full_incident_check,
 
+    Shipment,
+    shipments_status,
+    master_shipments_status,
+
 current_timestamp() as insertion_timestamp, 
 
 
