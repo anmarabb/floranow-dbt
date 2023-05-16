@@ -42,6 +42,6 @@ left join `floranow.erp_prod.order_requests` as orr on li.order_request_id = orr
 
 left join preb_budget as budget on budget.month = extract(month from i.printed_at) and budget.year = extract(year from i.printed_at) and budget.financial_administration = stg_users.financial_administration
 
-where ii.status = 'APPROVED' and ii.deleted_at is null  --and i.printed_at >= '2022-01-01'
+where ii.status = 'APPROVED' and ii.deleted_at is null  and i.printed_at >= '2023-01-01'
 group by  1,2,3,4
 order by 1 desc,2 desc, 3 desc
