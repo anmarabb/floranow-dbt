@@ -24,13 +24,17 @@ with
 
 select
 
-p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible),
 
-p.quantity as ordered_quantity,
-p.published_quantity,
-p.remaining_quantity,
+--products
+    p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,departure_date,created_at),
+    p.quantity as ordered_quantity,
+    p.published_quantity,
+    p.remaining_quantity,
+    p.departure_date,
+    p.created_at,
 
-case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
+    case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
+    case when p.remaining_quantity > 0 then 'Live Stock'  else 'Total Stock' end as live_stock,
 
 --product_locations
     pl.quantity as location_quantity,
@@ -73,6 +77,25 @@ case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
     when li.delivery_date < current_date() then "Past" 
     else "cheak" end as select_delivery_date,
 
+    case 
+    when date_diff(date(p.departure_date)  ,current_date(), month) > 1 then 'Wrong date' 
+    when p.departure_date > current_date() then "Future" 
+    when p.departure_date = current_date() then "Today" 
+    when p.departure_date < current_date() then "Past" 
+    else "cheak" end as select_departure_date,
+
+
+    case 
+    when date_diff(date(case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end)  ,current_date(), month) > 1 then 'Wrong date' 
+    when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end > current_date() then "Future" 
+    when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end = current_date() then "Today" 
+    when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end < current_date() then "Past" 
+    else "cheak" end as calc_select_departure_date,
+
+
+
+    case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end as calc_departure_date, 
+    case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end as calc_delivery_date,
 
 st.stock_name as Stock,
 reseller.name as Reseller,

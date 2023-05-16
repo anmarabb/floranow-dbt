@@ -19,6 +19,8 @@ select
     full_stock_name,
     loc_status,
 
+    live_stock,
+
 
     
     order_status,
