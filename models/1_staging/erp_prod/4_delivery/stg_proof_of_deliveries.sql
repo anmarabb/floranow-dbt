@@ -39,7 +39,7 @@ select
                 source_type,
                 number,
                 barcode,
-                status as pod_status,
+                status as pod_status, --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
                 discontinued,
                 sequence_number,
                 sequence,

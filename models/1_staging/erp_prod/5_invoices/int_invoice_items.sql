@@ -4,13 +4,14 @@ source as (
         
 select     
 
-ii.*EXCEPT(generation_type,invoice_type),
+ii.*EXCEPT(generation_type),
 
     --
         i.financial_administration,
-        i.proforma_at,
-        i.printed_at,
-        i.invoice_type,
+        i.invoice_header_created_at,
+        i.invoice_header_printed_at,
+        i.invoice_header_type,
+        i.invoice_header_status,
         i.generation_type,
         i.record_type,
 
@@ -28,7 +29,7 @@ ii.*EXCEPT(generation_type,invoice_type),
 
         approved_by_id.name as approved_by,
         
-case when i.invoice_type = 'credit note' then -ii.quantity else ii.quantity end as invoiced_quantity,
+case when i.invoice_header_type = 'credit note' then -ii.quantity else ii.quantity end as invoiced_quantity,
 
 
 
@@ -39,7 +40,7 @@ li.proof_of_delivery_id as proof_of_delivery_id_line,
 current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_invoice_items') }} as ii
-left join {{ ref('stg_invoices') }} as i on ii.invoice_id = i.invoice_id
+left join {{ ref('stg_invoices') }} as i on ii.invoice_header_id = i.invoice_header_id
 
 left join {{ ref('base_users') }} as customer on customer.id = ii.customer_id
 left join {{ref('base_users')}} as approved_by_id on approved_by_id.id = ii.approved_by_id

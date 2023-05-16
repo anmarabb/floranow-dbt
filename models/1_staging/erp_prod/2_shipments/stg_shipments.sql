@@ -15,9 +15,11 @@ select
 
             --dim
                 name as Shipment,
-                status, --DRAFT, PACKED, WAREHOUSED, MISSING, INSPECTED, CANCELED
-                fulfillment, --UNACCOUNTED, PARTIAL, SUCCEED, FAILED
+                status as shipments_status, --DRAFT, PACKED, WAREHOUSED, MISSING, INSPECTED, CANCELED
+                fulfillment as shipments_fulfillment_status, --UNACCOUNTED, PARTIAL, SUCCEED, FAILED
                 receiving_way,  --BY_BOX, BY_CLIENT, null
+                concat( "https://erp.floranow.com/shipments/", sh.id) as shipment_link,
+
 
 
                 packing_type, --null
@@ -42,6 +44,7 @@ select
                 created_at,
                 updated_at,
                 departure_date,
+                case when supplier_id in (66) then departure_date else departure_date + 1 end as arrival_date,
                 canceled_at,
                 deleted_at,
 
@@ -62,14 +65,6 @@ select
                 shipping_boxes_count,
                 warehousing_boxes_count,
 
-
-
-                
-
-
-            
-
-    
     
 
 

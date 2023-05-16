@@ -159,13 +159,26 @@ stg_line_items
 
 stg_invoice_items
     status 
-        draft
-        open
+        APPROVED
+        CANCELED
+        DRAFT
+        REJECTED
+
+stg_invoices
+    status 
+        0= draft - Original invoice not printed/ Pending
+        1= signed - Client signed on the invoice during delivery in the mobile app
+        2= Open - Need to check with Dev
+        3= Printed - Original invoice printed (Dispatched from Fulfilment)
+        6= Closed - Need to check with Dev team. Never saw this
+        7= Canceled - Invoice/ Credit Note cancelled
+        8= Rejected - Invoice/ credit note Rejected
+        9= voided
+
+        open     
         printed
-        signed
         closed
         canceled
         rejected
         voided
-
 

@@ -33,7 +33,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     case when li.dispatched_at is not null then 1 else 0 end as order_dispatched,
     case when li.state = 'DELIVERED' then 1 else 0 end as order_delivered,
     case when li.invoice_id is not null then 1 else 0 end as invoice_created,
-    case when li.invoice_id is not null and i.printed_at is not null then 1 else 0 end as invoice_printed,
+    case when li.invoice_id is not null and i.invoice_header_printed_at is not null then 1 else 0 end as invoice_printed,
 
 
     case when li.location = 'loc' then 1 else 0 end as order_loc_moved, --order_warehoused
@@ -73,6 +73,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
 --supplier
     case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
+    sh.Supplier as shipment_Supplier,
     lis.supplier_region,
 
 --order 
@@ -115,9 +116,9 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
 
 --shipments
-    sh.status as shipments_status, 
+    sh.shipments_status, 
     sh.Shipment,
-    msh.status as master_shipments_status,
+    msh.master_shipments_status,
 
 w.warehouse_name as warehouse,
 
@@ -208,7 +209,7 @@ left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
 left join {{ref('stg_order_payloads')}} as opl on li.order_payload_id = opl.order_payload_id
 
 
-left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id and ii.invoice_type = 'invoice'
+left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id and ii.invoice_item_type = 'invoice'
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as user on user.id = li.user_id
 left join {{ref('base_users')}} as dispatched_by on dispatched_by.id = li.dispatched_by_id
@@ -226,9 +227,9 @@ left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_i
 
 left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
 
-left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.shipment_id
-left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.id
-left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_id
+left join {{ref('int_shipments')}} as sh on li.shipment_id = sh.shipment_id
+left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.master_shipment_id
+left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
 
 left join {{ref('base_stocks')}} as st on p.stock_id = st.stock_id 
 --left join {{ref('stg_feed_sources')}} as origin_fs on origin_fs.feed_source_id = p.origin_feed_source_id

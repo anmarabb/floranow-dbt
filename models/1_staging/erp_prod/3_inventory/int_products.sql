@@ -28,12 +28,13 @@ p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible),
 
 p.quantity as ordered_quantity,
 p.published_quantity,
-p.remaining_quantity as remaining_quantity2 ,
+p.remaining_quantity,
+
 case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
 
 --product_locations
     pl.quantity as location_quantity,
-    pl.remaining_quantity,
+    pl.remaining_quantity as location_remaining_quantity,
     pl.product_location_id,
     pl.location_id,
     pl.locationable_id,
@@ -57,6 +58,7 @@ case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
     li.warehouse,
     li.loc_status,
     li.fulfillment_mode,
+    li.fulfillment,
     li.delivery_date,
     li.User,
     li.order_type,
