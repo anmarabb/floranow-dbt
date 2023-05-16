@@ -20,6 +20,8 @@ select
     else 'check_my_logic'
   end as customer_type,
   
+  INITCAP(u.city) as city,
+  
   case when u.internal is true then 'Internal' else 'External' end as account_type,
 
   
@@ -32,6 +34,12 @@ select
   pt.name as payment_term,
   f.name as financial_administration,
 
+case 
+when u.company_id = 3 then 'Bloomax Flowers LTD'
+when u.company_id = 2 then 'Global Floral Arabia tr'
+when u.company_id = 1 then 'Flora Express Flower Trading LLC'
+else  'cheack'
+end as company_name,
   
 current_timestamp() as ingestion_timestamp,
 

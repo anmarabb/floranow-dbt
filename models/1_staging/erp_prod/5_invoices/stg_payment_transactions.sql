@@ -17,12 +17,12 @@ select
                 added_by,
 
             --dim
-                payment_transaction_type,
-                adjustment_status,
-                payment_method,
-                transaction_type,
+                transaction_type,            --EXTERNAL, MANUAL, ONLINE, IN_SHOP
+                payment_transaction_type,    --ADVANCED, NORMAL, null
+                adjustment_status,           --NOT_ADJUSTED, TOTALLY_ADJUSTED, PARTIALLY_ADJUSTED
+                payment_method,              --BANK_TRANSFER, VISA_CARD, PAYMENT_BY_CREDIT, CASH, CHEQUE, WRITE_OFF, CREDIT, OVER_PAYED, OFFSET, OTHERS
                 payment_gateway,
-                status,
+                status,                      -- SUCCESS, DRAFT, FAILED, PROCESSING, CANCELED
                 approved,
                 trx_reference,
                 currency,

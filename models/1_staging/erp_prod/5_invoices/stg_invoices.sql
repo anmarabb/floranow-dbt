@@ -3,7 +3,7 @@ With source as (
 )
 select 
             --PK
-                i.id as invoice_id,
+                i.id as invoice_header_id,
             --FK
                 parent_invoice_id,
                 customer_id,
@@ -36,8 +36,8 @@ select
             --dim
                 --date
                 canceled_at,
-                created_at as proforma_at,  --proforma_at,
-                printed_at,  --invoiced_at,
+                created_at as invoice_header_created_at,  --proforma_at,
+                printed_at as invoice_header_printed_at,  --invoiced_at,
                 updated_at,
                 signed_at,
                 finalized_at,
@@ -48,6 +48,18 @@ select
                 items_collection_date,
                 paid_at,
                 deleted_at,
+                case
+                when i.status = 0 then "Draft"
+                when i.status = 1 then "signed"
+                when i.status = 2 then "Open"
+                when i.status = 3 then "Printed"
+                when i.status = 6 then "Closed"
+                when i.status = 7 then "Canceled"
+                when i.status = 8 then "Rejected"
+                when i.status = 9 then "voided"
+                when i.status is null then ""
+                else "check_my_logic"
+                end as invoice_header_status,
 
 
                 --dim
@@ -55,7 +67,7 @@ select
                 language,
                 number,
                 currency,
-                case when i.invoice_type = 1 then 'credit note' else 'invoice' end as invoice_type,
+                case when i.invoice_type = 1 then 'credit note' else 'invoice' end as invoice_header_type,
                 items_collection_method,
                 items_source_type,
                 generation_type,
@@ -68,6 +80,18 @@ case
     when i.invoice_type = 0 and i.generation_type ='AUTO' then 'Invoice - AUTO'
     else null
 end as record_type,
+
+
+        --fct
+            remaining_amount,
+            tax_rate,
+            prev_remaining_amount,
+            total_tax,
+            total_amount,
+            paid_amount,
+            discount_amount,
+            price_without_discount,
+
 
 
 current_timestamp() as ingestion_timestamp

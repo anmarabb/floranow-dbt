@@ -13,7 +13,7 @@ group by proof_of_delivery_id
 (
 select 
 proof_of_delivery_id,
-count (invoice_id) as invoice_count,
+count (invoice_header_id) as invoice_count,
 from {{ ref('stg_invoices') }}
 --where proof_of_delivery_id is not null
 group by proof_of_delivery_id

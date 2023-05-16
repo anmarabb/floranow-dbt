@@ -4,17 +4,21 @@ source as (
 
  
 select
-case 
-when invoice_type != 'credit note' and line_item_id is null then 'invoice_without_order'
-else null end as s1,
+
 
 line_item_id,
-proforma_at,
-printed_at, 
-invoice_status, --draft, open, printed, signed, closed, canceled, rejected, voided
+
+--invoice Header
+    invoice_header_created_at,
+    invoice_header_printed_at, 
+    invoice_header_status, --draft, open, printed, signed, closed, canceled, rejected, voided
+    invoice_header_type,
+
+
+invoice_item_status,
 
 record_type,
-invoice_type,
+invoice_item_type,
 generation_type,
 Customer,
 Supplier,
@@ -42,6 +46,7 @@ source_type,
 --date
     order_date,
     delivery_date,
+    deleted_at,
 
 --fct
     
@@ -50,6 +55,7 @@ source_type,
     fulfilled_quantity,
     
     price_without_tax,
+    price,
 
 
 

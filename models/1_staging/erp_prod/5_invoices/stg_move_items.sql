@@ -8,14 +8,16 @@ select
                 user_id,
                 documentable_id,
             --dim
-                source_system,
+                source_system, -- ODOO, FLORANOW_ERP, FLORISOFT
                 currency,
-                entry_type,
-                reconciled,
+                entry_type,  --CREDIT, DEBIT
+                case when reconciled is true then 'reconciled' else null end as reconciled,
+                documentable_type, --Invoice, PaymentTransaction, null
 
             --date
                 date,
                 updated_at,
+                created_at,
 
 
 

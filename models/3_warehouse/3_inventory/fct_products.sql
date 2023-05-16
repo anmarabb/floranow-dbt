@@ -25,9 +25,18 @@ select
     fulfillment_status,
     fulfillment_mode,
     warehouse,
+    fulfillment,
 
+
+--fct
     ordered_quantity,
+    
+    published_quantity,
+    remaining_quantity,
+
     location_quantity,
+    location_remaining_quantity,
+
     fulfilled_quantity,
     sold_quantity,
     incidents_quantity,
