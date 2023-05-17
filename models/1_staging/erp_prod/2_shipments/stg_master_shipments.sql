@@ -18,6 +18,10 @@ select
                 canceled_at,
                 deleted_at,
                 arrival_time as arrival_at, --i think this is when the team click the open butomn
+                case when origin in ('CO','NL') then departure_date + 1 else departure_date  end as arrival_date,
+
+
+                
 
 
 
@@ -45,7 +49,7 @@ select
 
 
             --fct
-                total_quantity,
+                total_quantity as master_total_quantity,
                 clearance_cost,
                 master_invoice_cost,
                 freight_cost,

@@ -44,15 +44,15 @@ select
                 created_at,
                 updated_at,
                 departure_date,
-                case when supplier_id in (66) then departure_date else departure_date + 1 end as arrival_date,
+                
                 canceled_at,
                 deleted_at,
 
             --fct
-                total_quantity,
-                total_received_quantity,
-                total_missing_quantity,
-                total_damaged_quantity,
+                total_quantity as supplier_shipment_total_quantity,
+                total_received_quantity as supplier_shipment_total_received_quantity,
+                total_missing_quantity as supplier_shipment_total_missing_quantity,
+                total_damaged_quantity as supplier_shipment_total_damaged_quantity,
 
                 total_fob,
                 total_received_fob,
