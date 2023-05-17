@@ -3,13 +3,16 @@ With source as (
     
  select 
  
- sh.* EXCEPT(ingestion_timestamp),
+ sh.* EXCEPT(ingestion_timestamp,master_shipment_id),
 
 
 msh.master_shipments_status,
 msh.master_shipment_name as master_shipment,
 msh.master_shipments_fulfillment_status,
 msh.arrival_at,
+msh.master_shipment_id,
+
+concat( "https://erp.floranow.com/master_shipment/", msh.master_shipment_id) as master_shipment_link,
 
 shipments_suppliers.supplier_name as Supplier,
 shipments_suppliers.supplier_region as Origin,
