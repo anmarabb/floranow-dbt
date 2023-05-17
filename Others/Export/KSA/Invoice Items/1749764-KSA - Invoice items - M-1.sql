@@ -11,7 +11,7 @@ case --financial ID
         else 'check_my_logic'
         end as financial_administration,
         
-date(i.printed_at) as ,
+date(i.printed_at) as  ,
 stg_users.debtor_number,
 stg_users.customer,
 stg_users.client_category,
