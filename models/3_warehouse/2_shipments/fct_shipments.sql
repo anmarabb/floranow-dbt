@@ -11,7 +11,14 @@ Origin,
 warehouse, --destination
 Destination,
 
+shipment_link,
+master_shipment_link,
+
+
 account_manager,
+shipment_id,
+master_shipment_id,
+
 
 --date
     created_at,
