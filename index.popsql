@@ -121,5 +121,6 @@
   "1948093": "Project Desert Rose data Integration/PWH/1948093-PostgreSQL.sql",
   "1943514": "Project Desert Rose data Integration/DWH/1943514-BigQuery.sql",
   "1856501": "1856501-Cohort Analysis.sql",
-  "2098359": "Dash/2098359-user dash.sql"
+  "2098359": "Dash/2098359-user dash.sql",
+  "2099017": "models/3_warehouse/1_orders/fct_line_items_groupby_order_id.sql"
 }
