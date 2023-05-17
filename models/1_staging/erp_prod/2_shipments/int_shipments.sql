@@ -12,6 +12,7 @@ msh.master_shipments_fulfillment_status,
 msh.arrival_at,
 msh.master_shipment_id,
 msh.master_total_quantity,
+
 msh.departure_date,
 msh.arrival_date,
 
@@ -65,3 +66,4 @@ current_timestamp() as ingestion_timestamp,
 
 
 from source as sh
+

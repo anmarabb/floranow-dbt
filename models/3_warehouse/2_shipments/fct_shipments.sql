@@ -30,6 +30,10 @@ select
         supplier_shipment_total_received_quantity,
         supplier_shipment_total_missing_quantity,
         supplier_shipment_total_damaged_quantity,
+        shipping_boxes_count,
+        warehousing_boxes_count,
+        total_fob,
+
 
 
 
