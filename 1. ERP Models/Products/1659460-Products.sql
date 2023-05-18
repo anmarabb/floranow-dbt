@@ -183,7 +183,7 @@ when st.id in (14,15) then 'Marketplace - Wish Flowers'
 when st.id in (15) then 'Commission Based - Wish Flowers'
 when st.id in (304,305) then 'Commission Based - Ward'
 when st.id in (128,129,18,19,22,23,266,267,486,526,529,565,90,91) then 'Commission Based - Astra Express'
-when st.id in (417,416,,,,) then 'Reselling Event'
+when st.id in (165,64,569,451,450,415,414,571,570,408,411,410,572,407,406,413,412) then 'Reselling Event'
 
 
 when st.id in (1,2,6,7,20,21,56,57,92,93,126,127,130,131,164,165,198,199,232,233,300,301,302,303,338,339,372,373,407,413,485,523,525) then 'Reselling'
