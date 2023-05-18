@@ -182,6 +182,7 @@ end as stock_model,
 
 
 
+
 --sometimes departure_date is null when the product source is imported from exel.
 --
 
