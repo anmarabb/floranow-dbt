@@ -63,6 +63,8 @@ select
                 sales_unit,
                 published_sales_unit,
 
+                p.remaining_quantity * p.unit_price as remaining_value,
+
 
 concat( "https://erp.floranow.com/products/", p.id) as product_link,
 

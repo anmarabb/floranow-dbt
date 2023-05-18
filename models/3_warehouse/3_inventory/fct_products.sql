@@ -7,51 +7,86 @@ source as (
 
  
 select 
-    product_id,
-    product_link,
-    record_type,
-    record_type_details,
 
-    Supplier,
-    product_name as Product,
-    Reseller,
-    Stock,
-    full_stock_name,
-    loc_status,
+--Products
+    --dim
+        product_name as Product,
+        Supplier,
+        Reseller,
+        Stock,
+        full_stock_name,
+        live_stock,
+        Visibility,
 
-    live_stock,
-
-
+        product_id,
+        product_link,
     
-    order_status,
-    fulfillment_status,
-    fulfillment_mode,
-    warehouse,
-    fulfillment,
 
-
---fct
-    ordered_quantity,
+    --date
+        expired_at,
+        departure_date,   --from product
+  
+    --fct
+        ordered_quantity,
+        remaining_quantity,
+        published_quantity,
+        remaining_value,
+        age,
     
-    published_quantity,
-    remaining_quantity,
 
-    location_quantity,
-    location_remaining_quantity,
 
+
+--product_locations
+    --dim
+
+    --date
+  
+    --fct
+        location_quantity,
+        location_remaining_quantity,
+
+
+
+--line_items
+    --dim
+        record_type,
+        record_type_details,
+        fulfillment,
+        fulfillment_status,
+        fulfillment_mode,
+        User,
+        loc_status,
+        order_status,
+        order_type,
+        warehouse,
+        Shipment,
+        shipments_status,
+        master_shipments_status,
+
+    --date
+        delivery_date,    --from line item
+  
+    --fct
     fulfilled_quantity,
+    
+    
+    
+
+    
+--line_items_sold
     sold_quantity,
+    
+
+--product_incidents
     incidents_quantity,
     damaged_quantity,
 
 
-    
 
-    User,
-    order_type,
 
-    departure_date,   --from product
-    delivery_date,    --from line item
+
+
+
     select_delivery_date,
     select_departure_date,
     calc_select_departure_date,
@@ -59,14 +94,11 @@ select
     calc_delivery_date, --order_date for import inventory
 
 
-    age,
-    Visibility,
+    
+    
 
     full_incident_check,
 
-    Shipment,
-    shipments_status,
-    master_shipments_status,
 
 current_timestamp() as insertion_timestamp, 
 
