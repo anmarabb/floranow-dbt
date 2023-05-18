@@ -49,7 +49,7 @@ create or replace table `floranow.Floranow_ERP.payments` as
                 when customer.company_id = 1 then 'Flora Express Flower Trading LLC'
                 else  'cheack'
                 end as company_name,
-pt.
+pt.transaction_type
 
     from   `floranow.erp_prod.payments` payments
              join `floranow.erp_prod.users`  customer on payments.user_id = customer.id
