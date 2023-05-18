@@ -32,7 +32,9 @@ with CTE as
             p.quantity as ordered_quantity,
             p.published_quantity,
             p.remaining_quantity,
-            p.departure_date,
+            --p.departure_date,
+            case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end as departure_date,
+            
             p.created_at,
 
             s.supplier_name as Supplier,
@@ -76,7 +78,8 @@ with CTE as
             li.loc_status,
             li.fulfillment_mode,
             li.fulfillment,
-            li.delivery_date,
+            --li.delivery_date,
+            case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end as delivery_date,
             li.User,
             li.order_type,
             li.Shipment,
@@ -84,31 +87,24 @@ with CTE as
             li.master_shipments_status,
             
             case 
-            when date_diff(date(li.delivery_date)  ,current_date(), month) > 1 then 'Wrong date' 
-            when li.delivery_date > current_date() then "Future" 
-            when li.delivery_date = current_date() then "Today" 
-            when li.delivery_date < current_date() then "Past" 
+            when date_diff(date(case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end)  ,current_date(), month) > 1 then 'Wrong date' 
+            when case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end > current_date() then "Future" 
+            when case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end = current_date() then "Today" 
+            when case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end < current_date() then "Past" 
             else "cheak" end as select_delivery_date,
 
-            case 
-            when date_diff(date(p.departure_date)  ,current_date(), month) > 1 then 'Wrong date' 
-            when p.departure_date > current_date() then "Future" 
-            when p.departure_date = current_date() then "Today" 
-            when p.departure_date < current_date() then "Past" 
-            else "cheak" end as select_departure_date,
-
-
+          
             case 
             when date_diff(date(case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end)  ,current_date(), month) > 1 then 'Wrong date' 
             when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end > current_date() then "Future" 
             when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end = current_date() then "Today" 
             when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end < current_date() then "Past" 
-            else "cheak" end as calc_select_departure_date,
+            else "cheak" end as select_departure_date,
 
 
 
-            case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end as calc_departure_date, 
-            case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end as calc_delivery_date,
+             
+            
 
             
 
