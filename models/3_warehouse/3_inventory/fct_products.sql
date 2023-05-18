@@ -16,6 +16,7 @@ select
         Stock,
         full_stock_name,
         live_stock,
+        stock_model,
         Visibility,
 
         product_id,

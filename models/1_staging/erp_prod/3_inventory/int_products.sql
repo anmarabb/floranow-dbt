@@ -42,6 +42,7 @@ with CTE as
             out_fs.feed_source_name as out_feed_source_name,
 
             st.stock_name as Stock,
+            st.stock_model,
             reseller.name as Reseller,
             concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_name,
 
@@ -148,6 +149,6 @@ with CTE as
         
     )
 select * from CTE where row_number=1
-
+ 
 
 
