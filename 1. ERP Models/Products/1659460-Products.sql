@@ -169,6 +169,8 @@ when st.id in (1,2,338,339,525) then 'Reselling'
 else 'not_set'
 end as stock_model2, --jibu
 
+
+
 case 
 when st.id in (12,13) then 'Internal - Jumeriah'
 when st.id in (10,11) then 'Internal - Spinnyes'
