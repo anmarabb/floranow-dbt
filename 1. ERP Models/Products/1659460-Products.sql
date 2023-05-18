@@ -176,7 +176,6 @@ when st.id in (12,13) then 'Internal - Jumeriah'
 when st.id in (10,11) then 'Internal - Spinnyes'
 when st.id in (16,17) then 'Internal - TBF'
 when st.id in (,) then 'Marketplace - Astra Express'
-when st.id in (14,15) then 'Marketplace - Wish Flowers'
 
 
 
