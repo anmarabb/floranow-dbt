@@ -151,7 +151,6 @@ concat(st.id, " - ", reseller.name , " - ", st.name ) as full_stock_name, --stoc
 
 
 
-
 case 
 when st.id in (12,13) then 'Internal - Jumeriah'
 when st.id in (10,11) then 'Internal - Spinnyes'
