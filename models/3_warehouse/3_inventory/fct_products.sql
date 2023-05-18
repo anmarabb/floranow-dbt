@@ -90,9 +90,6 @@ select
 
     select_delivery_date,
     select_departure_date,
-    calc_select_departure_date,
-    calc_departure_date, --order_date for import inventory
-    calc_delivery_date, --order_date for import inventory
 
 
     
