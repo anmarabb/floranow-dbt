@@ -175,7 +175,7 @@ case
 when st.id in (12,13) then 'Internal - Jumeriah'
 when st.id in (10,11) then 'Internal - Spinnyes'
 when st.id in (16,17) then 'Internal - TBF'
-when st.id in (18,19,22,23,90,128,129) then 'Marketplace - Astra Express'
+when st.id in (18,19,22,23,128,129) then 'Marketplace - Astra Express'
 when st.id in (304,305) then 'Marketplace - Ward'
 when st.id in (14,15) then 'Marketplace - Wish Flowers'
 
