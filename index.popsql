@@ -123,5 +123,8 @@
   "2099018": "models/1_staging/erp_prod/2_shipments/int_shipments.sql",
   "2099019": "models/3_warehouse/2_shipments/fct_shipments.sql",
   "2099198": "models/1_staging/erp_prod/2_shipments/stg_master_shipments.sql",
-  "2099199": "models/1_staging/erp_prod/2_shipments/stg_shipments.sql"
+  "2099199": "models/1_staging/erp_prod/2_shipments/stg_shipments.sql",
+  "2100951": "models/1_staging/erp_prod/3_inventory/int_products.sql",
+  "2100952": "models/1_staging/erp_prod/3_inventory/stg_products.sql",
+  "2100953": "models/3_warehouse/3_inventory/fct_products.sql"
 }
