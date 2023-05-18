@@ -2,23 +2,23 @@ with
     product_incidents as (
         select 
         p.product_id,
-        count(*) as incidents_count,
-        sum(pi.quantity) as incidents_quantity,
-        sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as damaged_quantity,
-        from {{ ref('stg_product_incidents')}}  as pi 
-        left join {{ ref('stg_line_items')}}  as li on  pi.line_item_id = li.line_item_id
-        left join {{ ref('stg_products')}}  as p on  p.line_item_id = li.line_item_id and p.product_id is not null
+            count(*) as incidents_count,
+            sum(pi.quantity) as incidents_quantity,
+            sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as damaged_quantity,
+            from {{ ref('stg_product_incidents')}}  as pi 
+            left join {{ ref('stg_line_items')}}  as li on  pi.line_item_id = li.line_item_id
+            left join {{ ref('stg_products')}}  as p on  p.line_item_id = li.line_item_id and p.product_id is not null
         where  pi.deleted_at is null
         group by p.product_id
       ),
 
     line_items_sold as (
         select
-        p.product_id,
-        count(li.line_item_id) as item_sold,
-        sum(li.quantity) as sold_quantity,         
-        from {{ ref('stg_line_items')}} as li
-        left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
+            p.product_id,
+            count(li.line_item_id) as item_sold,
+            sum(li.quantity) as sold_quantity,         
+            from {{ ref('stg_line_items')}} as li
+            left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
         group by 1
       )
 
@@ -115,6 +115,8 @@ s.supplier_name as Supplier,
     lis.item_sold,
     lis.sold_quantity,
 
+
+--product_incidents
     pi.incidents_count,
     pi.incidents_quantity,
     pi.damaged_quantity,

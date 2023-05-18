@@ -31,7 +31,7 @@ select
                 total_fob,
                 customer_type,  
 
-                status as master_shipments_status,
+                status as master_shipments_status, --CANCELED, MISSING, PACKED, WAREHOUSED,CANCELED,DRAFT
                 name as master_shipment_name,
                 fulfillment as master_shipments_fulfillment_status, --UNACCOUNTED, PARTIAL, SUCCEED
 
