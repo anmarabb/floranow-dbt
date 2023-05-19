@@ -1,4 +1,4 @@
-select count(*) as row_count from floranow_erp_db.public.invoice_items as ii ;
+select count(*) as row_count from floranow_erp_db.public.invoice_items as ii where ii.deleted_at is null;
 
 
 select count(*) as row_count from floranow_erp_db.public.line_items as li;
