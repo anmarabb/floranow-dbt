@@ -503,7 +503,8 @@ left join `floranow.erp_prod.feed_sources` as fs on li.feed_source_id = fs.id
 left join  `floranow.erp_prod.line_items` as parent_li on parent_li.id = li.parent_line_item_id
 left join `floranow.Floranow_ERP.suppliers` as parent_li_suppliers on parent_li_suppliers.id = parent_li.supplier_id
 left join `floranow.erp_prod.warehouses` as w on w.id = stg_users.warehouse_id
-where ii.deleted_at is null 
+where ii.deleted_at is null and  __hevo__marked_deleted is not true
+
 
 
 --left join floranow.erp_prod.products as p on p.line_item_id = li.id
