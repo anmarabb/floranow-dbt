@@ -23,20 +23,15 @@ select
 
                 --dim
                 ii.source_type,
-                ii.generation_type,
-                case 
-                    when ii.invoice_type = 1 then 'credit note' 
-                    when ii.invoice_type = 0 then 'invoice'
-                    when ii.price_without_tax < 0 then 'credit note'
-                    when ii.price_without_tax > 0 then 'invoice' 
-                    else 'check' 
-                    end as invoice_item_type,
+                ii.generation_type as invoice_item_generation_type,
+                
                 ii.currency,
                 ii.creditable_type,
                 ii.status as invoice_item_status, --APPROVED, CANCELED, DRAFT, REJECTED
                 ii.number,
                 ii.product_name,
                 ii.category,
+                ii.invoice_type,
 
                 --supplier
                 ii.meta_data.supplier as meta_supplier,

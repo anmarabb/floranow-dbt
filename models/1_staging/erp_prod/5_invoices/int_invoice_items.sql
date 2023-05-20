@@ -6,10 +6,18 @@ select
 
 --Invoice Items
 
-        ii.*EXCEPT(generation_type),
+        ii.*EXCEPT(invoice_type),
         approved_by_id.name as approved_by,
         customer.name as Customer,
         customer.customer_type,
+        
+        case 
+                    when ii.invoice_type = 1 then 'credit note' 
+                    when ii.invoice_type = 0 then 'invoice'
+                    when ii.price_without_tax < 0 then 'credit note'
+                    when ii.price_without_tax > 0 then 'invoice' 
+                    else 'check' 
+                    end as invoice_item_type,
 
 
 --invoice Header
