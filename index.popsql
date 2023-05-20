@@ -24,7 +24,6 @@
   "1732128": "1. ERP Models/Shipments/1732128-shipments.sql",
   "1659460": "1. ERP Models/Products/1659460-Products.sql",
   "2053239": "1. ERP Models/Products/2053239-stg_products.sql",
-  "1642212": "1. ERP Models/Payments/1642212-payments.sql",
   "2066888": "1. ERP Models/Payments/2066888-move_items.sql",
   "2077966": "1. ERP Models/Payments/2077966-Copy of move_items.sql",
   "2083048": "1. ERP Models/Payments/2083048-collection.sql",
