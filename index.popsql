@@ -47,7 +47,6 @@
   "1855458": "1. ERP Models/incidents/~stg/1855458-stg_ PACKING.sql",
   "1694497": "1. ERP Models/- Staging/~order_number/1694497-stg_orders.sql",
   "1702133": "1. ERP Models/- Staging/~supplier_id/1702133-stg_orders.sql",
-  "1714622": "1. ERP Models/- Staging/~invoice_id/1714622-stg_invoice_items.sql",
   "1733108": "1. ERP Models/- Staging/~shipments/1733108-stg_shipments.sql",
   "1772824": "1. ERP Models/- Core/Invoices/1772824-avg monthly.sql",
   "1573598": "Others/Analytics/1573598-line_item_per_month.sql",
