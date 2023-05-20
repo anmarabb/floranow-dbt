@@ -25,8 +25,8 @@ select
                 ii.source_type,
                 ii.generation_type,
                 case 
-                    --when ii.invoice_type = 1 then 'credit note' 
-                    --when ii.invoice_type = 0 then 'invoice'
+                    when ii.invoice_type = 1 then 'credit note' 
+                    when ii.invoice_type = 0 then 'invoice'
                     when ii.price_without_tax < 0 then 'credit note'
                     when ii.price_without_tax > 0 then 'invoice' 
                     else 'check' 
