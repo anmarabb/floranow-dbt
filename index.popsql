@@ -17,7 +17,6 @@
   "2007819": "1. ERP Models/incidents/2007819-~product_incidents_stg1.sql",
   "1772824": "1. ERP Models/- Core/Invoices/1772824-avg monthly.sql",
   "1821437": "Others/Export/KSA/Invoice Summary/1821437-KSA - Invoice Summary - MTD.sql",
-  "1821483": "Others/Export/UAE/Invoice Summary/1821483-UAE - Invoice Summary - YTD.sql",
   "1821485": "Others/Export/UAE/Invoice Summary/1821485-UAE - Invoice Summary - Y-1.sql",
   "1895685": "dbt/2. Warehouse/1895685-dim_customers.sql",
   "1895697": "dbt/2. Warehouse/1895697-dim_product.sql",
