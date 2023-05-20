@@ -7,16 +7,18 @@ source as (
  
 select
 
+--Line Items
+    line_item_id,
 
-line_item_id,
 
 --invoice Header
     invoice_header_created_at,
     invoice_header_printed_at, 
     invoice_header_status, --draft, open, printed, signed, closed, canceled, rejected, voided
-    invoice_header_type,
+    invoice_header_type, --credit note, invoice
+    invoice_header_id,
 
-
+--invoice Items
 invoice_item_status,
 
 record_type,

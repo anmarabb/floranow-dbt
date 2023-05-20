@@ -4,9 +4,16 @@ source as (
         
 select     
 
-ii.*EXCEPT(generation_type),
+--Invoice Items
 
-    --
+        ii.*EXCEPT(generation_type),
+        approved_by_id.name as approved_by,
+        customer.name as Customer,
+        customer.customer_type,
+
+
+--invoice Header
+
         i.financial_administration,
         i.invoice_header_created_at,
         i.invoice_header_printed_at,
@@ -14,10 +21,13 @@ ii.*EXCEPT(generation_type),
         i.invoice_header_status,
         i.generation_type,
         i.record_type,
+        i.proof_of_delivery_id as proof_of_delivery_id_inv,
 
-        customer.name as Customer,
-        customer.customer_type,
         
+
+
+--Line Items
+
         li.Supplier,
         li.fulfillment_mode,
         li.order_status,
@@ -27,13 +37,13 @@ ii.*EXCEPT(generation_type),
 
 
 
-        approved_by_id.name as approved_by,
+        
         
 case when i.invoice_header_type = 'credit note' then -ii.quantity else ii.quantity end as invoiced_quantity,
 
 
 
-i.proof_of_delivery_id as proof_of_delivery_id_inv,
+
 li.proof_of_delivery_id as proof_of_delivery_id_line,
 
 
