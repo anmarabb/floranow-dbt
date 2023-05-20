@@ -8,7 +8,6 @@
   "1772824": "1. ERP Models/- Core/Invoices/1772824-avg monthly.sql",
   "1821437": "Others/Export/KSA/Invoice Summary/1821437-KSA - Invoice Summary - MTD.sql",
   "1821483": "Others/Export/UAE/Invoice Summary/1821483-UAE - Invoice Summary - YTD.sql",
-  "1895698": "dbt/2. Warehouse/1895698-dim_date.sql",
   "1895723": "dbt/2. Warehouse/1895723-fact_sales.sql",
   "1895757": "dbt/2. Warehouse/1895757-fact_purchase_order.sql",
   "1895758": "dbt/2. Warehouse/1895758-fact_inventory.sql",
