@@ -18,7 +18,6 @@
   "1895776": "dbt/3. Analytics OBT/1895776-obt_product_inventory.sql",
   "1895777": "dbt/3. Analytics OBT/1895777-obt_customer_reporting.sql",
   "1943502": "Project Desert Rose data Integration/PWH/1943502-invoices.sql",
-  "1943514": "Project Desert Rose data Integration/DWH/1943514-BigQuery.sql",
   "2099017": "models/3_warehouse/1_orders/fct_line_items_groupby_order_id.sql",
   "2099018": "models/1_staging/erp_prod/2_shipments/int_shipments.sql",
   "2099019": "models/3_warehouse/2_shipments/fct_shipments.sql",
