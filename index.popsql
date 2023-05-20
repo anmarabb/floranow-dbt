@@ -59,7 +59,6 @@
   "1730426": "1. ERP Models/- Staging/~account_manager/1730426-stg_budget.sql",
   "1733108": "1. ERP Models/- Staging/~shipments/1733108-stg_shipments.sql",
   "1772824": "1. ERP Models/- Core/Invoices/1772824-avg monthly.sql",
-  "1995192": "1. ERP Models/- Core/Orders/1995192-JSON.sql",
   "2005181": "1. ERP Models/- Core/Orders/2005181-order_requests.sql",
   "2006179": "1. ERP Models/- Core/Orders/2006179-additional_items_reports.sql",
   "2008548": "1. ERP Models/- Core/Orders/2008548-analysis.sql",
