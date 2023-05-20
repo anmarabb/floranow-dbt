@@ -4,7 +4,6 @@
   "1731508": "Private queries/.ERP prod/ERP Schema/Core/supply & logistic/1731508-master_shipments.sql",
   "1731620": "Private queries/.ERP prod/ERP Schema/Core/supply & logistic/1731620-packages.sql",
   "1713642": "Private queries/.ERP prod/ERP Schema/Core/paymnets/1713642-payments_transactions.sql",
-  "1705297": "Private queries/.ERP prod/ERP Schema/Core/inventory/1705297-stocks.sql",
   "1705345": "Private queries/.ERP prod/ERP Schema/Core/inventory/1705345-warehouses.sql",
   "1705355": "Private queries/.ERP prod/ERP Schema/Core/inventory/1705355-locations.sql",
   "1705393": "Private queries/.ERP prod/ERP Schema/Core/inventory/1705393-sections.sql",
