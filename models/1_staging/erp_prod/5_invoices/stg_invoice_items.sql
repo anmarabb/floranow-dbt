@@ -24,7 +24,7 @@ select
                 --dim
                 ii.source_type,
                 ii.generation_type,
-                case when ii.invoice_type = 1 then 'credit note' else 'invoice' end as invoice_item_type,
+                case when ii.invoice_type = 1 then 'credit note' when ii.invoice_type = 0 then 'invoice'  else 'check' end as invoice_item_type,
                 ii.currency,
                 ii.creditable_type,
                 ii.status as invoice_item_status, --APPROVED, CANCELED, DRAFT, REJECTED
