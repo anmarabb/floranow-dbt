@@ -29,7 +29,7 @@ models:
     # Applies to all files under models/example/
     1_staging:
       +enabled: true
-      +materialized: table
+      +materialized: view
       +schema: stg
       
     2_intermediate:
