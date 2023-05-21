@@ -22,7 +22,12 @@ select
 
 
                 --dim
-                ii.source_type,
+                case 
+                    when ii.source_type = 'INTERNAL' then 'ERP'
+                    when ii.source_type is null  then 'Florisft'
+                    else  'check_my_logic'
+                    end as source_type,
+
                 ii.generation_type as invoice_item_generation_type,
                 
                 ii.currency,

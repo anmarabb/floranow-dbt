@@ -8,12 +8,12 @@ select
 
         ii.*,
         approved_by_id.name as approved_by,
-        
+        customer.name as Customer,
+        customer.customer_type,
+        customer.user_category,
 
         
 
-
-            
             --calculating the sum of price_without_tax for invoice items printed in the last month and the corresponding month in the previous year
             --last month Sales Vs. corresponding month in the previous year
             -- M-1 Vs. M-1 (Last Y)
@@ -36,7 +36,6 @@ select
 
         
 
-
 --Line Items
 
         li.Supplier,
@@ -46,12 +45,6 @@ select
         li.ordered_quantity,
         li.fulfilled_quantity,
 
-
---Users
-
-        customer.name as Customer,
-        customer.customer_type,
-        customer.user_category,
 
 
         
