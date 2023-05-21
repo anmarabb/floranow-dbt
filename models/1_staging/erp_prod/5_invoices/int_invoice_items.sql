@@ -12,15 +12,25 @@ select
         customer.customer_type,
         customer.user_category,
 
-        
+
+
+        --computing the total sales for the current month (month to date, MTD) and the corresponding month in the previous year
+        --and calculating the sales for the "Last Month to Date" (LMTD), meaning the total price_without_tax value for all invoices that were printed on or before today's date in the previous month.
+        -- MTD Vs. LMTD Vs. MTD (Last Y)
+            case when date_diff(date(i.invoice_header_printed_at) , current_date() , MONTH) = 0 then ii.price_without_tax else 0 end as MTD_sales,
+            case when EXTRACT(YEAR FROM date(i.invoice_header_printed_at)) = EXTRACT(YEAR FROM current_date()) - 1 AND EXTRACT(MONTH FROM date(i.invoice_header_printed_at)) = EXTRACT(MONTH FROM current_date()) then ii.price_without_tax else 0 end as MTD_sales_last_year
+            case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 and extract(day FROM i.invoice_header_printed_at) <= extract(day FROM current_date()) then ii.price_without_tax else 0 end as LMTD_sales,
+
+
 
             --calculating the sum of price_without_tax for invoice items printed in the last month and the corresponding month in the previous year
-            --last month Sales Vs. corresponding month in the previous year
             -- M-1 Vs. M-1 (Last Y)
                 case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 then ii.price_without_tax else 0 end as m_1_sales,
                 case when date_diff(current_date(),date(i.invoice_header_printed_at), YEAR) = 1 and extract(MONTH from date(i.invoice_header_printed_at)) = extract(MONTH from current_date()) - 1 then ii.price_without_tax else 0 end as m_1_sales_last_year,
 
-
+            --calculate the year-to-date sales and the last year's year-to-date sales.
+                case when date_diff(current_date(),date(i.invoice_header_printed_at), YEAR) = 0 then ii.price_without_tax else 0 end as YTD_sales,
+                case when EXTRACT(YEAR FROM i.invoice_header_printed_at) = EXTRACT(YEAR FROM DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR)) and EXTRACT(DAYOFYEAR FROM i.invoice_header_printed_at) <= EXTRACT(DAYOFYEAR FROM CURRENT_DATE()) then ii.price_without_tax else 0 end as LYTD_sales,
 
 
 --invoice Header

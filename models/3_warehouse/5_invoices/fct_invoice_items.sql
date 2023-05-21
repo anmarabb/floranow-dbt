@@ -7,8 +7,18 @@ select
 --invoice Items
     
     --fct
+
+        MTD_sales,
+        LMTD_sales,
+        MTD_sales_last_year,
         m_1_sales,
         m_1_sales_last_year,
+        YTD_sales,
+        LYTD_sales,
+        
+        
+         
+        
         price_without_tax,
         price,
 
