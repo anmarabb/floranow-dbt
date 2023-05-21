@@ -6,16 +6,10 @@ select
 
 --Invoice Items
 
-        ii.*EXCEPT(invoice_type),
+        ii.*,
         approved_by_id.name as approved_by,
         
-        case 
-            when ii.invoice_type = 1 then 'credit note' 
-            when ii.invoice_type = 0 then 'invoice'
-            when ii.price_without_tax < 0 then 'credit note'
-            when ii.price_without_tax > 0 then 'invoice' 
-            else 'check' 
-            end as invoice_item_type,
+
         
 
 

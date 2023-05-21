@@ -31,7 +31,14 @@ select
                 ii.number,
                 ii.product_name,
                 ii.category,
-                ii.invoice_type,
+
+                case 
+                    when ii.invoice_type = 1 then 'credit note' 
+                    when ii.invoice_type = 0 then 'invoice'
+                    when ii.price_without_tax < 0 then 'credit note'
+                    when ii.price_without_tax > 0 then 'invoice' 
+                    else 'check' 
+                end as invoice_item_type,
 
                 --supplier
                 ii.meta_data.supplier as meta_supplier,
