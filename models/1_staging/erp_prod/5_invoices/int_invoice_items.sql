@@ -17,8 +17,8 @@ select
             --calculating the sum of price_without_tax for invoice items printed in the last month and the corresponding month in the previous year
             --last month Sales Vs. corresponding month in the previous year
             -- M-1 Vs. M-1 (Last Y)
-                case when date_diff(current_date(),date(i.printed_at), MONTH) = 1 then ii.price_without_tax else 0 end as m_1_sales,
-                case when date_diff(current_date(),date(i.printed_at), YEAR) = 1 and extract(MONTH from date(i.printed_at)) = extract(MONTH from current_date()) - 1 then ii.price_without_tax else 0 end as m_1_sales_last_year,
+                case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 then ii.price_without_tax else 0 end as m_1_sales,
+                case when date_diff(current_date(),date(i.invoice_header_printed_at), YEAR) = 1 and extract(MONTH from date(i.invoice_header_printed_at)) = extract(MONTH from current_date()) - 1 then ii.price_without_tax else 0 end as m_1_sales_last_year,
 
 
 
