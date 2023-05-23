@@ -12,6 +12,7 @@ select
     --dim
         product_name as Product,
         Supplier,
+        Origin,
         Reseller,
         Stock,
         full_stock_name,
