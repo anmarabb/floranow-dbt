@@ -22,15 +22,28 @@ select
 
 
                 --dim
-                ii.source_type,
-                ii.generation_type,
-                case when ii.invoice_type = 1 then 'credit note' else 'invoice' end as invoice_item_type,
+                case 
+                    when ii.source_type = 'INTERNAL' then 'ERP'
+                    when ii.source_type is null  then 'Florisft'
+                    else  'check_my_logic'
+                    end as source_type,
+
+                ii.generation_type as invoice_item_generation_type,
+                
                 ii.currency,
                 ii.creditable_type,
                 ii.status as invoice_item_status, --APPROVED, CANCELED, DRAFT, REJECTED
                 ii.number,
                 ii.product_name,
                 ii.category,
+
+                case 
+                    when ii.invoice_type = 1 then 'credit note' 
+                    when ii.invoice_type = 0 then 'invoice'
+                    when ii.price_without_tax < 0 then 'credit note'
+                    when ii.price_without_tax > 0 then 'invoice' 
+                    else 'check' 
+                end as invoice_item_type,
 
                 --supplier
                 ii.meta_data.supplier as meta_supplier,
@@ -47,6 +60,17 @@ select
                 ii.price,
                 ii.discount_amount,               
 
+
+
+        case 
+            when ii.currency in ('SAR') then ii.price_without_tax * 0.26666667
+            when ii.currency in ('AED') then ii.price_without_tax * 0.27229408
+            when ii.currency in ('KWD') then ii.price_without_tax * 3.256648 
+            when ii.currency in ('USD') then ii.price_without_tax
+            when ii.currency in ('EUR') then ii.price_without_tax * 1.0500713
+            when ii.currency in ('QAR', 'QR') then ii.price_without_tax * 0.27472527
+            when ii.currency is null then ii.price_without_tax * 0.27229408
+            end as usd_price_without_tax,
 
 
 
