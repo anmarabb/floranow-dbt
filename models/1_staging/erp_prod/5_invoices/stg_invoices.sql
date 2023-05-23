@@ -67,7 +67,10 @@ select
                 language,
                 number,
                 currency,
-                case when i.invoice_type = 1 then 'credit note' else 'invoice' end as invoice_header_type,
+                case 
+                when i.invoice_type = 1 then 'credit note' 
+                when i.invoice_type = 0 then 'invoice'
+                else 'check' end as invoice_header_type,
                 items_collection_method,
                 items_source_type,
                 generation_type,

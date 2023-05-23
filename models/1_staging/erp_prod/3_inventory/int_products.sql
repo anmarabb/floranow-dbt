@@ -38,6 +38,7 @@ with CTE as
             p.created_at,
 
             s.supplier_name as Supplier,
+            s.supplier_region as Origin,
             fs.feed_source_name as feed_source_name,
             origin_fs.feed_source_name as origin_feed_name,
             publishing_fs.feed_source_name as publishing_feed_name,
