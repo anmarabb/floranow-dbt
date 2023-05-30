@@ -26,10 +26,10 @@ with CTE as
             )
 
         select
-
+ 
         --products
             p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,departure_date,created_at),
-            p.quantity as ordered_quantity,
+            p.quantity as fulfilled_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
             p.published_quantity,
             p.remaining_quantity,
             --p.departure_date,
@@ -68,9 +68,11 @@ with CTE as
 
 
         --line_items
-            li.ordered_quantity as li_ordered_quantity,
+            li.ordered_quantity,
+
+            
             --li.inventory_quantity,
-            li.fulfilled_quantity,
+            --li.fulfilled_quantity,
             li.record_type,
             li.record_type_details,
             li.order_status,
