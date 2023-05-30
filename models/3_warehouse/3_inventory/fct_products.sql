@@ -29,11 +29,12 @@ select
         departure_date,   --from product
   
     --fct
-        ordered_quantity,
+        
         remaining_quantity,
         published_quantity,
         remaining_value,
         age,
+        fulfilled_quantity,
     
 
 
@@ -46,6 +47,7 @@ select
     --fct
         location_quantity,
         location_remaining_quantity,
+
 
 
 
@@ -69,7 +71,8 @@ select
         delivery_date,    --from line item
   
     --fct
-    fulfilled_quantity,
+    
+    ordered_quantity,
     
     
     
