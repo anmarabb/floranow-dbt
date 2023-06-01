@@ -33,8 +33,13 @@ select
         remaining_quantity,
         published_quantity,
         remaining_value,
+        landed_remaining_value,
         age,
         fulfilled_quantity,
+
+        unit_landed_cost,
+        unit_price,
+        unit_fob_price,
     
 
 

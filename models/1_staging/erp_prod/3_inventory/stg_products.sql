@@ -64,6 +64,7 @@ select
                 published_sales_unit,
 
                 p.remaining_quantity * p.unit_price as remaining_value,
+                p.remaining_quantity * CAST(p.unit_landed_cost AS FLOAT64) as landed_remaining_value,
 
 
 concat( "https://erp.floranow.com/products/", p.id) as product_link,
