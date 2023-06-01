@@ -57,7 +57,7 @@ select
                 remaining_quantity,
 
                 unit_fob_price,
-                unit_landed_cost,
+                CAST(p.unit_landed_cost AS FLOAT64) as unit_landed_cost,
                 unit_price,
                 age,
                 sales_unit,
