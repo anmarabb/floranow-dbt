@@ -71,7 +71,7 @@ select
         Shipment,
         shipments_status,
         master_shipments_status,
-        master_shipment_name,
+        master_shipment_name as master_shipment,
 
     --date
         delivery_date,    --from line item
