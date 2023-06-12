@@ -34,6 +34,8 @@ select
         warehousing_boxes_count,
         total_fob,
 
+       -- case when shipments_status not in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as expected_quantity,
+       -- case when shipments_status in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as not_expected_quantity,
 
 
 
@@ -48,6 +50,7 @@ select
         master_shipment,
         warehouse, --destination
         Destination,
+
 
 
     --date
