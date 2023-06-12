@@ -21,6 +21,7 @@ select
         
         price_without_tax,
         price,
+        total_tax,
 
         invoiced_quantity,
 

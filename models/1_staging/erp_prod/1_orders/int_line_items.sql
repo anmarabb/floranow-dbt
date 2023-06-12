@@ -119,6 +119,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     sh.shipments_status, 
     sh.Shipment,
     msh.master_shipments_status,
+    msh.master_shipment_name,
 
 w.warehouse_name as warehouse,
 
