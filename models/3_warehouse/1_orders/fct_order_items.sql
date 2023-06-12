@@ -41,7 +41,7 @@ select
     Shipment,
     shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
     master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
-    master_shipment_name,
+    master_shipment_name as master_shipment,
     order_payloads_status,     -- true, false, null
 
 
