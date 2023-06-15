@@ -83,7 +83,10 @@ sources:
       - name: reserved_items
       - name: shopping_carts
       - name: system_settings_settings
+      - name: delivery_windows
+      - name: delivery_window_assignments
 
+ 
       - name: country
       - name: budget
       - name: collection

@@ -173,7 +173,7 @@ incidents_count,
 incident_quantity,
 
 
-
+delivery_window,
 current_timestamp() as insertion_timestamp, 
 
 

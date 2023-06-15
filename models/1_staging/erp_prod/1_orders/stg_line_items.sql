@@ -159,6 +159,10 @@ With source as
 
 
 
+--nested
+delivery_time_window.delivery_window_id,
+
+
         REGEXP_EXTRACT(permalink, r'/([^/]+)') AS product_crop , 
         REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') AS product_category,
         REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){2}([^/]+)') AS product_subcategory,
