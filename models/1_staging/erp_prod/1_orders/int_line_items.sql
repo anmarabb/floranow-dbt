@@ -202,7 +202,7 @@ end as ch_{{x}}
 
 
 
-
+win.name as delivery_window,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -246,6 +246,9 @@ left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=li.l
 
 left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
  
+
+left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
+
 
 left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.product_id 
 left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.line_item_id
