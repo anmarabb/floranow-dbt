@@ -161,6 +161,9 @@ With source as
 
 --nested
 delivery_time_window.delivery_window_id,
+delivery_time_window.delivery_time,
+--delivery_time_window.start_time,
+--delivery_time_window.end_time,
 
 
         REGEXP_EXTRACT(permalink, r'/([^/]+)') AS product_crop , 

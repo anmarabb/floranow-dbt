@@ -174,6 +174,7 @@ incident_quantity,
 
 
 delivery_window,
+delivery_time,
 current_timestamp() as insertion_timestamp, 
 
 
