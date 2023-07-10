@@ -13,6 +13,7 @@ group by proof_of_delivery_id
 (
 select 
 proof_of_delivery_id,
+max(financial_administration) as financial_administration,
 count (invoice_header_id) as invoice_count,
 from {{ ref('stg_invoices') }}
 --where proof_of_delivery_id is not null
@@ -21,6 +22,7 @@ group by proof_of_delivery_id
  
  select 
  
+ pod.customer_id,
 pod.proof_of_delivery_id,
 --date(li.order_date) as order_date,
 pod.delivery_date,
@@ -31,10 +33,11 @@ pod.pod_status,
 
 
 customer.name as Customer,
-customer.warehouse,
-customer.country,
-customer.financial_administration,
+customer.Warehouse,
+customer.Country,
 customer.account_manager,
+
+
 
 
 dispatched_by.name as dispatched_by,
@@ -45,6 +48,7 @@ skipped_by.name as skipped_by,
 li.item_count, 
 
 i.invoice_count,
+i.financial_administration,
 
 date.dim_date,
 

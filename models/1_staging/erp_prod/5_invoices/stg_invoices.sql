@@ -94,6 +94,7 @@ end as record_type,
             paid_amount,
             discount_amount,
             price_without_discount,
+            total_amount - total_tax as total_amount_without_tax,
 
 
 

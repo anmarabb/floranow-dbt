@@ -29,7 +29,7 @@ with CTE as
  
         --products
             p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,departure_date,created_at),
-            p.quantity as fulfilled_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
+            --p.quantity as fulfilled_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
             p.published_quantity,
             p.remaining_quantity,
             --p.departure_date,
@@ -72,7 +72,7 @@ with CTE as
 
             
             --li.inventory_quantity,
-            --li.fulfilled_quantity,
+            li.fulfilled_quantity,
             li.record_type,
             li.record_type_details,
             li.order_status,
@@ -134,6 +134,74 @@ with CTE as
         case when COUNT(*) over (partition by p.product_id)>1 then 'multi-location' else null end as multi_location,
         row_number() over (partition by p.product_id) as row_number,
             
+case 
+    when p.product_name like '%Cutter%' THEN 'Accessories'
+    when p.product_name like '%Arrangement%' THEN 'Accessories'
+    when p.product_name like '%Artificial%' THEN 'Accessories'
+    when p.product_name like '%Balloons%' THEN 'Accessories'
+    when p.product_name like '%Baloon%' THEN 'Accessories'
+    when p.product_name like '%Betula%' THEN 'Accessories'
+    when p.product_name like '%Binding%' THEN 'Accessories'
+    when p.product_name like '%Bouquet%' THEN 'Accessories'
+    when p.product_name like '%Branches%' THEN 'Accessories'
+    when p.product_name like '%Card%' THEN 'Accessories'
+    when p.product_name like '%Cellophane%' THEN 'Accessories'
+    when p.product_name like '%Ceramic%' THEN 'Accessories'
+    when p.product_name like '%Christmass%' THEN 'Accessories'
+    when p.product_name like '%Oasis%' THEN 'Accessories'
+    when p.product_name like '%Clip%' THEN 'Accessories'
+    when p.product_name like '%Color%' THEN 'Accessories'
+    when p.product_name like '%Conical%' THEN 'Accessories'
+    when p.product_name like '%Cortaderia%' THEN 'Accessories'
+    when p.product_name like '%Crystal%' THEN 'Accessories'
+    when p.product_name like '%Cutflower%' THEN 'Accessories'
+    when p.product_name like '%Duct%' THEN 'Accessories'
+    when p.product_name like '%Easter%' THEN 'Accessories'
+    when p.product_name like '%Faza%' THEN 'Accessories'
+    when p.product_name like '%Film%' THEN 'Accessories'
+    when p.product_name like '%Floral%' THEN 'Accessories'
+    when p.product_name like '%Flower%' THEN 'Accessories'
+    when p.product_name like '%Foam%' THEN 'Accessories'
+    when p.product_name like '%Follie%' THEN 'Accessories'
+    when p.product_name like '%Glue%' THEN 'Accessories'
+    when p.product_name like '%Golden%' THEN 'Accessories'
+    when p.product_name like '%Green%' THEN 'Accessories'
+    when p.product_name like '%Ideal%' THEN 'Accessories'
+    when p.product_name like '%Kash%' THEN 'Accessories'
+    when p.product_name like '%Khesh%' THEN 'Accessories'
+    when p.product_name like '%Leaf%' THEN 'Accessories'
+    when p.product_name like '%Metal%' THEN 'Accessories'
+    when p.product_name like '%Natural%' THEN 'Accessories'
+    when p.product_name like '%Oasis%' THEN 'Accessories'
+    when p.product_name like '%Pampas%' THEN 'Accessories'
+    when p.product_name like '%Pandanus%' THEN 'Accessories'
+    when p.product_name like '%Paper%' THEN 'Accessories'
+    when p.product_name like '%Plastic%' THEN 'Accessories'
+    when p.product_name like '%Plate%' THEN 'Accessories'
+    when p.product_name like '%Pr.%' THEN 'Accessories'
+    when p.product_name like '%Preserved/dry%' THEN 'Accessories'
+    when p.product_name like '%Preserverd%' THEN 'Accessories'
+    when p.product_name like '%Raffia%' THEN 'Accessories'
+    when p.product_name like '%Ribbon%' THEN 'Accessories'
+    when p.product_name like '%Rondella%' THEN 'Accessories'
+    when p.product_name like '%Rope%' THEN 'Accessories'
+    when p.product_name like '%Satin%' THEN 'Accessories'
+    when p.product_name like '%Saucer%' THEN 'Accessories'
+    when p.product_name like '%Shining%' THEN 'Accessories'
+    when p.product_name like '%Single%' THEN 'Accessories'
+    when p.product_name like '%Steel%' THEN 'Accessories'
+    when p.product_name like '%Sulfan%' THEN 'Accessories'
+    when p.product_name like '%Tape%' THEN 'Accessories'
+    when p.product_name like '%Vase%' THEN 'Accessories'
+    when p.product_name like '%White%' THEN 'Accessories'
+    when p.product_name like '%Wire%' THEN 'Accessories'
+    when p.product_name like '%Wood%' THEN 'Accessories'
+    when p.product_name like '%Wooden%' THEN 'Accessories'
+    when p.product_name like '%Wrapping%' THEN 'Accessories'
+    
+else p.product_category end as new_category,
+
+
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
         left join {{ ref('fct_order_items')}} as li on p.line_item_id = li.line_item_id
@@ -150,5 +218,7 @@ with CTE as
     )
 select * from CTE where row_number=1
  
+
+
 
 

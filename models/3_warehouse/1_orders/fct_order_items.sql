@@ -157,6 +157,7 @@ supplier_region as Origin,
 --order
     li.order_number,
     li.currency,
+    li.supplier_id,
 
 
 

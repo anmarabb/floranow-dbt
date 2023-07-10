@@ -73,8 +73,10 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
 --supplier
     case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
+    case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end as supplier_region,
+
+
     sh.Supplier as shipment_Supplier,
-    lis.supplier_region,
 
 --order 
     pli.order_type as parent_order_type,
@@ -253,3 +255,5 @@ left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id
 left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.product_id 
 left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.line_item_id
 left join prep_registered_clients as prep_registered_clients on prep_registered_clients.financial_administration = customer.financial_administration
+
+--where lis.supplier_id = 1
