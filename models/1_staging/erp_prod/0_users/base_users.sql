@@ -99,7 +99,9 @@ select
   uc.name as user_category,
   c.country_name as Country,
   pt.name as payment_term,
-  f.name as financial_administration,
+
+  --f.name as financial_administration,
+  case when f.name = 'Saudi' then 'KSA' else f.name end as financial_administration,
 
 
   

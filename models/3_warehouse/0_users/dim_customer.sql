@@ -12,6 +12,7 @@ select
 
     Country,
     City,
+    account_manager,
     fake_filter,
  
 

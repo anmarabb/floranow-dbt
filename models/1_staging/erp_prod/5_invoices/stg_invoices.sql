@@ -5,13 +5,13 @@ select
             --PK
                 i.id as invoice_header_id,
             --FK
-                parent_invoice_id,
+                --parent_invoice_id,
                 customer_id,
                 proof_of_delivery_id,
                 in_shop_order_number,
                 purchase_order_number,
 
-
+                financial_administration_id,
 
                 case --financial ID
                     when i.financial_administration_id = 1 then 'KSA'
@@ -24,12 +24,13 @@ select
                     else 'check_my_logic'
                 end as financial_administration,
 
+
                 printed_by_id,
-                deleted_by,
+                --deleted_by,
                 canceled_by_id,
-                paid_by,
-                finalized_by,
-                void_by,
+                --paid_by,
+                --finalized_by,
+               -- void_by,
                 voided_by_id,
                 created_by,
 
@@ -40,7 +41,7 @@ select
                 printed_at as invoice_header_printed_at,  --invoiced_at,
                 updated_at,
                 signed_at,
-                finalized_at,
+               -- finalized_at,
                 last_payment_at,
                 due_date,
                 voided_at,
@@ -63,7 +64,7 @@ select
 
 
                 --dim
-                creation_condition,
+                --creation_condition,
                 language,
                 number,
                 currency,
