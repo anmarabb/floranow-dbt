@@ -7,34 +7,26 @@ select
 --invoice Items
     
     --fct
-
-        MTD_sales,
-        LMTD_sales,
-        MTD_sales_last_year,
-        m_1_sales,
-        m_1_sales_last_year,
-        YTD_sales,
-        LYTD_sales,
-        
-        
-         
-        
         price_without_tax,
         price,
         total_tax,
-
-        invoiced_quantity,
+        quantity,
 
 
     --dim
+        financial_administration, -- Market
+        Customer,
+        user_category, -- Segment
+
+
+
+
         invoice_item_id,
-        financial_administration,
+        
         source_type, --ERP, Florisft
         invoice_item_type,
         invoice_item_status,
-        Customer,
         customer_type,
-        user_category,
         product_name as Product,
         
      --date
@@ -50,12 +42,11 @@ select
     --dim
         line_item_id,
         Supplier,
+        supplier_id,
+        Origin,
         fulfillment_mode,
         order_status,
-
-    --fct
-        ordered_quantity,
-        fulfilled_quantity,
+        order_number,
 
 
 

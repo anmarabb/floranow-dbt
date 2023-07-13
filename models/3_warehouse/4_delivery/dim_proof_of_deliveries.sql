@@ -3,7 +3,7 @@ with
 source as ( 
         
 select     
-dim_date,
+customer_id,
 
 proof_of_delivery_id,
 order_date,
