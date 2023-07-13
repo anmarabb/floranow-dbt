@@ -90,7 +90,8 @@ select
 
 --product_incidents
     incidents_quantity,
-    damaged_quantity,
+    toat_damaged_quantity,
+    inventory_damaged_quantity,
 
 
 

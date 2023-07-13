@@ -7,7 +7,9 @@ with CTE as
                 p.product_id,
                     count(*) as incidents_count,
                     sum(pi.quantity) as incidents_quantity,
-                    sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as damaged_quantity,
+                    sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as toat_damaged_quantity,
+                    sum(case when pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity else 0 end) as inventory_damaged_quantity,
+
                     from {{ ref('stg_product_incidents')}}  as pi 
                     left join {{ ref('stg_line_items')}}  as li on  pi.line_item_id = li.line_item_id
                     left join {{ ref('stg_products')}}  as p on  p.line_item_id = li.line_item_id and p.product_id is not null
@@ -69,6 +71,7 @@ with CTE as
 
         --line_items
             li.ordered_quantity,
+            li.received_quantity,
 
             
             --li.inventory_quantity,
@@ -127,7 +130,8 @@ with CTE as
         --product_incidents
             pi.incidents_count,
             pi.incidents_quantity,
-            pi.damaged_quantity,
+            pi.toat_damaged_quantity,
+            pi.inventory_damaged_quantity,
 
         case when li.fulfillment_status = '2. Fulfilled - with Full Item Incident' and  incidents_quantity != p.quantity then 'red_flag' else null end as full_incident_check,
 
