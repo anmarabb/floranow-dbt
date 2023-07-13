@@ -68,9 +68,26 @@ select
                     u.odoo_code,
                     u.statement_type,
 
-                    INITCAP(u.city) as City,
+                    --INITCAP(u.city) as City,
+
+                    case 
+                        when u.state = 'AJ' then 'Ajman'
+                        when u.state = 'AZ' and INITCAP(u.city) = 'Al Ain City'  then 'Al Ain'
+                        when u.state = 'AZ' then 'Abu Dhabi'
+                        when u.state = 'FU' then 'Sharjah' --Fujairah
+                        when u.state = 'DU' then 'Dubai'
+                        when u.state = 'RK' then 'Ras Al Khaimah'
+                        when u.state = 'SH' and u.city = 'Ras al-Khaimah'  then 'Ras Al Khaimah'
+                        when u.state = 'SH' then 'Sharjah' 
+                        when u.state = 'UQ' then 'Umm Al Quwain'
+                        else 'To Be Fixed Ask IT'
+                        end as  City,
+
+
+
                     u.state,
                     u.country as row_country,
+                    u.city as row_city,
 
 
 

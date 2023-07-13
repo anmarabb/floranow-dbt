@@ -49,7 +49,6 @@ SELECT
 
     u.* EXCEPT (City),
 
-    u.City as row_city,
 
     i.customer_acquisition_date,
     o.customers_last_order_date,
