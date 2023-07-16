@@ -11,6 +11,11 @@ select
 --Products
     --dim
         product_name as Product,
+        product_crop,
+        product_category,
+        new_category,
+
+
         Supplier,
         Origin,
         Reseller,
@@ -27,6 +32,7 @@ select
     --date
         expired_at,
         departure_date,   --from product
+        order_date,
   
     --fct
         
@@ -79,6 +85,9 @@ select
     --fct
     
     ordered_quantity,
+    received_quantity,
+
+    inventory_product_quantity,
     
     
     
@@ -86,12 +95,16 @@ select
     
 --line_items_sold
     sold_quantity,
+    child_incident_quantity,
     
 
 --product_incidents
     incidents_quantity,
     toat_damaged_quantity,
     inventory_damaged_quantity,
+    extra_quantity,
+    inventory_extra_quantity,
+    packing_extra_quantity,
 
 
 
