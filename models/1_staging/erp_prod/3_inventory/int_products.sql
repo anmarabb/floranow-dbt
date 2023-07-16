@@ -6,8 +6,16 @@ with CTE as
                 select 
                 p.product_id,
                     count(*) as incidents_count,
-                    sum(pi.quantity) as incidents_quantity,
-                    sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as damaged_quantity,
+                    --sum(pi.quantity) as incidents_quantity,
+                    sum(case when incident_type !='EXTRA' then pi.quantity else 0 end) as incidents_quantity,
+                    
+                    sum(case when incident_type ='EXTRA' then pi.quantity else 0 end) as extra_quantity,
+                    sum(case when pi.stage = 'INVENTORY' and incident_type ='EXTRA' then pi.quantity else 0 end) as inventory_extra_quantity,
+                    sum(case when pi.stage = 'PACKING' and incident_type ='EXTRA' then pi.quantity else 0 end) as packing_extra_quantity,
+
+                    sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as toat_damaged_quantity,
+                    sum(case when pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity else 0 end) as inventory_damaged_quantity,
+
                     from {{ ref('stg_product_incidents')}}  as pi 
                     left join {{ ref('stg_line_items')}}  as li on  pi.line_item_id = li.line_item_id
                     left join {{ ref('stg_products')}}  as p on  p.line_item_id = li.line_item_id and p.product_id is not null
@@ -19,7 +27,10 @@ with CTE as
                 select
                     p.product_id,
                     count(li.line_item_id) as item_sold,
-                    sum(li.quantity) as sold_quantity,         
+                    sum(li.fulfilled_quantity) as sold_quantity, 
+                    sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
+
+
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
                 group by 1
@@ -29,7 +40,7 @@ with CTE as
  
         --products
             p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,departure_date,created_at),
-            --p.quantity as fulfilled_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
+            p.quantity as inventory_product_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
             p.published_quantity,
             p.remaining_quantity,
             --p.departure_date,
@@ -68,7 +79,9 @@ with CTE as
 
 
         --line_items
+            li.order_date,
             li.ordered_quantity,
+            li.received_quantity,
 
             
             --li.inventory_quantity,
@@ -122,12 +135,17 @@ with CTE as
         --line_items_sold
             lis.item_sold,
             lis.sold_quantity,
+            lis.child_incident_quantity,
 
 
         --product_incidents
             pi.incidents_count,
             pi.incidents_quantity,
-            pi.damaged_quantity,
+            pi.toat_damaged_quantity,
+            pi.inventory_damaged_quantity,
+            pi.extra_quantity,
+            pi.inventory_extra_quantity,
+            pi.packing_extra_quantity,
 
         case when li.fulfillment_status = '2. Fulfilled - with Full Item Incident' and  incidents_quantity != p.quantity then 'red_flag' else null end as full_incident_check,
 

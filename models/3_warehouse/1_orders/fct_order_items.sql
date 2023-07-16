@@ -17,6 +17,7 @@ select
 --quantity
     li.ordered_quantity,
     li.fulfilled_quantity,
+    li.received_quantity,
 
 
 
