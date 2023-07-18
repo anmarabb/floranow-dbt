@@ -100,6 +100,8 @@ select
 
 --product_incidents
     incidents_quantity,
+    incidents_quantity_location,
+    cleanup_adjustments_quantity,
     toat_damaged_quantity,
     inventory_damaged_quantity,
     extra_quantity,
