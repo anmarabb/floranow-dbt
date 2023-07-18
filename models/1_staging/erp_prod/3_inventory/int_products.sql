@@ -7,8 +7,10 @@ with CTE as
                 p.product_id,
                     count(*) as incidents_count,
                     --sum(pi.quantity) as incidents_quantity,
-                    sum(case when incident_type !='EXTRA' then pi.quantity else 0 end) as incidents_quantity,
-                    
+                    sum(case when incident_type !='EXTRA' and after_sold is false then pi.quantity else 0 end) as incidents_quantity,
+                    sum(case when incident_type !='EXTRA' and pi.stage = 'INVENTORY' and pi.location_id is not null then pi.quantity else 0 end) as incidents_quantity_location,
+                    sum(case when incident_type ='CLEANUP_ADJUSTMENTS' then pi.quantity else 0 end) as cleanup_adjustments_quantity,
+
                     sum(case when incident_type ='EXTRA' then pi.quantity else 0 end) as extra_quantity,
                     sum(case when pi.stage = 'INVENTORY' and incident_type ='EXTRA' then pi.quantity else 0 end) as inventory_extra_quantity,
                     sum(case when pi.stage = 'PACKING' and incident_type ='EXTRA' then pi.quantity else 0 end) as packing_extra_quantity,
@@ -27,7 +29,7 @@ with CTE as
                 select
                     p.product_id,
                     count(li.line_item_id) as item_sold,
-                    sum(li.fulfilled_quantity) as sold_quantity, 
+                    sum(li.quantity) as sold_quantity, 
                     sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
 
 
@@ -141,11 +143,13 @@ with CTE as
         --product_incidents
             pi.incidents_count,
             pi.incidents_quantity,
+            pi.incidents_quantity_location,
             pi.toat_damaged_quantity,
             pi.inventory_damaged_quantity,
             pi.extra_quantity,
             pi.inventory_extra_quantity,
             pi.packing_extra_quantity,
+            pi.cleanup_adjustments_quantity,
 
         case when li.fulfillment_status = '2. Fulfilled - with Full Item Incident' and  incidents_quantity != p.quantity then 'red_flag' else null end as full_incident_check,
 
@@ -232,10 +236,9 @@ else p.product_category end as new_category,
         left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
         left join line_items_sold as lis on lis.product_id = p.product_id
         left join product_incidents as pi on pi.product_id = p.product_id
-        
+
     )
 select * from CTE where row_number=1
- 
 
 
 
