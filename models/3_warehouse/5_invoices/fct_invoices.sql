@@ -35,9 +35,10 @@ currency,
 remaining_amount,
 paid_amount,
 total_amount_without_tax,
-
-
-
+total_tax,
+discount_amount,
+price_without_discount,
+total_amount,
 
 
 current_timestamp() as insertion_timestamp 
