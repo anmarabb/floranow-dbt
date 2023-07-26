@@ -10,6 +10,8 @@ select
                 proof_of_delivery_id,
                 in_shop_order_number,
                 purchase_order_number,
+                odoo_id,
+                sub_customer_id,
 
                 financial_administration_id,
 

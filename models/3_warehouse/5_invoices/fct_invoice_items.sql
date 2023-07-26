@@ -5,6 +5,8 @@ source as (
 select
 
 --invoice Items
+
+creditable_id,
     
     --fct
         price_without_tax,
