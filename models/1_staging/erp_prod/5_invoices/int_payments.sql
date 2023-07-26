@@ -4,7 +4,7 @@ source as (
         
 select     
 
-*,
+py.*,
 
 current_timestamp() as insertion_timestamp, 
 
