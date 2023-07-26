@@ -58,3 +58,4 @@ from {{ref('int_invoices')}} as i
 
 select * from source
 
+where invoice_header_type = 'credit note'

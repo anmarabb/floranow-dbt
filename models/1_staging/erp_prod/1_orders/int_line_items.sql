@@ -4,11 +4,12 @@ prep_product_locations as (select  pl.locationable_id, max(pl.product_location_i
 prep_picking_products as (select  pk.line_item_id, max(pk.picking_product_id) as picking_product_id from {{ ref('stg_picking_products') }} as pk group by 1)
 
 SELECT
-li.* EXCEPT(order_type,delivery_date, quantity),
+li.* EXCEPT(order_type,delivery_date, quantity,invoice_id),
 
 
 li.quantity as ordered_quantity,
 
+li.invoice_id as invoice_header_id,
 
 
 case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,

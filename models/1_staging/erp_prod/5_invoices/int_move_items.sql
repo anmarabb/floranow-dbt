@@ -4,11 +4,11 @@ source as (
         
 select     
 
-moi.* EXCEPT(created_at),
+mi.* EXCEPT(created_at),
 
 --date
-    case when moi.date is not null then moi.date else moi.created_at end as created_at, 
-    case when pt.payment_received_at is not null then pt.payment_received_at else moi.created_at end as received_at, 
+    case when mi.date is not null then mi.date else mi.created_at end as created_at, 
+    case when pt.payment_received_at is not null then pt.payment_received_at else mi.created_at end as received_at, 
 
 
 
@@ -22,19 +22,20 @@ customer.user_category,
 
 
 --fct
-    -moi.balance as paid_amount,
-    -(moi.balance - moi.residual) as reconciled_amount,
-    -moi.residual as un_reconciled_amount,
+    -mi.balance as paid_amount,
+    -(mi.balance - mi.residual) as reconciled_amount,
+    -mi.residual as un_reconciled_amount,
 
     current_timestamp() as insertion_timestamp, 
 
-from {{ ref('stg_move_items')}} as moi
-left join {{ ref('base_users') }} as customer on customer.id = moi.user_id
-left join {{ ref('stg_payment_transactions') }} as pt on pt.payment_transaction_id = moi.documentable_id and moi.documentable_type = 'PaymentTransaction'
+from {{ ref('stg_move_items')}} as mi
+left join {{ ref('base_users') }} as customer on customer.id = mi.user_id
+left join {{ ref('stg_payment_transactions') }} as pt on pt.payment_transaction_id = mi.documentable_id and mi.documentable_type = 'PaymentTransaction' and  mi.entry_type = 'CREDIT'
 left join {{ source('erp_prod', 'financial_administrations') }} as fn on fn.id = pt.financial_administration_id
 left join {{ source('erp_prod', 'bank_accounts') }} as ba on pt.bank_account_id = ba.id
 
-where documentable_type = 'PaymentTransaction' and entry_type = 'CREDIT'
+left join {{ref('stg_invoices')}} as i on mi.documentable_id = i.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'DEBIT'
+left join {{ref('stg_invoices')}} as cn on mi.documentable_id = cn.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'CREDIT'
 
 
 

@@ -9,6 +9,8 @@ source as (
 select 
     product_incident_id,
     line_item_id,
+    incidentable_id, 
+    credit_note_item_id,
 
     created_at as incident_at,
 
@@ -16,7 +18,8 @@ select
    
     
     incident_type,  --MISSING, EXTRA, DAMAGED, RETURNED
-    stage,          --PACKING, RECEIVING, INVENTORY, DELIVERY, AFTER_RETURN
+    stage,        --PACKING, RECEIVING, INVENTORY, DELIVERY, AFTER_RETURN
+    incidentable_type, -- PackageLineItem, InvoiceItem, LineItem, ProductLocation, Product
 
     reported_by,
 
