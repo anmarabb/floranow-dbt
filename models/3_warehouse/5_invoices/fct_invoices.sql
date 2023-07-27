@@ -25,6 +25,8 @@ invoice_header_printed_at, -- it can be null
 case when date(invoice_header_printed_at) is not null then date(invoice_header_printed_at) else date(invoice_header_created_at) end as master_date,
 
 
+drop_id,
+
 date(invoice_header_printed_at) as date_invoice_header_printed_at,
 PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', invoice_header_printed_at), '-01')) as year_month_invoice_header_printed_at,
 date(invoice_header_created_at) as date_invoice_header_created_at,
