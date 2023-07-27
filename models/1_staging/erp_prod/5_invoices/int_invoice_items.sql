@@ -8,6 +8,7 @@ select
 
         ii.*,
 
+ii.quantity * li.unit_landed_cost as total_cost,
 
         approved_by_id.name as approved_by,
 
@@ -42,6 +43,10 @@ select
         li.fulfillment_mode,
         li.order_status,
         li.record_type_details,
+
+
+        li.unit_landed_cost,
+
 
 
         li.order_number,

@@ -51,7 +51,7 @@ total_tax,
 discount_amount,
 price_without_discount,
 total_amount,
-
+total_cost,
 
 current_timestamp() as insertion_timestamp 
 

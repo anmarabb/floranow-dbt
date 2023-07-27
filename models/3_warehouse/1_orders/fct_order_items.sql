@@ -13,6 +13,7 @@ select
     line_item_link,
     li.unit_price,
     li.total_price_without_tax, -- (li.quantity * li.unit_price)
+    li.unit_landed_cost,
 
 --quantity
     li.ordered_quantity,
