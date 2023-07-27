@@ -13,6 +13,10 @@ creditable_id,
         price,
         total_tax,
         quantity,
+        total_cost,
+
+        unit_price,
+        unit_landed_cost,
 
 
     --dim
