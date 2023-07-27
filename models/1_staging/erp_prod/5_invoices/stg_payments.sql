@@ -6,7 +6,7 @@ select
                 id as payment_id,
 
             --FK
-                invoice_id,
+                invoice_id as invoice_header_id,
                 payment_transaction_id,
                 credit_note_id,
                 debit_move_item_id,
