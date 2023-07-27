@@ -16,6 +16,7 @@ i.*,
     customer.account_manager,
     customer.City,
     customer.user_category as client_category,
+    customer.name as Customer,
 
 
 
