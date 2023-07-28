@@ -15,6 +15,8 @@ select
     li.total_price_without_tax, -- (li.quantity * li.unit_price)
     li.unit_landed_cost,
 
+    customer_id,
+
 --quantity
     li.ordered_quantity,
     li.fulfilled_quantity,
