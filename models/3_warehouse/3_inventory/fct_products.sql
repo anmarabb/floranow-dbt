@@ -23,6 +23,7 @@ select
         full_stock_name,
         live_stock,
         stock_model,
+        stock_model_details,
         Visibility,
 
         product_id,

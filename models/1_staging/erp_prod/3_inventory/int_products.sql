@@ -59,6 +59,7 @@ with CTE as
 
             st.stock_name as Stock,
             st.stock_model,
+            st.stock_model_details,
             reseller.name as Reseller,
             concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_name,
 
