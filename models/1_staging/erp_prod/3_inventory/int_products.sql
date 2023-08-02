@@ -66,6 +66,9 @@ with CTE as
             case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
             case when p.remaining_quantity > 0 then 'Live Stock'  else 'Total Stock' end as live_stock,
 
+
+
+
         --product_locations
             pl.quantity as location_quantity,
             pl.remaining_quantity as location_remaining_quantity,
@@ -123,7 +126,7 @@ with CTE as
 
 
 
-             
+              
             
 
             
@@ -223,6 +226,7 @@ case
     when p.product_name like '%Wrapping%' THEN 'Accessories'
     
 else p.product_category end as new_category,
+
 
 
         from {{ ref('stg_products')}} as p
