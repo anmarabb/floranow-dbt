@@ -130,6 +130,7 @@ select
     
 
     full_incident_check,
+    sku,
 
 
 
