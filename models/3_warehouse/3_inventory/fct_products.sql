@@ -38,6 +38,8 @@ select
     --fct
         
         remaining_quantity,
+        case when stock_model = 'Reselling' and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
+        case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
         published_quantity,
         remaining_value,
         landed_remaining_value,
@@ -49,6 +51,9 @@ select
         unit_fob_price,
 
         out_feed_source_name,
+
+         
+
     
 
 
@@ -125,6 +130,8 @@ select
     
 
     full_incident_check,
+
+
 
 
 current_timestamp() as insertion_timestamp, 
