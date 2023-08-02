@@ -14,7 +14,7 @@ select
 
             --dim
                 --date
-                ii.created_at as invoice_item_created_at,  --proforma_at,
+                ii.created_at as invoice_item_created_at,  --proforma_at, -- The date and time when the invoice item was created.
                 ii.updated_at,
                 ii.deleted_at,
                 ii.delivery_date,

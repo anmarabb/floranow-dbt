@@ -26,6 +26,7 @@ select
                 approved,
                 trx_reference,
                 currency,
+                number,
 
 
             --date
