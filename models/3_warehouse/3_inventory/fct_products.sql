@@ -47,6 +47,8 @@ select
         unit_landed_cost,
         unit_price,
         unit_fob_price,
+
+        out_feed_source_name,
     
 
 
