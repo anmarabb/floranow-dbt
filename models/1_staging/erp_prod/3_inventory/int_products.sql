@@ -60,8 +60,20 @@ with CTE as
             out_fs.feed_source_name as out_feed_source_name,
 
             st.stock_name as Stock,
-            st.stock_model,
-            st.stock_model_details,
+            --st.stock_model,
+
+           -- st.stock_model_details,
+
+            case 
+                when st.stock_model_details in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling' end
+                when st.stock_model_details in ('Reselling Event') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling Event'  end
+                else st.stock_model_details end as stock_model_details,
+
+            case 
+                when st.stock_model in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling'
+                end else st.stock_model end as stock_model,
+
+
             reseller.name as Reseller,
             concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_name,
 
@@ -234,7 +246,7 @@ else p.product_category end as new_category,
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
         left join {{ ref('fct_order_items')}} as li on p.line_item_id = li.line_item_id
-        left join {{ ref('base_suppliers')}} as s on s.supplier_id = p.supplier_id
+        left join {{ ref('base_suppliers')}} as s on s.supplier_id = li.supplier_id --was p.supplier_id
         left join {{ ref('stg_feed_sources')}} as origin_fs on p.origin_feed_source_id = origin_fs.feed_source_id 
         left join {{ ref('stg_feed_sources')}} as publishing_fs on p.publishing_feed_source_id = publishing_fs.feed_source_id 
         left join {{ ref('stg_feed_sources')}} as fs on p.feed_source_id = fs.feed_source_id 
