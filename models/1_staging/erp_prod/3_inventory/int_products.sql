@@ -38,6 +38,8 @@ with CTE as
                 group by 1
             )
 
+
+
         select
  
         --products
