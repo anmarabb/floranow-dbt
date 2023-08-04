@@ -1,9 +1,27 @@
--- fullfeled (added to loc, and genrate product_location recourd)
---
+            
+            
+            
+            WITH future_orders as (
+                WITH CTE AS (
+                SELECT 
+                    departure_date,
+                    warehouse,
+                    product_id,
+                    DENSE_RANK() OVER (PARTITION BY warehouse ORDER BY departure_date) AS departure_rank
+                from {{ ref('int_products')}} as p
+                WHERE departure_date >= CURRENT_DATE()
 
-with
-
-source as ( 
+                            )
+                SELECT 
+                *,
+                case 
+                    when departure_rank = 1 then 'first_departure'
+                    when departure_rank = 2 then 'second_departure'
+                    else null end as departure_ranking
+                FROM CTE
+            )
+                
+            
 
  
 select 
@@ -26,13 +44,13 @@ select
         stock_model_details,
         Visibility,
 
-        product_id,
+        p.product_id,
         product_link,
     
 
     --date
         expired_at,
-        departure_date,   --from product
+        p.departure_date,   --from product
         order_date,
   
     --fct
@@ -40,6 +58,10 @@ select
         remaining_quantity,
         case when stock_model = 'Reselling' and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
         case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
+        --case when select_departure_date in ('Future', 'Today') then MIN(departure_date) else null end AS next_departure_date,
+
+
+
         published_quantity,
         remaining_value,
         landed_remaining_value,
@@ -81,7 +103,7 @@ select
         loc_status,
         order_status,
         order_type,
-        warehouse,
+        p.warehouse,
         Shipment,
         shipments_status,
         master_shipments_status,
@@ -133,13 +155,14 @@ select
     sku,
 
 
+fo.departure_ranking,
+
+case when fo.departure_ranking ='first_departure' then ordered_quantity else 0 end as frirst_departure_coming_quantity,
+case when fo.departure_ranking ='second_departure' then ordered_quantity else 0 end as second_departure_coming_quantity,
 
 
 current_timestamp() as insertion_timestamp, 
 
 
 from {{ref('int_products')}} as p 
-)
-
-select * from source
-
+left join future_orders as fo on fo.product_id = p.product_id
