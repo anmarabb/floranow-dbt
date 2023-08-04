@@ -70,7 +70,7 @@ with CTE as
                 else st.stock_model_details end as stock_model_details,
 
             case 
-                when st.stock_model in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling'
+                when st.stock_model in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based' else 'Reselling'
                 end else st.stock_model end as stock_model,
 
 
