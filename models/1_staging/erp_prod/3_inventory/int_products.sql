@@ -8,6 +8,11 @@ with CTE as
                     count(*) as incidents_count,
                     --sum(pi.quantity) as incidents_quantity,
                     sum(case when incident_type !='EXTRA' and after_sold is false then pi.quantity else 0 end) as incidents_quantity,
+                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND incident_type != 'EXTRA' AND after_sold = false THEN pi.quantity ELSE 0 END) as last_30d_incidents_quantity,
+
+
+                    
+
                     sum(case when incident_type !='EXTRA' and pi.stage = 'INVENTORY' and pi.location_id is not null then pi.quantity else 0 end) as incidents_quantity_location,
                     sum(case when incident_type ='CLEANUP_ADJUSTMENTS' then pi.quantity else 0 end) as cleanup_adjustments_quantity,
 
@@ -16,7 +21,9 @@ with CTE as
                     sum(case when pi.stage = 'PACKING' and incident_type ='EXTRA' then pi.quantity else 0 end) as packing_extra_quantity,
 
                     sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as toat_damaged_quantity,
-                    sum(case when pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity else 0 end) as inventory_damaged_quantity,
+
+                    sum(case when after_sold is false and pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity else 0 end) as inventory_damaged_quantity,
+                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND after_sold is false and pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity ELSE 0 END) as last_30d_inventory_damaged_quantity
 
                     from {{ ref('stg_product_incidents')}}  as pi 
                     left join {{ ref('stg_line_items')}}  as li on  pi.line_item_id = li.line_item_id
@@ -32,11 +39,13 @@ with CTE as
                     sum(li.quantity) as sold_quantity, 
                     sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
 
-
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30d_sold_quantity
+                    --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
                 group by 1
             )
+
 
 
 
@@ -70,7 +79,7 @@ with CTE as
                 else st.stock_model_details end as stock_model_details,
 
             case 
-                when st.stock_model in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling'
+                when st.stock_model in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based' else 'Reselling'
                 end else st.stock_model end as stock_model,
 
 
@@ -156,11 +165,15 @@ with CTE as
             lis.item_sold,
             lis.sold_quantity,
             lis.child_incident_quantity,
+            lis.last_30d_sold_quantity,
 
 
         --product_incidents
             pi.incidents_count,
             pi.incidents_quantity,
+            pi.last_30d_incidents_quantity,
+            pi.last_30d_inventory_damaged_quantity,
+
             pi.incidents_quantity_location,
             pi.toat_damaged_quantity,
             pi.inventory_damaged_quantity,
@@ -255,6 +268,9 @@ else p.product_category end as new_category,
         left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
         left join line_items_sold as lis on lis.product_id = p.product_id
         left join product_incidents as pi on pi.product_id = p.product_id
+        
+
+        
 
     )
 select * from CTE where row_number=1

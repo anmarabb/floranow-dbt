@@ -26,6 +26,16 @@ co.name as company_name,
 
 sc.stock_count,
 rc.reseller_count,
+
+case 
+    when w.country ='SA' then 'KSA'
+    when w.country ='AE' then 'UAE'
+    when w.country ='QA' then 'Oatar'
+    when w.country ='JO' then 'Jordan'
+    when w.country ='KW' then 'kuwait'
+    else 'check'
+    end as financial_administration,
+
 current_timestamp() as ingestion_timestamp, 
   
 

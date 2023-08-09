@@ -7,12 +7,15 @@ source as (
 
  
 select 
+
+    incident_at,
+    
     product_incident_id,
     line_item_id,
     incidentable_id, 
     credit_note_item_id,
 
-    created_at as incident_at,
+    
 
     incident_quantity,
    
@@ -29,16 +32,20 @@ select
     Supplier,
 
 
+    incident_report,
+
+
     
 
 
     --line_item
+
+    Warehouse,
         
         
 
 
 current_timestamp() as insertion_timestamp, 
-
 
 from {{ref('int_product_incidents')}} as pi 
 

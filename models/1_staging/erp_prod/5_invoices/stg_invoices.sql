@@ -65,6 +65,9 @@ select
                 end as invoice_header_status,
 
 
+                source_system, --FLORANOW_ERP, FLORISOFT, ODOO
+
+
                 --dim
                 --creation_condition,
                 language,

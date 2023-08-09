@@ -30,7 +30,7 @@ select
 
             --fct
                 credit_note_amount,
-                paid_amount,
+              --  paid_amount,
                 total_amount,
 
                 

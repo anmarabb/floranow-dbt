@@ -15,7 +15,7 @@ select
 
             --dim
                 --date
-                created_at,
+                created_at as incident_at,
                 deleted_at,
                 updated_at,
 
