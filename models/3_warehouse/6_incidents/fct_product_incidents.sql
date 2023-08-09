@@ -40,7 +40,7 @@ select
 
     --line_item
 
-    Warehouse,
+    --Warehouse,
         
         
 

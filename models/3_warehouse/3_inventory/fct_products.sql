@@ -116,6 +116,7 @@ select
     --fct
     
     ordered_quantity,
+        last_30d_ordered_quantity,
     received_quantity,
 
     inventory_product_quantity,
