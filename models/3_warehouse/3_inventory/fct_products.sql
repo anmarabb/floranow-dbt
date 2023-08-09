@@ -74,6 +74,7 @@ select
 
         out_feed_source_name,
 
+
          
 
     
@@ -125,15 +126,22 @@ select
     
 --line_items_sold
     sold_quantity,
+        last_30d_sold_quantity,
     child_incident_quantity,
     
 
 --product_incidents
     incidents_quantity,
+        last_30d_incidents_quantity,
+
+    inventory_damaged_quantity,
+        last_30d_inventory_damaged_quantity,
+
+
     incidents_quantity_location,
     cleanup_adjustments_quantity,
     toat_damaged_quantity,
-    inventory_damaged_quantity,
+    
     extra_quantity,
     inventory_extra_quantity,
     packing_extra_quantity,
@@ -157,7 +165,7 @@ select
 
 fo.departure_ranking,
 
-case when fo.departure_ranking ='first_departure' then ordered_quantity else 0 end as frirst_departure_coming_quantity,
+case when fo.departure_ranking ='first_departure' then ordered_quantity else 0 end as first_departure_coming_quantity,
 case when fo.departure_ranking ='second_departure' then ordered_quantity else 0 end as second_departure_coming_quantity,
 
 

@@ -53,6 +53,9 @@ price_without_discount,
 total_amount,
 total_cost,
 
+
+--damged_value,
+
 current_timestamp() as insertion_timestamp 
 
 
