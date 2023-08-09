@@ -10,9 +10,6 @@ with CTE as
                     sum(case when incident_type !='EXTRA' and after_sold is false then pi.quantity else 0 end) as incidents_quantity,
                         SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND incident_type != 'EXTRA' AND after_sold = false THEN pi.quantity ELSE 0 END) as last_30d_incidents_quantity,
 
-
-                    
-
                     sum(case when incident_type !='EXTRA' and pi.stage = 'INVENTORY' and pi.location_id is not null then pi.quantity else 0 end) as incidents_quantity_location,
                     sum(case when incident_type ='CLEANUP_ADJUSTMENTS' then pi.quantity else 0 end) as cleanup_adjustments_quantity,
 
@@ -44,6 +41,15 @@ with CTE as
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
                 group by 1
+            ),
+            ordered_quantity as (
+                select
+                    p.product_id,
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end, DAY) <= 30 THEN li.ordered_quantity ELSE 0 END) as last_30d_ordered_quantity
+                    from {{ ref('stg_products')}} as p
+                    left join {{ ref('fct_order_items')}} as li on p.line_item_id = li.line_item_id
+                    group by 1
+
             )
 
 
@@ -110,6 +116,8 @@ with CTE as
         --line_items
             li.order_date,
             li.ordered_quantity,
+            ordered_quantity.last_30d_ordered_quantity,
+
             li.received_quantity,
 
             
@@ -268,6 +276,7 @@ else p.product_category end as new_category,
         left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
         left join line_items_sold as lis on lis.product_id = p.product_id
         left join product_incidents as pi on pi.product_id = p.product_id
+        left join ordered_quantity as ordered_quantity on ordered_quantity.product_id = p.product_id
         
 
         
