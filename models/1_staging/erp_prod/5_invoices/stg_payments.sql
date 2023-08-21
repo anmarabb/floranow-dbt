@@ -22,6 +22,8 @@ select
                 odoo_imported,
                 source_system,
                 odoo_synced,
+                accounting_ms_synced,
+                ready_to_sync,
 
             --date
                 created_at,

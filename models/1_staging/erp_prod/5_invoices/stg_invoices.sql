@@ -82,13 +82,13 @@ select
                 generation_type,
                 
 
-case 
-    when i.invoice_type = 1 and i.generation_type ='AUTO' then 'Credit Note - AUTO'
-    when i.invoice_type = 1 and i.generation_type ='MANUAL' then 'Credit Note - MANUAL'
-    when i.invoice_type = 0 and i.generation_type ='MANUAL' then 'Invoice - MANUAL'
-    when i.invoice_type = 0 and i.generation_type ='AUTO' then 'Invoice - AUTO'
-    else null
-end as record_type,
+                case 
+                    when i.invoice_type = 1 and i.generation_type ='AUTO' then 'Credit Note - AUTO'
+                    when i.invoice_type = 1 and i.generation_type ='MANUAL' then 'Credit Note - MANUAL'
+                    when i.invoice_type = 0 and i.generation_type ='MANUAL' then 'Invoice - MANUAL'
+                    when i.invoice_type = 0 and i.generation_type ='AUTO' then 'Invoice - AUTO'
+                    else null
+                end as record_type,
 
 
         --fct
