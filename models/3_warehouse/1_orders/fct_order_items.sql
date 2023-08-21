@@ -22,6 +22,8 @@ select
     li.fulfilled_quantity,
     li.received_quantity,
 
+    inv_quantity, --from invoice item
+
 
 
 --status
@@ -29,6 +31,7 @@ select
     record_type_details,       -- Reseller Purchase Order, Customer Bulk Order, Customer Shipment Order, Customer Inventory Order, Customer Fly Order, stock2stock, EXTRA, RETURN, MOVEMENT
     order_type,                -- ONLINE, OFFLINE, ADDITIONAL, IMPORT_INVENTORY, EXTRA, RETURN, MOVEMENT
     parent_order_type,
+    invoice_status,
 
     location as loc_status,    -- pod, loc, null
 
@@ -133,9 +136,34 @@ internal_invoicing,
     debtor_number,
     account_manager,
     warehouse,
+    warehouse_id,
+    case 
+    when warehouse_id in (10,43,76,79) then 'KSA - 4 Remote Branch (HHJQ)'
+    when warehouse_id in (7,9,8,6,5) then 'KSA - Main Branch'
+    when warehouse_id in (1,2) then 'UAE - Kuw'
+    else null 
+    end as warehouse_type,
+
+    Reseller,
+
+/*
+case 
+    when warehouse_id = 10 then 1-02-2023 -- Hail
+    when warehouse_id = 43 then 1-03-2023 -- Jouf
+    when warehouse_id = 76 then 10-03-2023 --Hafer
+    when warehouse_id = 79 then 17-03-2023 --Qaseem
+    else null
+end as go_live_date,
+*/
+
+
+
+
     country,
     financial_administration,
     User,
+    customer_type,
+    ksa_resellers,
 
 --pod
     proof_of_delivery_id,
@@ -144,7 +172,7 @@ internal_invoicing,
     source_type,
 
     
-
+samer_warehouses,
     
 
 
@@ -181,6 +209,51 @@ incident_quantity,
 
 delivery_window,
 delivery_time,
+
+
+shipment_id_check,
+invoice_id_check,
+parent_id_check,
+product_id_check,
+product_id,
+product_link,
+parent_line_item_link,
+offer_id,
+offer_id_check,
+reseller_id_check,
+reseller_id,
+
+CASE    -- Hail
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date < '2023-02-01' THEN 'regular phase'
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-02-01' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-07-10' THEN 'FN phase'
+        -- Jouf
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date < '2023-03-01' THEN 'regular phase'
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-03-01' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-07-10' THEN 'FN phase'
+         --Hafer
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date < '2023-03-10' THEN 'regular phase'
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-03-10' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-07-10' THEN 'FN phase'
+
+        --Qaseem
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date < '2023-03-17' THEN 'regular phase'
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date >= '2023-03-17' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date >= '2023-07-10' THEN 'FN phase'
+        ELSE 'other' 
+    END AS phase_segment,
+
+
+--feed soure
+    feed_source_name,
+    feed_type,
+    feed_source_supplier,
+
+
 current_timestamp() as insertion_timestamp, 
 
 

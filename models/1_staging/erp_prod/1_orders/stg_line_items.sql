@@ -132,28 +132,19 @@ With source as
                     li.published_canceled_quantity,
 
         case 
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Reseller Purchase Order' --from reseller to feed the stock
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Customer Bulk Order'
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Customer Shipment Order' --customer_direct_orders
-            when li.source_line_item_id is null and li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null and li.order_type = 'IN_SHOP' then 'Customer In Shop Order'
-            when li.source_line_item_id is null and li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null then 'Customer Inventory Order' --customer_inventory_orders
-            when li.source_line_item_id is null and li.ordering_stock_type = 'FLYING' and li.reseller_id is null then 'Customer Fly Order' --customer_inventory_orders_flying
-            when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is not null then 'stock2stock'
-            when li.source_line_item_id is not null and li.order_type = 'EXTRA' then 'EXTRA'
-            when li.source_line_item_id is not null and li.order_type = 'RETURN' then 'RETURN' 
-            when li.source_line_item_id is not null and li.order_type = 'MOVEMENT' then 'MOVEMENT'
+            when  li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Reseller Purchase Order' --from reseller to feed the stock
+            when  li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Customer Bulk Order'
+            when  li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Customer Shipment Order' --customer_direct_orders
+            when  li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null and li.order_type = 'IN_SHOP' then 'Customer In Shop Order'
+            when  li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null then 'Customer Inventory Order' --customer_inventory_orders
+            when  li.ordering_stock_type = 'FLYING' and li.reseller_id is null then 'Customer Fly Order' --customer_inventory_orders_flying
+            when  li.ordering_stock_type is not null and li.reseller_id is not null then 'Reseller Purchase Order From The Stock'
             else 'cheack_my_logic'
             end as record_type_details,
 
    case 
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Purchase Order'
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Customer Order'
-            when li.source_line_item_id is null and li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Customer Order' --customer_direct_orders
-            when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is null then 'Customer Order' --customer_inventory_orders
-            when li.source_line_item_id is null and li.ordering_stock_type is not null and li.reseller_id is not null then 'System'
-            when li.source_line_item_id is not null and li.order_type = 'EXTRA' then 'System'
-            when li.source_line_item_id is not null and li.order_type = 'RETURN' then 'System' 
-            when li.source_line_item_id is not null and li.order_type = 'MOVEMENT' then 'System'
+            when  li.reseller_id is not null  then 'Reseller Purchase Order'
+            when  li.reseller_id is null     then 'Customer Sales Order'
             else 'cheack_my_logic'
             end as record_type,
 

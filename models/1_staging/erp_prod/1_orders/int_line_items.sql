@@ -125,7 +125,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     msh.master_shipment_name,
 
 w.warehouse_name as warehouse,
-
+w.warehouse_id,
 
 pi.incidents_count,
 pi.incident_quantity,
@@ -207,20 +207,75 @@ end as ch_{{x}}
 
 win.name as delivery_window,
 
+
+
+
+
+
+case 
+when customer.debtor_number  in ('SHPRUH','LNDHAI','ASTHAI','LNDJOU','ASTJOU','LNDHAF','ASTHAF','LNDQAS','ASTQAS','lndmed','astmed','EVEDMM', 'EVEHAF','EVEHAI','EVEJED','EVEJOU','EVEMED','EVEQAS','EVERUH','EVETUU','LNDDMM','ASTJED','LNDJED','FNQSIM','ASTRUH','LNDRUH','FSTUU') then 'BMX Reseller'
+when customer.debtor_number  in ('130220','130009','130257','130188','132009','132008','134151','134150','820762') then 'BMX Original'
+else null end as ksa_resellers,
+
+
+  case 
+        when li.invoice_id is not null and i.invoice_header_printed_at is not null then 'Invoice Printed' 
+        when li.invoice_id is not null and i.invoice_header_printed_at is null then 'Invoice Created, Not Printed'
+        else 'No Invoice ID' 
+    end as invoice_status,
+
+case when li.shipment_id is not null then 'Shipment ID' else null end as shipment_id_check,
+case when li.invoice_id is not null then 'Invoice ID' else null end as invoice_id_check,
+case when li.parent_line_item_id is not null then 'Parent ID' else null end as parent_id_check,
+case when li.source_line_item_id is not null then 'Source ID' else null end as source_id_check,
+case when p.line_item_id is not null then 'Product ID' else null end as product_id_check,
+
+case when li.offer_id is not null then 'Offer ID' else null end as offer_id_check,
+case when li.reseller_id is not null then 'Reseller ID' else null end as reseller_id_check,
+
+
+p.product_id,
+
+
+concat( "https://erp.floranow.com/products/", p.product_id) as product_link,
+concat( "https://erp.floranow.com/line_items/", li.parent_line_item_id) as parent_line_item_link,
+
+case 
+when customer.debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') then 'Hail'
+WHEN customer.debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') then 'Jouf'
+WHEN customer.debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') then 'Hafer'
+WHEN customer.debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') then 'Qaseem'
+else null end as samer_warehouses,
+
+
+
+
+fs.feed_source_name,
+fs.feed_type,
+fs.supplier_name as feed_source_supplier,
+reseller.name as Reseller,
+
+ii.quantity as inv_quantity,
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
 left join {{ref('stg_order_payloads')}} as opl on li.order_payload_id = opl.order_payload_id
 
-
 left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id and ii.invoice_item_type = 'invoice'
+left join {{ref('stg_invoice_items')}} as ii2 on ii2.line_item_id=li.line_item_id and ii2.invoice_item_type = 'credit note'
+left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
+
+
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
+left join {{ref('base_users')}} as reseller on reseller.id = li.reseller_id
 left join {{ref('base_users')}} as user on user.id = li.user_id
 left join {{ref('base_users')}} as dispatched_by on dispatched_by.id = li.dispatched_by_id
 left join {{ref('base_users')}} as returned_by on returned_by.id = li.returned_by_id
 left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_id
 left join {{ref('base_users')}} as split_by on split_by.id = li.split_by_id
 left join {{ref('base_users')}} as order_requested_by on order_requested_by.id = orr.created_by_id
+
 
 left join {{ref('base_suppliers')}} as lis on lis.supplier_id = li.supplier_id
 
@@ -233,10 +288,12 @@ left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id
 
 left join {{ref('int_shipments')}} as sh on li.shipment_id = sh.shipment_id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.master_shipment_id
-left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
+
 
 left join {{ref('base_stocks')}} as st on p.stock_id = st.stock_id 
 --left join {{ref('stg_feed_sources')}} as origin_fs on origin_fs.feed_source_id = p.origin_feed_source_id
+
+left join {{ref('stg_feed_sources')}} as fs on fs.feed_source_id = li.feed_source_id
 
 
 left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
@@ -258,3 +315,4 @@ left join prep_picking_products as prep_picking_products on prep_picking_product
 left join prep_registered_clients as prep_registered_clients on prep_registered_clients.financial_administration = customer.financial_administration
 
 --where lis.supplier_id = 1
+--where li.line_item_id = 696559
