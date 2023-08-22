@@ -46,6 +46,7 @@ select
     pod_status,                --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
     order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
     Shipment,
+    shipment_link,
     shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
     master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
     master_shipment_name as master_shipment,
@@ -205,6 +206,7 @@ supplier_region as Origin,
 
 incidents_count,
 incident_quantity,
+inventory_missing_quantity,
 
 
 delivery_window,
