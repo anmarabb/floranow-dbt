@@ -34,9 +34,7 @@ select
                 u.ledger_template_ar_id,
 
 
-            --dim
-                
-                
+            --dim              
                 case when u.internal is true then 'Internal' else 'External' end as account_type,
                 case when u.customer_type = 0 then 'reseller' when u.customer_type = 1 then 'retail' when u.customer_type = 2 then 'fob' when u.customer_type = 3 then 'cif' else 'check_my_logic' end as customer_type,
                 

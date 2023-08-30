@@ -23,6 +23,24 @@ select
     li.received_quantity,
 
     inv_quantity, --from invoice item
+    inv_total_price_without_tax,  --from invoice item
+
+    case 
+    when inv_quantity < li.fulfilled_quantity then 'Wrongly invoiced'
+    when inv_quantity > li.fulfilled_quantity then 'Not invoiced'
+    when inv_quantity = li.fulfilled_quantity then 'Good invoiced'
+    else null end as valdiation_flag,
+
+case 
+    when li.fulfilled_quantity =0 then li.fulfilled_quantity
+    when inv_quantity = 0 and li.fulfilled_quantity > 0 then li.fulfilled_quantity
+    when inv_quantity is null and li.fulfilled_quantity > 0 then li.fulfilled_quantity
+    when inv_quantity > li.fulfilled_quantity then li.fulfilled_quantity
+    when li.fulfilled_quantity > inv_quantity then inv_quantity
+    when li.fulfilled_quantity = inv_quantity then li.fulfilled_quantity
+    else null
+    end as the_25_aug_quantity,
+
 
 
 
@@ -47,6 +65,7 @@ select
     order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
     Shipment,
     shipment_link,
+    master_shipment_link,
     shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
     master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
     master_shipment_name as master_shipment,
@@ -146,6 +165,7 @@ internal_invoicing,
     end as warehouse_type,
 
     Reseller,
+    Master,
 
 /*
 case 
@@ -180,6 +200,7 @@ samer_warehouses,
 
 
 Supplier,
+parent_supplier,
 supplier_region as Origin,
 
 --product
@@ -207,6 +228,15 @@ supplier_region as Origin,
 incidents_count,
 incident_quantity,
 inventory_missing_quantity,
+incident_quantity_receiving_stage,
+incident_quantity_packing_stage,
+incident_quantity_extra,
+incident_quantity_inventory_stage,
+
+incident_quantity_extra_packing,
+incident_quantity_extra_receiving,
+incident_quantity_extra_inventory,
+
 
 
 delivery_window,
@@ -224,6 +254,9 @@ offer_id,
 offer_id_check,
 reseller_id_check,
 reseller_id,
+customer_master_id_check,
+proof_of_delivery_id_check,
+
 
 CASE    -- Hail
             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date < '2023-02-01' THEN 'regular phase'
@@ -242,12 +275,38 @@ CASE    -- Hail
             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-07-10' THEN 'FN phase'
 
         --Qaseem
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date < '2023-03-17' THEN 'regular phase'
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date >= '2023-03-17' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','FNQIM') and delivery_date >= '2023-07-10' THEN 'FN phase'
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date < '2023-03-17' THEN 'regular phase'
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-03-17' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-07-10' THEN 'FN phase'
         ELSE 'other' 
     END AS phase_segment,
+
+
+
+CASE    -- Hail
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at < '2023-02-01' THEN 'regular phase'
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-02-01' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-07-10' THEN 'FN phase'
+        -- Jouf
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at < '2023-03-01' THEN 'regular phase'
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-03-01' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-07-10' THEN 'FN phase'
+         --Hafer
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at < '2023-03-10' THEN 'regular phase'
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-03-10' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-07-10' THEN 'FN phase'
+
+        --Qaseem
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at < '2023-03-17' THEN 'regular phase'
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-03-17' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-07-10' THEN 'FN phase'
+        ELSE 'other' 
+    END AS phase_segment_order_date,
 
 
 --feed soure
@@ -255,6 +314,12 @@ CASE    -- Hail
     feed_type,
     feed_source_supplier,
 
+case 
+    when EXTRACT(MONTH FROM delivery_date) = EXTRACT(MONTH FROM created_at) and EXTRACT(YEAR FROM delivery_date) = EXTRACT(YEAR FROM created_at) then 'Same Month Creation and Delivery'
+    else 'Corner case' end as out_of_period_check,
+
+additional_status,
+additional_creation_stage,
 
 current_timestamp() as insertion_timestamp, 
 

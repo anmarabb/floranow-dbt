@@ -71,6 +71,17 @@ creditable_id,
         invoice_header_created_at,
         invoice_header_printed_at,
 
+sales_source,
+
+CASE
+    WHEN sales_source = 'Astra' and LOWER(Customer) LIKE '%tamimi%' THEN 'Astra - Tamimi Sales'
+    WHEN sales_source = 'Non Astra' and LOWER(Customer) LIKE '%tamimi%' THEN 'Non Astra - Tamimi Sales'
+    WHEN sales_source = 'Astra' and Customer IN ('REMA1','REMA2','REMA3','REMA4','REMA5','REMA6','REMA7','REMA8') THEN 'Astra - REMA Sales'
+    WHEN sales_source = 'Non Astra' and Customer IN ('REMA1','REMA2','REMA3','REMA4','REMA5','REMA6','REMA7','REMA8') THEN 'Non Astra - REMA Sales'
+    WHEN sales_source = 'Astra' then 'Astra'
+    WHEN sales_source = 'Non Astra' then 'Non Astra' 
+    ELSE 'check'
+ END as sales_source_details,
 
 
 current_timestamp() as insertion_timestamp, 

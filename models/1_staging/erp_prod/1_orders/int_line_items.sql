@@ -12,6 +12,20 @@ product_incidents as (
                             count(*) as incidents_count,
                             --sum(quantity) as incident_quantity,
                             sum(case when incident_type !='EXTRA' and after_sold is false then pi.quantity else 0 end) as incident_quantity,
+                            sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
+                            sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
+
+                            sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_inventory_stage,
+
+
+                            sum(case when incident_type ='EXTRA'  then  pi.quantity else 0 end) as incident_quantity_extra,
+
+                            sum(case when incident_type ='EXTRA' and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_extra_packing,
+                            sum(case when incident_type ='EXTRA' and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_extra_receiving,
+                            sum(case when incident_type ='EXTRA' and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_extra_inventory,
+
+
+
                             sum(case when after_sold is false and pi.stage = 'INVENTORY' and incident_type ='MISSING' then pi.quantity else 0 end) as inventory_missing_quantity,
 
                             from {{ ref('stg_product_incidents') }} as pi  
@@ -88,7 +102,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 
     
 
-
+plis.supplier_name as parent_supplier,
 --supplier
     case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
     case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end as supplier_region,
@@ -139,6 +153,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     sh.shipments_status, 
     sh.Shipment,
     concat( "https://erp.floranow.com/shipments/", sh.shipment_id) as shipment_link,
+    concat( "https://erp.floranow.com/master_shipments/", msh.master_shipment_id) as master_shipment_link,
     msh.master_shipments_status,
     msh.master_shipment_name,
 
@@ -148,7 +163,13 @@ w.warehouse_id,
 pi.incidents_count,
 pi.incident_quantity,
 pi.inventory_missing_quantity,
-
+pi.incident_quantity_receiving_stage,
+pi.incident_quantity_packing_stage,
+pi.incident_quantity_extra,
+pi.incident_quantity_inventory_stage,
+pi.incident_quantity_extra_packing,
+pi.incident_quantity_extra_receiving,
+pi.incident_quantity_extra_inventory,
 
 pod.source_type,
 pod.pod_status,
@@ -250,6 +271,10 @@ case when p.line_item_id is not null then 'Product ID' else null end as product_
 
 case when li.offer_id is not null then 'Offer ID' else null end as offer_id_check,
 case when li.reseller_id is not null then 'Reseller ID' else null end as reseller_id_check,
+case when li.customer_master_id is not null then 'Master ID' else null end as customer_master_id_check,
+
+case when li.proof_of_delivery_id is not null then 'POD ID' else null end as proof_of_delivery_id_check,
+
 
 
 p.product_id,
@@ -272,8 +297,13 @@ fs.feed_source_name,
 fs.feed_type,
 fs.supplier_name as feed_source_supplier,
 reseller.name as Reseller,
+master.name as Master,
 
 ii.quantity as inv_quantity,
+ii.quantity * ii.unit_price as inv_total_price_without_tax,
+
+ad.status as additional_status, 
+ad.creation_stage as additional_creation_stage,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -284,6 +314,9 @@ left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id 
 --left join {{ref('stg_invoice_items')}} as ii2 on ii2.line_item_id=li.line_item_id and ii2.invoice_item_type = 'credit note'
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
 
+
+
+left join {{ref('base_users')}} as master on master.id = li.customer_master_id
 
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as reseller on reseller.id = li.reseller_id

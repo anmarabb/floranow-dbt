@@ -28,7 +28,6 @@ select
                 currency,
                 number,
 
-
             --date
                 payment_received_at,
                 collected_at,
