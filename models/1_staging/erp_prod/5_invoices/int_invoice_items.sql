@@ -54,7 +54,13 @@ ii.quantity * li.unit_landed_cost as total_cost,
 
 
         
-        
+case 
+when li.Supplier  = 'ASTRA Farms' then 'Astra'
+when ii.meta_supplier_name in ('Astra Farm','Astra farm Barcode','Astra Farm - Event','Astra Flash Sale - R','Astra Flash sale - W') then 'Astra'
+when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh') and  li.parent_supplier in ('Holex','Floradelight', 'Waridi', 'Sierra','Vianen','PJ Dave Roses','Heritage Flowers','Décor Foliage','Sian Flowers', 'Flora Ola') then 'Non Astra'
+when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') or li.Supplier in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') then 'Astra'
+else 'Non Astra'
+end as sales_source,
 
 
 
@@ -73,6 +79,9 @@ left join {{ref('base_users')}} as approved_by_id on approved_by_id.id = ii.appr
 left join {{ ref('fct_order_items') }} as li on ii.line_item_id = li.line_item_id
 
 left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
+
+
+
 
     )
 

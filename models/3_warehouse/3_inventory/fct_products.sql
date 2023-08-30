@@ -43,6 +43,7 @@ select
         stock_model,
         stock_model_details,
         Visibility,
+        shipment_link,
 
         p.product_id,
         product_link,

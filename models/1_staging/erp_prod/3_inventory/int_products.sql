@@ -139,6 +139,8 @@ with CTE as
             li.shipments_status,
             li.master_shipments_status,
             li.master_shipment,
+            li.shipment_link,
+            
             
             case 
             when date_diff(date(case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end)  ,current_date(), month) > 1 then 'Wrong date' 
