@@ -47,6 +47,8 @@ select
 
         p.product_id,
         product_link,
+
+        flag_1,
     
 
     --date

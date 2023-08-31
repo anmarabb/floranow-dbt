@@ -112,6 +112,11 @@ with CTE as
             pl.labeled,
             pl.section_cycle_check,
 
+            case 
+when pl.quantity is null then 'not_scaned' 
+when pl.quantity = p.quantity then 'scaned_good'
+else 'scaned_flag' end as flag_1,
+
 
         --line_items
             li.order_date,
