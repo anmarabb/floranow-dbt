@@ -174,6 +174,14 @@ pi.incident_quantity_extra_inventory,
 pod.source_type,
 pod.pod_status,
 pod.route_name,
+
+case 
+    when pod.route_name in ('Ajman', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 'Northern Emirates'
+    when pod.route_name in ('Al Ain' ,'Al Ain 1') then 'Al Ain City'
+    else pod.route_name end as vehicle_destination,
+
+
+
 --pod.dispatched_by,
 
 
