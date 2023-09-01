@@ -49,6 +49,8 @@ select
         product_link,
 
         flag_1,
+
+     
     
 
     --date
@@ -173,6 +175,19 @@ fo.departure_ranking,
 
 case when fo.departure_ranking ='first_departure' then ordered_quantity else 0 end as first_departure_coming_quantity,
 case when fo.departure_ranking ='second_departure' then ordered_quantity else 0 end as second_departure_coming_quantity,
+
+
+   case 
+            when route_name in ('Abu Dhabi Out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 'Boxer'
+            when route_name in ('Al AIN' ,'Al AIN 1', 'DXB Same Day Express', 'AUH Same Day Express') then 'Hiace'
+            else null end as vehicle_type, 
+
+    case 
+            when route_name in ('Abu Dhabi Out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 11573
+            when route_name in ('Al AIN' ,'Al AIN 1') then 2090
+
+            when route_name in ('DXB Same Day Express', 'AUH Same Day Express') then 2164
+            else null end as vehicle_capacity,        
 
 
 current_timestamp() as insertion_timestamp, 
