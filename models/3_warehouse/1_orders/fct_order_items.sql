@@ -322,6 +322,21 @@ case
 additional_status,
 additional_creation_stage,
 
+
+case 
+            when route_name in ('Abu Dhabi Out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 'Boxer'
+            when route_name in ('Al AIN' ,'Al AIN 1', 'DXB Same Day Express', 'AUH Same Day Express') then 'Hiace'
+            else null end as vehicle_type, 
+
+    case 
+            when route_name in ('Abu Dhabi Out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 11573
+            when route_name in ('Al AIN' ,'Al AIN 1') then 2090
+
+            when route_name in ('DXB Same Day Express', 'AUH Same Day Express') then 2164
+            else null end as vehicle_capacity,  
+
+            
+
 current_timestamp() as insertion_timestamp, 
 
 
