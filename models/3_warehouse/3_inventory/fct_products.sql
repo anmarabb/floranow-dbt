@@ -113,6 +113,8 @@ select
         master_shipments_status,
         master_shipment,
 
+        route_name,
+
     --date
         delivery_date,    --from line item
   

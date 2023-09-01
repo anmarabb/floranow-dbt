@@ -269,6 +269,10 @@ case
     
 else p.product_category end as new_category,
 
+li.route_name,
+
+
+
 
 
         from {{ ref('stg_products')}} as p

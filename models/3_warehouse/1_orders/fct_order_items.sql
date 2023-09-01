@@ -188,6 +188,7 @@ end as go_live_date,
 
 --pod
     proof_of_delivery_id,
+    route_name,
     
     
     source_type,
