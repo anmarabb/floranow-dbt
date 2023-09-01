@@ -50,6 +50,8 @@ li.item_count,
 i.invoice_count,
 i.financial_administration,
 
+rou.route_name,
+
 date.dim_date,
 
 

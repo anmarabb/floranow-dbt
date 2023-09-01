@@ -4,6 +4,7 @@ source as (
         
 select     
 customer_id,
+route_name,
 
 proof_of_delivery_id,
 order_date,
