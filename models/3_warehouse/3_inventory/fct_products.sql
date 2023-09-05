@@ -61,7 +61,7 @@ select
     --fct
         
         remaining_quantity,
-        case when flag_1 != 'not_scaned' and  stock_model = 'Reselling' and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
+        case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
         case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
         --case when select_departure_date in ('Future', 'Today') then MIN(departure_date) else null end AS next_departure_date,
 
@@ -184,3 +184,4 @@ current_timestamp() as insertion_timestamp,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
+
