@@ -16,7 +16,11 @@ ii.quantity * li.unit_landed_cost as total_cost,
         customer.name as Customer,
         customer.customer_type,
         customer.user_category,
+        customer.debtor_number,
         
+
+concat(customer.debtor_number,ii.delivery_date) as drop_id, 
+
 
 --case when i.invoice_header_type = 'credit note' then -ii.quantity else ii.quantity end as invoiced_quantity,
 
@@ -51,6 +55,8 @@ ii.quantity * li.unit_landed_cost as total_cost,
 
         li.order_number,
 
+        case when li.order_type is null and i.generation_type = 'MANUAL' then 'Unknown - Manual Invoicing' else li.order_type end as order_type,
+
 
 
         
@@ -61,6 +67,7 @@ when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh'
 when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') or li.Supplier in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') then 'Astra'
 else 'Non Astra'
 end as sales_source,
+
 
 
 

@@ -7,6 +7,7 @@ select
 --invoice Items
 
 creditable_id,
+invoice_item_generation_type,
     
     --fct
         price_without_tax,
@@ -18,16 +19,36 @@ creditable_id,
         unit_price,
         unit_landed_cost,
 
+case when invoice_header_printed_at is not null then 'Printed' else null end as printed_status,
+
+---Gross Revenue: This is the total amount of revenue generated from all printed invoices in a given period, without considering any adjustments like credit notes.
+    case when invoice_item_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as gross_revenue,
+
+    case when invoice_item_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as credit_note,
+
+
+--This represents the total monetary value deducted from the Gross Revenue for a specific period, such as a month, due to the issuance of credit notes. Credit notes are typically issued when a customer returns a product, doesn't accept a delivery, or when a correction to an invoice is required.
+case when creditable_id is not null then 'creditable_id' else null end as creditable_id_check,
+
+case when invoice_header_id is not null then 'invoice_header_id' else null end as invoice_header_id_check,
+
+
+invoice_item_type_row,
+creditable_type,
+
+
 
     --dim
         financial_administration, -- Market
         Customer,
         user_category, -- Segment
+        debtor_number,
 
 
 
 
         invoice_item_id,
+        drop_id, --concat(customer.debtor_number,ii.delivery_date)
         
         source_type, --ERP, Florisft
         invoice_item_type,
@@ -53,6 +74,7 @@ creditable_id,
         fulfillment_mode,
         order_status,
         order_number,
+        order_type,
 
 
 
@@ -82,6 +104,9 @@ CASE
     WHEN sales_source = 'Non Astra' then 'Non Astra' 
     ELSE 'check'
  END as sales_source_details,
+
+
+
 
 
 current_timestamp() as insertion_timestamp, 

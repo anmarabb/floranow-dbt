@@ -45,6 +45,8 @@ select
                     else 'check' 
                 end as invoice_item_type,
 
+                ii.invoice_type as invoice_item_type_row,
+
                 --supplier
                 ii.meta_data.supplier as meta_supplier,
                 ii.meta_data.supplier_code as meta_supplier_code,
