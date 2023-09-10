@@ -22,9 +22,11 @@ invoice_item_generation_type,
 case when invoice_header_printed_at is not null then 'Printed' else null end as printed_status,
 
 ---Gross Revenue: This is the total amount of revenue generated from all printed invoices in a given period, without considering any adjustments like credit notes.
-    case when invoice_item_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as gross_revenue,
+    case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as gross_revenue,
+    case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as credit_note,
 
-    case when invoice_item_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as credit_note,
+
+case when date(invoice_header_printed_at) is not null then date(invoice_header_printed_at) else date(invoice_header_created_at) end as master_date,
 
 
 --This represents the total monetary value deducted from the Gross Revenue for a specific period, such as a month, due to the issuance of credit notes. Credit notes are typically issued when a customer returns a product, doesn't accept a delivery, or when a correction to an invoice is required.
