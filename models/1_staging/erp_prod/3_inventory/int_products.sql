@@ -40,7 +40,9 @@ with CTE as
                     --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
+                    --where p.product_id=149074
                 group by 1
+                
             ),
             ordered_quantity as (
                 select

@@ -18,7 +18,8 @@ prep_payments as (
     select 
     py.invoice_header_id,
     sum(py.total_amount) as total_payments ,
-    --sum(py.paid_amount) as paid_amount,
+    --sum(py.paid_amount) as paid_amount
+    
     sum(py.credit_note_amount) as credit_note_amount_used,
     from {{ ref('int_payments') }} as py
     group by invoice_header_id
