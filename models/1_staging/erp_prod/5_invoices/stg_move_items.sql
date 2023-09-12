@@ -7,6 +7,7 @@ select
             --FK
                 user_id,
                 documentable_id,
+                company_id,
             --dim
                 source_system, -- ODOO, FLORANOW_ERP, FLORISOFT
                 currency,

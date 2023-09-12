@@ -23,7 +23,23 @@ prep_payments as (
     sum(py.credit_note_amount) as credit_note_amount_used,
     from {{ ref('int_payments') }} as py
     group by invoice_header_id
+),
+
+prep_move_item as (
+    select 
+    mi.documentable_id,
+    mi.documentable_type, 
+    mi.company_id
+
+    from {{ ref('int_move_items') }} as mi
+    left join {{ ref('stg_invoices')}} as i on i.invoice_header_id = mi.documentable_id and mi.documentable_type  = 'Invoice'
+    where mi.deleted_at is null  and i.deleted_at is null
+
+    group by 1,2,3
 )
+
+
+
 /*
 ,
 prep_damaged as (
@@ -77,4 +93,8 @@ left join {{ ref('base_users') }} as printed_by on printed_by.id = i.printed_by_
 left join {{ ref('base_users') }} as customer on customer.id = i.customer_id
 left join invoice_items as ii on ii.invoice_header_id = i.invoice_header_id
 left join prep_payments as prep_payments on prep_payments.invoice_header_id = i.invoice_header_id
+left join prep_move_item as mi on mi.documentable_id = i.invoice_header_id and mi.documentable_type  = 'Invoice'
+
+
+
 --left join prep_damaged as prep_damaged on prep_damaged.date_incident_at = date(i.invoice_header_printed_at) and prep_damaged.Warehouse = customer.Warehouse and prep_damaged.financial_administration = i.financial_administration
