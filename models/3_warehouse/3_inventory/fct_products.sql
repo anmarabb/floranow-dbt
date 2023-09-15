@@ -7,7 +7,7 @@
                     departure_date,
                     warehouse,
                     product_id,
-                    DENSE_RANK() OVER (PARTITION BY warehouse ORDER BY departure_date) AS departure_rank
+                    DENSE_RANK() OVER (PARTITION BY warehouse,departure_date ORDER BY departure_date) AS departure_rank
                 from {{ ref('int_products')}} as p
                 WHERE departure_date >= CURRENT_DATE()
 
@@ -21,6 +21,7 @@
                 FROM CTE
 
                 --where product_name like '%Athena%' and warehouse ='Riyadh Warehouse'
+                --where product_id=157823
             )
                 
             
@@ -187,3 +188,5 @@ current_timestamp() as insertion_timestamp,
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
 
+--where p.product_id = 157823
+--where product_name like '%Rose Ever Red%' and p.warehouse ='Riyadh Warehouse'
