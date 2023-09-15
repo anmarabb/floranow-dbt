@@ -7,7 +7,7 @@
                     departure_date,
                     warehouse,
                     product_id,
-                    DENSE_RANK() OVER (PARTITION BY warehouse,departure_date ORDER BY departure_date) AS departure_rank
+                    DENSE_RANK() OVER (PARTITION BY warehouse ORDER BY departure_date) AS departure_rank
                 from {{ ref('int_products')}} as p
                 WHERE departure_date >= CURRENT_DATE()
 
