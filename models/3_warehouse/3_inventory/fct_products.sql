@@ -10,7 +10,7 @@
                     --product_name,
                     DENSE_RANK() OVER (PARTITION BY warehouse,product_name ORDER BY departure_date) AS departure_rank,
                 from {{ ref('int_products')}} as p
-                WHERE departure_date > CURRENT_DATE() and product_name like '%Rose Ever Red%' and warehouse ='Riyadh Warehouse'
+                WHERE departure_date > CURRENT_DATE() --and product_name like '%Rose Athena%' and warehouse ='Riyadh Warehouse'
 
                             )
                 SELECT 
@@ -21,7 +21,7 @@
                     else null end as departure_ranking
                 FROM CTE
 
-               -- where product_name like '%Rose Ever Red%' and warehouse ='Riyadh Warehouse'
+               --where product_name like '%Rose Ever Red%' and warehouse ='Riyadh Warehouse'
                 --where product_id=157823
             )
                 
@@ -190,4 +190,5 @@ from {{ref('int_products')}} as p
 left join future_orders as fo on fo.product_id = p.product_id
 
 --where p.product_id = 157823
---where product_name like '%Rose Ever Red%' and p.warehouse ='Riyadh Warehouse'
+--where product_name like '%Rose Athena%' and p.warehouse ='Riyadh Warehouse' and select_departure_date in ('Future', 'Today')
+--Rose Athena
