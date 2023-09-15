@@ -28,9 +28,9 @@ models:
   floranow:
     # Applies to all files under models/example/
     1_staging:
-      +enabled: true
-      +materialized: view
-      +schema: stg
+        +enabled: true
+        +materialized: view
+        +schema: stg
       
     2_intermediate:
         +enabled: true
