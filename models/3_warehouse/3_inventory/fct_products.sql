@@ -180,7 +180,10 @@ fo.departure_ranking,
 case when fo.departure_ranking ='first_departure' then ordered_quantity else 0 end as first_departure_coming_quantity,
 case when fo.departure_ranking ='second_departure' then ordered_quantity else 0 end as second_departure_coming_quantity,
 
-
+case 
+when case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end = 0 and last_30d_sold_quantity = 0 and last_30d_inventory_damaged_quantity = 0 and case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end = 0 then 'Outdated Products'
+else 'Active Products'
+end as product_activity_status,
 
 
 current_timestamp() as insertion_timestamp, 
