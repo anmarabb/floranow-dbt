@@ -10,7 +10,7 @@
                     --product_name,
                     DENSE_RANK() OVER (PARTITION BY warehouse,product_name ORDER BY departure_date) AS departure_rank,
                 from {{ ref('int_products')}} as p
-                WHERE departure_date > CURRENT_DATE() --and product_name like '%Rose Athena%' and warehouse ='Riyadh Warehouse'
+                WHERE departure_date >= CURRENT_DATE() --and product_name like '%Rose Athena%' and warehouse ='Riyadh Warehouse'
 
                             )
                 SELECT 
