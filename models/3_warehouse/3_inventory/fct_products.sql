@@ -33,6 +33,7 @@ select
 --Products
     --dim
         product_name as Product,
+        stem_length,
         product_crop,
         product_category,
         new_category,

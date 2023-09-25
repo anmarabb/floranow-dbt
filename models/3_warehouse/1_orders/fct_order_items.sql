@@ -206,7 +206,7 @@ supplier_region as Origin,
 
 --product
     product_name as Product,
-    product_crop as Crop,
+    --product_crop as Crop,
     product_category,
     product_subcategory,
 

@@ -78,6 +78,9 @@ creditable_type,
         order_number,
         order_type,
 
+        product_category,
+        product_subcategory,
+
 
 
 --invoice Header
@@ -106,6 +109,9 @@ CASE
     WHEN sales_source = 'Non Astra' then 'Non Astra' 
     ELSE 'check'
  END as sales_source_details,
+
+
+ registered_clients,
 
 
 

@@ -112,6 +112,8 @@ select
   w.warehouse_name as Warehouse,
   u2.name as account_manager,
   uc.name as user_category,
+  case when  uc.name = 'Closed' then 'Deleted' else 'in business' end as deleted_accounts,
+
   c.country_name as Country,
   pt.name as payment_term,
 

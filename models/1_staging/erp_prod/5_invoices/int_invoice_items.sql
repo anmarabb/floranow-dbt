@@ -1,12 +1,23 @@
-with
 
-source as ( 
-        
+with 
+prep_registered_clients as (
+
+select 
+financial_administration,
+count(*) as registered_clients 
+from {{ ref('base_users') }}
+where account_type in ('External') and deleted_accounts != 'Deleted' 
+group by financial_administration
+)
+
 select     
 
 --Invoice Items
 
         ii.*,
+
+
+
 
 ii.quantity * li.unit_landed_cost as total_cost,
 
@@ -74,6 +85,22 @@ end as sales_source,
 
 li.proof_of_delivery_id as proof_of_delivery_id_line,
 
+prep_registered_clients.registered_clients,
+
+
+
+   
+   
+
+li.product_category,
+
+case 
+when ii.product_name like '%Lily Ot%' THEN 'Lily Or' 
+when ii.product_name like '%Lily Or%' THEN 'Lily Or' 
+when ii.product_name like '%Lily La%' THEN 'Lily La' 
+when ii.product_name like '%Li La%'  THEN 'Lily La' 
+else INITCAP(li.product_subcategory) end as product_subcategory,
+
 
 current_timestamp() as insertion_timestamp, 
 
@@ -87,12 +114,13 @@ left join {{ ref('fct_order_items') }} as li on ii.line_item_id = li.line_item_i
 
 left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
 
+--left join {{ref('base_suppliers')}} as lis on lis.supplier_id = li.supplier_id
+
+
+left join prep_registered_clients as prep_registered_clients on prep_registered_clients.financial_administration = customer.financial_administration
 
 
 
-    )
-
-select * from source
 
 
 --where invoice_type = 'credit note' and creditable_id is null

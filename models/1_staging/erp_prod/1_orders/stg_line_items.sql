@@ -157,13 +157,19 @@ delivery_time_window.delivery_time,
 --delivery_time_window.end_time,
 
 
-        REGEXP_EXTRACT(permalink, r'/([^/]+)') AS product_crop , 
-        REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') AS product_category,
-        REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){2}([^/]+)') AS product_subcategory,
+        REGEXP_EXTRACT(permalink, r'/([^/]+)') AS product_category , --flowers, greeneries
+        REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') AS product_subcategory, --chrysanthemum, tulip
+        REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){2}([^/]+)') AS product_subcategory2, --tulip-double
         --REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){3}([^/]+)') AS column4,
-           
 
-           
+
+
+
+--  Note:
+    -- Due to the absence of explicit columns for 'product_category' and 'product_subcategory' within the database,
+    -- we derive these metrics from the 'permalink' column representing the URL of line_items.
+    -- The structure of the permalink allows extraction in the format: 'product_category/product_subcategory'.
+    -- It's important to note that these are calculated metrics derived from the URL structure and not directly fetched from the database.
 
         
     
