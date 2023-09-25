@@ -35,7 +35,7 @@ product_incidents as (
                     )
 
 SELECT
-li.* EXCEPT(order_type,delivery_date, quantity,invoice_id),
+li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, product_category),
 
 
 li.quantity as ordered_quantity,
@@ -105,7 +105,7 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
 plis.supplier_name as parent_supplier,
 --supplier
     case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
-    case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end as supplier_region,
+    case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end as supplier_region, --Origin
 
 
     sh.Supplier as shipment_Supplier,
@@ -314,6 +314,32 @@ ii.quantity * ii.unit_price as inv_total_price_without_tax,
 ad.status as additional_status, 
 ad.creation_stage as additional_creation_stage,
 
+
+
+
+
+-- `filled_product_categories`
+    -- This model aims to address the null values in the `product_category` column of the `line_items` table.
+    -- When a null value is encountered in `line_items`, it fetches the corresponding value from the `invoice_items` table (if available).
+    -- This ensures a more complete dataset for analysis and reporting.
+    -- It's important to note that `product_category` column of the `line_items` are dbt calculated metrics derived from the URL structure and not directly fetched from the database.
+    case 
+    when li.product_category is not null and ii.inv_product_category is not null then INITCAP(ii.inv_product_category) 
+    when li.product_category is null then INITCAP(ii.inv_product_category) 
+    when li.product_category is not null and ii.inv_product_category is null then  INITCAP(li.product_category) 
+    else 'Ask Data Team' 
+    end as product_category,
+
+
+case 
+when li.product_name like '%Lily Ot%' THEN 'Lily Or' 
+when li.product_name like '%Lily Or%' THEN 'Lily Or' 
+when li.product_name like '%Lily La%' THEN 'Lily La' 
+when li.product_name like '%Li La%'  THEN 'Lily La' 
+else INITCAP(li.product_subcategory) end as product_subcategory,
+
+
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
@@ -322,9 +348,6 @@ left join {{ref('stg_order_payloads')}} as opl on li.order_payload_id = opl.orde
 left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id and ii.invoice_item_type = 'invoice'
 --left join {{ref('stg_invoice_items')}} as ii2 on ii2.line_item_id=li.line_item_id and ii2.invoice_item_type = 'credit note'
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
-
-
-
 left join {{ref('base_users')}} as master on master.id = li.customer_master_id
 
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id

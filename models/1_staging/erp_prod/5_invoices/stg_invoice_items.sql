@@ -35,7 +35,7 @@ select
                 ii.status as invoice_item_status, --APPROVED, CANCELED, DRAFT, REJECTED
                 ii.number,
                 ii.product_name,
-                ii.category,
+                ii.category as inv_product_category,
 
                 case 
                     when ii.invoice_type = 1 then 'credit note' 

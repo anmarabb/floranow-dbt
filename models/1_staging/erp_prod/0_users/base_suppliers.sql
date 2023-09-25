@@ -42,7 +42,7 @@ s.deleted_at,
 --resource_id,
 
 u2.name as account_manager ,
-c.country_name as supplier_region,
+c.country_name as supplier_region, --Origin
 s.country,
 
 
