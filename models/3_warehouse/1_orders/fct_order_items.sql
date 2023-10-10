@@ -162,8 +162,16 @@ END,
 CAST(EXTRACT(ISOWEEK FROM created_at) AS STRING)
 ) AS `Order Date Year Week`,
  
-
-
+CONCAT(
+CASE 
+WHEN EXTRACT(ISOWEEK FROM created_at) = 1 AND EXTRACT(MONTH FROM created_at) = 12 THEN CAST(EXTRACT(YEAR FROM created_at) + 1 AS STRING)
+WHEN EXTRACT(ISOWEEK FROM created_at) >= 52 AND EXTRACT(MONTH FROM created_at) = 1 THEN CAST(EXTRACT(YEAR FROM created_at) - 1 AS STRING)
+ELSE CAST(EXTRACT(YEAR FROM created_at) AS STRING)
+END,
+' - week ',
+CAST(EXTRACT(ISOWEEK FROM created_at) AS STRING)
+) AS Order_Date_Year_Week_1,
+ 
 
 --Customer
     Customer,
