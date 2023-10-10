@@ -58,6 +58,7 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         li.fulfillment_mode,
         li.order_status,
         li.record_type_details,
+        li.feed_source_name,
 
 
         li.unit_landed_cost,
@@ -100,6 +101,42 @@ when ii.product_name like '%Lily Or%' THEN 'Lily Or'
 when ii.product_name like '%Lily La%' THEN 'Lily La' 
 when ii.product_name like '%Li La%'  THEN 'Lily La' 
 else INITCAP(li.product_subcategory) end as product_subcategory,
+
+
+/*
+case 
+when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') or li.Supplier in ('Express Jeddah','Express Jeddah', 'Express Jeddah', 'Express Tabuk') or meta_supplier in ('Express Jeddah','Express Jeddah', 'Express Jeddah', 'Express Tabuk') then 'Marketplace'
+when li.Supplier in ('Fulfilled by Floranow SA','The Orchid Garden','Solai Roses','Selemo Valley Farms','Lomalinda','Gallica','Galleria Farms','Fresh Cap','Florius','Flores Del Este','Elite Flower Farm','Ecoflor','Capiro','Agroindustria','Smithers Oasis') then 'Re-Selling'
+when customer.financial_administration = 'UAE' and li.Supplier in ('Fulfilled by Floranow') then 'Re-Selling'
+when li.Supplier in ('Floranow Flash Sale Dammam', 'Floranow Flash Sale Riyadh', 'Floranow Flash Sale Tabuk', 'Floranow Flash Sale Jeddah') then 'Re-Selling'
+when meta_supplier in ('Verdissimo - AWS','The Orchid garden Reselling','The Orchid Garden - Event','The Orchid Garden - AWS','The Orchid Garden','Smithers Oasis - AWS','Loma Linda Re-selling','Loma Linda - Event','Loma Linda - AWS','Holland Reselling','Gallica AWS','Galleria Farms Reselling','Galleria Farms','Fulfilled By Floranow-KSA','Fresh cap reselling- AWS','Fresh Cap','Florius - event','Florius','Flores Del Este Reselling','Flores del Este - Event','Flores del Este','Floranow Flash sale Dammam','Floranow Express Flash Sale','Express Store','Express Reselling','Elite Flower Farm - Re-selling','Elite flower farm - event','Elite Flower Farm','Ecoflor Re-selling','Ecoflor Event','Ecoflor AWS','Capiro Re-selling','Capiro Event','Capiro AWS','AgroIndustria Reselling','Agroindustria Colombia - AWS','Agroindustria - Event','Holland Reselling Riyadh','Holland Reselling Dammam','Florius Reselling','Flores Del Este - AWS','Floranow Tabuk','Floranow Riyadh','Floranow Medina','Floranow Jeddah','Floranow Dammam','Floranow Jeddah','Floranow Flash Sale Dammam', 'Floranow Flash Sale Riyadh', 'Floranow Flash Sale Tabuk', 'Floranow Flash Sale Jeddah') then 'Re-Selling'
+when li.Supplier in ('Floranow Holland') and li.feed_source_name in ('Holland Reselling','Holland Reselling Dammam','Holland Reselling Riyadh') then 'Re-Selling'
+when li.Supplier in ('Floranow Flash sale') and li.feed_source_name in ('Floranow Express Flash sale', 'Floranow Flash Sale Dammam','Floranow Flash Sale Riyadh','Floranow Flash Sale Tabuk', 'Floranow Flash Sale Jeddah') then 'Re-Selling'
+when li.Supplier in ('wish flower') then 'Re-Selling'
+when li.Supplier in ('ASTRA Farms') and li.feed_source_name in ('Astra DXB out') then 'Marketplace'
+when meta_supplier in ('ASTRA Farms') and li.feed_source_name in ('Astra DXB out') then 'Marketplace'
+when li.Supplier in ('Ward Flowers') and li.feed_source_name in ('Ward Flower Inventory') then 'Marketplace'
+else 'Pre-Selling'
+end as trading_model,
+
+*/
+
+case when li.line_item_id is not null then 'line_item_id' else null end as line_item_id_check,
+li.parent_id_check,
+
+case 
+when li.line_item_id is null then 'No line_item_id'
+
+when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') or li.Supplier in ('Express Jeddah','Express Jeddah', 'Express Jeddah', 'Express Tabuk') or meta_supplier in ('Express Jeddah','Express Jeddah', 'Express Jeddah', 'Express Tabuk') then 'Marketplace'
+when li.Supplier in ('ASTRA Farms') and li.feed_source_name in ('Astra DXB out') then 'Marketplace'
+when meta_supplier in ('ASTRA Farms') and li.feed_source_name in ('Astra DXB out') then 'Marketplace'
+when li.Supplier in ('Ward Flowers') and li.feed_source_name in ('Ward Flower Inventory') then 'Marketplace'
+
+when li.line_item_id is not null and li.parent_id_check is not null then 'Re-Selling'
+when li.line_item_id is not null and li.parent_id_check is null then 'Pre-Selling'
+else 'check'
+end as trading_model,
+
 
 
 current_timestamp() as insertion_timestamp, 

@@ -78,6 +78,8 @@ creditable_type,
         order_number,
         order_type,
 
+        meta_supplier,
+
         product_category,
         product_subcategory,
 
@@ -113,9 +115,11 @@ CASE
 
  registered_clients,
 
+trading_model,
 
-
-
+feed_source_name,
+line_item_id_check,
+parent_id_check,
 
 current_timestamp() as insertion_timestamp, 
 

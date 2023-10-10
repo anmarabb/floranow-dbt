@@ -33,7 +33,34 @@ select
 
 
             w2.warehouse_name as Warehouse,
-            w2.financial_administration,
+         --   w2.financial_administration,
+
+
+/*
+case 
+when pi.stage != 'INVENTORY' then null
+when pi.incident_type = 'DAMAGED'  then 'inventory_dmaged'
+when pi.incident_type != 'DAMAGED'  then 'inventory_incidents'
+--when pi.incidentable_type in ('ProductLocation','Product') and 
+--when pi.incidentable_type = 'LineItem' and pi.incident_type not in ('DAMAGED') then 'inventory_incidents'
+else null  
+end as report_filter_inventory,
+
+case when pi.stage in ('PACKING', 'RECEIVING') then 'supplier_incidents' else null end as  report_filter_supplier,
+*/
+
+case 
+when pi.stage in ('PACKING', 'RECEIVING') then 'supplier_incidents'
+when pi.stage = 'DELIVERY' then 'DELIVERY'
+when pi.stage = 'AFTER_RETURN' then 'AFTER_RETURN'
+when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED'  then 'inventory_dmaged'
+when pi.stage = 'INVENTORY' and pi.incident_type != 'DAMAGED'  then 'inventory_incidents'
+else null  
+end as master_report_filter,
+
+concat( "https://erp.floranow.com/product_incidents/", pi.product_incident_id) as incidents_link,
+
+customer.financial_administration,
 
         current_timestamp() as insertion_timestamp,
 

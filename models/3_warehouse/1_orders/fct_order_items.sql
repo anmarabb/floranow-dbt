@@ -151,6 +151,20 @@ internal_invoicing,
     dim_date,
 
 
+
+CONCAT(
+CASE 
+WHEN EXTRACT(ISOWEEK FROM created_at) = 1 AND EXTRACT(MONTH FROM created_at) = 12 THEN CAST(EXTRACT(YEAR FROM created_at) + 1 AS STRING)
+WHEN EXTRACT(ISOWEEK FROM created_at) >= 52 AND EXTRACT(MONTH FROM created_at) = 1 THEN CAST(EXTRACT(YEAR FROM created_at) - 1 AS STRING)
+ELSE CAST(EXTRACT(YEAR FROM created_at) AS STRING)
+END,
+' - week ',
+CAST(EXTRACT(ISOWEEK FROM created_at) AS STRING)
+) AS `Order Date Year Week`,
+ 
+
+
+
 --Customer
     Customer,
     debtor_number,
@@ -337,7 +351,17 @@ case
 
 vehicle_destination, 
 
-            
+
+case 
+    when incidents_count is null then 'Line Item Without Incident'
+   -- when incidents_count = 1 then 'Line Item 1 Incident'
+ --   when incidents_count > 1 then 'Line Item Multiple Incident'
+else 'Line Item With Incident'
+end as incident_detection,
+
+
+
+
 
 current_timestamp() as insertion_timestamp, 
 

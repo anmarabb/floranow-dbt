@@ -33,6 +33,7 @@ select
 
 
     incident_report,
+    incident_value,
 
 
     
@@ -44,8 +45,27 @@ select
         
         
 
+CONCAT(
+CASE 
+WHEN EXTRACT(ISOWEEK FROM incident_at) = 1 AND EXTRACT(MONTH FROM incident_at) = 12 THEN CAST(EXTRACT(YEAR FROM incident_at) + 1 AS STRING)
+WHEN EXTRACT(ISOWEEK FROM incident_at) >= 52 AND EXTRACT(MONTH FROM incident_at) = 1 THEN CAST(EXTRACT(YEAR FROM incident_at) - 1 AS STRING)
+ELSE CAST(EXTRACT(YEAR FROM incident_at) AS STRING)
+END,
+' - week ',
+CAST(EXTRACT(ISOWEEK FROM incident_at) AS STRING)
+) AS `Year Week`,
+
+
+master_report_filter,
+
+incidents_link,
+financial_administration,
+
+currency,
+
 
 current_timestamp() as insertion_timestamp, 
+
 
 from {{ref('int_product_incidents')}} as pi 
 
