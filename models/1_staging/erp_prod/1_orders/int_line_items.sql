@@ -395,3 +395,5 @@ left join product_incidents as pi on pi.line_item_id = li.line_item_id
 --left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.product_id 
 --left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.line_item_id
 --left join prep_registered_clients as prep_registered_clients on prep_registered_clients.financial_administration = customer.financial_administration
+
+--where pi.line_item_id = 279976

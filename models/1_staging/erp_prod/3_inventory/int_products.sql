@@ -134,7 +134,9 @@ else 'scaned_flag' end as flag_1,
             li.record_type_details,
             li.order_status,
             li.fulfillment_status,
-            li.warehouse,
+            li.warehouse, --from customer
+            --w.warehouse_name as warehouse, --from stock
+
             li.loc_status,
             li.fulfillment_mode,
             li.fulfillment,
@@ -290,6 +292,10 @@ li.route_name,
         left join line_items_sold as lis on lis.product_id = p.product_id
         left join product_incidents as pi on pi.product_id = p.product_id
         left join ordered_quantity as ordered_quantity on ordered_quantity.product_id = p.product_id
+
+        left join {{ref('base_warehouses')}} as w on w.warehouse_id = st.warehouse_id
+      --  left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
+
         
 
         
