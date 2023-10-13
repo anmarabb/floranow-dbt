@@ -275,7 +275,6 @@ case
 else p.product_category 
 end as product_category,
 
-p.product_subcategory,
 
 li.route_name,
 
