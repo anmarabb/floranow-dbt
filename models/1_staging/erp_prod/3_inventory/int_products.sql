@@ -60,7 +60,7 @@ with CTE as
         select
  
         --products
-            p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,departure_date,created_at),
+            p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,departure_date,created_at,expired_at,product_category),
             p.quantity as inventory_product_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
             p.published_quantity,
             p.remaining_quantity,
@@ -272,13 +272,21 @@ case
     when p.product_name like '%Wooden%' THEN 'Accessories'
     when p.product_name like '%Wrapping%' THEN 'Accessories'
     
-else p.product_category end as new_category,
+else p.product_category 
+end as product_category,
+
+p.product_subcategory,
 
 li.route_name,
 
-case when p.expired_at is null then p.created_at else p.expired_at end as expired_at_2,
 
 
+--loc.label as location_name,
+--sec.section_name as section,
+
+
+case when p.expired_at is null then p.created_at else p.expired_at end as expired_at,
+concat(loc.label, " - ", sec.section_name) as Location,
 
 
         from {{ ref('stg_products')}} as p
@@ -291,6 +299,12 @@ case when p.expired_at is null then p.created_at else p.expired_at end as expire
         left join {{ ref('stg_feed_sources')}} as out_fs on st.out_feed_source_id = out_fs.feed_source_id 
         left join {{ ref('base_users')}} as reseller on reseller.id = p.reseller_id
         left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
+        left join {{ ref('stg_locations')}} as loc on pl.location_id=loc.location_id
+        left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
+
+
+        
+
         left join line_items_sold as lis on lis.product_id = p.product_id
         left join product_incidents as pi on pi.product_id = p.product_id
         left join ordered_quantity as ordered_quantity on ordered_quantity.product_id = p.product_id

@@ -70,9 +70,9 @@ select
 concat( "https://erp.floranow.com/products/", p.id) as product_link,
 
 
-        REGEXP_EXTRACT(permalink, r'/([^/]+)') as product_crop , 
-        REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') as product_category,
-        REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){2}([^/]+)') as product_subcategory,
+        REGEXP_EXTRACT(permalink, r'/([^/]+)') as product_category, 
+        REGEXP_EXTRACT(permalink, r'/(?:[^/]+)/([^/]+)') as product_subcategory,
+        REGEXP_EXTRACT(permalink, r'/(?:[^/]+/){2}([^/]+)') as product_subcategory_2,
 
 
   --CONCAT('SKU_', LOWER(SUBSTR(MD5(product_name), 1, 8))) AS sku,

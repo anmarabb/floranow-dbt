@@ -34,9 +34,8 @@ select
     --dim
         product_name as Product,
         stem_length,
-        product_crop,
+        product_subcategory,
         product_category,
-        new_category,
 
 
         Supplier,
@@ -60,7 +59,6 @@ select
 
     --date
         expired_at,
-        expired_at_2,
         p.departure_date,   --from product
         order_date,
   
@@ -187,6 +185,8 @@ when case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock =
 else 'Active Products'
 end as product_activity_status,
 
+
+Location,
 
 current_timestamp() as insertion_timestamp, 
 
