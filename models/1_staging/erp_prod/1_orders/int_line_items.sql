@@ -10,16 +10,27 @@ product_incidents as (
                             concat( "https://erp.floranow.com/line_items/", pi.line_item_id) as line_item_link,
 
                             count(*) as incidents_count,
-                            --sum(quantity) as incident_quantity,
-                            sum(case when incident_type !='EXTRA' and after_sold is false then pi.quantity else 0 end) as incident_quantity,
+                                count(case when incident_type !='EXTRA'  then 1 else null end) as incidents_count_without_extra,
+                                count(case when incident_type ='EXTRA'  then 1 else null end) as extra_count,
+
+                            sum(pi.quantity) as incident_quantity,
+                                sum(case when incident_type !='EXTRA'  then pi.quantity else 0 end) as incident_quantity_without_extra,
+                                sum(case when incident_type ='EXTRA'  then  pi.quantity else 0 end) as extra_quantity,
+
+                            sum( pi.quantity * li.unit_landed_cost ) as incident_cost,
+                                sum(case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_without_extra,
+                                sum(case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as extra_cost,
+
+
                             sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
                             sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
+
+                            
 
                             sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_inventory_stage,
 
 
-                            sum(case when incident_type ='EXTRA'  then  pi.quantity else 0 end) as incident_quantity_extra,
-
+                            
                             sum(case when incident_type ='EXTRA' and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_extra_packing,
                             sum(case when incident_type ='EXTRA' and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_extra_receiving,
                             sum(case when incident_type ='EXTRA' and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_extra_inventory,
@@ -29,13 +40,14 @@ product_incidents as (
                             sum(case when after_sold is false and pi.stage = 'INVENTORY' and incident_type ='MISSING' then pi.quantity else 0 end) as inventory_missing_quantity,
 
                             from {{ ref('stg_product_incidents') }} as pi  
+                            left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
 
                         group by pi.line_item_id
 
                     )
 
 SELECT
-li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, product_category),
+li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, product_category,extra_quantity),
 
 
 li.quantity as ordered_quantity,
@@ -160,12 +172,25 @@ plis.supplier_name as parent_supplier,
 w.warehouse_name as warehouse,
 w.warehouse_id,
 
-pi.incidents_count,
+
 pi.incident_quantity,
+    pi.incident_quantity_without_extra,
+    pi.extra_quantity,
+
+
+pi.incidents_count,
+    pi.incidents_count_without_extra,
+    pi.extra_count,
+
+
+pi.incident_cost,
+    pi.incident_cost_without_extra,
+    pi.extra_cost,
+
+
 pi.inventory_missing_quantity,
 pi.incident_quantity_receiving_stage,
 pi.incident_quantity_packing_stage,
-pi.incident_quantity_extra,
 pi.incident_quantity_inventory_stage,
 pi.incident_quantity_extra_packing,
 pi.incident_quantity_extra_receiving,

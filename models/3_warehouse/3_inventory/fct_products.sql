@@ -60,6 +60,7 @@ select
 
     --date
         expired_at,
+        expired_at_2,
         p.departure_date,   --from product
         order_date,
   

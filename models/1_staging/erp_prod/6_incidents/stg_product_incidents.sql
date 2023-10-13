@@ -19,14 +19,52 @@ select
                 deleted_at,
                 updated_at,
 
-            incident_type,     -- MISSING, EXTRA, DAMAGED, RETURNED
-            incidentable_type, -- PackageLineItem, InvoiceItem, LineItem, ProductLocation, Product
+            incident_type,     
+                               -- MISSING
+                               -- EXTRA
+                               -- DAMAGED
+                               -- RETURNED        The line item contains a returned quantity (  return the line item from customer )
+                               -- QUALITY_ISSUES
+                               -- TRANSACTIONAL_ISSUES
+
+
+
+            incidentable_type,
+                                 -- PackageLineItem:   Report incidents on package line items ( packing and receiving stage)
+                                 -- InvoiceItem:       Report incidents on invoice item ( after delivery the line item )
+                                 -- LineItem:          Report incidents on line item ( incidents on child line items )
+                                 -- ProductLocation:   Report incidents on product location ( the line item in warehouse )
+                                 -- Product:           Report incidents on product ( after sold the product )
+
+
+
+
             accountable_type,
-            stage,
-            reported_by as reported_by_id ,
-            credited, -- false: (no credit note for this incident, default false ), true: (there is credit note for this incident)
-            after_sold, -- false: (report incidents on line item or product before sold the product), true: (report incident on product after sold all quantity for this product)
-            status,
+
+            stage,  
+                    -- PACKING:        report incidents during packing stage
+                    -- RECEVING:       report incidents during receiving stage 
+                    -- INVENTORY:      report incidents during inventory stage ( line item in the warehouse )
+                    -- AFTER RETURN:   report incidents after the line item returned from customer
+                    -- DELIVERY:       report incidents during delivery stage 
+
+
+
+
+            reported_by as reported_by_id,
+
+            credited, 
+                      -- false: (no credit note for this incident, default false ), 
+                      -- true: (there is credit note for this incident)
+
+
+            after_sold, 
+                      -- false: (report incidents on line item or product before sold the product), 
+                      -- true: (report incident on product after sold all quantity for this product)
+
+
+
+            status, --REPORTED, CLOSED, null | It is no longer used (dev team)
             note,
 
 
@@ -59,4 +97,5 @@ current_timestamp() as ingestion_timestamp,
 
 
 from source as pi
+where  pi.deleted_at is null
 

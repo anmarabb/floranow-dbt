@@ -6,12 +6,17 @@ source as (
 select     
 
         pi.* EXCEPT(quantity),
-        pi.quantity as incident_quantity,
+        pi.quantity as raw_incident_quantity,
+        case when incident_type !='EXTRA'  then pi.quantity else 0 end as incident_quantity,
+        case when incident_type ='EXTRA'  then pi.quantity else 0 end as extra_quantity,
 
         li.order_type,
         li.customer,
         li.Supplier,
         li.ordered_quantity,
+        li.created_at as order_date,
+        li.delivery_date,
+        li.state,
 
         reported_by.name as reported_by,
 
@@ -32,7 +37,7 @@ select
             end as Accountable,
 
 
-            w2.warehouse_name as Warehouse,
+            w2.warehouse_name as warehouse,
          --   w2.financial_administration,
 
 
@@ -62,6 +67,15 @@ concat( "https://erp.floranow.com/product_incidents/", pi.product_incident_id) a
 
 customer.financial_administration,
 
+ii.invoice_item_id,
+
+case 
+when pi.line_item_id is not null and ii.invoice_item_id is not null then 'with Li and Inv' 
+when pi.line_item_id is not null then 'with Li' 
+when ii.invoice_item_id is not null then 'with Inv' 
+else 'check' 
+end as pi_record_type,
+
         current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_product_incidents')}} as pi
@@ -80,9 +94,13 @@ left join {{ref('base_warehouses')}} as w2 on w2.warehouse_id = customer.warehou
 
 
 
+left join {{ref('stg_invoice_items')}} as ii on ii.invoice_item_id=pi.credit_note_item_id 
 
 
-where  pi.deleted_at is null
+
+
+
+
     )
 
 select * from source

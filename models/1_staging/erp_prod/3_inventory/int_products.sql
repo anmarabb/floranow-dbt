@@ -71,6 +71,7 @@ with CTE as
 
             s.supplier_name as Supplier,
             s.supplier_region as Origin,
+
             fs.feed_source_name as feed_source_name,
             origin_fs.feed_source_name as origin_feed_name,
             publishing_fs.feed_source_name as publishing_feed_name,
@@ -275,6 +276,7 @@ else p.product_category end as new_category,
 
 li.route_name,
 
+case when p.expired_at is null then p.created_at else p.expired_at end as expired_at_2,
 
 
 

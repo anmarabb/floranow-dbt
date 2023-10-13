@@ -152,6 +152,7 @@ internal_invoicing,
 
 
 
+
 CONCAT(
 CASE 
 WHEN EXTRACT(ISOWEEK FROM created_at) = 1 AND EXTRACT(MONTH FROM created_at) = 12 THEN CAST(EXTRACT(YEAR FROM created_at) + 1 AS STRING)
@@ -160,18 +161,21 @@ ELSE CAST(EXTRACT(YEAR FROM created_at) AS STRING)
 END,
 ' - week ',
 CAST(EXTRACT(ISOWEEK FROM created_at) AS STRING)
-) AS `Order Date Year Week`,
+) AS Year_Week_order_at,
  
+
+
 CONCAT(
 CASE 
-WHEN EXTRACT(ISOWEEK FROM created_at) = 1 AND EXTRACT(MONTH FROM created_at) = 12 THEN CAST(EXTRACT(YEAR FROM created_at) + 1 AS STRING)
-WHEN EXTRACT(ISOWEEK FROM created_at) >= 52 AND EXTRACT(MONTH FROM created_at) = 1 THEN CAST(EXTRACT(YEAR FROM created_at) - 1 AS STRING)
-ELSE CAST(EXTRACT(YEAR FROM created_at) AS STRING)
+WHEN EXTRACT(ISOWEEK FROM delivery_date) = 1 AND EXTRACT(MONTH FROM delivery_date) = 12 THEN CAST(EXTRACT(YEAR FROM delivery_date) + 1 AS STRING)
+WHEN EXTRACT(ISOWEEK FROM delivery_date) >= 52 AND EXTRACT(MONTH FROM delivery_date) = 1 THEN CAST(EXTRACT(YEAR FROM delivery_date) - 1 AS STRING)
+ELSE CAST(EXTRACT(YEAR FROM delivery_date) AS STRING)
 END,
 ' - week ',
-CAST(EXTRACT(ISOWEEK FROM created_at) AS STRING)
-) AS Order_Date_Year_Week_1,
- 
+CAST(EXTRACT(ISOWEEK FROM delivery_date) AS STRING)
+) AS Year_Week_delivery_date,
+
+
 
 --Customer
     Customer,
@@ -249,11 +253,23 @@ supplier_region as Origin,
 
 
 incidents_count,
+    incidents_count_without_extra,
+    extra_count,
+
+incident_cost,
+    incident_cost_without_extra,
+    extra_cost,
+
 incident_quantity,
+    incident_quantity_without_extra,
+    extra_quantity,
+
+
 inventory_missing_quantity,
 incident_quantity_receiving_stage,
 incident_quantity_packing_stage,
-incident_quantity_extra,
+
+
 incident_quantity_inventory_stage,
 
 incident_quantity_extra_packing,
@@ -368,6 +384,8 @@ else 'Line Item With Incident'
 end as incident_detection,
 
 
+case when incidents_count is not null then 1 else 0 end as orders_with_incidents,
+case when incidents_count is  null then 1 else 0 end as orders_without_incidents,
 
 
 
