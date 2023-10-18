@@ -4,6 +4,20 @@ source as (
 
  
 select 
+potential_revenue,
+
+
+--invoices as i
+    invoice_header_status, --Draft, signed, Open, Printed, Closed, Canceled, Rejected, voided
+
+--proof_of_deliveries as pod
+    proof_of_delivery_id,
+    route_name,
+    source_type,
+    pod_status,  --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
+
+
+
 
 --actions
     dispatched_by,
@@ -61,7 +75,6 @@ case
 
     state,                     --PENDING, FULFILLED, DISPATCHED, DELIVERED, CANCELED, RETURNED
     fulfillment,               --SUCCEED, PARTIAL, FAILED, UNACCOUNTED
-    pod_status,                --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
     order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
     Shipment,
     shipment_link,
@@ -181,6 +194,10 @@ CAST(EXTRACT(ISOWEEK FROM delivery_date) AS STRING)
     Customer,
     debtor_number,
     account_manager,
+    customer_category,
+    account_type,
+    customer_details,
+
     warehouse,
     warehouse_id,
     case 
@@ -212,12 +229,6 @@ end as go_live_date,
     customer_type,
     ksa_resellers,
 
---pod
-    proof_of_delivery_id,
-    route_name,
-    
-    
-    source_type,
 
     
 samer_warehouses,
@@ -278,14 +289,24 @@ incident_quantity_extra_inventory,
 
 
 
+
+
+
 delivery_window,
 delivery_time,
 
-
+line_item_id_check,
 shipment_id_check,
+
+
 invoice_id_check,
+invoice_number_check,
+
 parent_id_check,
 product_id_check,
+source_id_check,
+
+
 product_id,
 product_link,
 parent_line_item_link,
@@ -387,7 +408,7 @@ end as incident_detection,
 case when incidents_count is not null then 1 else 0 end as orders_with_incidents,
 case when incidents_count is  null then 1 else 0 end as orders_without_incidents,
 
-
+Stock,
 
 current_timestamp() as insertion_timestamp, 
 

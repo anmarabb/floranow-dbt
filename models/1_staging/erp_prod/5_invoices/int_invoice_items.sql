@@ -138,6 +138,10 @@ else 'check'
 end as trading_model,
 
 
+concat( "https://erp.floranow.com/invoice_items/", ii.invoice_item_id) as invoice_items_link,
+concat( "https://erp.floranow.com/invoices/", ii.invoice_header_id) as invoice_link,
+concat( "https://erp.floranow.com/line_items/", ii.line_item_id) as line_items_link,
+
 
 current_timestamp() as insertion_timestamp, 
 

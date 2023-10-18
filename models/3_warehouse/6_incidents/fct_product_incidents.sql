@@ -18,9 +18,6 @@ select
     credit_note_item_id,
 
     
-    raw_incident_quantity, --- = incident_quantity + ABS(extra_quantity)
-    incident_quantity,
-    extra_quantity,
    
     
     incident_type,  --MISSING, EXTRA, DAMAGED, RETURNED
@@ -36,7 +33,21 @@ select
 
 
     incident_report,
-    incident_value,
+
+    incident_cost,
+        extra_cost,
+        incident_cost_without_extra,
+
+    incident_quantity,
+        extra_quantity,
+        incident_quantity_without_extra, 
+    
+    incidents_count,
+        extra_count,
+        incidents_count_without_extra,
+
+
+
 
 
     credited,
@@ -44,7 +55,13 @@ select
 
 
     
-case when pi.stage in ('PACKING', 'RECEIVING')  then 'Pre Shipment' else 'Post Shipment' end as shipment_phase,
+case when pi.stage in ('PACKING', 'RECEIVING')  then 'Pre Arrival' else 'Post Arrival' end as shipment_phase,
+
+case 
+    when pi.stage in ('PACKING', 'RECEIVING')  then 'S&L Team' 
+    when pi.stage in ('INVENTORY')  then 'Fulfillment Team' 
+    when pi.stage in ('AFTER_RETURN', 'DELIVERY')  then 'Shared Responsibility To Be Scoped' 
+ end as responsible_team,
 
 
     --line_item

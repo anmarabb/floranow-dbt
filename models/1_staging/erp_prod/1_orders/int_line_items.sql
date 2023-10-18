@@ -47,7 +47,16 @@ product_incidents as (
                     )
 
 SELECT
+
 li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, product_category,extra_quantity),
+
+
+case when li.line_item_id is not null then li.total_price_without_tax else 0 end as potential_revenue,
+
+
+
+
+
 
 
 li.quantity as ordered_quantity,
@@ -100,6 +109,10 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     customer.account_manager,
     customer.debtor_number,
     customer.customer_type,
+    customer.account_type,
+    customer.user_category as customer_category,
+    concat( customer.financial_administration," - ", customer.Warehouse," - ", customer.account_type," - ", customer.customer_type," - ", customer.user_category," - ", customer.debtor_number  ) as customer_details,
+
 
     case when customer.debtor_number in ('WANDE','95110') then 'Internal Invoicing' else 'Normal Invoicing' end as internal_invoicing,
 
@@ -297,16 +310,23 @@ else null end as ksa_resellers,
         else 'No Invoice ID' 
     end as invoice_status,
 
+
+case when li.line_item_id is not null then 'Line Item ID' else null end as line_item_id_check,
 case when li.shipment_id is not null then 'Shipment ID' else null end as shipment_id_check,
 case when li.invoice_id is not null then 'Invoice ID' else null end as invoice_id_check,
+
+case 
+when li.invoice_id is null then null 
+when li.invoice_id is not null and i.invoice_header_printed_at is null then null 
+else 'Invoice Number' end as invoice_number_check,
+
+
 case when li.parent_line_item_id is not null then 'Parent ID' else null end as parent_id_check,
 case when li.source_line_item_id is not null then 'Source ID' else null end as source_id_check,
 case when p.line_item_id is not null then 'Product ID' else null end as product_id_check,
-
 case when li.offer_id is not null then 'Offer ID' else null end as offer_id_check,
 case when li.reseller_id is not null then 'Reseller ID' else null end as reseller_id_check,
 case when li.customer_master_id is not null then 'Master ID' else null end as customer_master_id_check,
-
 case when li.proof_of_delivery_id is not null then 'POD ID' else null end as proof_of_delivery_id_check,
 
 
@@ -363,6 +383,10 @@ when li.product_name like '%Lily La%' THEN 'Lily La'
 when li.product_name like '%Li La%'  THEN 'Lily La' 
 else INITCAP(li.product_subcategory) end as product_subcategory,
 
+
+
+i.invoice_header_status,
+st.stock_name as Stock,
 
 
 from {{ref('stg_line_items')}} as li

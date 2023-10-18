@@ -12,12 +12,13 @@ financial_administration_id,
 items_collection_method,
 items_collection_date,
 
-case when items_collection_method = 'delivery_date' then items_collection_date else null end as promised_delivery_date,
+case when items_collection_method = 'delivery_date' then items_collection_date else null end as delivery_date,
 
 account_manager,
 City,
 client_category,
 Customer,
+Warehouse,
 
 invoice_header_id,
 invoice_header_printed_at, -- it can be null
@@ -30,7 +31,7 @@ drop_id,
 date(invoice_header_printed_at) as date_invoice_header_printed_at,
 PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', invoice_header_printed_at), '-01')) as year_month_invoice_header_printed_at,
 date(invoice_header_created_at) as date_invoice_header_created_at,
-
+invoice_header_created_at,
 invoice_header_status, --Draft,signed,Open,Printed,Closed,Canceled,Rejected,voided
 invoice_header_type, --credit note, invoice
 generation_type,
@@ -51,10 +52,25 @@ total_tax,
 discount_amount,
 price_without_discount,
 total_amount,
-total_cost,
 
+
+
+total_cost,
+invoice_items_count,
 
 --damged_value,
+
+
+invoice_link,
+
+
+line_items_count,
+incidents_count,
+
+invoice_items_detection,
+
+line_items_detection,
+full_detection,
 
 current_timestamp() as insertion_timestamp 
 

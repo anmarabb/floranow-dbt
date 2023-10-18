@@ -6,9 +6,22 @@ source as (
 select     
 
         pi.* EXCEPT(quantity),
-        pi.quantity as raw_incident_quantity,
-        case when incident_type !='EXTRA'  then pi.quantity else 0 end as incident_quantity,
+
+
+        pi.quantity as incident_quantity,
+        case when incident_type !='EXTRA'  then pi.quantity else 0 end as incident_quantity_without_extra,
         case when incident_type ='EXTRA'  then pi.quantity else 0 end as extra_quantity,
+
+
+        pi.quantity * li.unit_landed_cost as incident_cost,  -- damage, spoilage
+        case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end as incident_cost_without_extra,
+        case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end as extra_cost,
+
+        case when product_incident_id is not null  then 1 else null end as incidents_count,
+        case when incident_type !='EXTRA'  then 1 else null end as incidents_count_without_extra,
+        case when incident_type ='EXTRA'  then 1 else null end as extra_count,
+
+
 
         li.order_type,
         li.customer,
@@ -21,7 +34,10 @@ select
         reported_by.name as reported_by,
 
 
-        pi.quantity * li.unit_landed_cost as incident_value,  -- damage, spoilage
+
+
+
+
         pi.quantity * li.unit_fob_price as incident_fob_value,
 
         li.currency,
@@ -75,6 +91,14 @@ when pi.line_item_id is not null then 'with Li'
 when ii.invoice_item_id is not null then 'with Inv' 
 else 'check' 
 end as pi_record_type,
+
+
+
+
+
+
+
+
 
         current_timestamp() as insertion_timestamp,
 

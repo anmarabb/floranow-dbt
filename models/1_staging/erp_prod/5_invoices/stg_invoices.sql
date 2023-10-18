@@ -80,6 +80,7 @@ select
                 items_collection_method,
                 items_source_type,
                 generation_type,
+                source_type, -- EXTERNAL, INTERNAL
                 
 
                 case 
@@ -109,3 +110,4 @@ current_timestamp() as ingestion_timestamp
  
 from source as i 
 
+where i.deleted_at IS NULL
