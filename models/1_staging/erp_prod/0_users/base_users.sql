@@ -66,6 +66,7 @@ select
                     u.odoo_code,
                     u.statement_type,
 
+
                     --INITCAP(u.city) as City,
 
                     case 

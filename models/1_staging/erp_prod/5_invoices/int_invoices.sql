@@ -5,6 +5,7 @@ invoice_items as (
     SELECT
     ii.invoice_header_id,
     sum(ii.quantity * li.unit_landed_cost)  as total_cost,
+    count(ii.invoice_item_id) as invoice_items_count,
 
 
     from {{ ref('stg_invoice_items') }} as ii 
@@ -12,6 +13,16 @@ invoice_items as (
 
     where ii.invoice_item_status = 'APPROVED' and ii.deleted_at is null
     group by ii.invoice_header_id
+),
+
+line_items as (
+    select
+    li.invoice_header_id,
+    sum(li.incidents_count) as incidents_count,
+    count(li.line_item_id) as line_items_count,
+    from {{ ref('fct_order_items')}} as li
+    group by 1
+                
 ),
 
 prep_payments as (
@@ -75,12 +86,34 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     customer.Warehouse,
 
 
-    ii.total_cost,
     prep_payments.total_payments,
     prep_payments.credit_note_amount_used,
 
+--invoice_items
+    ii.total_cost,
+    ii.invoice_items_count,
+    case when ii.invoice_items_count > 0 then 'With Invoice Items' else 'No Invoice Items' end as invoice_items_detection,
+
+--line_items
+    li.line_items_count,
+    li.incidents_count,
+    case when li.line_items_count > 0 then 'With Order Items' else 'No Order Items' end as line_items_detection,
 
 
+case 
+    when ii.invoice_items_count > 0 and li.line_items_count > 0 then 'Full Invoice Data: Invoice with both Invoice Items and Line Items' 
+    when ii.invoice_items_count is null and li.line_items_count is null then 'Incomplete Invoice Data: Invoice without both Invoice Items and Line Items'
+    when ii.invoice_items_count > 0 and  li.line_items_count is null then 'Invoice Without Line Items Details: Invoice with Invoice Items but without Line Items'
+    when li.line_items_count > 0 and ii.invoice_items_count is null then 'Invoice Without Invoice Items Details: Invoice with Line Items but without Invoice Items'
+end as full_detection,
+
+
+
+
+
+
+
+concat( "https://erp.floranow.com/invoices/", i.invoice_header_id) as invoice_link,
 
 
 
@@ -95,6 +128,6 @@ left join invoice_items as ii on ii.invoice_header_id = i.invoice_header_id
 left join prep_payments as prep_payments on prep_payments.invoice_header_id = i.invoice_header_id
 left join prep_move_item as mi on mi.documentable_id = i.invoice_header_id and mi.documentable_type  = 'Invoice'
 
-
+left join line_items as li on li.invoice_header_id = i.invoice_header_id
 
 --left join prep_damaged as prep_damaged on prep_damaged.date_incident_at = date(i.invoice_header_printed_at) and prep_damaged.Warehouse = customer.Warehouse and prep_damaged.financial_administration = i.financial_administration

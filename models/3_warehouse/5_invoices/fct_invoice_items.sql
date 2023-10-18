@@ -121,6 +121,12 @@ feed_source_name,
 line_item_id_check,
 parent_id_check,
 
+invoice_items_link,
+invoice_link,
+line_items_link,
+
+
+
 current_timestamp() as insertion_timestamp, 
 
 
