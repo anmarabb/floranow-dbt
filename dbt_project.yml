@@ -32,12 +32,8 @@ models:
         +materialized: view
         +schema: stg
       
-    2_intermediate:
-        +enabled: true
-        +materialized: table
-        +schema: int
 
-    3_warehouse:
+    2_marts:
       +enabled: true
       +materialized: table
       +schema: dwh

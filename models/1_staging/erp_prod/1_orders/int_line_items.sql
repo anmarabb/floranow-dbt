@@ -322,6 +322,11 @@ else 'Invoice Number' end as invoice_number_check,
 
 
 case when li.parent_line_item_id is not null then 'Parent ID' else null end as parent_id_check,
+
+case when ppli.line_item_id is not null then 'Parent Parent ID' else null end as parent_parent_id_check,
+
+
+
 case when li.source_line_item_id is not null then 'Source ID' else null end as source_id_check,
 case when p.line_item_id is not null then 'Product ID' else null end as product_id_check,
 case when li.offer_id is not null then 'Offer ID' else null end as offer_id_check,
@@ -413,6 +418,15 @@ left join {{ref('base_suppliers')}} as lis on lis.supplier_id = li.supplier_id
 
 left join {{ ref('stg_products') }} as pp on pp.line_item_id = li.parent_line_item_id 
 left join {{ref('stg_line_items')}} as pli on pli.line_item_id = li.parent_line_item_id
+
+
+left join {{ref('stg_line_items')}} as ppli on ppli.line_item_id = pli.parent_line_item_id
+
+
+
+
+
+
 left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_id
 
 
