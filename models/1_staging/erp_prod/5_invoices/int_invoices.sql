@@ -4,12 +4,14 @@ with
 invoice_items as (
     SELECT
     ii.invoice_header_id,
-    sum(ii.quantity * li.unit_landed_cost)  as total_cost,
+    sum(case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end)  as total_cost,
     count(ii.invoice_item_id) as invoice_items_count,
 
 
     from {{ ref('stg_invoice_items') }} as ii 
     left join {{ ref('fct_order_items') }} as li on ii.line_item_id = li.line_item_id
+    left join {{ ref('stg_invoices') }} as i on ii.invoice_header_id = i.invoice_header_id
+
 
     where ii.invoice_item_status = 'APPROVED' and ii.deleted_at is null
     group by ii.invoice_header_id
@@ -114,6 +116,9 @@ end as full_detection,
 
 
 concat( "https://erp.floranow.com/invoices/", i.invoice_header_id) as invoice_link,
+
+
+case when items_collection_method = 'delivery_date' then items_collection_date else null end as delivery_date,
 
 
 

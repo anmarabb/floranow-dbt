@@ -11,15 +11,19 @@ select
         pi.quantity as incident_quantity,
         case when incident_type !='EXTRA'  then pi.quantity else 0 end as incident_quantity_without_extra,
         case when incident_type ='EXTRA'  then pi.quantity else 0 end as extra_quantity,
+        case when master_report_filter = 'inventory_dmaged' then pi.quantity else 0 end as incident_quantity_inventory_dmaged,
 
 
         pi.quantity * li.unit_landed_cost as incident_cost,  -- damage, spoilage
         case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end as incident_cost_without_extra,
         case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end as extra_cost,
+        case when master_report_filter = 'inventory_dmaged' then pi.quantity * li.unit_landed_cost else 0 end as incident_cost_inventory_dmaged,
 
         case when product_incident_id is not null  then 1 else null end as incidents_count,
         case when incident_type !='EXTRA'  then 1 else null end as incidents_count_without_extra,
         case when incident_type ='EXTRA'  then 1 else null end as extra_count,
+        case when master_report_filter = 'inventory_dmaged' then 1 else null end as incidents_count_inventory_dmaged,
+
 
 
 
@@ -70,14 +74,6 @@ end as report_filter_inventory,
 case when pi.stage in ('PACKING', 'RECEIVING') then 'supplier_incidents' else null end as  report_filter_supplier,
 */
 
-case 
-when pi.stage in ('PACKING', 'RECEIVING') then 'supplier_incidents'
-when pi.stage = 'DELIVERY' then 'DELIVERY'
-when pi.stage = 'AFTER_RETURN' then 'AFTER_RETURN'
-when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED'  then 'inventory_dmaged'
-when pi.stage = 'INVENTORY' and pi.incident_type != 'DAMAGED'  then 'inventory_incidents'
-else null  
-end as master_report_filter,
 
 concat( "https://erp.floranow.com/product_incidents/", pi.product_incident_id) as incidents_link,
 
