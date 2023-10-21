@@ -12,14 +12,17 @@ product_incidents as (
                             count(*) as incidents_count,
                                 count(case when incident_type !='EXTRA'  then 1 else null end) as incidents_count_without_extra,
                                 count(case when incident_type ='EXTRA'  then 1 else null end) as extra_count,
+                                sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then 1 else null end) as incidents_count_inventory_dmaged,
 
                             sum(pi.quantity) as incident_quantity,
                                 sum(case when incident_type !='EXTRA'  then pi.quantity else 0 end) as incident_quantity_without_extra,
                                 sum(case when incident_type ='EXTRA'  then  pi.quantity else 0 end) as extra_quantity,
+                                sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_dmaged,
 
                             sum( pi.quantity * li.unit_landed_cost ) as incident_cost,
                                 sum(case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_without_extra,
                                 sum(case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as extra_cost,
+                                sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_inventory_dmaged,
 
 
                             sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
@@ -189,16 +192,20 @@ w.warehouse_id,
 pi.incident_quantity,
     pi.incident_quantity_without_extra,
     pi.extra_quantity,
+    pi.incident_quantity_inventory_dmaged,
 
 
 pi.incidents_count,
     pi.incidents_count_without_extra,
     pi.extra_count,
+    pi.incidents_count_inventory_dmaged,
 
 
 pi.incident_cost,
     pi.incident_cost_without_extra,
     pi.extra_cost,
+    pi.incident_cost_inventory_dmaged,
+   
 
 
 pi.inventory_missing_quantity,

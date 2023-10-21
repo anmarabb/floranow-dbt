@@ -37,14 +37,17 @@ select
     incident_cost,
         extra_cost,
         incident_cost_without_extra,
+        incident_cost_inventory_dmaged,
 
     incident_quantity,
         extra_quantity,
-        incident_quantity_without_extra, 
+        incident_quantity_without_extra,
+        incident_quantity_inventory_dmaged,
     
     incidents_count,
         extra_count,
         incidents_count_without_extra,
+        incidents_count_inventory_dmaged,
 
 
 

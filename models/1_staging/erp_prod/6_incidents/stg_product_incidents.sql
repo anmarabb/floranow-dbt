@@ -90,6 +90,16 @@ select
             end as incident_report,
 
 
+            case 
+                when pi.stage in ('PACKING', 'RECEIVING') then 'supplier_incidents'
+                when pi.stage = 'DELIVERY' then 'DELIVERY'
+                when pi.stage = 'AFTER_RETURN' then 'AFTER_RETURN'
+                when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED'  then 'inventory_dmaged'
+                when pi.stage = 'INVENTORY' and pi.incident_type != 'DAMAGED'  then 'inventory_incidents'
+                else null  
+            end as master_report_filter,
+
+
     
 current_timestamp() as ingestion_timestamp,
 

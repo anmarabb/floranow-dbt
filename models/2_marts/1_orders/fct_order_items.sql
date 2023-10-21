@@ -266,14 +266,18 @@ supplier_region as Origin,
 incidents_count,
     incidents_count_without_extra,
     extra_count,
+    incidents_count_inventory_dmaged,
 
 incident_cost,
     incident_cost_without_extra,
     extra_cost,
+    incident_cost_inventory_dmaged,
+    
 
 incident_quantity,
     incident_quantity_without_extra,
     extra_quantity,
+    incident_quantity_inventory_dmaged,
 
 
 inventory_missing_quantity,

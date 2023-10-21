@@ -4,6 +4,23 @@ source as (
 
 select
 
+---Gross Revenue: This is the total amount of revenue generated from all printed invoices in a given period, without considering any adjustments like credit notes.
+    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as gross_revenue,
+    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as credit_note,
+
+    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed')  then 1 else 0 end as invoice_count,
+    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed')  then 1 else 0 end as credit_note_count,
+
+    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed') and generation_type = 'AUTO' then total_amount_without_tax else 0 end as auto_gross_revenue,
+    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed') and generation_type = 'AUTO' then total_amount_without_tax else 0 end as auto_credit_note,
+
+
+
+--invoice_items
+    total_cost,
+    invoice_items_count,
+
+
 number as invoice_number,
 financial_administration as Market,
 financial_administration,
@@ -12,7 +29,7 @@ financial_administration_id,
 items_collection_method,
 items_collection_date,
 
-case when items_collection_method = 'delivery_date' then items_collection_date else null end as delivery_date,
+delivery_date,
 
 account_manager,
 City,
@@ -55,8 +72,6 @@ total_amount,
 
 
 
-total_cost,
-invoice_items_count,
 
 --damged_value,
 
@@ -65,12 +80,23 @@ invoice_link,
 
 
 line_items_count,
+
+
 incidents_count,
 
 invoice_items_detection,
 
 line_items_detection,
 full_detection,
+
+
+
+DATE(
+    EXTRACT(YEAR FROM invoice_header_printed_at),
+    EXTRACT(MONTH FROM invoice_header_printed_at),
+    1
+) AS Year_Month_printed_at,
+
 
 current_timestamp() as insertion_timestamp 
 
