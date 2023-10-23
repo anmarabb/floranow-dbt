@@ -57,6 +57,8 @@ li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, p
 case when li.line_item_id is not null then li.total_price_without_tax else 0 end as potential_revenue,
 
 
+i.signed_at,
+
 
 
 
