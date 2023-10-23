@@ -192,8 +192,7 @@ CAST(EXTRACT(ISOWEEK FROM delivery_date) AS STRING)
 
 
 
---Customer
- --  customer,
+    customer,
     debtor_number,
     account_manager,
     customer_category,
