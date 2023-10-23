@@ -30,6 +30,7 @@ select
     Accountable,
     customer,
     Supplier,
+    Origin,
 
 
     incident_report,
@@ -63,7 +64,12 @@ case when pi.stage in ('PACKING', 'RECEIVING')  then 'Pre Arrival' else 'Post Ar
 case 
     when pi.stage in ('PACKING', 'RECEIVING')  then 'S&L Team' 
     when pi.stage in ('INVENTORY')  then 'Fulfillment Team' 
-    when pi.stage in ('AFTER_RETURN', 'DELIVERY')  then 'Shared Responsibility To Be Scoped' 
+    --when pi.stage in ('AFTER_RETURN', 'DELIVERY')  then 'Shared Responsibility To Be Scoped'
+    when pi.stage in ('AFTER_RETURN', 'DELIVERY') and pi.incident_type in ('DAMAGED','MISSING') and Origin =  'Netherlands' then 'S&L Team'
+    when pi.stage in ('AFTER_RETURN', 'DELIVERY') and pi.incident_type  in ('DAMAGED') and Origin !=  'Netherlands' then 'Fulfillment Team' 
+    when pi.stage in ('AFTER_RETURN', 'DELIVERY') and pi.incident_type  in ('MISSING') and Origin !=  'Netherlands' then 'LMD Team' 
+ else 'Shared Responsibility To Be Scoped'
+
  end as responsible_team,
 
 
