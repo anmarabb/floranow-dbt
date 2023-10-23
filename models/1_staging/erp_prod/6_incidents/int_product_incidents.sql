@@ -30,6 +30,7 @@ select
         li.order_type,
         li.customer,
         li.Supplier,
+        li.supplier_region as Origin,
         li.ordered_quantity,
         li.created_at as order_date,
         li.delivery_date,
