@@ -161,7 +161,7 @@ case
             when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Reseller Order From External Supplier'
             when  li.reseller_id is not null  and li.ordering_stock_type is not null  then 'Reseller Order From Inventory'
             when  li.reseller_id is null and li.ordering_stock_type is null then 'Customer Order From External Supplier'
-            when  li.reseller_id is null and li.ordering_stock_type is null then 'Customer Order From Inventory'
+            when  li.reseller_id is null and li.ordering_stock_type is not null then 'Customer Order From Inventory'
 
             else 'cheack_my_logic'
             end as record_type_3,
