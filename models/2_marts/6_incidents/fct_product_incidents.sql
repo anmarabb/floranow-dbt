@@ -138,7 +138,7 @@ after_sold,
 pi_record_type,
 
 state, --from line item
-
+fulfillment_mode,
 customer_id,
 
 box_label,

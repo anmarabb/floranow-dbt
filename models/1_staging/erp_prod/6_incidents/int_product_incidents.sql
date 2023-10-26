@@ -36,6 +36,7 @@ select
         li.departure_date,
         li.stem_length,
         li.state,
+        li.fulfillment_mode,
 
         li.product_category,
         li.product_subcategory,
