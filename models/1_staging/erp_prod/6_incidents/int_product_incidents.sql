@@ -41,6 +41,7 @@ select
         li.record_type_3,
         li.record_type_2,
         li.record_type_details,
+        li.Reseller,
 
         li.product_category,
         li.product_subcategory,
