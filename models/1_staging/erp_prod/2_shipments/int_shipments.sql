@@ -7,7 +7,7 @@ sh.* EXCEPT(ingestion_timestamp,master_shipment_id,departure_date),
 
 
 msh.master_shipments_status,
-msh.master_shipment_name as master_shipment,
+msh.master_shipment,
 msh.master_shipments_fulfillment_status,
 msh.arrival_at,
 msh.master_shipment_id,

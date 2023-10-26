@@ -42,7 +42,7 @@ select
         li.product_name as Product,
         li.order_type,
         li.line_item_link,
-        li.master_shipment_name,
+        li.master_shipment,
         li.Shipment,
         li.unit_fob_price,
 

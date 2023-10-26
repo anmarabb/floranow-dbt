@@ -32,7 +32,7 @@ select
                 customer_type,  
 
                 status as master_shipments_status, --CANCELED, MISSING, PACKED, WAREHOUSED,CANCELED,DRAFT
-                name as master_shipment_name,
+                name as master_shipment,
                 fulfillment as master_shipments_fulfillment_status, --UNACCOUNTED, PARTIAL, SUCCEED
 
                 origin,

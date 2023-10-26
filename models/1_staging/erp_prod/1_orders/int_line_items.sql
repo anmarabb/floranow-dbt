@@ -186,7 +186,7 @@ plis.supplier_name as parent_supplier,
     concat( "https://erp.floranow.com/shipments/", sh.shipment_id) as shipment_link,
     concat( "https://erp.floranow.com/master_shipments/", msh.master_shipment_id) as master_shipment_link,
     msh.master_shipments_status,
-    msh.master_shipment_name,
+    msh.master_shipment,
 
 w.warehouse_name as warehouse,
 w.warehouse_id,
