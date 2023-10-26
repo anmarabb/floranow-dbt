@@ -6,6 +6,8 @@ invoice_items as (
     ii.invoice_header_id,
     sum(case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end)  as total_cost,
     count(ii.invoice_item_id) as invoice_items_count,
+    --sum(ii.quantity) as quantity,
+    sum(case when i.invoice_header_type != 'invoice' then -ii.quantity else ii.quantity end) as quantity,
 
 
     from {{ ref('stg_invoice_items') }} as ii 
@@ -74,6 +76,16 @@ select
 i.*,
 
 
+    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as gross_revenue,
+    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as credit_note,
+
+    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed')  then 1 else 0 end as invoice_count,
+    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed')  then 1 else 0 end as credit_note_count,
+
+    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed') and generation_type = 'AUTO' then total_amount_without_tax else 0 end as auto_gross_revenue,
+    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed') and generation_type = 'AUTO' then total_amount_without_tax else 0 end as auto_credit_note,
+
+
 
 concat(customer.debtor_number,i.items_collection_date) as drop_id, 
 
@@ -86,6 +98,7 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     customer.user_category as client_category,
     customer.name as Customer,
     customer.Warehouse,
+    customer.debtor_number,
 
 
     prep_payments.total_payments,
@@ -94,6 +107,7 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
 --invoice_items
     ii.total_cost,
     ii.invoice_items_count,
+    ii.quantity,
     case when ii.invoice_items_count > 0 then 'With Invoice Items' else 'No Invoice Items' end as invoice_items_detection,
 
 --line_items
@@ -122,7 +136,7 @@ case when items_collection_method = 'delivery_date' then items_collection_date e
 
 
 
-
+fn.registered_clients,
 
     current_timestamp() as insertion_timestamp, 
 
@@ -134,5 +148,8 @@ left join prep_payments as prep_payments on prep_payments.invoice_header_id = i.
 left join prep_move_item as mi on mi.documentable_id = i.invoice_header_id and mi.documentable_type  = 'Invoice'
 
 left join line_items as li on li.invoice_header_id = i.invoice_header_id
+
+left join  {{ ref('stg_financial_administrations') }} as fn on fn.id = i.financial_administration_id
+
 
 --left join prep_damaged as prep_damaged on prep_damaged.date_incident_at = date(i.invoice_header_printed_at) and prep_damaged.Warehouse = customer.Warehouse and prep_damaged.financial_administration = i.financial_administration

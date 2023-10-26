@@ -36,6 +36,25 @@ case
     else 'check'
     end as financial_administration,
 
+
+
+
+case
+when w.warehouse_name = 'Dammam Warehouse' then 'FN-Dammam'
+when w.warehouse_name = 'Dubai Warehouse' then 'DXB'
+when w.warehouse_name = 'Jeddah Warehouse' then 'FN-Jeddah'
+when w.warehouse_name = 'Riyadh Warehouse' then 'FN-Riyadh'
+when w.warehouse_name = 'Tabuk Warehouse' then 'FN-Tabuk'
+when warehouse_name = 'Hail Warehouse' then 'FN-Hail'
+when warehouse_name = 'Qassim Warehouse' then 'FN-Qassim'
+when warehouse_name = 'Medina Warehouse' then 'FN-Medinah'
+when warehouse_name = 'Jouf WareHouse' then 'FN-Jouf'
+when warehouse_name = 'Hafar WareHouse' then 'FN-Hafar'
+when warehouse_name = 'Kuwait Warehouse' then 'KWT-Design Cell'
+else null end as box_label,
+
+
+
 current_timestamp() as ingestion_timestamp, 
   
 

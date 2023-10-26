@@ -182,6 +182,7 @@ plis.supplier_name as parent_supplier,
 --shipments
     sh.shipments_status, 
     sh.Shipment,
+    --sh.shipment_id,
     concat( "https://erp.floranow.com/shipments/", sh.shipment_id) as shipment_link,
     concat( "https://erp.floranow.com/master_shipments/", msh.master_shipment_id) as master_shipment_link,
     msh.master_shipments_status,

@@ -5,20 +5,42 @@ source as (
 select
 
 ---Gross Revenue: This is the total amount of revenue generated from all printed invoices in a given period, without considering any adjustments like credit notes.
-    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as gross_revenue,
-    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as credit_note,
+    gross_revenue,
+    credit_note,
+    invoice_count,
+    credit_note_count,
+    auto_gross_revenue,
+    auto_credit_note,
 
-    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed')  then 1 else 0 end as invoice_count,
-    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed')  then 1 else 0 end as credit_note_count,
+    case when  date_diff(date(i.invoice_header_printed_at) , current_date() , MONTH) = 0 then gross_revenue else 0 end as mtd_gross_revenue,
+    case when  date_diff(date(i.invoice_header_printed_at) , current_date() , MONTH) = 0 then credit_note else 0 end as mtd_credit_note,
 
-    case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed') and generation_type = 'AUTO' then total_amount_without_tax else 0 end as auto_gross_revenue,
-    case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed') and generation_type = 'AUTO' then total_amount_without_tax else 0 end as auto_credit_note,
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 and extract(day FROM i.invoice_header_printed_at) <= extract(day FROM current_date()) then gross_revenue else 0 end as lmtd_gross_revenue,
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 and extract(day FROM i.invoice_header_printed_at) <= extract(day FROM current_date()) then credit_note else 0 end as lmtd_credit_note,
 
 
+
+case 
+    when date_diff(current_date(), date(i.invoice_header_printed_at), YEAR) = 1 
+    and extract(month FROM i.invoice_header_printed_at) = extract(month FROM current_date()) 
+    and extract(day FROM i.invoice_header_printed_at) <= extract(day FROM current_date()) 
+    then gross_revenue else 0 
+end as lymtd_gross_revenue,
+
+
+case 
+    when date_diff(current_date(), date(i.invoice_header_printed_at), YEAR) = 1 
+    and extract(month FROM i.invoice_header_printed_at) = extract(month FROM current_date()) 
+    and extract(day FROM i.invoice_header_printed_at) <= extract(day FROM current_date()) 
+    then credit_note else 0 
+end as lymtd_credit_note,
+
+registered_clients,
 
 --invoice_items
     total_cost,
     invoice_items_count,
+    quantity,
 
 
 number as invoice_number,
@@ -35,6 +57,7 @@ account_manager,
 City,
 client_category,
 Customer,
+debtor_number,
 Warehouse,
 
 invoice_header_id,

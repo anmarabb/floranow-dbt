@@ -125,6 +125,14 @@ select
   
   com.name as company_name,
 
+case 
+when u.email  like '%fake_%' then 'fake_temp' 
+when u.email  like '%temp_%' then 'fake_temp' 
+
+else 'normal' end as fake_temp,
+
+
+
 current_timestamp() as ingestion_timestamp,
 
   from {{ source('erp_prod', 'users') }} as u

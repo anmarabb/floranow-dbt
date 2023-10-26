@@ -149,6 +149,12 @@ With source as
             end as record_type,
 
 
+case 
+            when  li.ordering_stock_type is null  then 'External Transaction'
+            when  li.ordering_stock_type is not null     then 'Inventory Transaction'
+            else 'cheack_my_logic'
+            end as record_type_2,
+
 
 --nested
 delivery_time_window.delivery_window_id,
