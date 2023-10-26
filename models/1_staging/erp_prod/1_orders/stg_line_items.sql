@@ -156,6 +156,18 @@ case
             end as record_type_2,
 
 
+
+case 
+            when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Reseller Order From External Supplier'
+            when  li.reseller_id is not null  and li.ordering_stock_type is not null  then 'Reseller Order From Inventory'
+            when  li.reseller_id is null and li.ordering_stock_type is null then 'Customer Order From External Supplier'
+            when  li.reseller_id is null and li.ordering_stock_type is null then 'Customer Order From Inventory'
+
+            else 'cheack_my_logic'
+            end as record_type_3,
+
+
+
 --nested
 delivery_time_window.delivery_window_id,
 delivery_time_window.delivery_time,

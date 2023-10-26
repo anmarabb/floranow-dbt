@@ -61,6 +61,7 @@ case
 --status
     record_type,               -- Purchase Order, Customer Order, System
     record_type_2,             -- External Transaction, Inventory Transaction
+    record_type_3,
     record_type_details,       -- Reseller Purchase Order, Customer Bulk Order, Customer Shipment Order, Customer Inventory Order, Customer Fly Order, stock2stock, EXTRA, RETURN, MOVEMENT
     order_type,                -- ONLINE, OFFLINE, ADDITIONAL, IMPORT_INVENTORY, EXTRA, RETURN, MOVEMENT
     parent_order_type,
