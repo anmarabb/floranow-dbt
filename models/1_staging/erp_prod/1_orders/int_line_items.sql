@@ -403,6 +403,17 @@ else INITCAP(li.product_subcategory) end as product_subcategory,
 i.invoice_header_status,
 st.stock_name as Stock,
 
+case 
+when st.stock_model in ('Reselling') then case when lis.supplier_name = 'ASTRA Farms' then 'Commission Based' else 'Reselling'
+end else st.stock_model end as stock_model,
+
+case 
+when st.stock_model_details in ('Reselling') then case when lis.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling' end
+when st.stock_model_details in ('Reselling Event') then case when lis.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling Event'  end
+else st.stock_model_details end as stock_model_details,
+
+concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_name,
+
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -446,7 +457,9 @@ left join {{ref('int_shipments')}} as sh on li.shipment_id = sh.shipment_id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.master_shipment_id
 
 
-left join {{ref('base_stocks')}} as st on p.stock_id = st.stock_id 
+left join {{ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
+
+
 --left join {{ref('stg_feed_sources')}} as origin_fs on origin_fs.feed_source_id = p.origin_feed_source_id
 
 left join {{ref('stg_feed_sources')}} as fs on fs.feed_source_id = li.feed_source_id

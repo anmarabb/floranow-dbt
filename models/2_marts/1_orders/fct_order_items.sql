@@ -417,6 +417,9 @@ case when incidents_count is not null then 1 else 0 end as orders_with_incidents
 case when incidents_count is  null then 1 else 0 end as orders_without_incidents,
 
 Stock,
+stock_model,
+stock_model_details,
+full_stock_name,
 
 current_timestamp() as insertion_timestamp, 
 
