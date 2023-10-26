@@ -27,16 +27,37 @@ select
 
 
 
-        li.order_type,
         li.customer,
         li.Supplier,
         li.supplier_region as Origin,
         li.ordered_quantity,
         li.created_at as order_date,
         li.delivery_date,
+        li.departure_date,
+        li.stem_length,
         li.state,
 
+        li.product_category,
+        li.product_subcategory,
+        li.product_name as Product,
+        li.order_type,
+        li.line_item_link,
+        li.master_shipment_name,
+        li.Shipment,
+        li.unit_fob_price,
+
+
+        pi.quantity * li.unit_fob_price as fob_value,
+
+
+
         reported_by.name as reported_by,
+
+
+
+        CONCAT(COALESCE(pi.incident_type, ''), '-', COALESCE(pi.reason, '')) as type_reason,
+
+
 
 
 
@@ -47,6 +68,7 @@ select
 
         li.currency,
         li.fob_currency,
+        li.customer_id,
 
 
 
@@ -59,8 +81,9 @@ select
 
 
             w2.warehouse_name as warehouse,
+            w2.warehouse_country,
+            w2.box_label,
          --   w2.financial_administration,
-
 
 /*
 case 
@@ -79,6 +102,7 @@ case when pi.stage in ('PACKING', 'RECEIVING') then 'supplier_incidents' else nu
 concat( "https://erp.floranow.com/product_incidents/", pi.product_incident_id) as incidents_link,
 
 customer.financial_administration,
+customer.debtor_number,
 
 ii.invoice_item_id,
 
@@ -93,11 +117,16 @@ end as pi_record_type,
 
 
 
+p.Stock,
+p.stock_model_details,
+p.stock_model,
+p.full_stock_name,
 
 
+concat('NCR-', FORMAT_TIMESTAMP('%y%m%d', li.departure_date), '-', li.shipment_id) as NCR,
 
 
-        current_timestamp() as insertion_timestamp,
+current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_product_incidents')}} as pi
 left join {{ref('int_line_items')}} as li on pi.line_item_id = li.line_item_id

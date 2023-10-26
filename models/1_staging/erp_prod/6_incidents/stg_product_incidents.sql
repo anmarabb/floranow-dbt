@@ -66,6 +66,7 @@ select
 
             status, --REPORTED, CLOSED, null | It is no longer used (dev team)
             note,
+            reason,
 
 
 

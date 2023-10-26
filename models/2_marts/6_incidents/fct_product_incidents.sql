@@ -11,13 +11,14 @@ select
     incident_at,
     order_date,
     delivery_date,
+    departure_date,
     
     product_incident_id,
     line_item_id,
     incidentable_id, 
     credit_note_item_id,
 
-    
+    stem_length,
    
     
     incident_type,  --MISSING, EXTRA, DAMAGED, RETURNED
@@ -76,8 +77,16 @@ case
     --line_item
 
      warehouse,
+     warehouse_country,
         
-        
+
+Stock,
+stock_model_details,
+stock_model,
+full_stock_name,
+
+NCR,
+
 
 CONCAT(
 CASE 
@@ -116,8 +125,10 @@ master_report_filter,
 
 incidents_link,
 financial_administration,
+debtor_number,
 
 currency,
+fob_currency,
 
 
 invoice_item_id,
@@ -127,6 +138,30 @@ after_sold,
 pi_record_type,
 
 state, --from line item
+
+customer_id,
+
+box_label,
+
+
+--
+    type_reason,
+    reason,
+    note,
+
+
+order_type,
+
+
+        product_category,
+        product_subcategory,
+        Product,
+        line_item_link,
+
+master_shipment_name,
+Shipment,
+
+fob_value,
 
 
 current_timestamp() as insertion_timestamp, 

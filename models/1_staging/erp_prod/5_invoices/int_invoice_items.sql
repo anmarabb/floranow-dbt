@@ -28,6 +28,7 @@ ii.quantity * li.unit_landed_cost as total_cost,
         customer.customer_type,
         customer.user_category,
         customer.debtor_number,
+        customer.account_manager,
         
 
 concat(customer.debtor_number,ii.delivery_date) as drop_id, 
@@ -47,6 +48,8 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         i.generation_type,
         i.record_type,
         i.proof_of_delivery_id as proof_of_delivery_id_inv,
+        i.number as invoice_number,
+
 
         
 
@@ -59,9 +62,11 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         li.order_status,
         li.record_type_details,
         li.feed_source_name,
+        li.record_type_2,
 
 
         li.unit_landed_cost,
+        li.ordering_stock_type,
 
 
 
@@ -124,23 +129,24 @@ end as trading_model,
 case when li.line_item_id is not null then 'line_item_id' else null end as line_item_id_check,
 li.parent_id_check,
 
-case 
-when li.line_item_id is null then 'No line_item_id'
 
-when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') or li.Supplier in ('Express Jeddah','Express Jeddah', 'Express Jeddah', 'Express Tabuk') or meta_supplier in ('Express Jeddah','Express Jeddah', 'Express Jeddah', 'Express Tabuk') then 'Marketplace'
-when li.Supplier in ('ASTRA Farms') and li.feed_source_name in ('Astra DXB out') then 'Marketplace'
-when meta_supplier in ('ASTRA Farms') and li.feed_source_name in ('Astra DXB out') then 'Marketplace'
-when li.Supplier in ('Ward Flowers') and li.feed_source_name in ('Ward Flower Inventory') then 'Marketplace'
-
-when li.line_item_id is not null and li.parent_id_check is not null then 'Re-Selling'
-when li.line_item_id is not null and li.parent_id_check is null then 'Pre-Selling'
-else 'check'
-end as trading_model,
 
 
 concat( "https://erp.floranow.com/invoice_items/", ii.invoice_item_id) as invoice_items_link,
 concat( "https://erp.floranow.com/invoices/", ii.invoice_header_id) as invoice_link,
 concat( "https://erp.floranow.com/line_items/", ii.line_item_id) as line_items_link,
+
+pod.source_type as pod_source_type,
+
+
+case 
+    when li.record_type_2 = 'Inventory Transaction' then 'Reselling Model' --customers purchase flowers that are already in your inventory, allowing for faster delivery.
+    when li.record_type_2 = 'External Transaction' then 'Direct Model' --Direct Supplier Model: customers purchase directly from the marketplace where suppliers list their flowers.
+    when i.generation_type = 'MANUAL' then 'Manual Invoice'
+    else 'Cheak Logic'
+    end as trading_model,
+
+
 
 
 current_timestamp() as insertion_timestamp, 

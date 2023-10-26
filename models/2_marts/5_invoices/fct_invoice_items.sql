@@ -45,6 +45,7 @@ creditable_type,
         Customer,
         user_category, -- Segment
         debtor_number,
+        account_manager,
 
 
 
@@ -80,8 +81,11 @@ creditable_type,
 
         meta_supplier,
 
+        ordering_stock_type,
+
         product_category,
         product_subcategory,
+        record_type_2,
 
 
 
@@ -94,6 +98,7 @@ creditable_type,
         generation_type,
         record_type,
         record_type_details,
+        invoice_number,
 
 
     --date
@@ -115,7 +120,6 @@ CASE
 
  registered_clients,
 
-trading_model,
 
 feed_source_name,
 line_item_id_check,
@@ -126,6 +130,9 @@ invoice_link,
 line_items_link,
 
 
+
+pod_source_type,
+trading_model,
 
 current_timestamp() as insertion_timestamp, 
 
