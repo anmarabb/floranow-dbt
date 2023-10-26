@@ -164,6 +164,11 @@ Shipment,
 fob_value,
 
 
+
+record_type_3,
+record_type_2,
+record_type_details,
+
 current_timestamp() as insertion_timestamp, 
 
 

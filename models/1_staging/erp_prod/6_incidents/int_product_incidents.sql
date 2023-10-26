@@ -38,6 +38,10 @@ select
         li.state,
         li.fulfillment_mode,
 
+        li.record_type_3,
+        li.record_type_2,
+        li.record_type_details,
+
         li.product_category,
         li.product_subcategory,
         li.product_name as Product,
