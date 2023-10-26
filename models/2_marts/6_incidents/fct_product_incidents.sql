@@ -158,7 +158,7 @@ order_type,
         Product,
         line_item_link,
 
-master_shipment_name,
+master_shipment,
 Shipment,
 
 fob_value,
