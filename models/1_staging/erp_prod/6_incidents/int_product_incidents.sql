@@ -38,9 +38,9 @@ select
         li.state,
         li.fulfillment_mode,
 
-        li.record_type_3,
-        li.record_type_2,
-        li.record_type_details,
+        li.li_record_type_details,
+        li.li_record_type,
+
         li.Reseller,
 
         li.product_category,

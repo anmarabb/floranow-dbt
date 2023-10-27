@@ -131,8 +131,8 @@ else 'scaned_flag' end as flag_1,
             
             --li.inventory_quantity,
             li.fulfilled_quantity,
-            li.record_type,
-            li.record_type_details,
+            li.li_record_type,
+            li.li_record_type_details,
             li.order_status,
             li.fulfillment_status,
             li.warehouse, --from customer

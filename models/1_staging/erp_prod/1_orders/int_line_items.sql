@@ -72,7 +72,7 @@ li.invoice_id as invoice_header_id,
 case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
 case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end as delivery_date,
 
-case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
+case when li.li_record_type_details in ('Reseller Purchase Order For Inventory') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
 --actions
     --returned_by.name as returned_by,
@@ -133,7 +133,6 @@ case when li.record_type_details in ('Reseller Purchase Order', 'EXTRA') and li.
     
 
 plis.supplier_name as parent_supplier,
---supplier
     case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
     case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end as supplier_region, --Origin
 
@@ -144,12 +143,10 @@ plis.supplier_name as parent_supplier,
     pli.order_type as parent_order_type,
 
     case 
-        when li.record_type_details in ('Customer Fly Order','Customer Shipment Order') then 'Shipment Orders'  -- From Shipment External
-        when li.record_type_details in ('Customer Inventory Order') then 'Inventory Orders (Stock-out)'          -- From Inventory (stock out)
-        when li.record_type_details in ('Reseller Purchase Order','EXTRA','RETURN') then 'Reselling Orders (Stock-in)' -- PO Orders (in) To Inventory Replenishment, Restocking
-        when li.record_type_details in ('Customer In Shop Order') then 'In-Shop Order'
-
-        else null
+        when li.li_record_type_details in ('Customer Sale Order From Fly-stock Inventory','Customer Sale Order From Direct Supplier') then 'Shipment Order To POD'  -- From Shipment External
+        when li.li_record_type_details in ('Customer Sale Order From In-stock Inventory') then 'Express Order To POD'     --Inventory Orders (Stock-out)     -- From Inventory (stock out)
+        when li.li_record_type_details in ('Reseller Purchase Order For Inventory') then 'Restocking Orders To LOC' -- --Reselling Orders (Stock-in) PO Orders (in) To Inventory Replenishment, Restocking
+        else 'To Be Scoped'
         end as fulfillment_mode,
 
 

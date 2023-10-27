@@ -59,10 +59,11 @@ case
 
 
 --status
-    record_type,               -- Purchase Order, Customer Order, System
-    record_type_2,             -- External Transaction, Inventory Transaction
-    record_type_3,
-    record_type_details,       -- Reseller Purchase Order, Customer Bulk Order, Customer Shipment Order, Customer Inventory Order, Customer Fly Order, stock2stock, EXTRA, RETURN, MOVEMENT
+    li_record_type,
+    li_record_type_details,
+    order_stream_type,
+    fulfillment_mode,
+
     order_type,                -- ONLINE, OFFLINE, ADDITIONAL, IMPORT_INVENTORY, EXTRA, RETURN, MOVEMENT
     parent_order_type,
     invoice_status,
@@ -118,7 +119,7 @@ case
         else '0.Not Fulfilled'
         end as order_state,
 
-        fulfillment_mode,
+        
 
         li.location,
 
@@ -127,7 +128,7 @@ case
     case when fulfillment_status like '%Not Fulfilled%' then 'Not Fulfilled' else 'Fulfilled' end as stage_gate2,
     case when li.dispatched_at is not null then 'Dispatched' else 'Not Dispatched' end as stage_gate3,
     
-    case when fulfillment_mode not in ('Reselling Orders (Stock-in)','Customer In Shop Order') and fulfillment_status not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
+    case when fulfillment_mode not in ('Purchase Order For Inventory','Customer Sales Order From Shop') and fulfillment_status not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
     
 
    case 
