@@ -104,8 +104,8 @@ select
 
 --line_items
     --dim
-        record_type,
-        record_type_details,
+        li_record_type,
+        li_record_type_details,
         fulfillment,
         fulfillment_status,
         fulfillment_mode,

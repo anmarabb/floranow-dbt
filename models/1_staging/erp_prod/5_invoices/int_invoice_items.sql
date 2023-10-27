@@ -60,9 +60,8 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         li.Origin,
         li.fulfillment_mode,
         li.order_status,
-        li.record_type_details,
+        li.li_record_type_details,
         li.feed_source_name,
-        li.record_type_2,
 
 
         li.unit_landed_cost,
@@ -140,8 +139,8 @@ pod.source_type as pod_source_type,
 
 
 case 
-    when li.record_type_2 = 'Inventory Transaction' then 'Reselling Model' --customers purchase flowers that are already in your inventory, allowing for faster delivery.
-    when li.record_type_2 = 'External Transaction' then 'Direct Model' --Direct Supplier Model: customers purchase directly from the marketplace where suppliers list their flowers.
+    when li.order_stream_type = 'Customer Sale Order From Inventory' then 'Reselling Model' --customers purchase flowers that are already in your inventory, allowing for faster delivery.
+    when li.order_stream_type = 'Customer Sale Order From Direct Supplier' then 'Direct Supplier Model' --Direct Supplier Model: customers purchase directly from the marketplace where suppliers list their flowers.
     when i.generation_type = 'MANUAL' then 'Manual Invoice'
     else 'Cheak Logic'
     end as trading_model,

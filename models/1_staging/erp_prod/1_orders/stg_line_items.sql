@@ -131,40 +131,38 @@ With source as
                     li.warehoused_quantity,
                     li.published_canceled_quantity,
 
+
+--li.parent_line_item_id is null and
         case 
-            when  li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is not null then 'Reseller Purchase Order' --from reseller to feed the stock
-            when  li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Customer Bulk Order'
-            when  li.parent_line_item_id is null and li.ordering_stock_type is null and li.reseller_id is null then 'Customer Shipment Order' --customer_direct_orders
-            when  li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null and li.order_type = 'IN_SHOP' then 'Customer In Shop Order'
-            when  li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null then 'Customer Inventory Order' --customer_inventory_orders
-            when  li.ordering_stock_type = 'FLYING' and li.reseller_id is null then 'Customer Fly Order' --customer_inventory_orders_flying
-            when  li.ordering_stock_type is not null and li.reseller_id is not null then 'Reseller Purchase Order From The Stock'
-            else 'cheack_my_logic'
-            end as record_type_details,
-
-   case 
-            when  li.reseller_id is not null  then 'Reseller Purchase Order'
-            when  li.reseller_id is null     then 'Customer Sales Order'
-            else 'cheack_my_logic'
-            end as record_type,
+            when  li.ordering_stock_type is null and li.reseller_id is not null then 'Reseller Purchase Order For Inventory'
+            when  li.ordering_stock_type is not null and li.reseller_id is not null then 'Reseller Internal Stock Transaction'
 
 
-case 
-            when  li.ordering_stock_type is null  then 'External Transaction'
-            when  li.ordering_stock_type is not null     then 'Inventory Transaction'
-            else 'cheack_my_logic'
-            end as record_type_2,
+            when  li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Customer Bulk Sale Order'
+            when  li.ordering_stock_type is null and li.reseller_id is null then 'Customer Sale Order From Direct Supplier' --customer_direct_orders
+            when  li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null and li.order_type = 'IN_SHOP' then 'Customer In-Shop Sale Order'
+
+
+            when  li.ordering_stock_type = 'INVENTORY' and li.reseller_id is null then 'Customer Sale Order From In-stock Inventory' --Customer Sale Order From Inventory
+            when  li.ordering_stock_type = 'FLYING' and li.reseller_id is null then 'Customer Sale Order From Fly-stock Inventory' --Customer Sale Order From Inventory
+            else 'To Be Scoped'
+            end as li_record_type_details,
+
+       case 
+            when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Purchase Order'
+            when  li.reseller_id is null  then 'Sale Order'
+            else 'To Be Scoped'
+            end as li_record_type,
 
 
 
-case 
-            when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Reseller Order From External Supplier'
-            when  li.reseller_id is not null  and li.ordering_stock_type is not null  then 'Reseller Order From Inventory'
-            when  li.reseller_id is null and li.ordering_stock_type is null then 'Customer Order From External Supplier'
-            when  li.reseller_id is null and li.ordering_stock_type is not null then 'Customer Order From Inventory'
 
-            else 'cheack_my_logic'
-            end as record_type_3,
+        case 
+            when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Reseller Purchase Order For Inventory'
+            when  li.reseller_id is null and li.ordering_stock_type is null then 'Customer Sale Order From Direct Supplier'
+            when  li.reseller_id is null and li.ordering_stock_type is not null then 'Customer Sale Order From Inventory'
+            else 'To Be Scoped'
+            end as order_stream_type,
 
 
 

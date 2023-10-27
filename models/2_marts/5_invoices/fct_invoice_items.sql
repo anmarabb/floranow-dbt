@@ -85,7 +85,6 @@ creditable_type,
 
         product_category,
         product_subcategory,
-        record_type_2,
 
 
 
@@ -97,7 +96,7 @@ creditable_type,
         invoice_header_type, --credit note, invoice
         generation_type,
         record_type,
-        record_type_details,
+        li_record_type_details,
         invoice_number,
 
 
