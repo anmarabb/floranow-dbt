@@ -12,7 +12,8 @@ product_incidents as (
                             count(*) as incidents_count,
                                 count(case when incident_type !='EXTRA'  then 1 else null end) as incidents_count_without_extra,
                                 count(case when incident_type ='EXTRA'  then 1 else null end) as extra_count,
-                                sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then 1 else null end) as incidents_count_inventory_dmaged,
+                                count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then 1 else null end) as incidents_count_inventory_dmaged,
+                                count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' OR incident_type ='EXTRA' then null else 1 end) as incidents_count_without_extra_without_inventory_dmaged,
 
                             sum(pi.quantity) as incident_quantity,
                                 sum(case when incident_type !='EXTRA'  then pi.quantity else 0 end) as incident_quantity_without_extra,
@@ -199,6 +200,7 @@ pi.incidents_count,
     pi.incidents_count_without_extra,
     pi.extra_count,
     pi.incidents_count_inventory_dmaged,
+    incidents_count_without_extra_without_inventory_dmaged,
 
 
 pi.incident_cost,

@@ -271,6 +271,7 @@ incidents_count,
     incidents_count_without_extra,
     extra_count,
     incidents_count_inventory_dmaged,
+    incidents_count_without_extra_without_inventory_dmaged,
 
 incident_cost,
     incident_cost_without_extra,
@@ -408,14 +409,35 @@ vehicle_destination,
 
 case 
     when incidents_count is null then 'Line Item Without Incident'
-   -- when incidents_count = 1 then 'Line Item 1 Incident'
- --   when incidents_count > 1 then 'Line Item Multiple Incident'
-else 'Line Item With Incident'
+    when incidents_count = extra_count and incidents_count_without_extra = 0 then 'Just Extra Incident'
+    when incidents_count = incidents_count_inventory_dmaged and extra_count = 0 then 'Just Inventory Damaged Incident'
+    when incidents_count = incidents_count_inventory_dmaged + extra_count then 'Just Extra & Inventory Damaged Incident'
+else 'Line Item with Incident'
 end as incident_detection,
 
 
-case when incidents_count is not null then 1 else 0 end as orders_with_incidents,
-case when incidents_count is  null then 1 else 0 end as orders_without_incidents,
+
+case 
+    when incidents_count is null then 0
+    when incidents_count = extra_count and incidents_count_without_extra = 0 then 0
+    when incidents_count = incidents_count_inventory_dmaged and extra_count = 0 then 0
+    when incidents_count = incidents_count_inventory_dmaged + extra_count then 0
+    else 1
+    end as line_order_with_incidents_adjusted,
+
+
+case 
+    when incidents_count is null then 1
+    when incidents_count = extra_count and incidents_count_without_extra = 0 then 1
+    when incidents_count = incidents_count_inventory_dmaged and extra_count = 0 then 1
+    when incidents_count = incidents_count_inventory_dmaged + extra_count then 1
+    else 0
+    end as line_order_without_incidents_adjusted,
+
+
+case when incidents_count is not null then 1 else 0 end as line_order_with_incidents,
+case when incidents_count is  null then 1 else 0 end as line_order_without_incidents,
+
 
 Stock,
 stock_model,
