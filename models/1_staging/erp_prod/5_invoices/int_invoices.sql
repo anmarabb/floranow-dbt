@@ -9,6 +9,9 @@ invoice_items as (
     --sum(ii.quantity) as quantity,
     sum(case when i.invoice_header_type != 'invoice' then -ii.quantity else ii.quantity end) as quantity,
 
+    sum(case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as ii_gross_revenue,
+    sum(case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as ii_credit_note,
+
 
     from {{ ref('stg_invoice_items') }} as ii 
     left join {{ ref('fct_order_items') }} as li on ii.line_item_id = li.line_item_id
@@ -109,6 +112,9 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     ii.invoice_items_count,
     ii.quantity,
     case when ii.invoice_items_count > 0 then 'With Invoice Items' else 'No Invoice Items' end as invoice_items_detection,
+    ii.ii_gross_revenue,
+    ii.ii_credit_note,
+
 
 --line_items
     li.line_items_count,
@@ -133,6 +139,16 @@ concat( "https://erp.floranow.com/invoices/", i.invoice_header_id) as invoice_li
 
 
 case when items_collection_method = 'delivery_date' then items_collection_date else null end as delivery_date,
+
+
+mi.company_id,
+
+case 
+when mi.company_id = 3 then 'Bloomax Flowers LTD'
+when mi.company_id = 2 then 'Global Floral Arabia tr'
+when mi.company_id = 1 then 'Flora Express Flower Trading LLC'
+else  'To Be Scoped'
+end as company_name,
 
 
 
