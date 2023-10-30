@@ -24,6 +24,8 @@ case when invoice_header_printed_at is not null then 'Printed' else null end as 
 ---Gross Revenue: This is the total amount of revenue generated from all printed invoices in a given period, without considering any adjustments like credit notes.
     case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as gross_revenue,
     case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as credit_note,
+    case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED'  then 1 else 0 end as credit_note_items_count,
+    case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  then 1 else 0 end as invoice_items_count,
 
 
 case when date(invoice_header_printed_at) is not null then date(invoice_header_printed_at) else date(invoice_header_created_at) end as master_date,
