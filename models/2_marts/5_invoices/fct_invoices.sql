@@ -35,12 +35,45 @@ case
     then credit_note else 0 
 end as lymtd_credit_note,
 
+
+CASE 
+    WHEN EXTRACT(YEAR FROM i.invoice_header_printed_at) = EXTRACT(YEAR FROM current_date())
+    AND date(i.invoice_header_printed_at) <= current_date() THEN gross_revenue 
+    ELSE 0 
+END AS ytd_gross_revenue,
+
+CASE 
+    WHEN EXTRACT(YEAR FROM i.invoice_header_printed_at) = EXTRACT(YEAR FROM current_date())
+    AND date(i.invoice_header_printed_at) <= current_date() THEN credit_note 
+    ELSE 0 
+END AS ytd_credit_note,
+
+CASE 
+    WHEN EXTRACT(YEAR FROM i.invoice_header_printed_at) = EXTRACT(YEAR FROM CURRENT_DATE()) - 1
+    AND DATE(i.invoice_header_printed_at) <= DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR) THEN gross_revenue 
+    ELSE 0 
+END AS lytd_gross_revenue,
+
+
+CASE 
+    WHEN EXTRACT(YEAR FROM i.invoice_header_printed_at) = EXTRACT(YEAR FROM CURRENT_DATE()) - 1
+    AND DATE(i.invoice_header_printed_at) <= DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR) THEN credit_note 
+    ELSE 0 
+END AS lytd_credit_note,
+
+
+
+
 registered_clients,
 
 --invoice_items
     total_cost,
     invoice_items_count,
     quantity,
+    ii_gross_revenue,
+    ii_credit_note,
+    delivery_charge_amount,
+
 
 
 number as invoice_number,
@@ -121,6 +154,8 @@ DATE(
 ) AS Year_Month_printed_at,
 
 
+company_id,
+company_name,
 current_timestamp() as insertion_timestamp 
 
 

@@ -10,6 +10,7 @@ select
                 proof_of_delivery_id,
                 in_shop_order_number,
                 purchase_order_number,
+                
                 odoo_id,
                 sub_customer_id,
 
@@ -43,9 +44,11 @@ select
                 printed_at as invoice_header_printed_at,  --invoiced_at, --DispatchDate  --This is the date when the invoice was printed and sent to the client. This date is critical as it might be used to start the payment term clock, especially if your terms are something like "Net 30 days from receipt of invoice". This date can be seen as the official invoice date from the customer's perspective, as it signifies when they received the invoice.
                 updated_at,
                 signed_at,
+
+                due_date,
+
                -- finalized_at,
                 last_payment_at,
-                due_date,
                 voided_at,
                 last_send_email_at,
                 items_collection_date,
@@ -81,6 +84,8 @@ select
                 items_source_type,
                 generation_type,
                 source_type, -- EXTERNAL, INTERNAL
+
+                items_collection_window,
                 
 
                 case 
@@ -102,6 +107,7 @@ select
             discount_amount,
             price_without_discount,
             total_amount - total_tax as total_amount_without_tax,
+            delivery_charge_amount,
 
 
 

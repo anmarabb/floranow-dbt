@@ -69,6 +69,10 @@ case
     when pi.stage in ('AFTER_RETURN', 'DELIVERY') and pi.incident_type in ('DAMAGED','MISSING') and Origin =  'Netherlands' then 'S&L Team'
     when pi.stage in ('AFTER_RETURN', 'DELIVERY') and pi.incident_type  in ('DAMAGED') and Origin !=  'Netherlands' then 'Fulfillment Team' 
     when pi.stage in ('AFTER_RETURN', 'DELIVERY') and pi.incident_type  in ('MISSING') and Origin !=  'Netherlands' then 'LMD Team' 
+    when pi.incident_type  in ('TRANSACTIONAL_ISSUES')  then 'IT Team' 
+    when pi.incident_type  in ('RETURNED','INCORRECT_ITEM','QUALITY_ISSUES') and Origin =  'Netherlands' then 'S&L Team'
+    when pi.incident_type  in ('RETURNED','INCORRECT_ITEM','QUALITY_ISSUES') and Origin !=  'Netherlands' then 'Fulfillment Team'
+
  else 'Shared Responsibility To Be Scoped'
 
  end as responsible_team,
