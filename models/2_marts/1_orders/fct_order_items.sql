@@ -95,7 +95,7 @@ case
     parent_line_item_id,
     invoice_header_id,
 
-    
+    invoice_number,
 
    
 

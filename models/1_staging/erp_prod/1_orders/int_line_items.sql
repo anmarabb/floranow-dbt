@@ -401,6 +401,8 @@ else INITCAP(li.product_subcategory) end as product_subcategory,
 
 i.invoice_header_status,
 i.invoice_header_printed_at,
+i.invoice_number,
+
 st.stock_name as Stock,
 
 case 

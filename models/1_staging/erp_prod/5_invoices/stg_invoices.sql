@@ -74,7 +74,7 @@ select
                 --dim
                 --creation_condition,
                 language,
-                number,
+                number as invoice_number,
                 currency,
                 case 
                 when i.invoice_type = 1 then 'credit note' 
