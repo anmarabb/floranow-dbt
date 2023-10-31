@@ -11,6 +11,8 @@ select
     credit_note_count,
     auto_gross_revenue,
     auto_credit_note,
+    invoice_items_record_count,
+    credit_note_items_count,
 
     case when  date_diff(date(i.invoice_header_printed_at) , current_date() , MONTH) = 0 then gross_revenue else 0 end as mtd_gross_revenue,
     case when  date_diff(date(i.invoice_header_printed_at) , current_date() , MONTH) = 0 then credit_note else 0 end as mtd_credit_note,
@@ -101,6 +103,8 @@ case when date(invoice_header_printed_at) is not null then date(invoice_header_p
 
 drop_id,
 
+
+signed_at,
 date(invoice_header_printed_at) as date_invoice_header_printed_at,
 PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', invoice_header_printed_at), '-01')) as year_month_invoice_header_printed_at,
 date(invoice_header_created_at) as date_invoice_header_created_at,

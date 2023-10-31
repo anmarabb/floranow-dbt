@@ -5,7 +5,11 @@ invoice_items as (
     SELECT
     ii.invoice_header_id,
     sum(case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end)  as total_cost,
-    count(ii.invoice_item_id) as invoice_items_count,
+    count(ii.invoice_item_id) as invoice_items_record_count,
+    count(case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then 1 else null end) as invoice_items_count,
+    count(case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then 1 else null end) as credit_note_items_count,
+
+
     --sum(ii.quantity) as quantity,
     sum(case when i.invoice_header_type != 'invoice' then -ii.quantity else ii.quantity end) as quantity,
 
@@ -110,6 +114,8 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
 --invoice_items
     ii.total_cost,
     ii.invoice_items_count,
+    ii.invoice_items_record_count,
+    ii.credit_note_items_count,
     ii.quantity,
     case when ii.invoice_items_count > 0 then 'With Invoice Items' else 'No Invoice Items' end as invoice_items_detection,
     ii.ii_gross_revenue,

@@ -79,8 +79,6 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
 case 
 when li.Supplier  = 'ASTRA Farms' then 'Astra'
 when ii.meta_supplier_name in ('Astra Farm','Astra farm Barcode','Astra Farm - Event','Astra Flash Sale - R','Astra Flash sale - W') then 'Astra'
-when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh') and  li.parent_supplier in ('Holex','Floradelight', 'Waridi', 'Sierra','Vianen','PJ Dave Roses','Heritage Flowers','Décor Foliage','Sian Flowers', 'Flora Ola') then 'Non Astra'
-when li.feed_source_name in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') or li.Supplier in ('Express Jeddah','Express Dammam', 'Express Riyadh', 'Express Tabuk') then 'Astra'
 else 'Non Astra'
 end as sales_source,
 
@@ -145,7 +143,7 @@ case
     else 'Cheak Logic'
     end as trading_model,
 
-
+li.order_stream_type,
 
 
 current_timestamp() as insertion_timestamp, 
