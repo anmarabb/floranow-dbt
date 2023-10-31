@@ -48,7 +48,7 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         i.generation_type,
         i.record_type,
         i.proof_of_delivery_id as proof_of_delivery_id_inv,
-        i.number as invoice_number,
+        i.invoice_number,
 
 
         

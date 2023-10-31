@@ -4,7 +4,7 @@ source as (
 
 select
 
-number as invoice_number,
+invoice_number,
 financial_administration as Market,
 financial_administration,
 financial_administration_id,
