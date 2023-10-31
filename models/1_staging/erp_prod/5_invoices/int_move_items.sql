@@ -13,7 +13,7 @@ mi.* EXCEPT(created_at),
 case when mi.documentable_id is not null and mi.documentable_type is not null then
 
 (case when mi.documentable_type = 'PaymentTransaction' then pt.number else
-(case when mi.entry_type = 'DEBIT' then i.number else cn.number end) 
+(case when mi.entry_type = 'DEBIT' then i.invoice_number else cn.invoice_number end) 
  end )
  else null end as doc_number,
 
