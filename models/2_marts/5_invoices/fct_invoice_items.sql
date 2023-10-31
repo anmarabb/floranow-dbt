@@ -40,7 +40,7 @@ case when invoice_header_id is not null then 'invoice_header_id' else null end a
 invoice_item_type_row,
 creditable_type,
 
-
+order_stream_type,
 
     --dim
         financial_administration, -- Market

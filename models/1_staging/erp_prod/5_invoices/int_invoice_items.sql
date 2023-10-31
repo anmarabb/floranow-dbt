@@ -143,7 +143,7 @@ case
     else 'Cheak Logic'
     end as trading_model,
 
-
+li.order_stream_type,
 
 
 current_timestamp() as insertion_timestamp, 

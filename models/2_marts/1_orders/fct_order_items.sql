@@ -444,6 +444,8 @@ stock_model,
 stock_model_details,
 full_stock_name,
 
+
+invoice_header_printed_at,
 current_timestamp() as insertion_timestamp, 
 
 
