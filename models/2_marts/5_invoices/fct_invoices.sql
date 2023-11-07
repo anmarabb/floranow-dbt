@@ -171,6 +171,7 @@ company_name,
 
 
 payment_status,
+payment_term,
 
 current_timestamp() as insertion_timestamp 
 
