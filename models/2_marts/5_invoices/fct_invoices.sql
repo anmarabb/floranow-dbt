@@ -173,6 +173,10 @@ company_name,
 payment_status,
 payment_term,
 
+case when payment_status in ('Totally paid','Partially paid') then 1 else 0 end as collected_invoices_count,
+case when payment_status in ('Not paid') then 1 else 0 end as not_collected_invoices_count,
+
+
 current_timestamp() as insertion_timestamp 
 
 
