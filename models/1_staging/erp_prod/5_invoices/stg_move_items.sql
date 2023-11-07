@@ -7,7 +7,9 @@ select
             --FK
                 user_id,
                 documentable_id,
+                external_source_id,
                 company_id,
+                financial_administration_id,
             --dim
                 source_system, -- ODOO, FLORANOW_ERP, FLORISOFT
                 currency,
@@ -20,6 +22,7 @@ select
                 updated_at,
                 created_at,
                 deleted_at,
+                creation_date,
 
 
 
@@ -32,4 +35,8 @@ select
 current_timestamp() as ingestion_timestamp
 
  
-from source
+from source as mi
+where 
+mi.deleted_at is null
+and mi.balance != 0
+and mi.__hevo__marked_deleted is not true

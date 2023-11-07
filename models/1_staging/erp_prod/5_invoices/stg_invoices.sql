@@ -109,6 +109,13 @@ select
             total_amount - total_tax as total_amount_without_tax,
             delivery_charge_amount,
 
+case
+when i.payment_status = 0 then "Not paid"
+when i.payment_status = 1 then "Partially paid"
+when i.payment_status = 2 then "Totally paid "
+else "check_my_logic"
+end as payment_status,
+
 
 
 current_timestamp() as ingestion_timestamp

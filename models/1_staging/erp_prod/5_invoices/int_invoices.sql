@@ -1,26 +1,32 @@
 
 with 
 
+
 invoice_items as (
     SELECT
     ii.invoice_header_id,
-    sum(case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end)  as total_cost,
+    sum(ii.total_cost)  as total_cost,
     count(ii.invoice_item_id) as invoice_items_record_count,
-    count(case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then 1 else null end) as invoice_items_count,
-    count(case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then 1 else null end) as credit_note_items_count,
+    count(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' then 1 else null end) as invoice_items_count,
+    count(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' then 1 else null end) as credit_note_items_count,
 
 
     --sum(ii.quantity) as quantity,
-    sum(case when i.invoice_header_type != 'invoice' then -ii.quantity else ii.quantity end) as quantity,
+    sum(case when ii.invoice_header_type != 'invoice' then -ii.quantity else ii.quantity end) as quantity,
 
-    sum(case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as ii_gross_revenue,
-    sum(case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as ii_credit_note,
+    sum(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as ii_gross_revenue,
+    sum(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as ii_credit_note,
+   
+    sum(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'Astra' then ii.price_without_tax else 0 end) as astra_gross_revenue,
+    sum(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'Astra' then ii.price_without_tax else 0 end) as astra_credit_note,
 
+    sum(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'Non Astra' then ii.price_without_tax else 0 end) as non_astra_gross_revenue,
+    sum(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'Non Astra' then ii.price_without_tax else 0 end) as non_astra_credit_note,
 
-    from {{ ref('stg_invoice_items') }} as ii 
-    left join {{ ref('fct_order_items') }} as li on ii.line_item_id = li.line_item_id
-    left join {{ ref('stg_invoices') }} as i on ii.invoice_header_id = i.invoice_header_id
+    sum(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'To Be Scoped' then ii.price_without_tax else 0 end) as tbs_gross_revenue,
+    sum(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'To Be Scoped' then ii.price_without_tax else 0 end) as tbs_credit_note,
 
+    from {{ ref('int_invoice_items') }} as ii 
 
     where ii.invoice_item_status = 'APPROVED' and ii.deleted_at is null
     group by ii.invoice_header_id
@@ -120,6 +126,13 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     case when ii.invoice_items_count > 0 then 'With Invoice Items' else 'No Invoice Items' end as invoice_items_detection,
     ii.ii_gross_revenue,
     ii.ii_credit_note,
+    ii.astra_gross_revenue,
+    ii.astra_credit_note,
+    ii.non_astra_gross_revenue,
+    ii.non_astra_credit_note,
+    ii.tbs_gross_revenue,
+    ii.tbs_credit_note,
+
 
 
 --line_items
@@ -173,5 +186,7 @@ left join line_items as li on li.invoice_header_id = i.invoice_header_id
 
 left join  {{ ref('stg_financial_administrations') }} as fn on fn.id = i.financial_administration_id
 
-
+--left join budget as b on b.date = date(i.invoice_header_printed_at)
 --left join prep_damaged as prep_damaged on prep_damaged.date_incident_at = date(i.invoice_header_printed_at) and prep_damaged.Warehouse = customer.Warehouse and prep_damaged.financial_administration = i.financial_administration
+
+

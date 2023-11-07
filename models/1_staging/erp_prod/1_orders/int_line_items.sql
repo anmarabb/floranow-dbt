@@ -50,9 +50,29 @@ product_incidents as (
 
                     )
 
+
+
+
 SELECT
 
-li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, product_category,extra_quantity),
+li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, product_category,extra_quantity, li_record_type_details,li_record_type),
+
+
+
+
+case 
+    when li.li_record_type_details != 'To Be Scoped' then li.li_record_type_details
+    when li.li_record_type_details = 'To Be Scoped' and customer.debtor_number in ('132008','scriyadh')  then 'Cash and Carry Purchase Order'  --'BlooMax Flowers - Al khubar'. --Shop Customer Riyadh then li.li_record_type 
+    else 'To Be Scoped'
+end as li_record_type_details,
+
+case 
+    when li.li_record_type = 'To Be Scoped' and customer.debtor_number in ('132008','scriyadh')  then 'Purchase Order'  --'BlooMax Flowers - Al khubar'. --Shop Customer Riyadh then li.li_record_type 
+    when li.li_record_type != 'To Be Scoped' then li.li_record_type
+    else 'To Be Scoped'
+end as li_record_type,
+
+
 
 
 case when li.line_item_id is not null then li.total_price_without_tax else 0 end as potential_revenue,
@@ -89,7 +109,9 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
     case when li.received_quantity > 0 then 1 else 0 end as order_received,
     case when li.fulfilled_quantity > 0 then 1 else 0 end as order_fulfilled,
     case when li.location = 'pod' then 1 else 0 end as order_pod_moved,
-    case when li.dispatched_at is not null then 1 else 0 end as order_dispatched,
+
+
+
     case when li.state = 'DELIVERED' then 1 else 0 end as order_delivered,
     case when li.invoice_id is not null then 1 else 0 end as invoice_created,
     case when li.invoice_id is not null and i.invoice_header_printed_at is not null then 1 else 0 end as invoice_printed,
@@ -139,6 +161,7 @@ plis.supplier_name as parent_supplier,
 
 
     sh.Supplier as shipment_Supplier,
+    lis.supplier_name as raw_supplier,
 
 --order 
     pli.order_type as parent_order_type,
@@ -151,22 +174,9 @@ plis.supplier_name as parent_supplier,
         end as fulfillment_mode,
 
 
-    case 
-     when li.state = 'CANCELED' then '1. Not Fulfilled - (Canceled Orders)'
-     when li.location is null and li.order_type = 'IN_SHOP' and li.fulfillment = 'SUCCEED' then '5. Fulfilled - In Shop'
-     when li.location = 'loc' and li.fulfillment = 'SUCCEED' then '4. Fulfilled - Warehoused Totaly'                                          --  Moveded Totaly to Stock (Warehoused)
-     when li.location = 'loc' and li.fulfillment = 'PARTIAL' then '4. Fulfilled - Warehoused Partially (with Incidents)'                      --  Moveded Partially to Stock (Warehoused)
-     when li.location = 'loc' and li.fulfillment = 'UNACCOUNTED' then '4. Fulfilled - Warehoused (with Process Breakdown)'
-     when li.location = 'pod' and li.fulfillment = 'SUCCEED' then '3. Fulfilled - Moved Totaly to POD'                                        --  Moveded Totaly to Dispatch Area (pod)
-     when li.location = 'pod' and li.fulfillment = 'PARTIAL' then '3. Fulfilled - Moved Partially to POD (with Incidents)'                    --  Moveded Partially to Dispatch Area (pod)
-     when li.location = 'pod' and li.fulfillment = 'UNACCOUNTED' then '3. Fulfilled - Moved to POD (with Process Breakdown)'
-     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'FAILED' then '2. Fulfilled - with Full Item Incident'
-     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'UNACCOUNTED' then '1. Not Fulfilled - (Investigate)'
-     when li.location is null and li.fulfillment in ('PARTIAL','SUCCEED') and li.reseller_id in (2061,1967,2079) then '3. Fulfilled - Other Internal Resellers'
-     when li.location is null and li.fulfillment in ('PARTIAL','SUCCEED') then '3. Fulfilled - with Process Breakdown'
-     else 'cheack_my_logic'  
-     end as fulfillment_status,
-             
+
+
+                  
 
  
 --order requist
@@ -243,62 +253,6 @@ case
 
 
 
-/*
-
---p.product_id,
---pp.product_id as pp_product_id,
---li.parent_line_item_id,
---lis.supplier_name as lis_supplier_name,
---plis.supplier_name as plis_supplier_name,
-
-
-prep_ploc.id as product_locations_id,
-prep_picking_products.id as picking_products_id,
-
-
-
-
-li.order_type as row_order_type,
-*/
-
-
-
-
-
-
-
-
-/*
-{% set  x = ['missing_quantity', 'delivered_quantity','inventory_quantity','warehoused_quantity','picked_quantity','fulfilled_quantity','received_quantity','quantity','returned_quantity','splitted_quantity','replaced_quantity','extra_quantity','damaged_quantity','published_canceled_quantity'] %}
-{% for x in x %}
-case 
-    when li.{{x}} > 0 then '{{x}}'
-    when li.{{x}} = 0 then '--'
-end as ch_{{x}}
-        {%- if not loop. last -%}
-        ,
-        {%- endif -%}
-        {% endfor -%},
-
-
-{% set  x = ['updated_at', 'created_at','completed_at','departure_date','delivery_date','deleted_at','split_at','canceled_at','delivered_at','dispatched_at','returned_at','order_id','offer_id','root_shipment_id','shipment_id','source_shipment_id','split_source_id','replace_for_id','feed_source_id','customer_master_id','customer_id','user_id','reseller_id','supplier_id','created_by_id','split_by_id','returned_by_id','canceled_by_id','dispatched_by_id','supplier_product_id','order_request_id','order_payload_id','source_invoice_id','invoice_id','proof_of_delivery_id','parent_line_item_id','source_line_item_id','line_item_id','sequence_number','number','variety_mask','product_mask','barcode','previous_moved_proof_of_deliveries','previous_split_proof_of_deliveries','previous_shipments'] %}
-{% for x in x %}
-case 
-    when li.{{x}} is not null then '{{x}}'
-    when li.{{x}} is null then '--'
-end as ch_{{x}}
-        {%- if not loop. last -%}
-        ,
-        {%- endif -%}
-        {% endfor -%},  
-*/
-
-
---Metreics
-   -- count (distinct li.order_number ) as orders,
-   -- count (distinct li.line_item_id ) as line_orders,
-
-
 
 win.name as delivery_window,
 
@@ -321,6 +275,11 @@ else null end as ksa_resellers,
 
 
 case when li.line_item_id is not null then 'Line Item ID' else null end as line_item_id_check,
+case when li.order_id is not null then 'Order ID' else null end as order_id_check,
+case when li.order_number is not null then 'Order Number ID' else null end as order_number_check,
+
+
+
 case when li.shipment_id is not null then 'Shipment ID' else null end as shipment_id_check,
 case when li.invoice_id is not null then 'Invoice ID' else null end as invoice_id_check,
 
@@ -339,7 +298,14 @@ case when ppli.line_item_id is not null then 'Parent Parent ID' else null end as
 case when li.source_line_item_id is not null then 'Source ID' else null end as source_id_check,
 case when p.line_item_id is not null then 'Product ID' else null end as product_id_check,
 case when li.offer_id is not null then 'Offer ID' else null end as offer_id_check,
+
 case when li.reseller_id is not null then 'Reseller ID' else null end as reseller_id_check,
+case when li.customer_id is not null then 'Customer ID' else null end as customer_id_check,
+case when li.supplier_id is not null then 'Supplier ID' else null end as supplier_id_check,
+
+case when li.reseller_id = li.customer_id then 'RC ID' else null end as reseller_customer_id_check,
+
+
 case when li.customer_master_id is not null then 'Master ID' else null end as customer_master_id_check,
 case when li.proof_of_delivery_id is not null then 'POD ID' else null end as proof_of_delivery_id_check,
 
@@ -413,6 +379,20 @@ case
 when st.stock_model_details in ('Reselling') then case when lis.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling' end
 when st.stock_model_details in ('Reselling Event') then case when lis.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling Event'  end
 else st.stock_model_details end as stock_model_details,
+
+
+
+case when li.order_source = 'Direct Supplier' then 1 else 0 end as direct_line_order_count,
+case when li.order_source = 'Express Inventory' then 1 else 0 end as stock_line_order_count,
+
+case when li.order_source = 'Direct Supplier' then li.order_id else null end as direct_order_ids,
+case when li.order_source = 'Express Inventory' then li.order_id else null end as stock_order_ids,
+
+
+case when li.fulfillment_status = 'Fulfilled' then 1 else 0 end as fulfilled_items,
+case when li.dispatched_status = 'Dispatched' then 1 else 0 end as dispatched_items,
+case when li.signed_status = 'Signed' then 1 else 0 end as signed_items,
+
 
 concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_name,
 

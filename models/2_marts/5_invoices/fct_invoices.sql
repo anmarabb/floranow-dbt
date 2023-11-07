@@ -3,6 +3,8 @@ with
 source as ( 
 
 select
+case when signed_at is not null then 1 else 0 end as signed_invoice,
+case when invoice_header_printed_at is not null then 1 else 0 end as printed_invoice,
 
 ---Gross Revenue: This is the total amount of revenue generated from all printed invoices in a given period, without considering any adjustments like credit notes.
     gross_revenue,
@@ -75,6 +77,12 @@ registered_clients,
     ii_gross_revenue,
     ii_credit_note,
     delivery_charge_amount,
+    astra_gross_revenue,
+    astra_credit_note,
+    non_astra_gross_revenue,
+    non_astra_credit_note,
+    tbs_gross_revenue,
+    tbs_credit_note,
 
 
 
@@ -160,6 +168,10 @@ DATE(
 
 company_id,
 company_name,
+
+
+payment_status,
+
 current_timestamp() as insertion_timestamp 
 
 

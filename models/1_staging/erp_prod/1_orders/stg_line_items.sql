@@ -135,7 +135,7 @@ With source as
 --li.parent_line_item_id is null and
         case 
             when  li.ordering_stock_type is null and li.reseller_id is not null then 'Reseller Purchase Order For Inventory'
-            when  li.ordering_stock_type is not null and li.reseller_id is not null then 'Reseller Internal Stock Transaction'
+            --when  li.ordering_stock_type is not null and li.reseller_id is not null then 'Reseller Internal Stock Transaction'
 
 
             when  li.ordering_stock_type is null and li.reseller_id is null and li.pricing_type in ('FOB','CIF') then 'Customer Bulk Sale Order'
@@ -147,6 +147,8 @@ With source as
             when  li.ordering_stock_type = 'FLYING' and li.reseller_id is null then 'Customer Sale Order From Fly-stock Inventory' --Customer Sale Order From Inventory
             else 'To Be Scoped'
             end as li_record_type_details,
+            
+
 
        case 
             when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Purchase Order'
@@ -156,13 +158,52 @@ With source as
 
 
 
-
         case 
-            when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Reseller Purchase Order For Inventory'
-            when  li.reseller_id is null and li.ordering_stock_type is null then 'Customer Sale Order From Direct Supplier'
-            when  li.reseller_id is null and li.ordering_stock_type is not null then 'Customer Sale Order From Inventory'
+            when  li.reseller_id is null and li.ordering_stock_type is null then 'Direct Supplier'
+            when  li.reseller_id is null and li.ordering_stock_type is not null then 'Express Inventory'
             else 'To Be Scoped'
-            end as order_stream_type,
+            end as order_source,
+
+
+
+
+    case 
+     when li.state = 'CANCELED' then '1. Not Fulfilled - (Canceled Orders)'
+     when li.location is null and li.order_type = 'IN_SHOP' and li.fulfillment = 'SUCCEED' then '5. Fulfilled - In Shop'
+     when li.location = 'loc' and li.fulfillment = 'SUCCEED' then '4. Fulfilled - Warehoused Totaly'                                          --  Moveded Totaly to Stock (Warehoused)
+     when li.location = 'loc' and li.fulfillment = 'PARTIAL' then '4. Fulfilled - Warehoused Partially (with Incidents)'                      --  Moveded Partially to Stock (Warehoused)
+     when li.location = 'loc' and li.fulfillment = 'UNACCOUNTED' then '4. Fulfilled - Warehoused (with Process Breakdown)'
+     when li.location = 'pod' and li.fulfillment = 'SUCCEED' then '3. Fulfilled - Moved Totaly to POD'                                        --  Moveded Totaly to Dispatch Area (pod)
+     when li.location = 'pod' and li.fulfillment = 'PARTIAL' then '3. Fulfilled - Moved Partially to POD (with Incidents)'                    --  Moveded Partially to Dispatch Area (pod)
+     when li.location = 'pod' and li.fulfillment = 'UNACCOUNTED' then '3. Fulfilled - Moved to POD (with Process Breakdown)'
+     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'FAILED' then '2. Fulfilled - with Full Item Incident'
+     when li.location is null and li.state != 'CANCELED' and li.fulfillment = 'UNACCOUNTED' then '1. Not Fulfilled - (Investigate)'
+     when li.location is null and li.fulfillment in ('PARTIAL','SUCCEED') and li.reseller_id in (2061,1967,2079) then '3. Fulfilled - Other Internal Resellers'
+     when li.location is null and li.fulfillment in ('PARTIAL','SUCCEED') then '3. Fulfilled - with Process Breakdown'
+     else 'cheack_my_logic'  
+     end as fulfillment_status_details,
+
+
+case 
+     when li.state in ('CANCELED','PENDING') and li.fulfillment = 'UNACCOUNTED' and li.location is null then 'Not Fulfilled'
+     when li.fulfillment != 'UNACCOUNTED' then 'Fulfilled'
+     else 'To Be Scoped'  
+     end as fulfillment_status,
+
+case 
+when li.order_type = 'IN_SHOP' and li.state = 'DELIVERED' then 'Dispatched'
+when li.dispatched_at is not null then 'Dispatched'
+else 'Not Dispatched'  
+end as dispatched_status,
+
+
+case 
+when li.order_type = 'IN_SHOP' and li.state = 'DELIVERED' and li.state = 'DELIVERED'  then 'Signed'
+when li.dispatched_at is not null and li.state = 'DELIVERED'  then 'Signed'
+else 'Not Signed' 
+end as signed_status,
+
+
 
 
 

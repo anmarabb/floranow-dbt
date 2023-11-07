@@ -52,6 +52,8 @@ description,
 with_stamp,
 
 
+block_after_interval,
+
 
 
 current_timestamp() as ingestion_timestamp,
