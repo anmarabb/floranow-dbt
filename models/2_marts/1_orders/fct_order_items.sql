@@ -4,7 +4,30 @@ source as (
 
  
 select 
+
+dispatched_items,
+fulfilled_items,
+signed_items,
+signed_status,
+
+
+
+number,
+order_number_check,
+order_id_check,
+
+order_source,  --Direct Supplier, Express Inventory
+--order_channel,
+
 potential_revenue,
+
+order_id,
+
+
+direct_line_order_count,
+stock_line_order_count,
+direct_order_ids,
+stock_order_ids,
 
 
 --invoices as i
@@ -61,7 +84,8 @@ case
 --status
     li_record_type,
     li_record_type_details,
-    order_stream_type,
+    li.pricing_type,
+
     fulfillment_mode,
 
     order_type,                -- ONLINE, OFFLINE, ADDITIONAL, IMPORT_INVENTORY, EXTRA, RETURN, MOVEMENT
@@ -123,19 +147,20 @@ case
 
         li.location,
 
-
-    fulfillment_status,
-    case when fulfillment_status like '%Not Fulfilled%' then 'Not Fulfilled' else 'Fulfilled' end as stage_gate2,
+fulfillment_status,
+dispatched_status,
+    fulfillment_status_details,
+    case when fulfillment_status_details like '%Not Fulfilled%' then 'Not Fulfilled' else 'Fulfilled' end as stage_gate2,
     case when li.dispatched_at is not null then 'Dispatched' else 'Not Dispatched' end as stage_gate3,
     
-    case when fulfillment_mode not in ('Purchase Order For Inventory','Customer Sales Order From Shop') and fulfillment_status not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
+    case when fulfillment_mode not in ('Purchase Order For Inventory','Customer Sales Order From Shop') and fulfillment_status_details not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
     
 
    case 
-        when fulfillment_status like '%Not Fulfilled%' then 'Not Fulfilled' 
-        when fulfillment_status in ('2. Fulfilled - with Full Item Incident') then 'Fulfilled Full Incident'
-        when fulfillment_status not like '%Not Fulfilled%' and  li.dispatched_at is null then 'Fulfilled Not Dispatched'
-        when fulfillment_status not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
+        when fulfillment_status_details like '%Not Fulfilled%' then 'Not Fulfilled' 
+        when fulfillment_status_details in ('2. Fulfilled - with Full Item Incident') then 'Fulfilled Full Incident'
+        when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is null then 'Fulfilled Not Dispatched'
+        when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
         else 'cheak'
         end as order_status,
         
@@ -244,6 +269,7 @@ samer_warehouses,
 Supplier,
 parent_supplier,
 supplier_region as Origin,
+raw_supplier,
 
 --product
     product_name as Product,
@@ -322,7 +348,12 @@ product_link,
 parent_line_item_link,
 offer_id,
 offer_id_check,
+
 reseller_id_check,
+customer_id_check,
+supplier_id_check,
+
+reseller_customer_id_check,
 reseller_id,
 customer_master_id_check,
 proof_of_delivery_id_check,

@@ -40,8 +40,6 @@ case when invoice_header_id is not null then 'invoice_header_id' else null end a
 invoice_item_type_row,
 creditable_type,
 
-order_stream_type,
-
     --dim
         financial_administration, -- Market
         Customer,
@@ -82,6 +80,8 @@ order_stream_type,
         order_type,
 
         meta_supplier,
+        meta_supplier_code,
+        meta_supplier_name,
 
         ordering_stock_type,
 
@@ -107,6 +107,9 @@ order_stream_type,
         invoice_header_printed_at,
 
 sales_source,
+
+
+order_source,
 
 CASE
     WHEN sales_source = 'Astra' and LOWER(Customer) LIKE '%tamimi%' THEN 'Astra - Tamimi Sales'

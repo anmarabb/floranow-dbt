@@ -19,7 +19,7 @@ select
 
 
 
-ii.quantity * li.unit_landed_cost as total_cost,
+case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end  as total_cost,
 
         approved_by_id.name as approved_by,
 
@@ -55,7 +55,24 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
 
 --Line Items
 
-        li.Supplier,
+        
+        case 
+            when li.Supplier is not null then li.Supplier
+            when li.Supplier is null and ii.meta_supplier is not null then ii.meta_supplier 
+            when li.Supplier is null and ii.meta_supplier is null and ii.meta_supplier_name is not null then ii.meta_supplier_name
+            when li.Supplier is null and ii.meta_supplier is null and ii.meta_supplier_name is null  and ii.meta_supplier_code is not null then ii.meta_supplier_code
+            else  'To Be Scoped'   end as Supplier,
+
+
+        case 
+            when li.Supplier  = 'ASTRA Farms' then 'Astra'
+            when ii.meta_supplier_name in ('Astra Farm','Astra farm Barcode','Astra Farm - Event','Astra Flash Sale - R','Astra Flash sale - W') then 'Astra'
+            when ii.meta_supplier in ('Astra Farm','Astra farm Barcode','Astra Farm - Event','Astra Flash Sale - R','Astra Flash sale - W') then 'Astra'
+            when li.Supplier is null and ii.meta_supplier is null and ii.meta_supplier_name is null  and ii.meta_supplier_code is null then 'To Be Scoped' 
+            else 'Non Astra'
+        end as sales_source,
+
+
         li.supplier_id,
         li.Origin,
         li.fulfillment_mode,
@@ -76,11 +93,7 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
 
 
         
-case 
-when li.Supplier  = 'ASTRA Farms' then 'Astra'
-when ii.meta_supplier_name in ('Astra Farm','Astra farm Barcode','Astra Farm - Event','Astra Flash Sale - R','Astra Flash sale - W') then 'Astra'
-else 'Non Astra'
-end as sales_source,
+
 
 
 
@@ -123,7 +136,7 @@ end as trading_model,
 
 */
 
-case when li.line_item_id is not null then 'line_item_id' else null end as line_item_id_check,
+case when ii.line_item_id is not null then 'line_item_id' else null end as line_item_id_check,
 li.parent_id_check,
 
 
@@ -137,13 +150,13 @@ pod.source_type as pod_source_type,
 
 
 case 
-    when li.order_stream_type = 'Customer Sale Order From Inventory' then 'Reselling Model' --customers purchase flowers that are already in your inventory, allowing for faster delivery.
-    when li.order_stream_type = 'Customer Sale Order From Direct Supplier' then 'Direct Supplier Model' --Direct Supplier Model: customers purchase directly from the marketplace where suppliers list their flowers.
+    when li.order_source = 'Express Inventory' then 'Reselling Model' --customers purchase flowers that are already in your inventory, allowing for faster delivery.
+    when li.order_source = 'Direct Supplier' then 'Direct Supplier Model' --Direct Supplier Model: customers purchase directly from the marketplace where suppliers list their flowers.
     when i.generation_type = 'MANUAL' then 'Manual Invoice'
     else 'Cheak Logic'
     end as trading_model,
 
-li.order_stream_type,
+li.order_source,
 
 
 current_timestamp() as insertion_timestamp, 

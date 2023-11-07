@@ -23,9 +23,12 @@ case when entry_type = 'CREDIT' then balance else 0 end as total_credits,
 case when entry_type = 'DEBIT' then balance else 0 end as total_debits,
 
 
-case when entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then balance else 0 end as payments,
-case when entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then balance else 0 end as credit_nots,
+case when entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then mi.balance else 0 end as payments,
+case when entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.balance else 0 end as credit_nots_with_tax,
+case when entry_type = 'DEBIT' then mi.balance else 0 end as gross_revenue_with_tax,
 
+i.total_tax as invoice_total_tax,
+cn.total_tax as credit_note_total_tax,
 
 case when entry_type = 'CREDIT' then residual else 0 end as unreconciled_credits,
 case when entry_type = 'DEBIT' then residual else 0 end as unreconciled_debits,
@@ -62,36 +65,18 @@ customer.Warehouse,
 
 
 -----
-CASE
-	WHEN customer.warehouse_id IN (10, 79, 76, 43) THEN
-	CASE
-		WHEN mi.date > '2023-07-09' THEN customer.company_id 
-		WHEN mi.date <= '2023-07-09' THEN 
-		CASE 
-			WHEN REGEXP_CONTAINS(customer.debtor_number, r'^b') THEN 3
-			WHEN NOT REGEXP_CONTAINS(customer.debtor_number, r'^b') THEN 
-			CASE 
-				WHEN mi.source_system = 'ODOO' THEN 3
-				WHEN mi.source_system IN ('FLORANOW_ERP', 'FLORISOFT') THEN customer.company_id 
-		    END
-		END
-	END
-	WHEN customer.warehouse_id NOT IN (10, 79, 76, 43) OR customer.warehouse_id IS NULL THEN
-	CASE
-		WHEN mi.source_system = 'ODOO' THEN 3
-		WHEN mi.source_system IN ('FLORANOW_ERP', 'FLORISOFT') THEN customer.company_id 
-	END
-END AS reporting_company_id,
+
 
 fn.name as financial_administration,
 
+pt.payment_method,
 
    -- current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_move_items')}} as mi
 left join {{ ref('base_users') }} as customer on customer.id = mi.user_id
 left join {{ ref('stg_payment_transactions') }} as pt on pt.payment_transaction_id = mi.documentable_id and mi.documentable_type = 'PaymentTransaction' and  mi.entry_type = 'CREDIT'
-left join {{ source('erp_prod', 'financial_administrations') }} as fn on fn.id = customer.financial_administration_id
+left join {{ source('erp_prod', 'financial_administrations') }} as fn on fn.id = mi.financial_administration_id
 left join {{ source('erp_prod', 'bank_accounts') }} as ba on pt.bank_account_id = ba.id
 
 left join {{ref('stg_invoices')}} as i on mi.documentable_id = i.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'DEBIT'
