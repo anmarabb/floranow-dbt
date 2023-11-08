@@ -40,6 +40,7 @@ select
 
         li.li_record_type_details,
         li.li_record_type,
+        li.order_source,
 
         li.Reseller,
 

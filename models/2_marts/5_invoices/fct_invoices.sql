@@ -101,7 +101,7 @@ City,
 client_category,
 Customer,
 debtor_number,
-Warehouse,
+warehouse,
 
 invoice_header_id,
 invoice_header_printed_at, -- it can be null
