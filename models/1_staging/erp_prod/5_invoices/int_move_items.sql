@@ -53,7 +53,7 @@ customer.debtor_number,
 customer.company_name,
 customer.city,
 customer.user_category,
-customer.Warehouse,
+customer.Warehouse as warehouse,
 
 --fct
    -- -mi.balance as paid_amount,

@@ -171,6 +171,7 @@ fob_value,
 Reseller,
 li_record_type_details,
 li_record_type,
+order_source,
 
 current_timestamp() as insertion_timestamp, 
 
