@@ -55,7 +55,7 @@ product_incidents as (
 
 SELECT
 
-li.* EXCEPT(order_type,delivery_date, quantity,invoice_id,product_subcategory, product_category,extra_quantity, li_record_type_details,li_record_type),
+li.* EXCEPT(order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category,extra_quantity, li_record_type_details,li_record_type),
 
 
 
@@ -92,6 +92,9 @@ li.invoice_id as invoice_header_id,
 
 case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
 case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end as delivery_date,
+case when li.departure_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.departure_date end as departure_date,
+
+
 
 case when li.li_record_type_details in ('Reseller Purchase Order For Inventory') and li.location = 'loc' and pi.incidents_count is  null then 1 else 0 end as Received_not_scanned,
 
@@ -131,7 +134,7 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
 
 --customer
     user.name as user,
-    customer.name as customer,
+    case when li.reseller_id is not null then  'Reseller' else customer.name  end as customer,
     customer.country,
     customer.financial_administration,
     customer.account_manager,

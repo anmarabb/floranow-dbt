@@ -149,18 +149,22 @@ With source as
             end as li_record_type_details,
             
 
-
        case 
             when  li.reseller_id is not null  and li.ordering_stock_type is null then 'Purchase Order'
             when  li.reseller_id is null  then 'Sale Order'
             else 'To Be Scoped'
             end as li_record_type,
 
+       case 
+            when  li.reseller_id is not null then 'Reseller'
+            when  li.reseller_id is null  then 'Customer'
+            else 'To Be Scoped'
+            end as persona,
 
 
         case 
-            when  li.reseller_id is null and li.ordering_stock_type is null then 'Direct Supplier'
-            when  li.reseller_id is null and li.ordering_stock_type is not null then 'Express Inventory'
+            when  li.ordering_stock_type is null then 'Direct Supplier'
+            when  li.ordering_stock_type is not null then 'Express Inventory'
             else 'To Be Scoped'
             end as order_source,
 
@@ -233,6 +237,8 @@ delivery_time_window.delivery_time,
         
         
         from {{ source('erp_prod', 'line_items') }} as li
+         where li.deleted_at is null 
+         and li.__hevo__marked_deleted is not true
     )
 
 

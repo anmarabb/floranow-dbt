@@ -51,6 +51,7 @@ select
 
         p.product_id,
         product_link,
+        line_item_link,
 
         flag_1,
 
@@ -58,7 +59,7 @@ select
     
 
     --date
-        expired_at,
+        product_expired_at,
         p.departure_date,   --from product
         order_date,
   
@@ -167,7 +168,6 @@ select
     select_delivery_date,
     select_departure_date,
 
-
     
     
 
@@ -187,9 +187,33 @@ end as product_activity_status,
 
 
 Location,
+p.modified_expired_at,
+DATE_DIFF(p.modified_expired_at, p.departure_date, DAY) AS difference_in_days,
+shelf_life_days,
+
+DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
+
+
+
+
+case when line_item_id is not null then 'Line Item ID' else null end as line_item_id_check,
+case when p.delivery_date is not null then 'Delivery Date' else null end as delivery_date_check,
+case when p.departure_date is not null then 'Departure Date' else null end as departure_date_check,
+
+created_at_check,
+additional_items_check,
+inventory_item_type,
+
+product_created_at,
+order_source,
+persona,
+
+
+parent_parent_id_check,
+parent_id_check,
+
 
 current_timestamp() as insertion_timestamp, 
-
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id

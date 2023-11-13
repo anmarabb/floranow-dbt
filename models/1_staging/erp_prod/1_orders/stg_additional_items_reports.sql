@@ -23,6 +23,8 @@ select
         creation_stage, --INVENTORY, PACKING, RECEIVING
         status, -- APPROVED, FAILED, REJECTED, PROCESSING
 
+        locations_quantities.value,
+
         active,
         reject_reason,
         failure_reason,
