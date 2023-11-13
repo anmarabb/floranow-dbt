@@ -78,6 +78,7 @@ creditable_type,
         order_status,
         order_number,
         order_type,
+        stock_model,
 
         meta_supplier,
         meta_supplier_code,
@@ -99,6 +100,7 @@ creditable_type,
         generation_type,
         record_type,
         li_record_type_details,
+        li_record_type,
         invoice_number,
 
 

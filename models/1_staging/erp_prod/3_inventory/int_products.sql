@@ -60,14 +60,24 @@ with CTE as
         select
  
         --products
-            p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,departure_date,created_at,expired_at,product_category),
+            p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,product_expired_at,product_category,departure_date),
             p.quantity as inventory_product_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
             p.published_quantity,
             p.remaining_quantity,
             --p.departure_date,
-            case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end as departure_date,
             
-            p.created_at,
+            --product_created_at,
+            --li.order_date
+            case when date(p.product_created_at) = date(li.order_date) then 'Match' else 'Check'  end as created_at_check,
+            
+            --case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end as departure_date,
+            case when  p.departure_date is not null then p.departure_date else li.departure_date end as departure_date,
+            li.delivery_date,
+
+            li.order_source,
+            li.persona,
+
+            
 
             s.supplier_name as Supplier,
             s.supplier_region as Origin,
@@ -142,7 +152,6 @@ else 'scaned_flag' end as flag_1,
             li.fulfillment_mode,
             li.fulfillment,
             --li.delivery_date,
-            case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end as delivery_date,
             li.User,
             li.order_type,
             li.Shipment,
@@ -150,6 +159,7 @@ else 'scaned_flag' end as flag_1,
             li.master_shipments_status,
             li.master_shipment,
             li.shipment_link,
+            li.line_item_link,
             
             
             case 
@@ -161,17 +171,15 @@ else 'scaned_flag' end as flag_1,
 
           
             case 
-            when date_diff(date(case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end)  ,current_date(), month) > 1 then 'Wrong date' 
-            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end > current_date() then "Future" 
-            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end = current_date() then "Today" 
-            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.created_at) else p.departure_date end < current_date() then "Past" 
+            when date_diff(date(case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end)  ,current_date(), month) > 1 then 'Wrong date' 
+            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end > current_date() then "Future" 
+            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end = current_date() then "Today" 
+            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end < current_date() then "Past" 
             else "cheak" end as select_departure_date,
 
 
 
               
-            
-
             
 
         --feed_source
@@ -280,13 +288,91 @@ li.route_name,
 
 
 
+CASE
+    WHEN p.product_subcategory IN (
+      'rose', 'chrysanthemum', 'alstroemeria', 'lily', 'eustoma', 'gerbera',
+      'garden-type-rose', 'delphinium', 'cymbidium', 'trachelium', 'sunflower',
+      'anthurium', 'calla-lily', 'eryngium', 'veronica', 'aster', 'dendrobium',
+      'chamelaucium', 'solidago', 'matthiola', 'brassica', 'dianthus-barbatus',
+      'lilium', 'astilbe', 'tinted-roses', 'ornithogalum', 'vanda', 'asparagus',
+      'aralia', 'bouvardia', 'waxed', 'ranunculus', 'monstera', 'pistacia',
+      'aspidistra', 'mokkara', 'oxypetalum', 'pittosporum', 'ornamental-fruit',
+      'banksia', 'symphoricarpos', 'freesia', 'hyacinthus', 'leucospermum',
+      'anigozanthos', 'scabiosa', 'bupleurum', 'berzelia', 'anemone', 'lepidium',
+      'skimmia', 'antirrhinum', 'ozothamnus', 'ammi', 'panicum', 'mentha',
+      'oncidium', 'orchids', 'gladiolus', 'carthamus', 'acacia', 'astrantia',
+      'tanacetum', 'paeonia', 'cordyline', 'amaranthus', 'fatsia', 'iris',
+      'celosia', 'pennisetum'
+    ) THEN DATE_ADD(li.departure_date, INTERVAL 7 DAY)
+
+    WHEN p.product_subcategory IN (
+      'spray-rose', 'carnation', 'tulip', 'eucalyptus', 'gypsophila', 'limonium',
+      'dracaena', 'statice', 'craspedia', 'phalaenopsis', 'leucadendron',
+      'protea', 'kaaps', 'brunia', 'green-plants', 'echeveria', 'crassula'
+    ) THEN DATE_ADD(li.departure_date, INTERVAL 10 DAY)
+
+    WHEN p.product_subcategory IN (
+      'hydrangea', 'hypericum'
+    ) THEN DATE_ADD(li.departure_date, INTERVAL 14 DAY)
+
+    ELSE li.departure_date
+  END AS modified_expired_at,
+
+
+
+CASE
+    WHEN p.product_subcategory IN (
+      'rose', 'chrysanthemum', 'alstroemeria', 'lily', 'eustoma', 'gerbera',
+      'garden-type-rose', 'delphinium', 'cymbidium', 'trachelium', 'sunflower',
+      'anthurium', 'calla-lily', 'eryngium', 'veronica', 'aster', 'dendrobium',
+      'chamelaucium', 'solidago', 'matthiola', 'brassica', 'dianthus-barbatus',
+      'lilium', 'astilbe', 'tinted-roses', 'ornithogalum', 'vanda', 'asparagus',
+      'aralia', 'bouvardia', 'waxed', 'ranunculus', 'monstera', 'pistacia',
+      'aspidistra', 'mokkara', 'oxypetalum', 'pittosporum', 'ornamental-fruit',
+      'banksia', 'symphoricarpos', 'freesia', 'hyacinthus', 'leucospermum',
+      'anigozanthos', 'scabiosa', 'bupleurum', 'berzelia', 'anemone', 'lepidium',
+      'skimmia', 'antirrhinum', 'ozothamnus', 'ammi', 'panicum', 'mentha',
+      'oncidium', 'orchids', 'gladiolus', 'carthamus', 'acacia', 'astrantia',
+      'tanacetum', 'paeonia', 'cordyline', 'amaranthus', 'fatsia', 'iris',
+      'celosia', 'pennisetum'
+    ) THEN 7
+
+    WHEN p.product_subcategory IN (
+      'spray-rose', 'carnation', 'tulip', 'eucalyptus', 'gypsophila', 'limonium',
+      'dracaena', 'statice', 'craspedia', 'phalaenopsis', 'leucadendron',
+      'protea', 'kaaps', 'brunia', 'green-plants', 'echeveria', 'crassula'
+    ) THEN 10
+
+    WHEN p.product_subcategory IN (
+      'hydrangea', 'hypericum'
+    ) THEN 14
+
+    ELSE null
+  END AS shelf_life_days,
+
+
+
+
 --loc.label as location_name,
 --sec.section_name as section,
 
 
-case when p.expired_at is null then p.created_at else p.expired_at end as expired_at,
+case when p.product_expired_at is null then p.product_created_at else p.product_expired_at end as product_expired_at,
 concat(loc.label, " - ", sec.section_name) as Location,
 
+
+case when ad.additional_items_report_id is not null then 'Additional Items' else null end as additional_items_check,
+
+case 
+    when ad.additional_items_report_id is not null then 'additional_inventory_item_id'
+    when li.order_type ='RETURN' then 'return_inventory_item_id'
+    when li.order_type ='MOVEMENT' then 'movement_inventory_item_id'
+    else  'inventory_item_id'
+end as inventory_item_type,
+
+
+li.parent_parent_id_check,
+li.parent_id_check,
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
@@ -300,6 +386,9 @@ concat(loc.label, " - ", sec.section_name) as Location,
         left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
         left join {{ ref('stg_locations')}} as loc on pl.location_id=loc.location_id
         left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
+
+        left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=p.line_item_id
+
 
 
         

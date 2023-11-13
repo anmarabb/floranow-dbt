@@ -82,7 +82,8 @@ case
 
 
 --status
-    li_record_type,
+    li_record_type, --Purchase Order, Sale Order, To Be Scoped
+
     li_record_type_details,
     li.pricing_type,
 
@@ -263,7 +264,7 @@ end as go_live_date,
 samer_warehouses,
     
 
-
+persona,
 
 
 Supplier,
