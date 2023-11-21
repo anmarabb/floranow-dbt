@@ -173,11 +173,14 @@ li_record_type_details,
 li_record_type,
 order_source,
 
+
+reseller_type,
 current_timestamp() as insertion_timestamp, 
 
 
 from {{ref('int_product_incidents')}} as pi 
 
+where pi.customer_id not in (1289,1470,2816,11123)
 )
 
 select * from source

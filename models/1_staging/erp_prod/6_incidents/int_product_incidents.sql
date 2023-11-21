@@ -133,6 +133,16 @@ p.full_stock_name,
 concat('NCR-', FORMAT_TIMESTAMP('%y%m%d', li.departure_date), '-', li.shipment_id) as NCR,
 
 
+case 
+when li.customer_id in (1289,1470,2816,11123) then 'Cash and Carry Reseller' 
+else 'Normal Reseller' 
+end as reseller_type,
+
+--Retail Bloomax Flowers Hail  - 130009
+--BlooMax Flowers - Al khubar - 132008
+--Bloomax - Hafer Al baten - 132009
+--BX Shop Express Riyadh - 11123
+
 current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_product_incidents')}} as pi

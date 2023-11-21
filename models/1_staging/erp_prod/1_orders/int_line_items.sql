@@ -18,7 +18,14 @@ product_incidents as (
                             sum(pi.quantity) as incident_quantity,
                                 sum(case when incident_type !='EXTRA'  then pi.quantity else 0 end) as incident_quantity_without_extra,
                                 sum(case when incident_type ='EXTRA'  then  pi.quantity else 0 end) as extra_quantity,
+
                                 sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_dmaged,
+
+                                sum(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
+                                sum(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
+                                sum(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then pi.quantity else 0 end) as incident_quantity_inventory_stage,
+                                sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
+                                sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
 
                             sum( pi.quantity * li.unit_landed_cost ) as incident_cost,
                                 sum(case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_without_extra,
@@ -26,12 +33,9 @@ product_incidents as (
                                 sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_inventory_dmaged,
 
 
-                            sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
-                            sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
 
                             
 
-                            sum(case when incident_type !='EXTRA' and after_sold is false  and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_inventory_stage,
 
 
                             
@@ -45,6 +49,7 @@ product_incidents as (
 
                             from {{ ref('stg_product_incidents') }} as pi  
                             left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
+                            where li.customer_id not in (1289,1470,2816,11123)
 
                         group by pi.line_item_id
 
@@ -55,10 +60,16 @@ product_incidents as (
 
 SELECT
 
-li.* EXCEPT(order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category,extra_quantity, li_record_type_details,li_record_type),
+li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category,extra_quantity, li_record_type_details,li_record_type),
 
 
-
+case 
+    when li.persona = 'Reseller' and customer.account_type = 'External' then 'External Reseller'
+    when li.persona = 'Reseller' and customer.account_type = 'Internal' then 'Internal Reseller'
+    when li.persona = 'Customer' and customer.account_type = 'External' then 'External Customer'
+    when li.persona = 'Customer' and customer.account_type = 'Internal' then 'Internal Customer'
+    else li.persona
+    end as persona,
 
 case 
     when li.li_record_type_details != 'To Be Scoped' then li.li_record_type_details
@@ -91,8 +102,8 @@ li.invoice_id as invoice_header_id,
 
 
 case when li.order_type = 'OFFLINE' and orr.standing_order_id is not null then 'STANDING' else li.order_type end as order_type,
-case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end as delivery_date,
-case when li.departure_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.departure_date end as departure_date,
+case when li.delivery_date is null  then date(li.created_at) else li.delivery_date end as delivery_date,
+case when li.departure_date is null then date(li.created_at) else li.departure_date end as departure_date,
 
 
 
@@ -141,9 +152,16 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
     customer.debtor_number,
     customer.customer_type,
     customer.account_type,
+    customer.payment_term,
+    customer.allow_due_invoices,
     customer.user_category as customer_category,
     concat( customer.financial_administration," - ", customer.Warehouse," - ", customer.account_type," - ", customer.customer_type," - ", customer.user_category," - ", customer.debtor_number  ) as customer_details,
 
+    case 
+        when customer.payment_term = 'Without invoicing' then 'Without invoicing'
+        when customer.payment_term = 'Cash on Delivery' then 'Cash on Delivery'
+        else 'Invoicing'
+        end as payment_term_type,
 
     case when customer.debtor_number in ('WANDE','95110') then 'Internal Invoicing' else 'Normal Invoicing' end as internal_invoicing,
 
@@ -173,6 +191,7 @@ plis.supplier_name as parent_supplier,
         when li.li_record_type_details in ('Customer Sale Order From Fly-stock Inventory','Customer Sale Order From Direct Supplier') then 'Shipment Order To POD'  -- From Shipment External
         when li.li_record_type_details in ('Customer Sale Order From In-stock Inventory') then 'Express Order To POD'     --Inventory Orders (Stock-out)     -- From Inventory (stock out)
         when li.li_record_type_details in ('Reseller Purchase Order For Inventory') then 'Restocking Orders To LOC' -- --Reselling Orders (Stock-in) PO Orders (in) To Inventory Replenishment, Restocking
+        when li.li_record_type_details in ('Customer Bulk Sale Order') then 'Bulk Orders'
         else 'To Be Scoped'
         end as fulfillment_mode,
 
@@ -184,6 +203,10 @@ plis.supplier_name as parent_supplier,
  
 --order requist
     orr.status as order_request_status,
+    concat( "https://erp.floranow.com/order_requests/", li.order_request_id) as order_request_link,
+    case when li.order_request_id is not null then 'Order Request ID' else null end as order_request_cheack,
+    orr.quantity as requested_quantity,
+
 
 --order_payloads
     --opl.offer_id,
@@ -227,6 +250,9 @@ pi.inventory_missing_quantity,
 pi.incident_quantity_receiving_stage,
 pi.incident_quantity_packing_stage,
 pi.incident_quantity_inventory_stage,
+pi.incident_quantity_delivery_stage,
+pi.incident_quantity_after_return_stage,
+
 pi.incident_quantity_extra_packing,
 pi.incident_quantity_extra_receiving,
 pi.incident_quantity_extra_inventory,
@@ -280,6 +306,8 @@ else null end as ksa_resellers,
 case when li.line_item_id is not null then 'Line Item ID' else null end as line_item_id_check,
 case when li.order_id is not null then 'Order ID' else null end as order_id_check,
 case when li.order_number is not null then 'Order Number ID' else null end as order_number_check,
+
+case when li.root_shipment_id is not null then 'Root Shipment ID' else null end as root_shipment_id_check,
 
 
 
@@ -341,7 +369,11 @@ ii.quantity * ii.unit_price as inv_total_price_without_tax,
 
 ad.status as additional_status, 
 ad.creation_stage as additional_creation_stage,
+ad.additional_items_report_id,
+concat( "https://erp.floranow.com/additional_items_reports/", ad.additional_items_report_id) as additional_item_link,
+case when ad.additional_items_report_id is not null then 'Additional ID' else null end as additional_id_check,
 
+concat( "https://erp.floranow.com/line_items/", li.source_line_item_id) as source_line_item_link,
 
 
 
@@ -399,6 +431,19 @@ case when li.signed_status = 'Signed' then 1 else 0 end as signed_items,
 
 concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_name,
 
+
+pp.product_id as parent_product_id,
+
+
+
+CASE 
+  WHEN li.ordering_stock_type IS NOT NULL AND pp.product_id = SAFE_CAST(li.offer_id AS INT64) THEN 'ordering from reselling stocks product - GOOD'
+  WHEN li.ordering_stock_type IS NOT NULL AND pp.product_id != SAFE_CAST(li.offer_id AS INT64) THEN 'ordering from reselling stocks product - To Be Scoped'
+  WHEN li.ordering_stock_type IS NULL THEN 'ordering from external supplier offer'
+  ELSE 'To Be Scoped'
+END AS ordering_source_details,
+
+sh.master_shipment_id,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 

@@ -10,7 +10,7 @@ With source as
                 li.invoice_id,
                 li.order_id,
                 li.order_payload_id,
-                li.order_request_id,
+                li.order_request_id, --Referenced to order_requests, order request which generated this line item
 
                 li.customer_id,
                 li.customer_master_id,
@@ -23,26 +23,30 @@ With source as
                 li.feed_source_id,
 
                 li.shipment_id,
-                li.source_shipment_id,
-                li.root_shipment_id,
+                li.source_shipment_id, --Referenced to shipments, on cancel line item or move line item to another shipment, the line item will be disconnected to the old shipment and keep its data in this column ,related to order cancel process and move line item to feature departure date
+
+                li.root_shipment_id, --Referenced to shipments. related to ordering from reselling stocks
+
+
 
                 li.proof_of_delivery_id,
                 li.supplier_product_id,
 
-                li.source_line_item_id, 
-                li.parent_line_item_id,
+                li.source_line_item_id, --Referenced to line_items, Line item where the generated a copy from, related to reporting extra and returned items
+                li.parent_line_item_id, --Referenced to line_items, Line item where the order placed on, related to order from reselling stocks
                 li.split_source_id,
+
 
                 li.dispatched_by_id,
                 li.canceled_by_id,
                 li.returned_by_id,
                 li.created_by_id,
-                li.split_by_id,
+                li.split_by_id, --Referenced to Users, User who split the proof of delivery and cause this line item to split/move to new delivery date
                 
-                li.replace_for_id,
+                li.replace_for_id, --Referenced to line_items, Line item which has been replaced by this line item, related to replacement
 
-                li.source_invoice_id,
 
+                li.source_invoice_id, --Referenced to invoices, Invoice related to the line item before cancel or move line item’s delivery date, related to cancel order and move line item
 
             --dim
                 --date

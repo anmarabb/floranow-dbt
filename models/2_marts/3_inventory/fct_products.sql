@@ -30,6 +30,7 @@
  
 select 
 
+
 --Products
     --dim
         product_name as Product,
@@ -55,6 +56,8 @@ select
 
         flag_1,
 
+        
+multi_location,
      
     
 
@@ -68,6 +71,10 @@ select
         remaining_quantity,
         case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
         case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
+        case when select_departure_date not in ('Future', 'Today') then ordered_quantity else 0 end as past_ordered_quantity,
+
+        case when select_departure_date in ('last_10_days') and loc_status is null and shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' then ordered_quantity else 0 end as transit_quantity,
+
         --case when select_departure_date in ('Future', 'Today') then MIN(departure_date) else null end AS next_departure_date,
 
 
@@ -109,6 +116,7 @@ select
         li_record_type_details,
         fulfillment,
         fulfillment_status,
+        fulfillment_status_details,
         fulfillment_mode,
         User,
         loc_status,
@@ -126,7 +134,7 @@ select
         delivery_date,    --from line item
   
     --fct
-    
+    requested_quantity,
     ordered_quantity,
         last_30d_ordered_quantity,
     received_quantity,
@@ -141,14 +149,17 @@ select
     sold_quantity,
         last_30d_sold_quantity,
     child_incident_quantity,
+    item_sold,
+    customer_ordered,
     
 
 --product_incidents
     incidents_quantity,
         last_30d_incidents_quantity,
 
-    inventory_damaged_quantity,
-        last_30d_inventory_damaged_quantity,
+    incident_quantity_inventory_dmaged,
+    incident_quantity_inventory_stage,
+        last_30d_incident_quantity_inventory_dmaged,
 
 
     incidents_quantity_location,
@@ -165,7 +176,6 @@ select
 
 
 
-    select_delivery_date,
     select_departure_date,
 
     
@@ -180,8 +190,11 @@ fo.departure_ranking,
 case when fo.departure_ranking ='first_departure' then ordered_quantity else 0 end as first_departure_coming_quantity,
 case when fo.departure_ranking ='second_departure' then ordered_quantity else 0 end as second_departure_coming_quantity,
 
+case when fo.departure_ranking ='first_departure' then p.departure_date else null end as first_departure_date,
+case when fo.departure_ranking ='second_departure' then p.departure_date else null end as second_departure_date,
+
 case 
-when case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end = 0 and last_30d_sold_quantity = 0 and last_30d_inventory_damaged_quantity = 0 and case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end = 0 then 'Outdated Products'
+when case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end = 0 and last_30d_sold_quantity = 0 and last_30d_incident_quantity_inventory_dmaged = 0 and case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end = 0 then 'Outdated Products'
 else 'Active Products'
 end as product_activity_status,
 
@@ -190,9 +203,6 @@ Location,
 p.modified_expired_at,
 DATE_DIFF(p.modified_expired_at, p.departure_date, DAY) AS difference_in_days,
 shelf_life_days,
-
-DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
-
 
 
 
@@ -213,6 +223,35 @@ parent_parent_id_check,
 parent_id_check,
 
 
+DATE_DIFF(date(p.departure_date), date(p.order_date), DAY) AS lead_time,
+PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', p.departure_date), '-01')) as year_month_departure_date,
+
+
+
+CASE 
+        WHEN EXTRACT(YEAR FROM p.departure_date) = 2022 THEN sold_quantity 
+        ELSE 0 
+    END AS sold_quantity_2022,
+CASE 
+        WHEN EXTRACT(YEAR FROM p.departure_date) = 2023 THEN sold_quantity 
+        ELSE 0 
+    END AS sold_quantity_2023,
+
+
+case when COALESCE(incidents_quantity, 0) + COALESCE(fulfilled_quantity, 0)  = ordered_quantity then 'Match' else 'Cheack' end as quantity_cheack,
+
+
+master_shipment_id,
+shipment_id,
+
+
+DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
+
+
+
+
+STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sold_quantity_stddev,
+
 current_timestamp() as insertion_timestamp, 
 
 from {{ref('int_products')}} as p 
@@ -221,3 +260,4 @@ left join future_orders as fo on fo.product_id = p.product_id
 --where p.product_id = 157823
 --where product_name like '%Rose Athena%' and p.warehouse ='Riyadh Warehouse' and select_departure_date in ('Future', 'Today')
 --Rose Athena
+
