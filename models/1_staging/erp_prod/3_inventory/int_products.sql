@@ -4,11 +4,21 @@ with CTE as
         with 
             product_incidents as (
                 select 
-                p.product_id,
+                p.product_id, 
                     count(*) as incidents_count,
                     --sum(pi.quantity) as incidents_quantity,
-                    sum(case when incident_type !='EXTRA' and after_sold is false then pi.quantity else 0 end) as incidents_quantity,
-                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND incident_type != 'EXTRA' AND after_sold = false THEN pi.quantity ELSE 0 END) as last_30d_incidents_quantity,
+                    sum(case when incident_type ='EXTRA' then 0 
+
+                            when pi.stage = 'INVENTORY'   then 0
+
+                            else  pi.quantity  end) as incidents_quantity,
+
+                     sum(case when  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_dmaged,
+                           
+                     sum(case when  pi.stage = 'INVENTORY' and incident_type !='DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_stage,
+
+
+                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND incident_type != 'EXTRA'  THEN pi.quantity ELSE 0 END) as last_30d_incidents_quantity,
 
                     sum(case when incident_type !='EXTRA' and pi.stage = 'INVENTORY' and pi.location_id is not null then pi.quantity else 0 end) as incidents_quantity_location,
                     sum(case when incident_type ='CLEANUP_ADJUSTMENTS' then pi.quantity else 0 end) as cleanup_adjustments_quantity,
@@ -19,8 +29,7 @@ with CTE as
 
                     sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as toat_damaged_quantity,
 
-                    sum(case when after_sold is false and pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity else 0 end) as inventory_damaged_quantity,
-                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND after_sold is false and pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity ELSE 0 END) as last_30d_inventory_damaged_quantity
+                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity ELSE 0 END) as last_30d_incident_quantity_inventory_dmaged
 
                     from {{ ref('stg_product_incidents')}}  as pi 
                     left join {{ ref('stg_line_items')}}  as li on  pi.line_item_id = li.line_item_id
@@ -33,6 +42,7 @@ with CTE as
                 select
                     p.product_id,
                     count(li.line_item_id) as item_sold,
+                    count(distinct li.customer_id) as customer_ordered,
                     sum(li.quantity) as sold_quantity, 
                     sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
 
@@ -61,18 +71,39 @@ with CTE as
  
         --products
             p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,product_expired_at,product_category,departure_date),
+
+
+         case when pl.quantity is null and  lis.sold_quantity is not null   then li.ordered_quantity else pl.quantity end as location_quantity,
+
+
+--Date
+     case when date(p.product_created_at) = date(li.order_date) then 'Match' else 'Check'  end as created_at_check,
+
+    case when li.order_type = 'IMPORT_INVENTORY' and li.delivery_date is null then date(p.product_created_at) else li.delivery_date end as delivery_date,
+
+    case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end as departure_date,
+          
+    case 
+        when date_diff(date(case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end), current_date(), month) > 1 then 'Wrong date' 
+        when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end > current_date() then 'Future' 
+        when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end = current_date() then 'Today' 
+        when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end < current_date() and 
+            case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end >= date_add(current_date(), INTERVAL -10 DAY) then 'last_10_days' 
+        when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end < current_date() then 'Past' 
+        else 'Check' 
+    end as select_departure_date,
+
+
+
+
+
+
             p.quantity as inventory_product_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
             p.published_quantity,
             p.remaining_quantity,
-            --p.departure_date,
             
-            --product_created_at,
-            --li.order_date
-            case when date(p.product_created_at) = date(li.order_date) then 'Match' else 'Check'  end as created_at_check,
             
-            --case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end as departure_date,
-            case when  p.departure_date is not null then p.departure_date else li.departure_date end as departure_date,
-            li.delivery_date,
+            
 
             li.order_source,
             li.persona,
@@ -112,7 +143,7 @@ with CTE as
 
 
         --product_locations
-            pl.quantity as location_quantity,
+            --pl.quantity as location_quantity,
             pl.remaining_quantity as location_remaining_quantity,
             pl.product_location_id,
             pl.location_id,
@@ -134,6 +165,7 @@ else 'scaned_flag' end as flag_1,
         --line_items
             li.order_date,
             li.ordered_quantity,
+            li.requested_quantity,
             ordered_quantity.last_30d_ordered_quantity,
 
             li.received_quantity,
@@ -145,6 +177,7 @@ else 'scaned_flag' end as flag_1,
             li.li_record_type_details,
             li.order_status,
             li.fulfillment_status,
+            li.fulfillment_status_details,
             li.warehouse, --from customer
             --w.warehouse_name as warehouse, --from stock
 
@@ -160,22 +193,10 @@ else 'scaned_flag' end as flag_1,
             li.master_shipment,
             li.shipment_link,
             li.line_item_link,
+            li.master_shipment_id,
+            li.shipment_id,
             
             
-            case 
-            when date_diff(date(case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end)  ,current_date(), month) > 1 then 'Wrong date' 
-            when case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end > current_date() then "Future" 
-            when case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end = current_date() then "Today" 
-            when case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end < current_date() then "Past" 
-            else "cheak" end as select_delivery_date,
-
-          
-            case 
-            when date_diff(date(case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end)  ,current_date(), month) > 1 then 'Wrong date' 
-            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end > current_date() then "Future" 
-            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end = current_date() then "Today" 
-            when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null  then date(p.product_created_at) else p.departure_date end < current_date() then "Past" 
-            else "cheak" end as select_departure_date,
 
 
 
@@ -194,17 +215,19 @@ else 'scaned_flag' end as flag_1,
             lis.sold_quantity,
             lis.child_incident_quantity,
             lis.last_30d_sold_quantity,
+            lis.customer_ordered,
 
 
         --product_incidents
             pi.incidents_count,
             pi.incidents_quantity,
             pi.last_30d_incidents_quantity,
-            pi.last_30d_inventory_damaged_quantity,
+            pi.last_30d_incident_quantity_inventory_dmaged,
 
             pi.incidents_quantity_location,
             pi.toat_damaged_quantity,
-            pi.inventory_damaged_quantity,
+            pi.incident_quantity_inventory_dmaged,
+            pi.incident_quantity_inventory_stage,
             pi.extra_quantity,
             pi.inventory_extra_quantity,
             pi.packing_extra_quantity,
@@ -347,7 +370,7 @@ CASE
       'hydrangea', 'hypericum'
     ) THEN 14
 
-    ELSE null
+    ELSE 7
   END AS shelf_life_days,
 
 
@@ -373,6 +396,7 @@ end as inventory_item_type,
 
 li.parent_parent_id_check,
 li.parent_id_check,
+
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id

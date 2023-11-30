@@ -1,5 +1,10 @@
 With source as (
- select * from {{ source('erp_prod', 'invoices') }}
+ select i.*,
+ fn.name as financial_administration,
+
+ from {{ source('erp_prod', 'invoices') }} as i
+ left join  {{ ref('stg_financial_administrations') }} as fn on fn.id = i.financial_administration_id
+
 )
 select 
             --PK
@@ -16,6 +21,7 @@ select
 
                 financial_administration_id,
 
+/*
                 case --financial ID
                     when i.financial_administration_id = 1 then 'KSA'
                     when i.financial_administration_id = 2 then 'UAE'
@@ -27,7 +33,7 @@ select
                     else 'check_my_logic'
                 end as financial_administration,
 
-
+*/
                 printed_by_id,
                 --deleted_by,
                 canceled_by_id,
@@ -116,7 +122,7 @@ when i.payment_status = 2 then "Totally paid "
 else "check_my_logic"
 end as payment_status,
 
-
+financial_administration,
 
 current_timestamp() as ingestion_timestamp
 

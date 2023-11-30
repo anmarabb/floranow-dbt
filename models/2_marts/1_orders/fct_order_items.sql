@@ -104,13 +104,20 @@ case
     state,                     --PENDING, FULFILLED, DISPATCHED, DELIVERED, CANCELED, RETURNED
     fulfillment,               --SUCCEED, PARTIAL, FAILED, UNACCOUNTED
     order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
+    order_request_link,
+    order_request_cheack,
+    requested_quantity,
+    
+
     Shipment,
     shipment_link,
     master_shipment_link,
     shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
     master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
     master_shipment,
-    order_payloads_status,     -- true, false, null
+    order_payloads_status,   -- true, false, null
+    master_shipment_id,
+    shipment_id,
 
 
     creation_stage,            -- SPLIT, PACKING, INVENTORY, receiving
@@ -227,6 +234,9 @@ CAST(EXTRACT(ISOWEEK FROM delivery_date) AS STRING)
     customer_category,
     account_type,
     customer_details,
+    payment_term,
+    allow_due_invoices,
+    payment_term_type,
 
     warehouse,
     warehouse_id,
@@ -315,9 +325,9 @@ incident_quantity,
 inventory_missing_quantity,
 incident_quantity_receiving_stage,
 incident_quantity_packing_stage,
-
-
+incident_quantity_delivery_stage,
 incident_quantity_inventory_stage,
+incident_quantity_after_return_stage,
 
 incident_quantity_extra_packing,
 incident_quantity_extra_receiving,
@@ -333,6 +343,9 @@ delivery_time,
 
 line_item_id_check,
 shipment_id_check,
+additional_id_check,
+additional_item_link,
+source_line_item_link,
 
 
 invoice_id_check,
@@ -478,6 +491,21 @@ full_stock_name,
 
 
 invoice_header_printed_at,
+
+
+case when delivery_date is not null then 'Delivery Date' else null end as delivery_date_check,
+case when departure_date is not null then 'Departure Date' else null end as departure_date_check,
+
+
+root_shipment_id_check,
+li.source_line_item_id,
+
+
+parent_product_id,
+
+
+ordering_source_details,
+
 current_timestamp() as insertion_timestamp, 
 
 

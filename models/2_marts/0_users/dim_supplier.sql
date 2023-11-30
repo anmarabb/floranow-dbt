@@ -4,7 +4,12 @@ source as (
         
 select     
 
-*,
+supplier_name,
+currency,
+account_manager,
+supplier_region,
+country,
+
 
 
     current_timestamp() as insertion_timestamp 

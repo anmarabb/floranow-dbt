@@ -86,6 +86,9 @@ registered_clients,
 
 
 
+
+
+
 invoice_number,
 financial_administration as Market,
 financial_administration,
@@ -115,6 +118,8 @@ drop_id,
 signed_at,
 date(invoice_header_printed_at) as date_invoice_header_printed_at,
 PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', invoice_header_printed_at), '-01')) as year_month_invoice_header_printed_at,
+PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', invoice_header_printed_at), '-01')) as month_printed_date,
+
 date(invoice_header_created_at) as date_invoice_header_created_at,
 invoice_header_created_at,
 invoice_header_status, --Draft,signed,Open,Printed,Closed,Canceled,Rejected,voided
@@ -172,9 +177,20 @@ company_name,
 
 payment_status,
 payment_term,
-
+source_system,
 case when payment_status in ('Totally paid','Partially paid') then 1 else 0 end as collected_invoices_count,
 case when payment_status in ('Not paid') then 1 else 0 end as not_collected_invoices_count,
+
+
+
+
+   case when company_id = 3 then gross_revenue else 0 end as  bmx_gross_revenue,
+  --  bmx_credit_note,
+
+EXTRACT(month FROM invoice_header_printed_at) AS month,
+
+CASE WHEN  invoice_header_printed_at >= '2022-01-01' AND invoice_header_printed_at < '2023-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2022,
+CASE WHEN  invoice_header_printed_at >= '2023-01-01' AND invoice_header_printed_at < '2024-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2023,
 
 
 current_timestamp() as insertion_timestamp 
