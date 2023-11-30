@@ -26,6 +26,8 @@ invoice_items as (
     sum(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'To Be Scoped' then ii.price_without_tax else 0 end) as tbs_gross_revenue,
     sum(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'To Be Scoped' then ii.price_without_tax else 0 end) as tbs_credit_note,
 
+
+
     from {{ ref('int_invoice_items') }} as ii 
 
     where ii.invoice_item_status = 'APPROVED' and ii.deleted_at is null
@@ -167,12 +169,14 @@ case
 when mi.company_id = 3 then 'Bloomax Flowers LTD'
 when mi.company_id = 2 then 'Global Floral Arabia tr'
 when mi.company_id = 1 then 'Flora Express Flower Trading LLC'
+when mi.company_id is null then 'null'
 else  'To Be Scoped'
 end as company_name,
 
 
 
 fn.registered_clients,
+
 
     current_timestamp() as insertion_timestamp, 
 
@@ -181,11 +185,13 @@ left join {{ ref('base_users') }} as printed_by on printed_by.id = i.printed_by_
 left join {{ ref('base_users') }} as customer on customer.id = i.customer_id
 left join invoice_items as ii on ii.invoice_header_id = i.invoice_header_id
 left join prep_payments as prep_payments on prep_payments.invoice_header_id = i.invoice_header_id
-left join prep_move_item as mi on mi.documentable_id = i.invoice_header_id and mi.documentable_type  = 'Invoice'
+join prep_move_item as mi on mi.documentable_id = i.invoice_header_id and mi.documentable_type  = 'Invoice' 
 
 left join line_items as li on li.invoice_header_id = i.invoice_header_id
 
 left join  {{ ref('stg_financial_administrations') }} as fn on fn.id = i.financial_administration_id
+
+
 
 --left join budget as b on b.date = date(i.invoice_header_printed_at)
 --left join prep_damaged as prep_damaged on prep_damaged.date_incident_at = date(i.invoice_header_printed_at) and prep_damaged.Warehouse = customer.Warehouse and prep_damaged.financial_administration = i.financial_administration

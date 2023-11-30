@@ -39,5 +39,7 @@ from source as mi
 where 
 mi.deleted_at is null
 and mi.balance != 0
-and mi.documentable_id is not null
 and mi.__hevo__marked_deleted is not true
+
+--and mi.documentable_id is not null
+--and ((mi.entry_type = 'DEBIT' AND round(residual, 2) >= 0) OR (mi.entry_type = 'CREDIT' AND round(mi.residual, 2) <= 0))

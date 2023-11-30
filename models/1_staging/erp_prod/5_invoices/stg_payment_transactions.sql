@@ -22,7 +22,7 @@ select
                 adjustment_status,           --NOT_ADJUSTED, TOTALLY_ADJUSTED, PARTIALLY_ADJUSTED
                 payment_method,              --BANK_TRANSFER, VISA_CARD, PAYMENT_BY_CREDIT, CASH, CHEQUE, WRITE_OFF, CREDIT, OVER_PAYED, OFFSET, OTHERS
                 payment_gateway,
-                status,                      -- SUCCESS, DRAFT, FAILED, PROCESSING, CANCELED
+                status,                      -- DRAFT, SUCCESS,  FAILED, PROCESSING, CANCELED
                 approved,
                 trx_reference,
                 currency,

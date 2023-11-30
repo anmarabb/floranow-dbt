@@ -6,29 +6,33 @@ with anmar as (
         warehouse,
         year_month_departure_date,
         count(distinct year_month_departure_date) as months_count,
-        sum(sold_quantity) as monthly_demand,
+        COALESCE(sum(sold_quantity),0) as monthly_demand,
         avg(lead_time)/30.5 as month_lead_time,
-        -- Calculate the Monthly Demand
-        --sum(sold_quantity) / nullif(count(distinct year_month_departure_date), 0) as monthly_demand
+        avg(lead_time) as lead_time,
+
     from {{ref('fct_products')}} as p 
     where  stock_model = 'Reselling'
-    --and p.Product = 'Rose Ever Red'
-    ---and p.warehouse='Dubai Warehouse'
+   -- and p.Product = 'Rose Ever Red'
+  -- and p.warehouse='Dubai Warehouse'
 
 
     group by 1, 2,3
 )
 
 select 
-Product,
+Product,  
 warehouse,
 avg(md.monthly_demand) as avg_monthly_demand,
+
+
 stddev_pop (md.monthly_demand) as std_dev_monthly_demand,
 
 CASE
-     WHEN AVG(month_lead_time) < 0 THEN SQRT(1)
-        ELSE SQRT(AVG(month_lead_time))
-    END AS sqrt_avg_lead_time_per_month,
+  WHEN AVG(month_lead_time) < 0 THEN SQRT(1)
+     ELSE SQRT(AVG(month_lead_time))
+   END AS sqrt_avg_lead_time_per_month,
+
+
 
 from anmar as md
 group by 1, 2

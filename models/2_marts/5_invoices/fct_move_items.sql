@@ -4,22 +4,63 @@ source as (
 
 select
 
-*,
 
 
 
-case 
-when company_id = 3 then 'Bloomax Flowers LTD'
-when company_id = 2 then 'Global Floral Arabia tr'
-when company_id = 1 then 'Flora Express Flower Trading LLC'
-else  'cheack'
-end as reporting_company_name,
+date,
+balance, --
+residual, --
+source_system,
+reconciled,
+documentable_type, --Invoice, PaymentTransaction, null
+entry_type,  --CREDIT, DEBIT
+currency,
 
 
-gross_revenue_with_tax - invoice_total_tax as gross_revenue,
-credit_nots_with_tax -credit_note_total_tax as credit_note,
+--move_items
+    company_name,
+    financial_administration,
 
----payment_transactions
+    payment_method,
+    doc_number,
+    doc_type,
+
+    total_credits,
+    total_debits,
+    payments,
+    other_credit,
+    unreconciled_credits,
+    unreconciled_debits,
+
+
+    up_to_30_days,
+    between_31_to_60_days,
+    between_61_to_90_days,
+    between_91_to_120_days,
+    more_than_120_days,
+
+    gross_revenue,
+    invoice_total_tax,
+    credit_note_total_tax,
+    credit_nots_with_tax,
+    gross_revenue_with_tax,
+    total_tax,
+    credit_note,
+
+    
+
+    
+
+
+
+--customer
+    Customer,
+    warehouse,
+    debtor_number,
+    user_category,
+    payment_term,
+    account_manager,
+    credit_limit,
 
 
 current_timestamp() as insertion_timestamp 

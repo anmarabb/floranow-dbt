@@ -24,7 +24,11 @@ rc.registered_clients,
 
 
 id,
-name,
+
+
+case when name = 'Saudi' then 'KSA' else name end as name,
+
+
 prefix,
 created_at,
 updated_at,
