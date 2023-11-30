@@ -479,6 +479,7 @@ case
     else 0
     end as line_order_without_incidents_adjusted,
 
+order_with_incidents,
 
 case when incidents_count is not null then 1 else 0 end as line_order_with_incidents,
 case when incidents_count is  null then 1 else 0 end as line_order_without_incidents,
