@@ -66,7 +66,8 @@ With source as
 
                 --order
                 li.fulfillment, --SUCCEED (Set on fulfilling, when adding the full quantity to location or proof of delivery), PARTIAL (Set on fulfilling, when adding the part of the quantity to location or proof of delivery), FAILED (Set on fulfilling, when full quantity is missing),UNACCOUNTED (Set on placing order till receiving)
-                li.location, --pod (on proof of delivery), loc (on location in warehouse), null (not fulfilled, not added to location or pod)
+                case when li.location is null then 'null' else li.location end as location, --pod (on proof of delivery), loc (on location in warehouse), null (not fulfilled, not added to location or pod)
+                
                 li.state, --PENDING (Set on placing order till receiving), FULFILLED (Set on adding line item’s product to location or put the line item to proof of delivery), DISPATCHED(Set on dispatching line item), DELIVERED (Set on delivered item to the end user), CANCELED (Set on canceled the full quantity), RETURNED (Set on returned the full quantity to the warehouse)
                 li.creation_stage, --SPLIT (Line item creation stage on split proof of delivery), PACKING (Line item creation stage on packing on reporting additional), INVENTORY (Line item creation stage on inventory on reporting additional),receiving (Line item creation stage on receiving on reporting extra),
                 li.ordering_stock_type, --INVENTORY(line item created by ordering from a product while existing in the inventory), FLYING (line item created by ordering from a product while is not received yet in the warehouse), null (line item created by ordering from a external  supplier)
