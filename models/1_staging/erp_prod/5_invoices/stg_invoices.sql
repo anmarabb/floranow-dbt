@@ -61,18 +61,17 @@ select
                 paid_at,
                 deleted_at,
                 case
-                when i.status = 0 then "Draft"
-                when i.status = 1 then "signed"
-                when i.status = 2 then "Open"
-                when i.status = 3 then "Printed"
-                when i.status = 6 then "Closed"
-                when i.status = 7 then "Canceled"
-                when i.status = 8 then "Rejected"
-                when i.status = 9 then "voided"
-                when i.status is null then ""
+                when i.status = 0 then 'Draft'
+                when i.status = 1 then 'signed'
+                when i.status = 2 then 'Open'
+                when i.status = 3 then 'Printed'
+                when i.status = 6 then 'Closed'
+                when i.status = 7 then 'Canceled'
+                when i.status = 8 then 'Rejected'
+                when i.status = 9 then 'voided'
+                when i.status is null then ''
                 else "check_my_logic"
                 end as invoice_header_status,
-
 
                 source_system, --FLORANOW_ERP, FLORISOFT, ODOO
 

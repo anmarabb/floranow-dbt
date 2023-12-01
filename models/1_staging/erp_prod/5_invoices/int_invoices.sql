@@ -185,15 +185,10 @@ left join {{ ref('base_users') }} as printed_by on printed_by.id = i.printed_by_
 left join {{ ref('base_users') }} as customer on customer.id = i.customer_id
 left join invoice_items as ii on ii.invoice_header_id = i.invoice_header_id
 left join prep_payments as prep_payments on prep_payments.invoice_header_id = i.invoice_header_id
-join prep_move_item as mi on mi.documentable_id = i.invoice_header_id and mi.documentable_type  = 'Invoice' 
+
+left join prep_move_item as mi on mi.documentable_id = i.invoice_header_id and mi.documentable_type  = 'Invoice' 
 
 left join line_items as li on li.invoice_header_id = i.invoice_header_id
 
 left join  {{ ref('stg_financial_administrations') }} as fn on fn.id = i.financial_administration_id
-
-
-
---left join budget as b on b.date = date(i.invoice_header_printed_at)
---left join prep_damaged as prep_damaged on prep_damaged.date_incident_at = date(i.invoice_header_printed_at) and prep_damaged.Warehouse = customer.Warehouse and prep_damaged.financial_administration = i.financial_administration
-
 
