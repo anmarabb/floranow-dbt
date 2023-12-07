@@ -52,6 +52,7 @@ select
         li.master_shipment,
         li.Shipment,
         li.unit_fob_price,
+        li.order_number,
 
 
         pi.quantity * li.unit_fob_price as fob_value,

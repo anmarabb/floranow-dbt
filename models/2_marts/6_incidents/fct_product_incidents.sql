@@ -12,7 +12,7 @@ select
     order_date,
     delivery_date,
     departure_date,
-    
+    order_number,
     product_incident_id,
     line_item_id,
     incidentable_id, 
@@ -184,4 +184,5 @@ where pi.customer_id not in (1289,1470,2816,11123)
 )
 
 select * from source
+
 

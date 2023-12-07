@@ -479,7 +479,25 @@ case
     else 0
     end as line_order_without_incidents_adjusted,
 
-order_with_incidents,
+case 
+    when incidents_count is null then null
+    when incidents_count = extra_count and incidents_count_without_extra = 0 then null
+    when incidents_count = incidents_count_inventory_dmaged and extra_count = 0 then null
+    when incidents_count = incidents_count_inventory_dmaged + extra_count then null
+    else order_id
+    end as order_with_incidents,
+
+
+case 
+    when incidents_count is null then null
+    when incidents_count = extra_count and incidents_count_without_extra = 0 then null
+    when incidents_count = incidents_count_inventory_dmaged and extra_count = 0 then null
+    when incidents_count = incidents_count_inventory_dmaged + extra_count then null
+    else proof_of_delivery_id
+    end as pods_with_incidents,
+
+
+--order_with_incidents,
 
 case when incidents_count is not null then 1 else 0 end as line_order_with_incidents,
 case when incidents_count is  null then 1 else 0 end as line_order_without_incidents,
@@ -507,6 +525,17 @@ parent_product_id,
 
 ordering_source_details,
 
+concat(debtor_number,delivery_date) as drop_id, 
+
+incident_orders_packing_stage,
+incident_orders_receiving_stage,
+incident_orders_inventory_stage,
+incident_orders_delivery_stage,
+incident_orders_after_return_stage,
+
+
+
+
 current_timestamp() as insertion_timestamp, 
 
 
@@ -514,3 +543,5 @@ from {{ref('int_line_items')}} as li
 )
 
 select * from source
+
+

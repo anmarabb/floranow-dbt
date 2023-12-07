@@ -27,6 +27,13 @@ product_incidents as (
                                 sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
                                 sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
 
+                                max(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  li.order_id else 0 end) as incident_orders_receiving_stage,
+                                max(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  li.order_id else 0 end) as incident_orders_packing_stage,
+                                max(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then li.order_id else 0 end) as incident_orders_inventory_stage,
+                                max(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then li.order_id else 0 end) as incident_orders_delivery_stage,
+                                max(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then li.order_id else 0 end) as incident_orders_after_return_stage,
+
+
                             sum( pi.quantity * li.unit_landed_cost ) as incident_cost,
                                 sum(case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_without_extra,
                                 sum(case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as extra_cost,
@@ -53,24 +60,24 @@ product_incidents as (
 
                         group by pi.line_item_id
 
-                    ),
+                    )
 
+/*
 product_incidents_orders as (
 
                         select 
                             li.order_id,
 
                                 count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' OR incident_type ='EXTRA' then null else 1 end) as incidents_order_level,
-                            
-                            from `floranow`.`dbt_dev_stg`.`stg_product_incidents` as pi  
-                            left join `floranow`.`dbt_dev_stg`.`stg_line_items` as li on pi.line_item_id = li.line_item_id
-                            where li.customer_id not in (1289,1470,2816,11123)
 
+                            from {{ ref('stg_product_incidents') }} as pi  
+                            left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
+                            where li.customer_id not in (1289,1470,2816,11123) 
                         group by li.order_id
 
                     )
 
-
+*/
 
 SELECT
 
@@ -271,6 +278,16 @@ pi.incident_quantity_extra_packing,
 pi.incident_quantity_extra_receiving,
 pi.incident_quantity_extra_inventory,
 
+
+pi.incident_orders_packing_stage,
+pi.incident_orders_receiving_stage,
+pi.incident_orders_inventory_stage,
+pi.incident_orders_delivery_stage,
+pi.incident_orders_after_return_stage,
+
+
+
+
 pod.source_type,
 pod.pod_status,
 pod.route_name,
@@ -461,13 +478,14 @@ sh.master_shipment_id,
 
 
 
-
+/*
 case 
-    when pio.incidents_order_level is null then 0
-    when pio.incidents_order_level =0 then 0
-    else 1
+    when pio.incidents_order_level is null then null
+    when pio.incidents_order_level =0 then null
+    else pio.order_id
     end as order_with_incidents,
 
+*/
 
 
 
@@ -534,7 +552,7 @@ left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
 left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
 left join product_incidents as pi on pi.line_item_id = li.line_item_id
 
-left join product_incidents_orders as pio on pio.order_id = li.order_id
+--left join product_incidents_orders as pio on pio.order_id = li.order_id
 
 --left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.product_id 
 --left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.line_item_id
