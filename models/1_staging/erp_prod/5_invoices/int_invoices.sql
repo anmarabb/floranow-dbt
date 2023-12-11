@@ -115,6 +115,8 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     customer.Warehouse as warehouse,
     customer.debtor_number,
     customer.payment_term,
+    customer.account_type,
+    customer.customer_type,
 
 
     prep_payments.total_payments,

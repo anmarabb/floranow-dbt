@@ -4,16 +4,19 @@ with anmar as (
     select
         Product,
         warehouse,
+       -- Supplier,
         year_month_departure_date,
         count(distinct year_month_departure_date) as months_count,
+       -- count(distinct Supplier) as supplier_count,
         COALESCE(sum(sold_quantity),0) as monthly_demand,
         avg(lead_time)/30.5 as month_lead_time,
         avg(lead_time) as lead_time,
 
     from {{ref('fct_products')}} as p 
     where  stock_model = 'Reselling'
-   -- and p.Product = 'Rose Ever Red'
-  -- and p.warehouse='Dubai Warehouse'
+ --   and p.Product = 'Rose Ever Red'
+ --  and p.warehouse='Dubai Warehouse'
+  -- and year_month_departure_date = '2022-10-01'
 
 
     group by 1, 2,3
@@ -22,6 +25,7 @@ with anmar as (
 select 
 Product,  
 warehouse,
+--Supplier,
 avg(md.monthly_demand) as avg_monthly_demand,
 
 
@@ -42,6 +46,7 @@ group by 1, 2
 select
 p.Product,
 p.warehouse,
+--p.Supplier,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
 max(md.std_dev_monthly_demand) as std_dev_monthly_demand,

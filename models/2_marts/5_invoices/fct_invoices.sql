@@ -106,6 +106,9 @@ Customer,
 debtor_number,
 warehouse,
 
+account_type,
+customer_type,
+
 invoice_header_id,
 invoice_header_printed_at, -- it can be null
 
