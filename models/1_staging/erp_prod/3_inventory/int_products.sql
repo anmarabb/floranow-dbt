@@ -15,7 +15,6 @@ with CTE as
 
                      sum(case when  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_dmaged,
                            
-                     sum(case when  pi.stage = 'INVENTORY' and incident_type !='DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_stage,
 
 
                         SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND incident_type != 'EXTRA'  THEN pi.quantity ELSE 0 END) as last_30d_incidents_quantity,
@@ -29,7 +28,14 @@ with CTE as
 
                     sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as toat_damaged_quantity,
 
-                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity ELSE 0 END) as last_30d_incident_quantity_inventory_dmaged
+                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity ELSE 0 END) as last_30d_incident_quantity_inventory_dmaged,
+                        sum(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
+                        sum(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
+                        sum(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then pi.quantity else 0 end) as incident_quantity_inventory_stage,
+                        sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
+                        sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
+
+
 
                     from {{ ref('stg_product_incidents')}}  as pi 
                     left join {{ ref('stg_line_items')}}  as li on  pi.line_item_id = li.line_item_id
@@ -165,10 +171,11 @@ else 'scaned_flag' end as flag_1,
         --line_items
             li.order_date,
             li.ordered_quantity,
-            li.requested_quantity,
+            
             ordered_quantity.last_30d_ordered_quantity,
 
             li.received_quantity,
+            li.source_line_item_id,
 
             
             --li.inventory_quantity,
@@ -180,6 +187,15 @@ else 'scaned_flag' end as flag_1,
             li.fulfillment_status_details,
             li.warehouse, --from customer
             --w.warehouse_name as warehouse, --from stock
+
+            case 
+            when li.shipments_status not in ('PACKED','WAREHOUSED') then 0
+            else li.ordered_quantity - COALESCE(pi.incident_quantity_packing_stage,0)
+            end as  packed_quantity,
+
+
+            case when li.requested_quantity is not null then li.requested_quantity else li.ordered_quantity end as requested_quantity,
+
 
             li.loc_status,
             li.fulfillment_mode,
@@ -232,6 +248,9 @@ else 'scaned_flag' end as flag_1,
             pi.inventory_extra_quantity,
             pi.packing_extra_quantity,
             pi.cleanup_adjustments_quantity,
+
+            pi.incident_quantity_packing_stage,
+            pi.incident_quantity_receiving_stage,
 
         case when li.fulfillment_status = '2. Fulfilled - with Full Item Incident' and  incidents_quantity != p.quantity then 'red_flag' else null end as full_incident_check,
 
@@ -338,7 +357,7 @@ CASE
       'hydrangea', 'hypericum'
     ) THEN DATE_ADD(li.departure_date, INTERVAL 14 DAY)
 
-    ELSE li.departure_date
+    ELSE  DATE_ADD(li.departure_date, INTERVAL 7 DAY)
   END AS modified_expired_at,
 
 

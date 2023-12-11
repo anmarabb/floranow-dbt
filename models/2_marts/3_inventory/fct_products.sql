@@ -81,7 +81,10 @@ multi_location,
         remaining_value,
         landed_remaining_value,
         age,
+
+        
         fulfilled_quantity,
+        packed_quantity,
 
         unit_landed_cost,
         unit_price,
@@ -163,6 +166,9 @@ multi_location,
     incidents_quantity_location,
     cleanup_adjustments_quantity,
     toat_damaged_quantity,
+
+    incident_quantity_packing_stage,
+    incident_quantity_receiving_stage,
     
     extra_quantity,
     inventory_extra_quantity,
@@ -215,7 +221,8 @@ inventory_item_type,
 product_created_at,
 order_source,
 persona,
-
+line_item_id,
+source_line_item_id,
 
 parent_parent_id_check,
 parent_id_check,
@@ -250,12 +257,11 @@ DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
 
 STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sold_quantity_stddev,
 
+
+--max(case when fo.departure_ranking ='first_departure' then p.departure_date else null end) over (partition by p.product_name, p.warehouse) as first_departure_date,
+
+
 current_timestamp() as insertion_timestamp, 
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
-
---where p.product_id = 157823
---where product_name like '%Rose Athena%' and p.warehouse ='Riyadh Warehouse' and select_departure_date in ('Future', 'Today')
---Rose Athena
-
