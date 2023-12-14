@@ -110,7 +110,7 @@ with
 
 
 
-
+        case when pl.location_count is not null and  p.remaining_quantity > 0 and  st.stock_name = 'Inventory Stock' then p.remaining_quantity else 0 end as in_stock_quantity,
 
 
             p.quantity as inventory_product_quantity, --we need to take the order quanty form the line item not form the product, and  fulfilled_quantity from product (Awis)
@@ -134,6 +134,7 @@ with
             out_fs.feed_source_name as out_feed_source_name,
 
             st.stock_name as Stock,
+            
             case 
                 when st.stock_model_details in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling' end
                 when st.stock_model_details in ('Reselling Event') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling Event'  end
