@@ -67,7 +67,9 @@ select
     --fct
         
         remaining_quantity,
-        case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
+        --case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
+        in_stock_quantity,
+        
         case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
         case when select_departure_date not in ('Future', 'Today') then ordered_quantity else 0 end as past_ordered_quantity,
 
@@ -256,7 +258,7 @@ shipment_id,
 
 DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
 
-
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <=2 then 0 else in_stock_quantity end as active_in_stock_quantity,
 
 
 STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sold_quantity_stddev,
