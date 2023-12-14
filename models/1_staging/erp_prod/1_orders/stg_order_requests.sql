@@ -21,6 +21,9 @@ customer_id,
 
 
 quantity,
+confirmed_quantity,
+ordered_quantity,
+
 currency,
 price,
 
@@ -49,7 +52,6 @@ head_size,
 commercial_taxon,
 note,
 
-ordered_quantity,
 
 fob_price,
 
@@ -63,7 +65,7 @@ generation_version,
 product_image,
 sales_unit,
 
-confirmed_quantity,
+
 requested_price_margin_is_valid,
 
 calculated_final_price,

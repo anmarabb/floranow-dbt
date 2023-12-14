@@ -46,6 +46,7 @@ group by 1, 2
 select
 p.Product,
 p.warehouse,
+--p.origin
 --p.Supplier,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
@@ -97,7 +98,7 @@ when sum(sold_quantity) >1000 then 'B-1K'
 else 'C - 100 To 1K' end as product_classification,
 
 avg(lead_time) as lead_time,
-
+-- current_departure_date,
 sum(second_departure_coming_quantity) as second_departure_coming_quantity,
 sum(first_departure_coming_quantity) as first_departure_coming_quantity,
 
