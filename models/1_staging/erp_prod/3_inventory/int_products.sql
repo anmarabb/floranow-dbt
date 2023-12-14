@@ -1,8 +1,6 @@
-with CTE as 
 
-    (
-        with 
-            product_incidents as (
+with 
+  product_incidents as (
                 select 
                 p.product_id, 
                     count(*) as incidents_count,
@@ -42,9 +40,9 @@ with CTE as
                     left join {{ ref('stg_products')}}  as p on  p.line_item_id = li.line_item_id and p.product_id is not null
                 where  pi.deleted_at is null
                 group by p.product_id
-            ),
+            ),  
 
-            line_items_sold as (
+ line_items_sold as (
                 select
                     p.product_id,
                     count(li.line_item_id) as item_sold,
@@ -60,7 +58,8 @@ with CTE as
                 group by 1
                 
             ),
-            ordered_quantity as (
+
+ ordered_quantity as (
                 select
                     p.product_id,
                     SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.order_date) else li.delivery_date end, DAY) <= 30 THEN li.ordered_quantity ELSE 0 END) as last_30d_ordered_quantity
@@ -68,27 +67,37 @@ with CTE as
                     left join {{ ref('fct_order_items')}} as li on p.line_item_id = li.line_item_id
                     group by 1
 
+            ),
+ product_locations as (
+
+                select
+                      pl.locationable_id,
+                      sum(pl.quantity) as location_quantity,
+                      sum(pl.remaining_quantity) as remaining_quantity,
+                      count(product_location_id) as location_count,
+
+                      from {{ ref('stg_product_locations')}} AS pl    
+                      LEFT JOIN {{ ref('stg_locations')}} AS loc ON pl.location_id = loc.location_id
+                      LEFT JOIN {{ ref('stg_sections')}} AS sec ON sec.section_id = loc.section_id
+
+                where pl.locationable_type = "Product" --and pl.locationable_id = 212559
+                group by pl.locationable_id
             )
 
-
-
-
-        select
+            
+            
+ select
  
-        --products
+  --products
             p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,product_expired_at,product_category,departure_date),
-
-
-         case when pl.quantity is null and  lis.sold_quantity is not null   then li.ordered_quantity else pl.quantity end as location_quantity,
+           -- case when pl.quantity is null and  lis.sold_quantity is not null   then li.ordered_quantity else pl.quantity end as location_quantity,      
 
 
 --Date
-     case when date(p.product_created_at) = date(li.order_date) then 'Match' else 'Check'  end as created_at_check,
-
+    case when date(p.product_created_at) = date(li.order_date) then 'Match' else 'Check'  end as created_at_check,
     case when li.order_type = 'IMPORT_INVENTORY' and li.delivery_date is null then date(p.product_created_at) else li.delivery_date end as delivery_date,
-
     case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end as departure_date,
-          
+        
     case 
         when date_diff(date(case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end), current_date(), month) > 1 then 'Wrong date' 
         when case when li.order_type = 'IMPORT_INVENTORY' and p.departure_date is null then date(p.product_created_at) else p.departure_date end > current_date() then 'Future' 
@@ -125,10 +134,6 @@ with CTE as
             out_fs.feed_source_name as out_feed_source_name,
 
             st.stock_name as Stock,
-            --st.stock_model,
-
-           -- st.stock_model_details,
-
             case 
                 when st.stock_model_details in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling' end
                 when st.stock_model_details in ('Reselling Event') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based - Astra Express' else 'Reselling Event'  end
@@ -149,23 +154,30 @@ with CTE as
 
 
         --product_locations
-            --pl.quantity as location_quantity,
-            pl.remaining_quantity as location_remaining_quantity,
-            pl.product_location_id,
-            pl.location_id,
-            pl.locationable_id,
-            pl.created_at as fulfilled_at, --the time when the product added to loc in stock.
+           pl.location_quantity,
+           pl.remaining_quantity as location_remaining_quantity,
+           pl.location_count,
+           -- pl.product_location_id,
+           -- pl.location_id,
+           -- pl.locationable_id,
+           -- pl.created_at as fulfilled_at, --the time when the product added to loc in stock.
             --pl.updated_at,
-            pl.empty_at, --damaged at.
-            pl.locationable_type,
-            pl.inventory_cycle_check_status,
-            pl.labeled,
-            pl.section_cycle_check,
+           -- pl.empty_at, --damaged at.
+           -- pl.locationable_type,
+           -- pl.inventory_cycle_check_status,
+          --  pl.labeled,
+           -- pl.section_cycle_check,
 
             case 
-when pl.quantity is null then 'not_scaned' 
-when pl.quantity = p.quantity then 'scaned_good'
-else 'scaned_flag' end as flag_1,
+              when pl.location_count is null then 'not_scaned' 
+              when pl.location_quantity = p.quantity then 'scaned_good'
+            else 'scaned_flag' end as flag_1,
+            case 
+                when pl.location_count is null then 'not_scaned' 
+                when pl.location_count =1 then 'scaned one location'
+                when pl.location_count > 1 then 'scaned multi location'
+                else 'check the logic'
+                end as flag,
 
 
         --line_items
@@ -254,8 +266,6 @@ else 'scaned_flag' end as flag_1,
 
         case when li.fulfillment_status = '2. Fulfilled - with Full Item Incident' and  incidents_quantity != p.quantity then 'red_flag' else null end as full_incident_check,
 
-        case when COUNT(*) over (partition by p.product_id)>1 then 'multi-location' else null end as multi_location,
-        row_number() over (partition by p.product_id) as row_number,
             
 case 
     when p.product_name like '%Cutter%' THEN 'Accessories'
@@ -400,7 +410,7 @@ CASE
 
 
 case when p.product_expired_at is null then p.product_created_at else p.product_expired_at end as product_expired_at,
-concat(loc.label, " - ", sec.section_name) as Location,
+--concat(loc.label, " - ", sec.section_name) as Location,
 
 
 case when ad.additional_items_report_id is not null then 'Additional Items' else null end as additional_items_check,
@@ -426,9 +436,11 @@ li.parent_id_check,
         left join {{ ref('stg_feed_sources')}} as fs on p.feed_source_id = fs.feed_source_id 
         left join {{ ref('stg_feed_sources')}} as out_fs on st.out_feed_source_id = out_fs.feed_source_id 
         left join {{ ref('base_users')}} as reseller on reseller.id = p.reseller_id
-        left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
-        left join {{ ref('stg_locations')}} as loc on pl.location_id=loc.location_id
-        left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
+        left join product_locations as pl on pl.locationable_id = p.product_id 
+
+        --left join {{ ref('stg_product_locations')}} as pl on pl.locationable_id = p.product_id and pl.locationable_type = "Product"
+       -- left join {{ ref('stg_locations')}} as loc on pl.location_id=loc.location_id
+       -- left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
 
         left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=p.line_item_id
 
@@ -447,8 +459,7 @@ li.parent_id_check,
 
         
 
-    )
-select * from CTE where row_number=1
+    
 
 
 

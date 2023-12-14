@@ -62,6 +62,7 @@ With source as
                 li.split_at,
                 li.returned_at,
                 li.updated_at,
+                --li.received_at,
 
 
                 --order
@@ -123,14 +124,14 @@ With source as
                     li.quantity,
                     li.fulfilled_quantity, 
                     li.received_quantity,
-                    li.inventory_quantity,
+                    li.inventory_quantity, -- Not used
                     li.missing_quantity,
                     li.damaged_quantity,
                     li.delivered_quantity,
                     li.extra_quantity,
                     li.returned_quantity,
                     li.canceled_quantity,
-                    li.picked_quantity,
+                    li.picked_quantity, --Not used
                     li.replaced_quantity,
                     li.splitted_quantity,
                     li.warehoused_quantity,

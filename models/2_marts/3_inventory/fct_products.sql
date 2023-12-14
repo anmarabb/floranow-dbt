@@ -53,9 +53,9 @@ select
         line_item_link,
 
         flag_1,
+        flag,
 
         
-multi_location,
      
     
 
@@ -107,6 +107,7 @@ multi_location,
     --fct
         location_quantity,
         location_remaining_quantity,
+        location_count,
 
 
 
@@ -171,7 +172,10 @@ multi_location,
     incident_quantity_receiving_stage,
     
     extra_quantity,
-    inventory_extra_quantity,
+    COALESCE(inventory_extra_quantity,0) as inventory_extra_quantity,
+
+
+
     packing_extra_quantity,
 
 
@@ -203,7 +207,7 @@ else 'Active Products'
 end as product_activity_status,
 
 
-Location,
+--Location,
 p.modified_expired_at,
 DATE_DIFF(p.modified_expired_at, p.departure_date, DAY) AS difference_in_days,
 shelf_life_days,
