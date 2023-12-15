@@ -1,47 +1,60 @@
 with monthly_demand as (
 
-with anmar as (
-    select
-        Product,
-        warehouse,
-       -- Supplier,
-        year_month_departure_date,
-        count(distinct year_month_departure_date) as months_count,
-       -- count(distinct Supplier) as supplier_count,
-        COALESCE(sum(sold_quantity),0) as monthly_demand,
-        avg(lead_time)/30.5 as month_lead_time,
-        avg(lead_time) as lead_time,
+                with anmar as (
+                    select
+                        Product,
+                        warehouse,
+                        origin,
+                    -- Supplier,
+                        year_month_departure_date,
+                        count(distinct year_month_departure_date) over (partition by Product, warehouse)  as months_count,
+                        sum(sold_quantity) as total_demand_for_month_origin, -- Total demand for each month and origin
+                       -- COALESCE(sum(sold_quantity),0) as monthly_demand,
+                        avg(lead_time)/30.5 as month_lead_time,
+                        avg(lead_time) as lead_time,
 
-    from {{ref('fct_products')}} as p 
-    where  stock_model = 'Reselling'
- --   and p.Product = 'Rose Ever Red'
- --  and p.warehouse='Dubai Warehouse'
-  -- and year_month_departure_date = '2022-10-01'
-
-
-    group by 1, 2,3
-)
-
-select 
-Product,  
-warehouse,
---Supplier,
-avg(md.monthly_demand) as avg_monthly_demand,
+                    from {{ref('fct_products')}} as p 
+                    where  stock_model in ('Reselling', 'Commission Based')
+                  --and p.Product = 'Rose Ever Red'
+                 -- and p.warehouse='Dubai Warehouse'
+                 --and year_month_departure_date = '2023-10-01'
 
 
-stddev_pop (md.monthly_demand) as std_dev_monthly_demand,
+                    group by 1, 2,3,4
+                ),
 
-CASE
-  WHEN AVG(month_lead_time) < 0 THEN SQRT(1)
-     ELSE SQRT(AVG(month_lead_time))
-   END AS sqrt_avg_lead_time_per_month,
+                aggregated as (
+                    select
+                        Product,
+                        warehouse,
+                        origin,
+                        sum(total_demand_for_month_origin) as total_demand_by_origin, -- Total demand per origin
+                        months_count
+                    from anmar
+                    group by Product, warehouse, origin, months_count
+                              )
 
 
+                        select 
+                        Product,  
+                        warehouse,
+                        origin,
+                        --Supplier,
+                       SAFE_DIVIDE(total_demand_by_origin,months_count) as avg_monthly_demand -- Calculate average monthly demand per origin
 
-from anmar as md
-group by 1, 2
 
-)
+                        --stddev_pop (md.monthly_demand) as std_dev_monthly_demand,
+/*
+                        CASE
+                        WHEN AVG(month_lead_time) < 0 THEN SQRT(1)
+                            ELSE SQRT(AVG(month_lead_time))
+                        END AS sqrt_avg_lead_time_per_month,
+
+*/
+
+                        from aggregated as md
+
+          )
 
 select
 p.Product,
@@ -50,12 +63,12 @@ p.origin,
 --p.Supplier,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
-max(md.std_dev_monthly_demand) as std_dev_monthly_demand,
+--max(md.std_dev_monthly_demand) as std_dev_monthly_demand,
 
-max(sqrt_avg_lead_time_per_month) as sqrt_avg_lead_time_per_month,
+--max(sqrt_avg_lead_time_per_month) as sqrt_avg_lead_time_per_month,
 
 
-1.28*max(md.std_dev_monthly_demand)*max(sqrt_avg_lead_time_per_month) as monthly_safety_stock,
+--1.28*max(md.std_dev_monthly_demand)*max(sqrt_avg_lead_time_per_month) as monthly_safety_stock,
 
 max(first_departure_date) as first_departure_date,
 max(second_departure_date) as second_departure_date,
@@ -92,6 +105,11 @@ sum(active_in_stock_quantity) as active_in_stock_quantity,
 
 sum(coming_quantity) as coming_quantity,
 sum(sold_quantity) as sold_quantity,
+sum(last_30d_sold_quantity) as last_30d_sold_quantity,
+sum(last_30d_incident_quantity_inventory_dmaged) as last_30d_incident_quantity_inventory_dmaged,
+
+
+
 sum(item_sold) as item_sold,
 
 case 
@@ -120,10 +138,12 @@ SAFE_DIVIDE(count(distinct p.master_shipment_id), count(distinct p.year_month_de
 
 
 max(shelf_life_days) as shelf_life_days,
-from {{ref('fct_products')}} as p 
-left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse 
 
-where  stock_model = 'Reselling'
+
+from {{ref('fct_products')}} as p 
+left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.origin = md.origin
+
+where  stock_model in ('Reselling', 'Commission Based')
 
 --and p.Product = 'Rose Ever Red'
 --and p.warehouse='Dubai Warehouse'
