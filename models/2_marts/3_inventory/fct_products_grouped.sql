@@ -46,7 +46,7 @@ group by 1, 2
 select
 p.Product,
 p.warehouse,
---p.origin
+p.origin,
 --p.Supplier,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
@@ -87,6 +87,9 @@ sum(past_ordered_quantity) as past_ordered_quantity,
 
 sum(transit_quantity) as transit_quantity,
 sum(in_stock_quantity) as in_stock_quantity,
+sum(active_in_stock_quantity) as active_in_stock_quantity,
+
+
 sum(coming_quantity) as coming_quantity,
 sum(sold_quantity) as sold_quantity,
 sum(item_sold) as item_sold,
@@ -124,4 +127,4 @@ where  stock_model = 'Reselling'
 
 --and p.Product = 'Rose Ever Red'
 --and p.warehouse='Dubai Warehouse'
-group by 1,2
+group by 1,2,3
