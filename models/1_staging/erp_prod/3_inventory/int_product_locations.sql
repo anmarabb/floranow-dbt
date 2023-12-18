@@ -3,7 +3,7 @@ With source as (
     
  select 
  
-*
+location_id,
 
 from {{ ref('stg_product_locations') }} as pl
  
