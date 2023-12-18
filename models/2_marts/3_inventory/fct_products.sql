@@ -267,6 +267,7 @@ case
  when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then 'Expired'
  when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then 'Expiring Soon'
  when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) >2 then 'Active'
+ else 'Check'
  end as inventory_status,
 
 
