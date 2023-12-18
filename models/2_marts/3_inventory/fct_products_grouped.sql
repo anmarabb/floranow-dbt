@@ -103,6 +103,11 @@ sum(in_stock_quantity) as in_stock_quantity,
 sum(active_in_stock_quantity) as active_in_stock_quantity,
 
 
+sum(expired_stock_quantity) as expired_stock_quantity,
+sum(aging_stock_quantity) as aging_stock_quantity,
+
+
+
 sum(coming_quantity) as coming_quantity,
 sum(sold_quantity) as sold_quantity,
 sum(last_30d_sold_quantity) as last_30d_sold_quantity,
@@ -138,7 +143,6 @@ SAFE_DIVIDE(count(distinct p.master_shipment_id), count(distinct p.year_month_de
 
 
 max(shelf_life_days) as shelf_life_days,
-
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.origin = md.origin
