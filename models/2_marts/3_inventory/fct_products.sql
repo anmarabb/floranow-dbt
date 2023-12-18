@@ -1,6 +1,5 @@
             
             
-            
             WITH future_orders as (
                 WITH CTE AS (
                 SELECT 
@@ -28,6 +27,7 @@
  
 select 
 
+case when Stock = 'Inventory Stock' and live_stock = 'Live Stock' and stock_model in ('Reselling', 'Commission Based') and flag_1 in ('scaned_flag', 'scaned_good') then 'Current Inventory' else null end as report_filter,
 
 --Products
     --dim
@@ -258,7 +258,10 @@ shipment_id,
 
 DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
 
-case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <=2 then 0 else in_stock_quantity end as active_in_stock_quantity,
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <=0 then 0 else in_stock_quantity end as active_in_stock_quantity,
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then in_stock_quantity else 0 end as expired_stock_quantity,
+
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then in_stock_quantity else 0 end as aging_stock_quantity,
 
 
 STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sold_quantity_stddev,
