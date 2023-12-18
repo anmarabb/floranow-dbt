@@ -263,6 +263,12 @@ case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then in_stock_q
 
 case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then in_stock_quantity else 0 end as aging_stock_quantity,
 
+case 
+ when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then 'Expired'
+ when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then 'Expiring Soon'
+ when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then 'Active'
+ end as inventory_status,
+
 
 STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sold_quantity_stddev,
 
