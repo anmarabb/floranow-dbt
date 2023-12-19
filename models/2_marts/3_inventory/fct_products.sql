@@ -259,6 +259,8 @@ shipment_id,
 DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
 
 case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <=0 then 0 else in_stock_quantity end as active_in_stock_quantity,
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <=2 then 0 else in_stock_quantity end as stable_in_stock_quantity,
+
 case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then in_stock_quantity else 0 end as expired_stock_quantity,
 
 case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then in_stock_quantity else 0 end as aging_stock_quantity,
