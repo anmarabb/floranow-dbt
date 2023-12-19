@@ -81,7 +81,7 @@ product_incidents_orders as (
 
 SELECT
 
-li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category,extra_quantity, li_record_type_details,li_record_type),
+li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type),
 
 
 case 
@@ -153,7 +153,7 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
 
 
     case when li.location = 'loc' then 1 else 0 end as order_loc_moved, --order_warehoused
-    case when li.picked_quantity > 0 then 1 else 0 end as order_picked,
+    --case when li.picked_quantity > 0 then 1 else 0 end as order_picked,
 
 
 
