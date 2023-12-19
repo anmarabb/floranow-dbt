@@ -124,14 +124,14 @@ With source as
                     li.quantity,
                     li.fulfilled_quantity, 
                     li.received_quantity,
-                    li.inventory_quantity, -- Not used
-                    li.missing_quantity,
-                    li.damaged_quantity,
-                    li.delivered_quantity,
-                    li.extra_quantity,
+                    --li.inventory_quantity, -- Not used
+                    li.missing_quantity, --
+                    li.damaged_quantity, --
+                    --li.delivered_quantity, -- Not used
+                    --li.extra_quantity,     -- Not used
                     li.returned_quantity,
                     li.canceled_quantity,
-                    li.picked_quantity, --Not used
+                    --li.picked_quantity, --Not used
                     li.replaced_quantity,
                     li.splitted_quantity,
                     li.warehoused_quantity,
