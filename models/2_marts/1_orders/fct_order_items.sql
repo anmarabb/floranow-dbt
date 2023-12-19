@@ -58,6 +58,9 @@ stock_order_ids,
     li.ordered_quantity,
     li.fulfilled_quantity,
     li.received_quantity,
+    
+    li.replaced_quantity,
+    li.warehoused_quantity,
 
     inv_quantity, --from invoice item
     inv_total_price_without_tax,  --from invoice item
@@ -106,6 +109,7 @@ case
     order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
     order_request_link,
     order_request_cheack,
+    replaced_quantity_cheack,
     requested_quantity,
     
 

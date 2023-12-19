@@ -226,6 +226,9 @@ plis.supplier_name as parent_supplier,
     orr.status as order_request_status,
     concat( "https://erp.floranow.com/order_requests/", li.order_request_id) as order_request_link,
     case when li.order_request_id is not null then 'Order Request ID' else null end as order_request_cheack,
+    case when li.replaced_quantity is not null then 'Replaced Qty.' else null end as replaced_quantity_cheack,
+
+
     orr.quantity as requested_quantity,
 
 

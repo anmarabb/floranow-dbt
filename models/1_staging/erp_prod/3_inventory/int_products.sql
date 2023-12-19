@@ -333,7 +333,7 @@ case
     when p.product_name like '%Wooden%' THEN 'Accessories'
     when p.product_name like '%Wrapping%' THEN 'Accessories'
     
-else p.product_category 
+else INITCAP(p.product_category )
 end as product_category,
 
 
