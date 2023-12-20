@@ -1,4 +1,5 @@
 select
+product_id,
 Product,
 warehouse,
 Location,
