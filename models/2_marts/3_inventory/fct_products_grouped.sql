@@ -60,7 +60,7 @@ select
 p.Product,
 p.warehouse,
 p.Supplier,
---p.Supplier,
+max(p.Origin) as Origin,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
 --max(md.std_dev_monthly_demand) as std_dev_monthly_demand,
