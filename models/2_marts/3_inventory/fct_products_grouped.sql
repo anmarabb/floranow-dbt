@@ -4,11 +4,11 @@ with monthly_demand as (
                     select
                         Product,
                         warehouse,
-                        origin,
+                        Supplier,
                     -- Supplier,
                         year_month_departure_date,
                         count(distinct year_month_departure_date) over (partition by Product, warehouse)  as months_count,
-                        sum(sold_quantity) as total_demand_for_month_origin, -- Total demand for each month and origin
+                        sum(sold_quantity) as total_demand_for_month_supplier, -- Total demand for each month and origin
                        -- COALESCE(sum(sold_quantity),0) as monthly_demand,
                         avg(lead_time)/30.5 as month_lead_time,
                         avg(lead_time) as lead_time,
@@ -27,20 +27,20 @@ with monthly_demand as (
                     select
                         Product,
                         warehouse,
-                        origin,
-                        sum(total_demand_for_month_origin) as total_demand_by_origin, -- Total demand per origin
+                        Supplier,
+                        sum(total_demand_for_month_supplier) as total_demand_by_supplier, -- Total demand per origin
                         months_count
                     from anmar
-                    group by Product, warehouse, origin, months_count
+                    group by Product, warehouse, Supplier, months_count
                               )
 
 
                         select 
                         Product,  
                         warehouse,
-                        origin,
+                        Supplier,
                         --Supplier,
-                       SAFE_DIVIDE(total_demand_by_origin,months_count) as avg_monthly_demand -- Calculate average monthly demand per origin
+                       SAFE_DIVIDE(total_demand_by_supplier,months_count) as avg_monthly_demand -- Calculate average monthly demand per origin
 
 
                         --stddev_pop (md.monthly_demand) as std_dev_monthly_demand,
@@ -59,7 +59,7 @@ with monthly_demand as (
 select
 p.Product,
 p.warehouse,
-p.origin,
+p.Supplier,
 --p.Supplier,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
@@ -145,7 +145,7 @@ SAFE_DIVIDE(count(distinct p.master_shipment_id), count(distinct p.year_month_de
 max(shelf_life_days) as shelf_life_days,
 
 from {{ref('fct_products')}} as p 
-left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.origin = md.origin
+left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
 
 where  stock_model in ('Reselling', 'Commission Based')
 
