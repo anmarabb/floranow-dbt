@@ -2,7 +2,8 @@ With source as (
 
     
  select
- product_name as Product,
+ p.product_id,
+ p.product_name as Product,
 
  p.warehouse,
 
