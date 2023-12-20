@@ -255,16 +255,14 @@ case when COALESCE(incidents_quantity, 0) + COALESCE(fulfilled_quantity, 0)  = o
 master_shipment_id,
 shipment_id,
 
-
 DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
 
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <=0 then 0 else in_stock_quantity end as active_in_stock_quantity,
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <=2 then 0 else in_stock_quantity end as stable_in_stock_quantity,
 
 case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then in_stock_quantity else 0 end as expired_stock_quantity,
-case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) >=0 then in_stock_quantity else 0 end as active_in_stock_quantity,
-    case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1) then in_stock_quantity else 0 end as aging_stock_quantity,
-    case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) > 1 then in_stock_quantity else 0 end as stable_in_stock_quantity,
 
-
+case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then in_stock_quantity else 0 end as aging_stock_quantity,
 
 case 
  when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then 'Expired'
@@ -284,3 +282,4 @@ current_timestamp() as insertion_timestamp,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
+
