@@ -89,3 +89,5 @@ warehouse,
 departure_date as current_departure_date,
 
 from last_one where departure_rank = 1 
+
+--and Supplier = 'PJ Flora' --and warehouse='Hafar WareHouse'
