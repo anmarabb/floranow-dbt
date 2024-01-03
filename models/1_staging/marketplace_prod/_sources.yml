@@ -62,5 +62,7 @@ sources:
       - name: spree_taxonomies
       - name: spree_taxonomy_translations
       - name: spree_taxons
+      - name: spree_offering_windows
+      
 
 
