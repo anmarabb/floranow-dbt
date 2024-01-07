@@ -108,6 +108,10 @@ pending_order_requests_balance,
 total_pending_balance,
 days_since_last_drop,
 
+
+mtd_orders,
+mtd_orders_affected,
+
     current_timestamp() as insertion_timestamp 
 
 from {{ ref('int_customer')}} as u
