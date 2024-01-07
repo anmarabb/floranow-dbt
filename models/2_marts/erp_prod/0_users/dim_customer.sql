@@ -2,29 +2,34 @@ with
 
 source as ( 
         
-select     
+select    
+    user_validity_filter,
     u.id as customer_id,
+    u.debtor_number,
     u.name as Customer,
-    u.financial_administration as User_Market, --UAE, Saudi, Qatar, Jordan, Kuwait, Bulk, Internal
+    u.financial_administration, --UAE, Saudi, Qatar, Jordan, Kuwait, Bulk, Internal
+    u.email,
 
+case when user_validity_filter = 'normal' and client_engagement_status = 'Active' then 1 else 0 end as active_clients,
+case when user_validity_filter = 'normal' and client_engagement_status != 'Active' then 1 else 0 end as not_active_clients,
 
-
+case when user_validity_filter = 'normal' then 1 else 0 end as registered_clients,
 
     Country,
     City,
     account_manager,
-    fake_filter,
+
+    have_master_id,
  
 
-    u.user_category as Segment,
-    u.Warehouse,
+    user_category as customer_category,
+    Warehouse,
 
 
 
     row_city,
     u.state,
 
-    u.debtor_number,
 
 
     --dim Selector
@@ -38,6 +43,7 @@ select
 
     u.odoo_code,
     u.statement_type,
+
 
     accessible_warehouses,
     --commercial_register,
@@ -61,6 +67,31 @@ customer_acquisition_date,
 customers_last_purchase_date,
 customer_lifespan,
 months_of_customer_engagement,
+total_credit_note_per_customer,
+total_gross_revenue_per_customer,
+total_net_revenue_per_customer,
+monthly_demand,
+client_value_segments,
+
+
+
+
+ user_link,
+
+ client_engagement_status,
+
+ total_blocked,
+
+mtd_gross_revenue,
+mtd_credit_note,
+
+credit_balance,   
+credit_limit, 
+debit_balance, 
+pending_balance, 
+pending_order_requests_balance,
+total_pending_balance,
+days_since_last_drop,
 
     current_timestamp() as insertion_timestamp 
 
@@ -69,3 +100,5 @@ from {{ ref('int_customer')}} as u
 )
 
 select * from source
+
+

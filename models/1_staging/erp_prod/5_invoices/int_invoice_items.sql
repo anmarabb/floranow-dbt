@@ -6,7 +6,7 @@ select
 financial_administration,
 count(*) as registered_clients 
 from {{ ref('base_users') }}
-where account_type in ('External') and deleted_accounts != 'Deleted' 
+where account_type in ('External') 
 group by financial_administration
 )
 
