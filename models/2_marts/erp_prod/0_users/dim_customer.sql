@@ -88,6 +88,17 @@ client_value_segments,
 
 mtd_gross_revenue,
 mtd_credit_note,
+lmtd_gross_revenue,
+lmtd_credit_note,
+lymtd_credit_note,
+lymtd_gross_revenue,
+m_1_gross_revenue,
+m_1_credit_note,
+m_2_gross_revenue,
+m_2_credit_note,
+m_3_gross_revenue,
+m_3_credit_note,
+
 
 credit_balance,   
 credit_limit, 

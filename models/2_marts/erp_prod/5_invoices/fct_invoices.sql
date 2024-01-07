@@ -16,8 +16,22 @@ case when invoice_header_printed_at is not null then 1 else 0 end as printed_inv
     invoice_items_record_count,
     credit_note_items_count,
 
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 then gross_revenue else 0 end as m_1_gross_revenue,
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 then credit_note else 0 end as m_1_credit_note,
+
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 2 then gross_revenue else 0 end as m_2_gross_revenue,
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 2 then credit_note else 0 end as m_2_credit_note,
+
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 3 then gross_revenue else 0 end as m_3_gross_revenue,
+    case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 3 then credit_note else 0 end as m_3_credit_note,
+
+
+
+
     case when  date_diff(date(i.invoice_header_printed_at) , current_date() , MONTH) = 0 then gross_revenue else 0 end as mtd_gross_revenue,
     case when  date_diff(date(i.invoice_header_printed_at) , current_date() , MONTH) = 0 then credit_note else 0 end as mtd_credit_note,
+
+
 
     case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 and extract(day FROM i.invoice_header_printed_at) <= extract(day FROM current_date()) then gross_revenue else 0 end as lmtd_gross_revenue,
     case when date_diff(current_date(),date(i.invoice_header_printed_at), MONTH) = 1 and extract(day FROM i.invoice_header_printed_at) <= extract(day FROM current_date()) then credit_note else 0 end as lmtd_credit_note,

@@ -29,6 +29,27 @@ invoice AS
 
         sum (mtd_gross_revenue) as mtd_gross_revenue,
         sum (mtd_credit_note) as mtd_credit_note,
+
+        sum (lmtd_credit_note) as lmtd_credit_note,
+        sum (lmtd_gross_revenue) as lmtd_gross_revenue,
+
+        sum (lymtd_gross_revenue) as lymtd_gross_revenue,
+        sum (lymtd_credit_note) as lymtd_credit_note,
+
+        sum (m_1_gross_revenue) as m_1_gross_revenue,
+        sum (m_1_credit_note) as m_1_credit_note,
+
+        sum (m_2_gross_revenue) as m_2_gross_revenue,
+        sum (m_2_credit_note) as m_2_credit_note,
+
+
+        sum (m_3_gross_revenue) as m_3_gross_revenue,
+        sum (m_3_credit_note) as m_3_credit_note,
+
+
+
+        
+
         sum(gross_revenue) as total_gross_revenue_per_customer,
         sum(credit_note) as total_credit_note_per_customer,
         sum(gross_revenue+credit_note) as total_net_revenue_per_customer,
@@ -110,6 +131,17 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
 
     i.mtd_gross_revenue,
     i.mtd_credit_note,
+    i.lmtd_credit_note,
+    i.lmtd_gross_revenue,
+    i.lymtd_credit_note,
+    i.lymtd_gross_revenue,
+    i.m_1_gross_revenue,
+    i.m_1_credit_note,
+    i.m_2_gross_revenue,
+    i.m_2_credit_note,
+    i.m_3_gross_revenue,
+    i.m_3_credit_note,
+
     i.total_gross_revenue_per_customer,
     i.total_credit_note_per_customer,
     i.total_net_revenue_per_customer,
