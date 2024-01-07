@@ -11,6 +11,10 @@ select
     u.email,
 
 case when user_validity_filter = 'normal' and client_engagement_status = 'Active' then 1 else 0 end as active_clients,
+case when user_validity_filter = 'normal' and client_engagement_status = 'Churned' then 1 else 0 end as churned_clients,
+case when user_validity_filter = 'normal' and client_engagement_status = 'Inactive' then 1 else 0 end as inactive_clients,
+case when user_validity_filter = 'normal' and client_engagement_status = 'Blocked' then 1 else 0 end as blocked_clients,
+
 case when user_validity_filter = 'normal' and client_engagement_status != 'Active' then 1 else 0 end as not_active_clients,
 
 case when user_validity_filter = 'normal' then 1 else 0 end as registered_clients,
