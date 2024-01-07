@@ -2,10 +2,15 @@ WITH line_items AS
 (
     SELECT 
         customer_id,
-        MAX(li.created_at) AS customers_last_order_date,
-        DATE_DIFF(CURRENT_DATE(), DATE(MAX(li.created_at)), DAY) as days_since_last_order,
+        MAX(li.order_date) AS customers_last_order_date,
+        DATE_DIFF(CURRENT_DATE(), DATE(MAX(li.order_date)), DAY) as days_since_last_order,
+        --count (DISTINCT li.order_number) as customer_orders,
+        count( DISTINCT case when  date_diff(date(delivery_date) , current_date() , MONTH) = 0 then order_number else null end) as mtd_orders,
+        count ( DISTINCT case when  date_diff(date(delivery_date) , current_date() , MONTH) = 0 then order_with_incidents else null end) as mtd_orders_affected,
+
+        --
      
-    FROM  {{ ref('int_line_items') }} as li
+    FROM  {{ ref('fct_order_items') }} as li
     GROUP BY
         customer_id
 
@@ -119,6 +124,8 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
 
 
     li.customers_last_order_date,
+    li.mtd_orders,
+    li.mtd_orders_affected,
     i.customers_last_purchase_date,
     i.customer_lifespan,
     i.months_of_customer_engagement,
