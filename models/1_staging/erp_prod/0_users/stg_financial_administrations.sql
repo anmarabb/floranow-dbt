@@ -11,8 +11,7 @@ WITH registered_clients AS
     FROM  {{ ref('base_users') }} as u
     where 
         account_type in ('External') 
-        and deleted_accounts != 'Deleted' 
-        and fake_temp = 'normal'
+        and user_validity_filter = 'normal'
     GROUP BY
         u.financial_administration_id
 
