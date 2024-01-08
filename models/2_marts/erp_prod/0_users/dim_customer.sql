@@ -82,7 +82,11 @@ u.deleted_at,
 
 
 --move_item
-    total_order_value_per_customer,
+    mi_total_order_value_per_customer,
+    mi_residual,
+    mi_credit_balance,
+    mi_debit_balance,
+
 
 
  user_link,

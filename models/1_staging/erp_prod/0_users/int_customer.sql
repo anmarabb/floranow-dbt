@@ -98,11 +98,12 @@ move_items AS
 (
     SELECT
         user_id,
-        sum( case when mi.entry_type = 'DEBIT' then mi.residual else 0 end) as debit_balance,
-        sum( case when mi.entry_type = 'CREDIT' then mi.residual else 0 end) as credit_balance,
-        sum(mi.residual) as residual,
-        sum(mi.total_debits) as total_order_value_per_customer, --with VAT
+        sum( case when mi.entry_type = 'DEBIT' then mi.residual else 0 end) as mi_debit_balance,
+        sum( case when mi.entry_type = 'CREDIT' then mi.residual else 0 end) as mi_credit_balance,
+        sum(mi.residual) as mi_residual,
+        sum(mi.total_debits) as mi_total_order_value_per_customer, --with VAT
         --total_credit_not_value_per_customer
+
 
 
 
@@ -174,7 +175,10 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     i.total_net_revenue_per_customer,
     i.total_tax_per_customer,
 
-    mi.total_order_value_per_customer,
+    mi.mi_total_order_value_per_customer,
+    mi.mi_residual,
+    mi.mi_credit_balance,
+    mi.mi_debit_balance,
 
 
 
