@@ -125,6 +125,8 @@ residual,
 mtd_orders,
 mtd_orders_affected,
 
+order_blocked_status,
+
     current_timestamp() as insertion_timestamp 
 
 from {{ ref('int_customer')}} as u
