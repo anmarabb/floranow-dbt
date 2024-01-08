@@ -58,6 +58,7 @@ invoice AS
         sum(gross_revenue) as total_gross_revenue_per_customer,
         sum(credit_note) as total_credit_note_per_customer,
         sum(gross_revenue+credit_note) as total_net_revenue_per_customer,
+        sum(total_tax) as total_tax_per_customer,
         SAFE_DIVIDE(sum(gross_revenue+credit_note),COUNT(DISTINCT FORMAT_TIMESTAMP('%Y-%m', i.invoice_header_printed_at))) as monthly_demand,
 
         case 
@@ -84,14 +85,33 @@ invoice_items AS
     SELECT
         customer_id,
         COUNT(DISTINCT ii.invoice_header_id) as total_order_count_per_customer,
-        SUM(ii.price_without_tax) as total_order_value_per_customer
+        --SUM(ii.price_without_tax) as total_order_value_per_customer
 
 
 
     FROM  {{ ref('int_invoice_items') }} as ii
     GROUP BY
         customer_id
+),
+
+move_items AS
+(
+    SELECT
+        user_id,
+        sum( case when mi.entry_type = 'DEBIT' then mi.residual else 0 end) as debit_balance,
+        sum( case when mi.entry_type = 'CREDIT' then mi.residual else 0 end) as credit_balance,
+        sum(mi.residual) as residual,
+        sum(mi.total_debits) as total_order_value_per_customer, --with VAT
+        --total_credit_not_value_per_customer
+
+
+
+    FROM  {{ ref('fct_move_items') }} as mi
+    GROUP BY
+        user_id
 )
+
+
 
 --move items
 --incendnts
@@ -152,6 +172,9 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     i.total_gross_revenue_per_customer,
     i.total_credit_note_per_customer,
     i.total_net_revenue_per_customer,
+    i.total_tax_per_customer,
+
+    mi.total_order_value_per_customer,
 
 
 
@@ -163,3 +186,4 @@ from   {{ ref('base_users') }} as u
 LEFT JOIN line_items as li ON u.id = li.customer_id
 LEFT JOIN invoice as i ON u.id = i.customer_id
 LEFT JOIN invoice_items as ii ON u.id = ii.customer_id
+left join move_items as mi on u.id = mi.user_id 

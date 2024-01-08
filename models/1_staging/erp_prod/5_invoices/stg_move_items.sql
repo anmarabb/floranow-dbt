@@ -30,6 +30,10 @@ select
                 residual,
                 prev_residual,
                 balance,
+                case when entry_type = 'DEBIT' then balance else 0 end as total_debits, --The sum of all the invoices issued to the customer. total_debits = sum(total_amount) for printed invoice. + VAT
+                case when entry_type = 'CREDIT' then balance else 0 end as total_credits, --The sum of all the payments received from the customer and all the credit notes issued to the customer. total_credits= payments + credit_nots + other_credit other_credit: from odoo
+
+
            
 
 current_timestamp() as ingestion_timestamp

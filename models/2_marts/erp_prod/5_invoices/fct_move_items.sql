@@ -4,7 +4,7 @@ source as (
 
 select
 
-
+user_id,
 
 
 date,

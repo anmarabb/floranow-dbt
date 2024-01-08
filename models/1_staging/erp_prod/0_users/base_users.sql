@@ -134,14 +134,17 @@ select
             --fct
                 u.remaining_credit,
                 u.credit_limit,
+
                 u.debit_balance, --printed invoices not paid or partially paid
                 u.credit_balance, --printed credit notes not used  and  payment transactions not used
+                
                 u.pending_balance, --line items for invoices not printed (draft))
                 u.pending_order_requests_balance, --order requests  status: (requested or partially placed
                 --u.credit_note_balance,
                 --u.advance_balance,
                 (u.debit_balance + u.credit_balance + u.pending_balance + u.pending_order_requests_balance) as total_pending_balance, 
-
+                u.credit_balance + u.debit_balance as residual,
+ 
 
 
     

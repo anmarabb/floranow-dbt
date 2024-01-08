@@ -66,18 +66,23 @@ u.updated_at,
 u.deleted_at,
 
 
-customers_last_order_date,
-customer_acquisition_date,
-customers_last_purchase_date,
-customer_lifespan,
-months_of_customer_engagement,
-total_credit_note_per_customer,
-total_gross_revenue_per_customer,
-total_net_revenue_per_customer,
-monthly_demand,
-client_value_segments,
+--invoice
+    customers_last_order_date,
+    customer_acquisition_date,
+    customers_last_purchase_date,
+    customer_lifespan,
+    months_of_customer_engagement,
+    total_credit_note_per_customer,
+    total_gross_revenue_per_customer,
+    total_net_revenue_per_customer,
+    total_tax_per_customer,
+
+    monthly_demand,
+    client_value_segments,
 
 
+--move_item
+    total_order_value_per_customer,
 
 
  user_link,
@@ -110,7 +115,7 @@ pending_order_requests_balance,
 total_pending_balance,
 days_since_last_drop,
 
-credit_balance + debit_balance as residual,
+residual,
 
 
 mtd_orders,
