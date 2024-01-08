@@ -113,6 +113,7 @@ items_collection_date,
 
 delivery_date,
 due_date,
+case when due_date < current_date() then remaining_amount else 0 end as collectible_amount,
 
 
 
