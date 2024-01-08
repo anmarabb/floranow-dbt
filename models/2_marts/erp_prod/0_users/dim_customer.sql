@@ -127,6 +127,8 @@ mtd_orders_affected,
 
 order_blocked_status,
 
+collectible_amount,
+
     current_timestamp() as insertion_timestamp 
 
 from {{ ref('int_customer')}} as u

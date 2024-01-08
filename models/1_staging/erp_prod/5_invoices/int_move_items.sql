@@ -9,7 +9,9 @@ mi.* EXCEPT(created_at),
 
 --date
     case when mi.date is not null then mi.date else mi.created_at end as created_at, 
-    case when pt.payment_received_at is not null then pt.payment_received_at else mi.created_at end as received_at, 
+    case when pt.payment_received_at is not null then pt.payment_received_at else mi.created_at end as received_at,
+    
+ 
 
 case when mi.documentable_id is not null and mi.documentable_type is not null then
 
@@ -95,6 +97,9 @@ case when date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) >
 case when date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) > 120 then mi.residual else 0 end as more_than_120_days,
 
 
+
+case when mi.due_date < current_date() then mi.residual else 0 end as collectible_amount,
+--sum up the value of all invoices issued to that customer that have a due date later than today
 
 
    -- current_timestamp() as insertion_timestamp, 

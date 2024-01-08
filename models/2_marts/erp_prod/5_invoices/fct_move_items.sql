@@ -6,7 +6,7 @@ select
 
 user_id,
 
-
+due_date,
 date,
 balance, --
 residual, --
@@ -38,6 +38,9 @@ currency,
     between_61_to_90_days,
     between_91_to_120_days,
     more_than_120_days,
+
+
+    collectible_amount,
 
     gross_revenue,
     invoice_total_tax,
