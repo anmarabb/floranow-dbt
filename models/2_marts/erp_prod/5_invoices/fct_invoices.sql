@@ -112,6 +112,9 @@ items_collection_method,
 items_collection_date,
 
 delivery_date,
+due_date,
+
+
 
 account_manager,
 City,

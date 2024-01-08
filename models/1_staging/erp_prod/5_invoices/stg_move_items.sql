@@ -1,5 +1,8 @@
 With source as (
- select * from {{ source('erp_prod', 'move_items') }}
+ select mi.*,  i.due_date, i.invoice_header_id,
+ from {{ source('erp_prod', 'move_items') }} as mi
+ left join {{ref('stg_invoices')}} as i on mi.documentable_id = i.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'DEBIT'
+
 )
 select 
             --PK
@@ -32,6 +35,10 @@ select
                 balance,
                 case when entry_type = 'DEBIT' then balance else 0 end as total_debits, --The sum of all the invoices issued to the customer. total_debits = sum(total_amount) for printed invoice. + VAT
                 case when entry_type = 'CREDIT' then balance else 0 end as total_credits, --The sum of all the payments received from the customer and all the credit notes issued to the customer. total_credits= payments + credit_nots + other_credit other_credit: from odoo
+
+
+    --case when invoice_header_id is not null then date(due_date) else date(mi.date) end as due_date,
+    due_date,
 
 
            

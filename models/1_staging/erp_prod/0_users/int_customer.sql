@@ -102,6 +102,7 @@ move_items AS
         sum( case when mi.entry_type = 'CREDIT' then mi.residual else 0 end) as mi_credit_balance,
         sum(mi.residual) as mi_residual,
         sum(mi.total_debits) as mi_total_order_value_per_customer, --with VAT
+        sum(mi.collectible_amount) as collectible_amount,
         --total_credit_not_value_per_customer
 
 
@@ -179,6 +180,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     mi.mi_residual,
     mi.mi_credit_balance,
     mi.mi_debit_balance,
+    mi.collectible_amount,
 
 
 
