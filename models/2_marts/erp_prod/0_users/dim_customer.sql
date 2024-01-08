@@ -101,12 +101,16 @@ m_3_credit_note,
 
 
 credit_balance,   
+
+
 credit_limit, 
 debit_balance, 
 pending_balance, 
 pending_order_requests_balance,
 total_pending_balance,
 days_since_last_drop,
+
+credit_balance + debit_balance as residual,
 
 
 mtd_orders,
