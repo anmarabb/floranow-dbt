@@ -27,12 +27,14 @@ select
                 trx_reference,
                 currency,
                 number,
+                approval_code,
 
             --date
                 payment_received_at,
                 collected_at,
                 created_at,
                 updated_at,
+                
 
 
 
