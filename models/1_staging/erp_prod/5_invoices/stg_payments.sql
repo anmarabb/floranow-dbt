@@ -36,7 +36,7 @@ select
                 total_amount,
 
                 
-current_timestamp() as ingestion_timestamp
+--current_timestamp() as ingestion_timestamp
 
  
 from source as i 

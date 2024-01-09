@@ -2,14 +2,57 @@ with
 
 source as ( 
         
-select     
+select  
+
+
+--case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.residual else 0 end as unreconciled_credits_CN,
+--case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then mi.residual else 0 end as unreconciled_credits_PT,
+--case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then (round(mi.balance,2) - round(mi.residual,2)) else 0 end as reconciled_credits_CN,
+
+--case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then (round(mi.balance,2) - round(mi.residual,2)) else 0 end as reconciled_credits_PT,
+
+
+--case when mi.entry_type = 'DEBIT'  then mi.residual else 0 end as unreconciled_debits_INV, -- unpaid invoice
+--case when mi.entry_type = 'DEBIT'  then (round(mi.balance,2) - round(mi.residual,2)) else 0 end as reconciled_debits_INV,  --paid invoices
 
 mi.* EXCEPT(created_at),
 
 
+
+--LTV = total_debits-total_credits. (net revinew)
+--total_debits,  --gross reve
+ --total creidt not =  case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.balance else 0 end as total_credits_CN,
+-- CN Rate (total_credits_CN / total_debits). 
+--Collection Rate. (  unreconciled_debits / LTV)
+
+
+
+case when mi.entry_type = 'DEBIT' then mi.residual else 0 end as unreconciled_debits, --outstanding sum(residual)
+
+
+
+case when mi.entry_type = 'CREDIT' then mi.residual else 0 end as unreconciled_credits,
+
+
+
+
+case when mi.entry_type='CREDIT' then abs (CNmi.residual) else 0 end as CN_amount,
+case when mi.entry_type='CREDIT' then abs (PTmi.residual) else 0 end as PT_amount,
+
+
+
+case when (pt.payment_transaction_id is null and cn.invoice_header_id is null and mi.source_system = 'ODOO')   then 'ODOO' else pt.number end as payment_transaction_number,
+case when (pt.payment_transaction_id is null and cn.invoice_header_id is null and mi.source_system = 'ODOO')   then 'ODOO' else cn.invoice_number end as credit_note_number,
+
+pt.approval_code,
+pt.transaction_type,
+
+case when pt.payment_gateway=0 then 'telr' else null end as payment_gateway,
+
+
 --date
     case when mi.date is not null then mi.date else mi.created_at end as created_at, 
-    case when pt.payment_received_at is not null then pt.payment_received_at else mi.created_at end as received_at,
+    case when pt.payment_received_at is not null then pt.payment_received_at else mi.created_at end as payment_received_at,
     
  
 
@@ -23,7 +66,7 @@ case when mi.documentable_id is not null and mi.documentable_type is not null th
 
 
 
-case when entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then mi.balance else 0 end as payments,
+case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then mi.balance else 0 end as payments,
 
 i.total_tax as invoice_total_tax,
 cn.total_tax as credit_note_total_tax,
@@ -33,16 +76,13 @@ cn.total_tax as credit_note_total_tax,
 COALESCE(i.total_tax,0) + COALESCE(cn.total_tax,0) as total_tax,
 
 
-case when entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.balance else 0 end as credit_nots_with_tax,
-case when entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then (mi.balance - COALESCE(cn.total_tax,0)) else 0 end as credit_note,
-case when entry_type = 'CREDIT' and (mi.documentable_id is null or mi.documentable_type is null) then mi.balance end  as other_credit,
+case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.balance else 0 end as credit_nots_with_tax,
+case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then (mi.balance - COALESCE(cn.total_tax,0)) else 0 end as credit_note,
+case when mi.entry_type = 'CREDIT' and (mi.documentable_id is null or mi.documentable_type is null) then mi.balance end  as other_credit,
 
-case when entry_type = 'DEBIT' then mi.balance else 0 end as gross_revenue_with_tax,
-case when entry_type = 'DEBIT' then (mi.balance - COALESCE(i.total_tax,0)) else 0 end as gross_revenue,
+case when mi.entry_type = 'DEBIT' then mi.balance else 0 end as gross_revenue_with_tax,
+case when mi.entry_type = 'DEBIT' then (mi.balance - COALESCE(i.total_tax,0)) else 0 end as gross_revenue,
 
-
-case when entry_type = 'CREDIT' then mi.residual else 0 end as unreconciled_credits,
-case when entry_type = 'DEBIT' then mi.residual else 0 end as unreconciled_debits,
 
 
 
@@ -102,6 +142,7 @@ case when mi.due_date < current_date() then mi.residual else 0 end as collectibl
 --sum up the value of all invoices issued to that customer that have a due date later than today
 
 
+
    -- current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_move_items')}} as mi
@@ -112,6 +153,10 @@ left join {{ source('erp_prod', 'bank_accounts') }} as ba on pt.bank_account_id 
 
 left join {{ref('stg_invoices')}} as i on mi.documentable_id = i.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'DEBIT'
 left join {{ref('stg_invoices')}} as cn on mi.documentable_id = cn.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'CREDIT'
+
+
+left join {{ ref('stg_move_items')}} as CNmi on  CNmi.move_item_id = mi.move_item_id and CNmi.documentable_type = 'Invoice' 
+left join {{ ref('stg_move_items')}} as PTmi on  PTmi.move_item_id = mi.move_item_id and PTmi.documentable_type = 'PaymentTransaction' 
 
 --where customer.deleted_at is null
 

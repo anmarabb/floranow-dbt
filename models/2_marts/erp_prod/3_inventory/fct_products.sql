@@ -73,7 +73,8 @@ case when Stock = 'Inventory Stock' and live_stock = 'Live Stock' and stock_mode
         case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
         case when select_departure_date not in ('Future', 'Today') then ordered_quantity else 0 end as past_ordered_quantity,
 
-        case when select_departure_date in ('last_10_days') and loc_status is null and shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' then ordered_quantity else 0 end as transit_quantity,
+        case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and loc_status ='null' then p.ordered_quantity else 0 end as transit_quantity,
+        --case when (select_departure_date = 'last_10_days' and loc_status is null) and ( shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident') then p.ordered_quantity else 0 end as transit_quantity,
 
         --case when select_departure_date in ('Future', 'Today') then MIN(departure_date) else null end AS next_departure_date,
 

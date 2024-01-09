@@ -4,10 +4,17 @@ source as (
 
 select
 
+credit_note_number,
+payment_transaction_number,
+approval_code,
+CN_amount,
+PT_amount,
 user_id,
 
 due_date,
 date,
+payment_received_at,
+
 balance, --
 residual, --
 source_system,
@@ -65,6 +72,8 @@ currency,
     account_manager,
     credit_limit,
 
+null as invoice_number,
+null as invoice_id,
 
 current_timestamp() as insertion_timestamp 
 
