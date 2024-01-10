@@ -9,7 +9,7 @@ with unreconciled_payment as (
         Customer,
         debtor_number, 
         account_manager,        
-        user_category,
+        user_category as client_category,
         company_name,
         Warehouse,
         financial_administration,
@@ -18,6 +18,7 @@ with unreconciled_payment as (
         payment_transaction_number,
         credit_note_number,
         CAST(NULL AS STRING) as invoice_number,
+        approval_code,
 
 
         abs(cmi.residual) as payment_amount,
@@ -48,7 +49,7 @@ payment_received_at,
 Customer,
 debtor_number,
 account_manager,
-user_category,
+user_category as client_category,
 company_name,
 Warehouse,
 financial_administration,
@@ -57,6 +58,7 @@ payment_method,
 payment_transaction_number,
 credit_note_number,
 invoice_number,
+approval_code,
 
 
 payment_amount,
