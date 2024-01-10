@@ -25,6 +25,7 @@ with unreconciled_payment as (
         null as  reconciled_payment_amount,
         abs(cmi.residual) as unreconciled_payment_amount,
 
+        CASE WHEN Customer LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
 
 
     from {{ref('fct_move_items')}} as cmi 
@@ -64,6 +65,8 @@ approval_code,
 payment_amount,
 payment_amount as reconciled_payment_amount,
 null as unreconciled_payment_amount,
+
+CASE WHEN Customer LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
 
 --current_timestamp() as insertion_timestamp,
 
