@@ -4,6 +4,21 @@ source as (
         
 select  
 
+case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then mi.balance else 0 end as payments,
+
+i.total_tax as invoice_total_tax,
+cn.total_tax as credit_note_total_tax,
+ 
+COALESCE(i.total_tax,0) + COALESCE(cn.total_tax,0) as total_tax,
+
+
+case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.balance else 0 end as credit_nots_with_tax,
+case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then (mi.balance - COALESCE(cn.total_tax,0)) else 0 end as credit_note,
+case when mi.entry_type = 'CREDIT' and (mi.documentable_id is null or mi.documentable_type is null) then mi.balance end  as other_credit,
+
+case when mi.entry_type = 'DEBIT' then mi.balance else 0 end as gross_revenue_with_tax,
+case when mi.entry_type = 'DEBIT' then (mi.balance - COALESCE(i.total_tax,0)) else 0 end as gross_revenue,
+
 
 --case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.residual else 0 end as unreconciled_credits_CN,
 --case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then mi.residual else 0 end as unreconciled_credits_PT,
@@ -66,22 +81,6 @@ case when mi.documentable_id is not null and mi.documentable_type is not null th
 
 
 
-case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'PaymentTransaction' then mi.balance else 0 end as payments,
-
-i.total_tax as invoice_total_tax,
-cn.total_tax as credit_note_total_tax,
-
-
- 
-COALESCE(i.total_tax,0) + COALESCE(cn.total_tax,0) as total_tax,
-
-
-case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then mi.balance else 0 end as credit_nots_with_tax,
-case when mi.entry_type = 'CREDIT' and mi.documentable_type = 'Invoice' then (mi.balance - COALESCE(cn.total_tax,0)) else 0 end as credit_note,
-case when mi.entry_type = 'CREDIT' and (mi.documentable_id is null or mi.documentable_type is null) then mi.balance end  as other_credit,
-
-case when mi.entry_type = 'DEBIT' then mi.balance else 0 end as gross_revenue_with_tax,
-case when mi.entry_type = 'DEBIT' then (mi.balance - COALESCE(i.total_tax,0)) else 0 end as gross_revenue,
 
 
 

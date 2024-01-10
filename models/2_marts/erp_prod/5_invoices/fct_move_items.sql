@@ -13,7 +13,7 @@ user_id,
 
 due_date,
 date,
-payment_received_at,
+date(payment_received_at) as payment_received_at,
 
 balance, --
 residual, --
@@ -72,8 +72,7 @@ currency,
     account_manager,
     credit_limit,
 
-null as invoice_number,
-null as invoice_id,
+documentable_id,
 
 current_timestamp() as insertion_timestamp 
 

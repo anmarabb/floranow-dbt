@@ -2,28 +2,9 @@ with
 
 source as ( 
         
-select     
+select   
 
 py.*,
-
-
-customer.name as Customer,
-customer.debtor_number,
-customer.account_manager,
-customer.user_category,
-customer.company_name,
-customer.Warehouse,
-
-fn.name as financial_administration,
-pt.payment_method,
-
-
-case when (pt.payment_transaction_id is null and cn.invoice_header_id is null and cmi.source_system = 'ODOO')   then 'ODOO' else pt.number end as payment_transaction_number,
-case when (pt.payment_transaction_id is null and cn.invoice_header_id is null and cmi.source_system = 'ODOO')   then 'ODOO' else cn.invoice_number end as credit_note_number,
-case when i.invoice_header_id is null and dmi.source_system = 'ODOO'   then 'ODOO' else i.invoice_number end as invoice_number,
-
-pt.approval_code,
-
 
 --date
     case when pt.payment_received_at is not null then pt.payment_received_at else cmi.date end as master_date,
@@ -32,7 +13,32 @@ pt.approval_code,
 
 
 
-    py.total_amount as payment_amount,
+py.total_amount as payment_amount,
+
+
+
+
+customer.name as Customer,
+customer.debtor_number,
+customer.account_manager,
+customer.user_category,
+customer.company_name,
+customer.Warehouse,
+fn.name as financial_administration,
+
+pt.payment_method,
+pt.approval_code,
+
+
+case when (pt.payment_transaction_id is null and cn.invoice_header_id is null and cmi.source_system = 'ODOO')   then 'ODOO' else pt.number end as payment_transaction_number,
+case when (pt.payment_transaction_id is null and cn.invoice_header_id is null and cmi.source_system = 'ODOO')   then 'ODOO' else cn.invoice_number end as credit_note_number,
+case when i.invoice_header_id is null and dmi.source_system = 'ODOO'   then 'ODOO' else i.invoice_number end as invoice_number,
+
+
+
+
+
+    
 
 
 

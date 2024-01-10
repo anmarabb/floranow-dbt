@@ -1,10 +1,47 @@
-with
+--query for unreconciled payment transactions amount
 
-source as ( 
+with unreconciled_payment as (
+
+    select
+        case when cmi.date is not null then cmi.date else cmi.date end as master_date,
+        payment_received_at,
+        
+        Customer,
+        debtor_number, 
+        account_manager,        
+        user_category,
+        company_name,
+        Warehouse,
+        financial_administration,
+        payment_method,
+
+        payment_transaction_number,
+        credit_note_number,
+        CAST(NULL AS STRING) as invoice_number,
+
+
+        abs(cmi.residual) as payment_amount,
+        null as  reconciled_payment_amount,
+        abs(cmi.residual) as unreconciled_payment_amount,
+
+
+
+    from {{ref('fct_move_items')}} as cmi 
+    where cmi.entry_type='CREDIT'
+    and  round(cmi.residual, 2) != 0 
+    and cmi.documentable_id is not null
+    )
+
+ select
+
+*
+
+from unreconciled_payment
+   
+union all
 
 select
-master_date,
-cridet_date,
+master_date,  --case when pt.payment_received_at is not null then pt.payment_received_at else cmi.date end
 payment_received_at,
 
 
@@ -17,20 +54,16 @@ Warehouse,
 financial_administration,
 payment_method,
 
-
 payment_transaction_number,
 credit_note_number,
 invoice_number,
 
 
 payment_amount,
+payment_amount as reconciled_payment_amount,
+null as unreconciled_payment_amount,
 
-
-current_timestamp() as insertion_timestamp,
+--current_timestamp() as insertion_timestamp,
 
 
 from {{ref('int_payments')}} as py
-)
-
-select * from source
-
