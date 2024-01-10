@@ -7,6 +7,7 @@ invoice_items as (
     ii.invoice_header_id,
     sum(ii.total_cost)  as total_cost,
     count(ii.invoice_item_id) as invoice_items_record_count,
+    count(distinct Supplier) as suppliers_count,
     count(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' then 1 else null end) as invoice_items_count,
     count(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' then 1 else null end) as credit_note_items_count,
 
@@ -137,6 +138,7 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     ii.non_astra_credit_note,
     ii.tbs_gross_revenue,
     ii.tbs_credit_note,
+    ii.suppliers_count,
 
 
 
