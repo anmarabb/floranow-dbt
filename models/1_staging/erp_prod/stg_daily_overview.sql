@@ -1,6 +1,6 @@
 WITH date_series AS (
     SELECT d AS date
-    FROM UNNEST(GENERATE_DATE_ARRAY('2024-01-01', '2024-02-01', INTERVAL 1 DAY)) AS d
+    FROM UNNEST(GENERATE_DATE_ARRAY('2022-01-01', '2025-01-01', INTERVAL 1 DAY)) AS d
 ),
 warehouse_list AS (
     SELECT warehouse
