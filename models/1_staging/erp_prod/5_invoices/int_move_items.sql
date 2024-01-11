@@ -105,6 +105,9 @@ customer.user_category,
 customer.Warehouse as warehouse,
 customer.payment_term,
 customer.credit_limit,
+customer.customer_type,
+customer.account_type,
+customer.user_validity_filter,
 --fct
    -- -mi.balance as paid_amount,
   --  -(mi.balance - mi.residual) as reconciled_amount,
@@ -138,15 +141,13 @@ case when date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) >
 
 
 case when mi.due_date < current_date() then mi.residual else 0 end as collectible_amount,
---sum up the value of all invoices issued to that customer that have a due date later than today
 
-case when mi.due_date < current_date() then mi.residual else 0 end as past_due_receivable , --
+case when mi.due_date < current_date() then mi.residual else 0 end as past_due_receivable , --Overdue Receivable
 case when mi.due_date >= current_date() then mi.residual else 0 end as current_due_receivable  , --current_receivables, unmatured_receivables
 
 --amount of money that has not been paid by its due date
 
---amount of money hasn't yet reached its due date for payment.
---amount is owed but not yet due.
+--"Current Due Receivable" amount is owed but not yet reached its due date for payment.
 
 --Total Receivable = Current Due Receivable + Past-Due Receivable
 case when date_diff(cast(current_date() as date), cast(mi.due_date as date), DAY) > 0 and date_diff(cast(current_date() as date), cast(mi.due_date as date), DAY) <= 30 then mi.residual else 0 end as up_to_30_days_past_due,
