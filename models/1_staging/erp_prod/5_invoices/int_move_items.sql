@@ -140,7 +140,22 @@ case when date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) >
 case when mi.due_date < current_date() then mi.residual else 0 end as collectible_amount,
 --sum up the value of all invoices issued to that customer that have a due date later than today
 
+case when mi.due_date < current_date() then mi.residual else 0 end as past_due_receivable , --
+case when mi.due_date >= current_date() then mi.residual else 0 end as current_due_receivable  , --current_receivables, unmatured_receivables
 
+--amount of money that has not been paid by its due date
+
+--amount of money hasn't yet reached its due date for payment.
+--amount is owed but not yet due.
+
+--Total Receivable = Current Due Receivable + Past-Due Receivable
+case when date_diff(cast(current_date() as date), cast(mi.due_date as date), DAY) > 0 and date_diff(cast(current_date() as date), cast(mi.due_date as date), DAY) <= 30 then mi.residual else 0 end as up_to_30_days_past_due,
+case when date_diff( cast(current_date() as date ),cast(mi.due_date as date), DAY) > 30 and date_diff( cast(current_date() as date ),cast(mi.due_date as date), DAY) <= 60 then mi.residual else 0 end as between_31_to_60_days_past_due,
+case when date_diff( cast(current_date() as date ),cast(mi.due_date as date), DAY) > 60 and date_diff( cast(current_date() as date ),cast(mi.due_date as date), DAY) <= 90 then mi.residual else 0 end as between_61_to_90_days_past_due,
+case when date_diff( cast(current_date() as date ),cast(mi.due_date as date), DAY) > 90 and date_diff( cast(current_date() as date ),cast(mi.due_date as date), DAY) <= 120 then mi.residual else 0 end as between_91_to_120_days_past_due,
+case when date_diff( cast(current_date() as date ),cast(mi.due_date as date), DAY) > 120 then mi.residual else 0 end as more_than_120_days_past_due,
+
+DATE_DIFF(DATE(mi.due_date) ,CURRENT_DATE() , DAY) as days_to_due_date,
 
    -- current_timestamp() as insertion_timestamp, 
 

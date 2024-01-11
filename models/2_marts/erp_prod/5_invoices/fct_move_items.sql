@@ -74,6 +74,17 @@ currency,
 
 documentable_id,
 
+
+past_due_receivable,
+current_due_receivable,
+
+up_to_30_days_past_due,
+between_31_to_60_days_past_due,
+between_61_to_90_days_past_due,
+between_91_to_120_days_past_due,
+more_than_120_days_past_due,
+days_to_due_date,
+
 current_timestamp() as insertion_timestamp 
 
 
