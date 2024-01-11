@@ -85,6 +85,11 @@ between_91_to_120_days_past_due,
 more_than_120_days_past_due,
 days_to_due_date,
 
+
+customer_type,
+account_type,
+user_validity_filter,
+
 current_timestamp() as insertion_timestamp 
 
 
