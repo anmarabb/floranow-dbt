@@ -27,7 +27,10 @@
  
 select 
 
-case when Stock = 'Inventory Stock' and live_stock = 'Live Stock' and stock_model in ('Reselling', 'Commission Based') and flag_1 in ('scaned_flag', 'scaned_good') then 'Current Inventory' else null end as report_filter,
+case 
+  when Stock = 'Inventory Stock' and live_stock = 'Live Stock' and stock_model in ('Reselling', 'Commission Based') and flag_1 in ('scaned_flag', 'scaned_good') then 'Current Inventory' 
+  else null 
+  end as report_filter,
 
 --Products
     --dim
@@ -266,9 +269,9 @@ case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then in_stock_q
 case when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then in_stock_quantity else 0 end as aging_stock_quantity,
 
 case 
- when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then 'Expired'
- when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then 'Expiring Soon'
- when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) >2 then 'Active'
+ when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) <0 then 'Expired Stock'
+ when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) in (0,1,2) then 'Expiring Soon Stock'
+ when DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) >2 then 'Stable Stock'
  else 'Check'
  end as inventory_status,
 

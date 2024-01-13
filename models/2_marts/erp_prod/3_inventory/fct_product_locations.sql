@@ -2,6 +2,11 @@ select
 product_location_id,
 product_id,
 Product,
+product_category,
+product_subcategory,
+departure_date,
+days_until_expiry,
+
 warehouse,
 Location,
 
