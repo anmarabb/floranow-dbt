@@ -166,8 +166,11 @@ select
   com.name as company_name,
 
         case 
-           when u.email  like '%fake_%' then 'fake_temp' 
-           when u.email  like '%temp_%' and f.name != 'UAE' then 'fake_temp' 
+           when u.email  like '%fake_%' and w.warehouse_name = 'Riyadh Warehouse' then 'fake_temp_Riyadh' 
+           when u.email  like '%temp_%' and f.name != 'UAE' and w.warehouse_name = 'Riyadh Warehouse'  then 'fake_temp_Riyadh'
+           when u.email  like '%fake_%' and w.warehouse_name != 'Riyadh Warehouse' then 'fake_temp_others' 
+           when u.email  like '%temp_%' and f.name != 'UAE' and w.warehouse_name != 'Riyadh Warehouse'  then 'fake_temp_others'
+
            when u.internal is true then 'Internal'
            when uc.name in ('Closed','Deleted Customers') then 'Category Closed'
            WHEN u.debtor_number IN (
