@@ -1,5 +1,6 @@
 With source as (
  select * from {{ source('marketplace_prod', 'spree_offering_windows') }}
+ 
 )
 select 
 *,
