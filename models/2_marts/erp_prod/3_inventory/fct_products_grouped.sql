@@ -144,9 +144,9 @@ SAFE_DIVIDE(count(distinct p.master_shipment_id), count(distinct p.year_month_de
 
 max(shelf_life_days) as shelf_life_days,
 
---max(ow.current_departure_date) as current_departure_date,
+max(ow.current_departure_date) as current_departure_date,
 
---DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_lead_time, --days_to_next_shipment_departure
+DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_lead_time, --days_to_next_shipment_departure
 
 
 from {{ref('fct_products')}} as p 
