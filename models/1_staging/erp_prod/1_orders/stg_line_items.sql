@@ -214,6 +214,27 @@ else 'Not Signed'
 end as signed_status,
 
 
+ ---extra_info
+    extra_info.custom_product_name,
+    extra_info.line_item_number,
+    extra_info.custom_delivery_location,
+    extra_info.skip_delivery_time_window,
+    extra_info.custom_lpo,
+
+    /*
+    extra_info.shopping_cart_info,
+        resource_number,
+        resource_type,
+        shopping_cart_item_id,
+        reserved_item_id,
+        sales_agent_name,
+        total_amount,
+        name,
+        total_amount_with_tax,
+        currency,
+        total_tax,
+*/
+
 
 
 
