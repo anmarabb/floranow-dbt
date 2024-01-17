@@ -1,14 +1,15 @@
 
 with 
-prep_registered_clients as (
-
-select 
-financial_administration,
-count(*) as registered_clients 
-from {{ ref('base_users') }}
-where account_type in ('External') 
-group by financial_administration
-)
+prep_registered_clients 
+         as (
+   
+                select 
+                financial_administration,
+                count(*) as registered_clients 
+                from {{ ref('base_users') }}
+                where account_type in ('External') 
+                group by financial_administration
+            )
 
 select     
 
@@ -73,6 +74,17 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
             when li.Supplier is null and ii.meta_supplier is null and ii.meta_supplier_name is null  and ii.meta_supplier_code is null then 'To Be Scoped' 
             else 'Non Astra'
         end as sales_source,
+
+        case 
+            WHEN  LOWER(customer.name) LIKE '%tamimi%' THEN 'Tamimi Customer'
+            WHEN  customer.name IN ('REMA1','REMA2','REMA3','REMA4','REMA5','REMA6','REMA7','REMA8') THEN 'REMA Customer'
+            ELSE 'Normal Customer'
+        END as tamimi_rema_customer,
+
+
+
+
+       
 
 
         li.supplier_id,

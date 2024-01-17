@@ -19,11 +19,25 @@ invoice_item_generation_type,
         unit_price,
         unit_landed_cost,
 
+        gross_revenue,
+        credit_note,
+
+ CASE
+            WHEN sales_source = 'Astra' and LOWER(Customer) LIKE '%tamimi%' THEN 'Astra - Tamimi Sales'
+            WHEN sales_source = 'Non Astra' and LOWER(Customer) LIKE '%tamimi%' THEN 'Non Astra - Tamimi Sales'
+            WHEN sales_source = 'Astra' and Customer IN ('REMA1','REMA2','REMA3','REMA4','REMA5','REMA6','REMA7','REMA8') THEN 'Astra - REMA Sales'
+            WHEN sales_source = 'Non Astra' and Customer IN ('REMA1','REMA2','REMA3','REMA4','REMA5','REMA6','REMA7','REMA8') THEN 'Non Astra - REMA Sales'
+            WHEN sales_source = 'Astra' then 'Astra'
+            WHEN sales_source = 'Non Astra' then 'Non Astra' 
+            ELSE 'To Be Scoped'
+        END as sales_source_details,
+
+
 case when sales_source = 'Non Astra' then gross_revenue else 0 end as non_astra_gross_revenue,
 case when sales_source = 'Non Astra' then credit_note else 0 end as non_astra_credit_note,
 
-case when sales_source = 'ASTRA' then gross_revenue else 0 end as astra_gross_revenue,
-case when sales_source = 'ASTRA' then credit_note else 0 end as astra_credit_note,
+case when sales_source = 'Astra' then gross_revenue else 0 end as astra_gross_revenue,
+case when sales_source = 'Astra' then credit_note else 0 end as astra_credit_note,
 
 case when sales_source = 'To Be Scoped' then gross_revenue else 0 end as tbs_gross_revenue,
 case when sales_source = 'To Be Scoped' then credit_note else 0 end as tbs_credit_note,
@@ -121,15 +135,6 @@ sales_source,
 
 order_source,
 
-CASE
-    WHEN sales_source = 'Astra' and LOWER(Customer) LIKE '%tamimi%' THEN 'Astra - Tamimi Sales'
-    WHEN sales_source = 'Non Astra' and LOWER(Customer) LIKE '%tamimi%' THEN 'Non Astra - Tamimi Sales'
-    WHEN sales_source = 'Astra' and Customer IN ('REMA1','REMA2','REMA3','REMA4','REMA5','REMA6','REMA7','REMA8') THEN 'Astra - REMA Sales'
-    WHEN sales_source = 'Non Astra' and Customer IN ('REMA1','REMA2','REMA3','REMA4','REMA5','REMA6','REMA7','REMA8') THEN 'Non Astra - REMA Sales'
-    WHEN sales_source = 'Astra' then 'Astra'
-    WHEN sales_source = 'Non Astra' then 'Non Astra' 
-    ELSE 'check'
- END as sales_source_details,
 
 
  registered_clients,

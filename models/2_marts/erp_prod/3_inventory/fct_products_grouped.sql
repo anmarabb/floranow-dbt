@@ -144,15 +144,15 @@ SAFE_DIVIDE(count(distinct p.master_shipment_id), count(distinct p.year_month_de
 
 max(shelf_life_days) as shelf_life_days,
 
-max(ow.current_departure_date) as current_departure_date,
+--max(ow.current_departure_date) as current_departure_date,
 
-DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_lead_time, --days_to_next_shipment_departure
+--DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_lead_time, --days_to_next_shipment_departure
 
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
 left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin
-where  stock_model in ('Reselling', 'Commission Based')
+--where  stock_model in ('Reselling', 'Commission Based')
 
 --and p.Product = 'Rose Ever Red'
 --and p.warehouse='Dubai Warehouse'
