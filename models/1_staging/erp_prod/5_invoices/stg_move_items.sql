@@ -37,8 +37,8 @@ select
                 case when entry_type = 'CREDIT' then balance else 0 end as total_credits, --The sum of all the payments received from the customer and all the credit notes issued to the customer. total_credits= payments + credit_nots + other_credit other_credit: from odoo
 
 
-    --case when invoice_header_id is not null then date(due_date) else date(mi.date) end as due_date,
-    due_date,
+    case when invoice_header_id is not null then date(due_date) else date(mi.date) end as due_date,
+    --due_date,
 
 
            
