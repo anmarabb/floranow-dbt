@@ -16,6 +16,8 @@ select
 
         ii.*,
 
+    case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as gross_revenue,
+    case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as credit_note,
 
 
 
