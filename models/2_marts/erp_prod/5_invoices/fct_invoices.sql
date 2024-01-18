@@ -5,7 +5,7 @@ source as (
 select
 
 case 
-    when debtor_number != '132008' then 'Filter Out'
+    when debtor_number = '132008' then 'Filter Out'
     when customer_type = 'reseller' then 'Filter Out'
     when invoice_header_status not in ('Printed','signed') then 'Filter Out'
     else 'Default Filter'
