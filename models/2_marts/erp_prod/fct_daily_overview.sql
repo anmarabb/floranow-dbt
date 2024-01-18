@@ -8,7 +8,7 @@ with invoices_daily as (
 
         COALESCE(SUM(i.gross_revenue + i.credit_note), 0) as Sales,
         FROM {{ ref('fct_invoices') }} i
-        where i.invoice_header_status in ('Printed','signed') and i.customer_type = 'retail'
+        where i.reprot_filter = 'Default Filter'
         GROUP BY 1,2,3
 
         ),
