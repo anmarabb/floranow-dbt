@@ -93,6 +93,7 @@ creditable_type,
         user_category, -- Segment
         debtor_number,
         account_manager,
+        warehouse,
 
 
 

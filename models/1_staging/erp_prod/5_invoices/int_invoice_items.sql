@@ -32,6 +32,7 @@ case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_co
         customer.user_category,
         customer.debtor_number,
         customer.account_manager,
+        customer.Warehouse as warehouse,
         
 
 concat(customer.debtor_number,ii.delivery_date) as drop_id, 
