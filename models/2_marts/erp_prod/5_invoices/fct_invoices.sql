@@ -3,6 +3,16 @@ with
 source as ( 
 
 select
+
+case 
+    when debtor_number != '132008' then 'Filter Out'
+    when customer_type = 'reseller' then 'Filter Out'
+    when invoice_header_status not in ('Printed','signed') then 'Filter Out'
+    else 'Default Filter'
+    end as reprot_filter,
+    
+
+
 case when signed_at is not null then 1 else 0 end as signed_invoice,
 case when invoice_header_printed_at is not null then 1 else 0 end as printed_invoice,
 
