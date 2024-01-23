@@ -1,8 +1,9 @@
-select
+SELECT
 
 
 *
 
 
 
-FROM {{ source('erp_prod', 'astra_budget') }} as bud
+
+from {{ source('erp_prod', 'astra_budget') }} as bud
