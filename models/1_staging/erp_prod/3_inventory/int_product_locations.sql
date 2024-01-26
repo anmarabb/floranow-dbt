@@ -6,6 +6,7 @@ select
  --pl.locationable_id,  --product_id
  p.product_id,
  concat(loc.label, " - ", sec.section_name) as Location,
+concat( "https://erp.floranow.com/products/", p.product_id) as product_link,
 
  p.Product,
  p.product_subcategory,
@@ -14,7 +15,8 @@ select
  p.days_until_expiry,
  
  p.warehouse,
-
+ p.order_type,
+ p.Supplier,
 
  pl.quantity as location_quantity,
  p.remaining_quantity,
