@@ -17,6 +17,7 @@ concat( "https://erp.floranow.com/products/", p.product_id) as product_link,
  p.warehouse,
  p.order_type,
  p.Supplier,
+ p.stem_length,
 
  pl.quantity as location_quantity,
  p.remaining_quantity,

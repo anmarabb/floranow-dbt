@@ -13,7 +13,7 @@ Location,
 product_link,
 order_type,
 Supplier,
-
+stem_length,
 
 location_quantity,
 location_remaining_quantity,
