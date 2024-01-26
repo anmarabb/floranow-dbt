@@ -10,6 +10,11 @@ days_until_expiry,
 warehouse,
 Location,
 
+product_link,
+order_type,
+Supplier,
+
+
 location_quantity,
 location_remaining_quantity,
 
