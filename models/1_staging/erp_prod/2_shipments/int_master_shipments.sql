@@ -1,7 +1,6 @@
-With
-prep_countryas as (select distinct country_iso_code  as code, country_name from `floranow.erp_prod.country` )
-
-
+With source as (
+ select * from {{ source('erp_prod', 'master_shipments') }}
+)
 select 
 
             --PK
@@ -19,8 +18,6 @@ select
                 canceled_at,
                 deleted_at,
                 arrival_time as arrival_at, --i think this is when the team click the open butomn
-
-
                 case when origin in ('CO','NL') then departure_date + 1 else departure_date  end as arrival_date,
 
 
@@ -38,9 +35,7 @@ select
                 name as master_shipment,
                 fulfillment as master_shipments_fulfillment_status, --UNACCOUNTED, PARTIAL, SUCCEED
 
-                --origin,
-                c.country_name as origin, 
-
+                origin,
                 order_sequence,
                 note,
 
@@ -72,5 +67,4 @@ current_timestamp() as ingestion_timestamp,
 
 
 
-from {{ source('erp_prod', 'master_shipments') }} as msh
-left join prep_countryas as c on msh.origin = c.code
+from source as msh
