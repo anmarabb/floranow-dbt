@@ -19,4 +19,10 @@ location_quantity,
 location_remaining_quantity,
 
 remaining_quantity,
+
+sold_quantity,
+incident_quantity_inventory_dmaged,
+incident_quantity_inventory_stage,
+
+
 from  {{ref('int_product_locations')}} as pl
