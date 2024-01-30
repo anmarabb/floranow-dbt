@@ -54,4 +54,5 @@ left join base_manageable_accounts_supplier as mas on mas.manageable_id = s.id
 left join {{ source('erp_prod', 'account_managers') }} as account_m on mas.account_manager_id = account_m.id
 left join {{ source('erp_prod', 'users') }} as u2 on u2.id = account_m.user_id
 
---where s.id = 1
+
+where s.id = 3
