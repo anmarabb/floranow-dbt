@@ -129,6 +129,12 @@ order_blocked_status,
 
 collectible_amount,
 
+
+--budget
+current_month_budget,
+mtd_budget,
+
+
     current_timestamp() as insertion_timestamp 
 
 from {{ ref('int_customer')}} as u

@@ -111,6 +111,23 @@ move_items AS
     FROM  {{ ref('fct_move_items') }} as mi
     GROUP BY
         user_id
+),
+
+
+budget as (
+
+select
+    b.financial_administration,
+    b.warehouse,
+    b.account_manager,
+    sum(b.mtd_budget) as mtd_budget,
+    sum(b.current_month_budget) as current_month_budget,
+
+from {{ ref('fct_budget') }} as b
+where financial_administration is not null and warehouse != ''
+group by 1,2,3
+
+
 )
 
 
@@ -183,6 +200,10 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     mi.collectible_amount,
 
 
+    b.current_month_budget,
+    b.mtd_budget,
+
+
 
 
 
@@ -193,3 +214,4 @@ LEFT JOIN line_items as li ON u.id = li.customer_id
 LEFT JOIN invoice as i ON u.id = i.customer_id
 LEFT JOIN invoice_items as ii ON u.id = ii.customer_id
 left join move_items as mi on u.id = mi.user_id 
+left join budget as b on b.financial_administration = u.financial_administration and b.warehouse = u.warehouse and b.account_manager = u.account_manager

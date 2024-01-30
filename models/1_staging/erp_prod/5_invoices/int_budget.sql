@@ -11,6 +11,12 @@ SELECT
     db.city,
     db.client_category,
     db.warehouse,
+    case when  date_diff(date(d) , current_date() , MONTH) = 0 then db.daily_budget else 0 end as mtd_budget,
+      CASE 
+            WHEN EXTRACT(YEAR FROM date(d)) = EXTRACT(YEAR FROM CURRENT_DATE()) AND EXTRACT(MONTH FROM date(d)) = EXTRACT(MONTH FROM CURRENT_DATE()) THEN db.daily_budget
+            ELSE 0
+        END AS current_month_budget,
+
 
     CASE
         WHEN ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager,city) = 1 THEN 
