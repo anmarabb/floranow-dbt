@@ -11,6 +11,8 @@ warehouse,
 Location,
 
 product_link,
+product_location_link,
+
 order_type,
 Supplier,
 stem_length,
