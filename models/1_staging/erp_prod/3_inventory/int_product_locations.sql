@@ -7,6 +7,7 @@ select
  p.product_id,
  concat(loc.label, " - ", sec.section_name) as Location,
 concat( "https://erp.floranow.com/products/", p.product_id) as product_link,
+concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) as product_location_link,
 
  p.Product,
  p.product_subcategory,
