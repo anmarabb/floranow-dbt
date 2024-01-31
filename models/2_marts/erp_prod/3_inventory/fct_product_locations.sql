@@ -27,4 +27,8 @@ incident_quantity_inventory_dmaged,
 incident_quantity_inventory_stage,
 
 
+live_stock,
+report_filter,
+full_stock_name,
+
 from  {{ref('int_product_locations')}} as pl

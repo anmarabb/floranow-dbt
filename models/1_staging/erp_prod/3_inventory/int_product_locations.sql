@@ -29,8 +29,9 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
  p.incident_quantity_inventory_stage,
 
 
-
-
+p.live_stock,
+p.report_filter,
+p.full_stock_name,
 
 
 
