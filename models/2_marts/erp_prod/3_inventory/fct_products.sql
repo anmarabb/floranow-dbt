@@ -41,6 +41,7 @@ case
 
 
         Supplier,
+        orginal_supplier,
         Origin,
         Reseller,
         Stock,

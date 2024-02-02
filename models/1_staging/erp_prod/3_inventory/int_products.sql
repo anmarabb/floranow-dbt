@@ -127,6 +127,7 @@ with
 
             s.supplier_name as Supplier,
             s.supplier_region as Origin,
+            os.supplier_name as orginal_supplier,
 
             fs.feed_source_name as feed_source_name,
             origin_fs.feed_source_name as origin_feed_name,
@@ -432,6 +433,9 @@ li.parent_id_check,
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
         left join {{ ref('fct_order_items')}} as li on p.line_item_id = li.line_item_id
         left join {{ ref('base_suppliers')}} as s on s.supplier_id = li.supplier_id --was p.supplier_id
+        left join {{ ref('base_suppliers')}} as os on os.supplier_id = p.original_supplier_id
+
+        
         left join {{ ref('stg_feed_sources')}} as origin_fs on p.origin_feed_source_id = origin_fs.feed_source_id 
         left join {{ ref('stg_feed_sources')}} as publishing_fs on p.publishing_feed_source_id = publishing_fs.feed_source_id 
         left join {{ ref('stg_feed_sources')}} as fs on p.feed_source_id = fs.feed_source_id 
