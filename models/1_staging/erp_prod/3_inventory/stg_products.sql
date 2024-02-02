@@ -18,6 +18,8 @@ select
                 reseller_id,
                 order_id,
                 supplier_product_id,
+
+                original_supplier_id,
             
 
             --dim
