@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'order_requests') }}
+ select * from {{ source(var('erp_source'), 'order_requests') }}
 )
 select 
 
@@ -13,7 +13,7 @@ order_builder_id,
 
 
 approved_by_id,
-requested_by_id,
+--requested_by_id,
 created_by_id,
 rejected_by_id,
 canceled_by_id,
@@ -36,7 +36,7 @@ created_at,
 updated_at,
 departure_date,
 rejected_at,
-reject_reason,
+--reject_reason,
 failure_at,
 failure_reason,
 approved_at,
@@ -44,13 +44,13 @@ canceled_at,
 
 product_type,
 product_name,
-product_selection_type,
+--product_selection_type,
 color,
 stem_length,
 head_size,
 
-commercial_taxon,
-note,
+--commercial_taxon,
+--note,
 
 
 fob_price,

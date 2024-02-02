@@ -1,70 +1,18 @@
-With source as (
- select * from {{ source('erp_prod', 'master_shipments') }}
-)
+
+
+With
+prep_countryas as (select distinct country_iso_code  as code, country_name from {{ source(var('erp_source'), 'country') }} )
+
 select 
 
-            --PK
-                id as master_shipment_id,
-            --FK
-                warehouse_id,
-                customer_id,
+   msh.* EXCEPT (origin),
 
-
-
-            --date
-                created_at,
-                updated_at,
-                departure_date,
-                canceled_at,
-                deleted_at,
-                arrival_time as arrival_at, --i think this is when the team click the open butomn
-                case when origin in ('CO','NL') then departure_date + 1 else departure_date  end as arrival_date,
-
-
-                
-
-
-
-            --dim
-                destination,
-                
-                total_fob,
-                customer_type,  
-
-                status as master_shipments_status, --CANCELED, MISSING, PACKED, WAREHOUSED,CANCELED,DRAFT
-                name as master_shipment,
-                fulfillment as master_shipments_fulfillment_status, --UNACCOUNTED, PARTIAL, SUCCEED
-
-                origin,
-                order_sequence,
-                note,
-
-                freight_currency,
-                master_invoice_currency,
-                clearance_currency,
-                cancellation_reason,
-                case when msh.customer_id is not null then 'Bulk shipments' else null end as shipment_type,
-                concat( "https://erp.floranow.com/master_shipments/", msh.id) as master_shipment_link,
-
-
-
-            --fct
-                total_quantity as master_total_quantity,
-                clearance_cost,
-                master_invoice_cost,
-                freight_cost,
-            
-            
-
-
-
-
-
-
+ c.country_name as origin, 
 
 current_timestamp() as ingestion_timestamp, 
 
 
 
 
-from source as msh
+from{{ ref('stg_master_shipments') }}  as msh
+left join prep_countryas as c on msh.origin = c.code

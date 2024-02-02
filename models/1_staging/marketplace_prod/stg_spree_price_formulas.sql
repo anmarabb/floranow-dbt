@@ -35,9 +35,9 @@ seller_feed_id,
 seller_type,
 seller_id,
 
-formula.value as formula_value,
-factors.value as factors_value,
+--formula.value as formula_value,
+--factors.value as factors_value,
 
 
 
-from {{ source('marketplace_prod', 'spree_price_formulas') }}
+from {{ source(var('mkp_source'), 'spree_price_formulas') }}

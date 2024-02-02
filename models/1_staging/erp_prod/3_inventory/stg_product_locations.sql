@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'product_locations') }}
+ select * from {{ source(var('erp_source'), 'product_locations') }}
 )
 select 
 
@@ -14,7 +14,7 @@ select
                 --date
                 created_at,
                 updated_at,
-                empty_at,
+               -- empty_at,
 
 
 

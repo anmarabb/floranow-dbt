@@ -4,7 +4,7 @@ prep_countryas as
         (
             select 
             distinct country_iso_code  as code, country_name 
-            from `floranow.erp_prod.country` 
+            from {{ source(var('erp_source'), 'country') }}
         ),
 
 temp_calculation as 

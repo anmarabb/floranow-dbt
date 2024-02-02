@@ -1,7 +1,7 @@
 
 with
-  prep_countryas as (select distinct country_iso_code as code, country_name from `floranow.erp_prod.country`),
-  base_manageable_accounts_user as (select account_manager_id, manageable_id, from `floranow.erp_prod.manageable_accounts` where manageable_type = 'User')
+  prep_countryas as (select distinct country_iso_code as code, country_name from {{ source(var('erp_source'), 'country') }}),
+  base_manageable_accounts_user as (select account_manager_id, manageable_id, from {{ source(var('erp_source'), 'manageable_accounts') }}  where manageable_type = 'User')
 
 
 select
@@ -10,7 +10,7 @@ select
 
             --FK
                 u.warehouse_id,
-                u.parent_id,
+                --u.parent_id,
                 u.user_reference_id,
                 u.payment_term_id,
                 u.master_id,
@@ -75,7 +75,7 @@ select
 
                     u.street_address,
                     u.phone_number,
-                    u.username,
+                   -- u.username,
                     u.accessible_warehouses,
                     u.odoo_code,
                     u.statement_type,
@@ -242,13 +242,13 @@ concat( "https://erp.floranow.com/users/", u.id) as user_link,
 
 current_timestamp() as ingestion_timestamp,
 
-  from {{ source('erp_prod', 'users') }} as u
+  from {{ source(var('erp_source'), 'users') }} as u
   left join prep_countryas as c on u.country = c.code
   left join base_manageable_accounts_user as mau on mau.manageable_id = u.id
-  left join {{ source('erp_prod', 'account_managers') }} as account_m on mau.account_manager_id = account_m.id
-  left join {{ source('erp_prod', 'users') }} as u2 on u2.id = account_m.user_id
-  left join {{ source('erp_prod', 'user_categories') }} as uc on u.user_category_id = uc.id
-  left join {{ source('erp_prod', 'payment_terms') }} as pt on pt.id = u.payment_term_id
-  left join {{ source('erp_prod', 'financial_administrations') }} as f on f.id = u.financial_administration_id
+  left join {{ source(var('erp_source'), 'account_managers') }} as account_m on mau.account_manager_id = account_m.id
+  left join {{ source(var('erp_source'), 'users') }} as u2 on u2.id = account_m.user_id
+  left join {{ source(var('erp_source'), 'user_categories') }} as uc on u.user_category_id = uc.id
+  left join {{ source(var('erp_source'), 'payment_terms') }} as pt on pt.id = u.payment_term_id
+  left join {{ source(var('erp_source'), 'financial_administrations') }} as f on f.id = u.financial_administration_id
   left join {{ ref('stg_warehouses') }} as w on w.warehouse_id = u.warehouse_id 
   left join {{ ref('stg_companies') }} as com on com.id = u.company_id 

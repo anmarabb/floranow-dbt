@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'shipments') }}
+ select * from {{ source(var('erp_source'), 'shipments') }}
 )
 select 
 
@@ -22,8 +22,8 @@ select
 
 
 
-                packing_type, --null
-                customer_type, --null
+               -- packing_type, --null
+                --customer_type, --null
                 
                 cancellation_reason, --null
                 number,
@@ -34,19 +34,19 @@ select
 
 
                 invoice_uploaded_by,
-                proforma_uploaded_by,
+                --proforma_uploaded_by,
                 canceled_by_id,
 
 
 
             --date
-                received_at,
+               -- received_at,
                 created_at,
                 updated_at,
                 departure_date,
                 
                 canceled_at,
-                deleted_at,
+                --deleted_at,
 
             --fct
                 total_quantity as supplier_shipment_total_quantity,
@@ -60,7 +60,7 @@ select
                 total_damaged_fob,
                 
                 invoice_amount,
-                proforma_amount,
+                --proforma_amount,
 
                 shipping_boxes_count,
                 warehousing_boxes_count,

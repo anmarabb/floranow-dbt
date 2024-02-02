@@ -32,7 +32,7 @@ prefix,
 created_at,
 updated_at,
 start_invoice_number,
-current_invoice_number,
+--current_invoice_number,
 invoice_prefix,
 credit_note_prefix,
 payment_transaction_prefix,
@@ -41,5 +41,5 @@ payment_transaction_prefix,
 current_timestamp() as ingestion_timestamp,
 
 
-from {{ source('erp_prod', 'financial_administrations') }} as fn
+from {{ source(var('erp_source'), 'financial_administrations') }} as fn
 left join registered_clients as rc on rc.financial_administration_id = fn.id

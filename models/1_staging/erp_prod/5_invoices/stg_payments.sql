@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'payments') }}
+ select * from {{ source(var('erp_source'), 'payments') }}
 )
 select 
             --PK
@@ -17,7 +17,7 @@ select
             --dim
                 payment_type,
                 currency,
-                added_by,
+                --added_by,
                 approved_by,
                 odoo_imported,
                 source_system,

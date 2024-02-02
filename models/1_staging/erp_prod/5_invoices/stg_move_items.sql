@@ -1,6 +1,6 @@
 With source as (
  select mi.*,  i.due_date, i.invoice_header_id,
- from {{ source('erp_prod', 'move_items') }} as mi
+ from {{ source(var('erp_source'), 'move_items') }} as mi
  left join {{ref('stg_invoices')}} as i on mi.documentable_id = i.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'DEBIT'
 
 )

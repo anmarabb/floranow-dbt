@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'feed_source_regions') }}
+ select * from {{ source(var('erp_source'), 'feed_source_regions') }}
 )
 select 
 *,

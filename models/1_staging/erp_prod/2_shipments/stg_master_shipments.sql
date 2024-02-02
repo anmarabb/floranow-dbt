@@ -1,5 +1,3 @@
-With
-prep_countryas as (select distinct country_iso_code  as code, country_name from `floranow.erp_prod.country` )
 
 
 select 
@@ -38,8 +36,8 @@ select
                 name as master_shipment,
                 fulfillment as master_shipments_fulfillment_status, --UNACCOUNTED, PARTIAL, SUCCEED
 
-                --origin,
-                c.country_name as origin, 
+                origin,
+               
 
                 order_sequence,
                 note,
@@ -67,10 +65,8 @@ select
 
 
 
-current_timestamp() as ingestion_timestamp, 
 
 
 
 
-from {{ source('erp_prod', 'master_shipments') }} as msh
-left join prep_countryas as c on msh.origin = c.code
+from {{ source(var('erp_source'), 'master_shipments') }} as msh

@@ -2,7 +2,7 @@ With source as (
  select i.*,
  fn.name as financial_administration,
 
- from {{ source('erp_prod', 'invoices') }} as i
+ from {{ source(var('erp_source'), 'invoices') }} as i
  left join  {{ ref('stg_financial_administrations') }} as fn on fn.id = i.financial_administration_id
 
 )
