@@ -110,3 +110,5 @@ current_timestamp() as ingestion_timestamp,
 from source as pi
 where  pi.deleted_at is null
 
+and reported_by != 10988
+
