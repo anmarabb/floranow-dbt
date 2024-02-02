@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'statement_of_accounts') }}
+ select * from {{ source(var('erp_source'), 'statement_of_accounts') }}
 )
 select 
             --PK
@@ -25,7 +25,7 @@ select
                 --dim
                 currency,
                 invoices_ids,
-                summary_file,
+               -- summary_file,
                 transaction_ids,
                 move_items_ids,
 

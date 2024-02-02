@@ -15,4 +15,4 @@
 
 
 
-    FROM {{ source('erp_prod', 'collection') }} as b
+    FROM {{ source(var('erp_source'), 'collection') }} as b

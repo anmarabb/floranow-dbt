@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'proof_of_deliveries') }}
+ select * from {{ source(var('erp_source'), 'proof_of_deliveries') }}
 )
 select 
 
@@ -35,7 +35,7 @@ select
 
 
                 summary,
-                creation_condition,
+               -- creation_condition,
                 source_type,
                 number,
                 barcode,

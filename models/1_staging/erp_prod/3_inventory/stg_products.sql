@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'products') }} as p
+ select * from {{ source(var('erp_source'), 'products') }} as p
  where p.deleted_at is  null
  and p.__hevo__marked_deleted is not true
 

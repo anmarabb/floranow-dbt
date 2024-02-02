@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'additional_items_reports') }}
+ select * from {{ source(var('erp_source'), 'additional_items_reports') }}
 )
 select 
 
@@ -23,10 +23,10 @@ select
         creation_stage, --INVENTORY, PACKING, RECEIVING
         status, -- APPROVED, FAILED, REJECTED, PROCESSING
 
-        locations_quantities.value,
+        --locations_quantities.value,
 
         active,
-        reject_reason,
+        --reject_reason,
         failure_reason,
         currency,
 

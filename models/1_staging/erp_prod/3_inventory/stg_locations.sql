@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source('erp_prod', 'locations') }}
+ select * from {{ source(var('erp_source'), 'locations') }}
 )
 select 
 
@@ -21,7 +21,7 @@ section_checking_status,
 created_at,
 deleted_at,
 updated_at,
-name,
+--name,
 
 current_timestamp() as ingestion_timestamp,
  

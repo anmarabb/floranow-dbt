@@ -1,7 +1,7 @@
 with
-  prep_countryas as (select distinct country_iso_code as code, country_name from `floranow.erp_prod.country`),
-  prep_stock_count as (select warehouse_id, count(*) as stock_count, from {{source('erp_prod', 'stocks')}} as st group by 1),
-  prep_reseller_count as (select warehouse_id, count(*) as reseller_count, from {{ source('erp_prod', 'users') }} as u where u.customer_type = 0 group by 1)
+  prep_countryas as (select distinct country_iso_code as code, country_name from {{ source(var('erp_source'), 'country') }}),
+  prep_stock_count as (select warehouse_id, count(*) as stock_count, from {{source(var('erp_source'), 'stocks')}} as st group by 1),
+  prep_reseller_count as (select warehouse_id, count(*) as reseller_count, from {{ source(var('erp_source'), 'users') }} as u where u.customer_type = 0 group by 1)
 select 
 
 w.warehouse_id,

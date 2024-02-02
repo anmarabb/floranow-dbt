@@ -164,7 +164,7 @@ from {{ ref('stg_move_items')}} as mi
 left join {{ ref('base_users') }} as customer on customer.id = mi.user_id
 left join {{ ref('stg_payment_transactions') }} as pt on pt.payment_transaction_id = mi.documentable_id and mi.documentable_type = 'PaymentTransaction' and  mi.entry_type = 'CREDIT'
 left join {{ ref('stg_financial_administrations') }} as fn on fn.id = mi.financial_administration_id
-left join {{ source('erp_prod', 'bank_accounts') }} as ba on pt.bank_account_id = ba.id
+left join {{ source(var('erp_source'), 'bank_accounts') }} as ba on pt.bank_account_id = ba.id
 
 left join {{ref('stg_invoices')}} as i on mi.documentable_id = i.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'DEBIT'
 left join {{ref('stg_invoices')}} as cn on mi.documentable_id = cn.invoice_header_id and mi.documentable_type = 'Invoice' and mi.entry_type = 'CREDIT'

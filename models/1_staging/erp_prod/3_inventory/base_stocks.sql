@@ -36,7 +36,7 @@ case when st.status = 0 then 'visible' else 'hidden' end as stock_status,
 
 st.availability_type,
 st.has_custom_sales_unit,
-st.custom_sales_unit,
+--st.custom_sales_unit,
 
 
 case 
@@ -78,7 +78,7 @@ current_timestamp() as ingestion_timestamp,
 
 
 
-from {{source('erp_prod', 'stocks')}} as st
+from {{source(var('erp_source'), 'stocks')}} as st
 left join {{ ref('base_users') }} as re on re.id = st.reseller_id
 left join {{ref('stg_warehouses')}} as w on w.warehouse_id = st.warehouse_id
 left join {{ref('stg_feed_sources')}} as fs on fs.feed_source_id = st.out_feed_source_id

@@ -1,140 +1,387 @@
-financial_administration,date,account_manager,city,client_category,budget
-UAE,2022-06-01,Fatima,,Retail Shops,982800
-UAE,2022-06-01,Ibrahim,,Retail Shops,302400
-UAE,2022-06-01,Mujibur,,Retail Shops,604800
-UAE,2022-06-01,Shyam,,Fully Serviced Clients,246000
-UAE,2022-06-01,Shyam,,Hotels,243048
-UAE,2022-06-01,Shoaib,,Plant Nurseries,100000
-UAE,2022-06-01,Shoaib,,SuperMarkets,450000
-UAE,2022-06-01,Osama,,Weddings & Events,144000
-UAE,2022-06-01,Mariam,,The Bouquet Factory,105000
-UAE,2022-07-01,Fatima,,Retail Shops,886950
-UAE,2022-07-01,Shyam,,Fully Serviced Clients,246000
-UAE,2022-07-01,Shyam,,Hotels,243048
-UAE,2022-07-01,Ibrahim,,Retail Shops,492750
-UAE,2022-07-01,Shoaib,,SuperMarkets,320000
-UAE,2022-07-01,Shoaib,,Plant Nurseries,100000
-UAE,2022-07-01,Osama,,Weddings & Events,172800
-UAE,2022-07-01,Mariam,,The Bouquet Factory,105000
-UAE,2022-07-01,Shakir,,Retail Shops,591300
-UAE,2022-08-01,Fatima,,Retail Shops,923400
-UAE,2022-08-01,Shyam,,Fully Serviced Clients,246000
-UAE,2022-08-01,Shyam,,Hotels,243048
-UAE,2022-08-01,Ibrahim,,Retail Shops,513000
-UAE,2022-08-01,Shoaib,,SuperMarkets,320000
-UAE,2022-08-01,Shoaib,,Plant Nurseries,240000
-UAE,2022-08-01,Osama,,Weddings & Events,216000
-UAE,2022-08-01,Mariam,,The Bouquet Factory,105000
-UAE,2022-08-01,Shakir,,Retail Shops,615600
-UAE,2022-09-01,Fatima,,Retail Shops,994140
-UAE,2022-09-01,Shyam,,Fully Serviced Clients,360000
-UAE,2022-09-01,Shyam,,Hotels,332500
-UAE,2022-09-01,Ibrahim,,Retail Shops,852300
-UAE,2022-09-01,Shoaib,,SuperMarkets,400000
-UAE,2022-09-01,Shoaib,,Plant Nurseries,100000
-UAE,2022-09-01,Osama,,Weddings & Events,336000
-UAE,2022-09-01,Mariam,,The Bouquet Factory,126000
-UAE,2022-09-01,Shakir,,Retail Shops,662760
-UAE,2022-10-01,Fatima,Dubai,Retail Shops,1038048
-UAE,2022-10-01,Shyam,Dubai,Fully Serviced Clients,360000
-UAE,2022-10-01,Shyam,Dubai,Hotels,332500
-UAE,2022-10-01,Ibrahim,Sharjah,Retail Shops,180636
-UAE,2022-10-01,Ibrahim,Ajman,Retail Shops,73593
-UAE,2022-10-01,Ibrahim,Al Ain,Retail Shops,234158
-UAE,2022-10-01,Ibrahim,Ras Al Khaimah,Retail Shops,113734
-UAE,2022-10-01,Ibrahim,Umm Al Quwain,Retail Shops,66902
-UAE,2022-10-01,Shoaib,Dubai,SuperMarkets,294400
-UAE,2022-10-01,Shoaib,Abu Dhabi,SuperMarkets,25600
-UAE,2022-10-01,Shoaib,Dubai,Plant Nurseries,34000
-UAE,2022-10-01,Shoaib,Abu Dhabi,Plant Nurseries,6000
-UAE,2022-10-01,Osama,Dubai,Weddings & Events,168000
-UAE,2022-10-01,Osama,Sharjah,Weddings & Events,84000
-UAE,2022-10-01,Osama,Abu Dhabi,Weddings & Events,84000
-UAE,2022-10-01,Mariam,Dubai,The Bouquet Factory,70000
-UAE,2022-10-01,Shakir,Abu Dhabi,Retail Shops,802128
-UAE,2022-11-01,Fatima,Dubai,Retail Shops,1038048
-UAE,2022-11-01,Shyam,Dubai,Fully Serviced Clients,360000
-UAE,2022-11-01,Shyam,Dubai,Hotels,332500
-UAE,2022-11-01,Ibrahim,Sharjah,Retail Shops,180636
-UAE,2022-11-01,Ibrahim,Ajman,Retail Shops,73593
-UAE,2022-11-01,Ibrahim,Al Ain,Retail Shops,234158
-UAE,2022-11-01,Ibrahim,Ras Al Khaimah,Retail Shops,113734
-UAE,2022-11-01,Ibrahim,Umm Al Quwain,Retail Shops,66902
-UAE,2022-11-01,Shoaib,Dubai,SuperMarkets,368000
-UAE,2022-11-01,Shoaib,Abu Dhabi,SuperMarkets,32000
-UAE,2022-11-01,Shoaib,Dubai,Plant Nurseries,68000
-UAE,2022-11-01,Shoaib,Abu Dhabi,Plant Nurseries,12000
-UAE,2022-11-01,Osama,Dubai,Weddings & Events,184000
-UAE,2022-11-01,Osama,Sharjah,Weddings & Events,92000
-UAE,2022-11-01,Osama,Abu Dhabi,Weddings & Events,92000
-UAE,2022-11-01,Mariam,Dubai,The Bouquet Factory,105000
-UAE,2022-11-01,Shakir,Abu Dhabi,Retail Shops,802128
-UAE,2022-12-01,Fatima,Dubai,Retail Shops,1038048
-UAE,2022-12-01,Shyam,Dubai,Fully Serviced Clients,360000
-UAE,2022-12-01,Shyam,Dubai,Hotels,332500
-UAE,2022-12-01,Ibrahim,Sharjah,Retail Shops,180636
-UAE,2022-12-01,Ibrahim,Ajman,Retail Shops,73593
-UAE,2022-12-01,Ibrahim,Al Ain,Retail Shops,234158
-UAE,2022-12-01,Ibrahim,Ras Al Khaimah,Retail Shops,113734
-UAE,2022-12-01,Ibrahim,Umm Al Quwain,Retail Shops,66902
-UAE,2022-12-01,Shoaib,Dubai,SuperMarkets,368000
-UAE,2022-12-01,Shoaib,Abu Dhabi,SuperMarkets,32000
-UAE,2022-12-01,Shoaib,Dubai,Plant Nurseries,68000
-UAE,2022-12-01,Shoaib,Abu Dhabi,Plant Nurseries,12000
-UAE,2022-12-01,Osama,Dubai,Weddings & Events,200000
-UAE,2022-12-01,Osama,Sharjah,Weddings & Events,100000
-UAE,2022-12-01,Osama,Abu Dhabi,Weddings & Events,100000
-UAE,2022-12-01,Mariam,Dubai,The Bouquet Factory,105000
-UAE,2022-12-01,Shakir,Abu Dhabi,Retail Shops,802128
-UAE,2023-01-01,Fatima,Dubai,Retail Shops,838522
-UAE,2023-01-01,Shyam,Dubai,Fully Serviced Clients,277452
-UAE,2023-01-01,Osama,Dubai,Hotels,286260
-UAE,2023-01-01,Ibrahim,Sharjah,Retail Shops,103767
-UAE,2023-01-01,Ibrahim,Ajman,Retail Shops,42276
-UAE,2023-01-01,Ibrahim,Al Ain,Retail Shops,134513
-UAE,2023-01-01,Ibrahim,Ras Al Khaimah,Retail Shops,65335
-UAE,2023-01-01,Ibrahim,Umm Al Quwain,Retail Shops,38432
-UAE,2023-01-01,Shoaib,Dubai,SuperMarkets,72209
-UAE,2023-01-01,Shoaib,Abu Dhabi,SuperMarkets,6279
-UAE,2023-01-01,Shoaib,Dubai,Plant Nurseries,9010
-UAE,2023-01-01,Shoaib,Abu Dhabi,Plant Nurseries,2000
-UAE,2023-01-01,Osama,Dubai,Weddings & Events,130359
-UAE,2023-01-01,Osama,Sharjah,Weddings & Events,65179
-UAE,2023-01-01,Osama,Abu Dhabi,Weddings & Events,65179
-UAE,2023-01-01,Mariam,Dubai,The Bouquet Factory,231210
-UAE,2023-01-01,Mirza,Abu Dhabi,Retail Shops,524076
-UAE,2023-02-01,Fatima,Dubai,Retail Shops,1276896
-UAE,2023-02-01,Shyam,Dubai,Fully Serviced Clients,439867
-UAE,2023-02-01,Osama,Dubai,Hotels,305344
-UAE,2023-02-01,Ibrahim,Sharjah,Retail Shops,140467
-UAE,2023-02-01,Ibrahim,Ajman,Retail Shops,57228
-UAE,2023-02-01,Ibrahim,Al Ain,Retail Shops,182087
-UAE,2023-02-01,Ibrahim,Ras Al Khaimah,Retail Shops,88442
-UAE,2023-02-01,Ibrahim,Umm Al Quwain,Retail Shops,52025
-UAE,2023-02-01,Shoaib,Dubai,SuperMarkets,117782
-UAE,2023-02-01,Shoaib,Abu Dhabi,SuperMarkets,10242
-UAE,2023-02-01,Shoaib,Dubai,Plant Nurseries,9010
-UAE,2023-02-01,Shoaib,Abu Dhabi,Plant Nurseries,2000
-UAE,2023-02-01,Osama,Dubai,Weddings & Events,141699
-UAE,2023-02-01,Osama,Sharjah,Weddings & Events,70849
-UAE,2023-02-01,Osama,Abu Dhabi,Weddings & Events,70849
-UAE,2023-02-01,Mariam,Dubai,The Bouquet Factory,330300
-UAE,2023-02-01,Mirza,Abu Dhabi,Retail Shops,690162
-UAE,2023-03-01,Fatima,Dubai,Retail Shops,792720
-UAE,2023-03-01,Osama,Dubai,Fully Serviced Clients,293233
-UAE,2023-03-01,Shyam,Dubai,Hotels,286260
-UAE,2023-03-01,Ibrahim,Sharjah,Retail Shops,86062
-UAE,2023-03-01,Ibrahim,Ajman,Retail Shops,86062
-UAE,2023-03-01,Ibrahim,Al Ain,Retail Shops,172123
-UAE,2023-03-01,Ibrahim,Ras Al Khaimah,Retail Shops,43031
-UAE,2023-03-01,Ibrahim,Umm Al Quwain,Retail Shops,43031
-UAE,2023-03-01,Ibrahim,Dubai,Retail Shops,430308
-UAE,2023-03-01,Shyam,Dubai,SuperMarkets,429751
-UAE,2023-03-01,Shyam,Abu Dhabi,SuperMarkets,37370
-UAE,2023-03-01,Shoaib,Dubai,Plant Nurseries,9010
-UAE,2023-03-01,Shoaib,Abu Dhabi,Plant Nurseries,2000
-UAE,2023-03-01,Osama,Dubai,Weddings & Events,141699
-UAE,2023-03-01,Osama,Sharjah,Weddings & Events,70849
-UAE,2023-03-01,Osama,Abu Dhabi,Weddings & Events,70849
-UAE,2023-03-01,Mariam,Dubai,The Bouquet Factory,12300
-UAE,2023-03-01,Mirza,Abu Dhabi,Retail Shops,792720
+financial_administration,date,account_manager,city,client_category,warehouse,budget
+
+"KSA","2022-06-01","Mohammed Al Hadidi","Jeddah","","","85000"
+"KSA","2022-06-01","hamada","Jeddah","","","65000"
+"KSA","2022-06-01","Mahmoud Ahmed","Jeddah","","","699520"
+"KSA","2022-06-01","Mohammad Hijazzi","Jeddah","","","125000"
+"KSA","2022-06-01","Hani Gamil","Dammam","","","160000"
+"KSA","2022-06-01","Mohammad Khyair","Dammam","","","130000"
+"KSA","2022-06-01","Mohammad Yaqoup","Dammam","","","479850"
+"KSA","2022-06-01","Mounir Falaha","Dammam","","","130000"
+"KSA","2022-06-01","Yousif Taqi","Dammam","","","175000"
+"KSA","2022-06-01","Delbrin","Riyadh","","","710000"
+"KSA","2022-06-01","Mohammad Shetawi","Riyadh","","","200000"
+"KSA","2022-06-01","Mahmoud shaker","Riyadh","","","200000"
+"KSA","2022-06-01","Mohamed Alkoud","Riyadh","","","271000"
+"KSA","2022-06-01","Mustfa Salah","Medina","","","340680"
+"KSA","2022-06-01","Mahmoud Awawdeh","Tabuk","","","257825"
+"KSA","2022-06-01","Mohammad Jebril","Tabuk","","","257825"
+"KSA","2022-10-01","Mohammed Al Hadidi","Jeddah","KSA retail","","100000"
+"KSA","2022-10-01","hamada","Jeddah","KSA retail","","80000"
+"KSA","2022-10-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","","740000"
+"KSA","2022-10-01","Mohammad Hijazzi","Jeddah","KSA retail","","80000"
+"KSA","2022-10-01","Hani Gamil","Dammam","KSA retail","","120000"
+"KSA","2022-10-01","Mohammad Khyair","Dammam","KSA retail","","105000"
+"KSA","2022-10-01","Mohammad Yaqoup","Dammam","KSA wholesaler","","280000"
+"KSA","2022-10-01","Mounir Falaha","Dammam","KSA retail","","100000"
+"KSA","2022-10-01","Yousif Taqi","Dammam","KSA retail","","165000"
+"KSA","2022-10-01","Mohammad Shetawi","Riyadh","KSA wholesaler","","105000"
+"KSA","2022-10-01","Mohammad Shetawi","Riyadh","KSA retail","","50000"
+"KSA","2022-10-01","Mahmoud shaker","Riyadh","KSA wholesaler","","750000"
+"KSA","2022-10-01","Mohamed Alkoud","Riyadh","KSA retail","","175000"
+"KSA","2022-10-01","Mustfa Salah","Medina","KSA wholesaler","","120000"
+"KSA","2022-10-01","Mustfa Salah","Medina","KSA retail","","80000"
+"KSA","2022-10-01","Mahmoud Awawdeh","Tabuk","KSA retail","","200000"
+"KSA","2022-10-01","Mohammad Jebril","Tabuk","KSA wholesaler","","50000"
+"KSA","2022-10-01","Mohammad Jebril","Tabuk","KSA retail","","150000"
+"KSA","2022-11-01","Mohammed Al Hadidi","Jeddah","KSA retail","","100000"
+"KSA","2022-11-01","hamada","Jeddah","KSA retail","","80000"
+"KSA","2022-11-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","","740000"
+"KSA","2022-11-01","Mohammad Hijazzi","Jeddah","KSA retail","","80000"
+"KSA","2022-11-01","Hani Gamil","Dammam","KSA retail","","120000"
+"KSA","2022-11-01","Mohammad Khyair","Dammam","KSA retail","","105000"
+"KSA","2022-11-01","Mohammad Yaqoup","Dammam","KSA wholesaler","","280000"
+"KSA","2022-11-01","Mounir Falaha","Dammam","KSA retail","","100000"
+"KSA","2022-11-01","Yousif Taqi","Dammam","KSA retail","","165000"
+"KSA","2022-11-01","Mohammad Shetawi","Riyadh","KSA wholesaler","","105000"
+"KSA","2022-11-01","Mohammad Shetawi","Riyadh","KSA retail","","50000"
+"KSA","2022-11-01","Mahmoud shaker","Riyadh","KSA wholesaler","","750000"
+"KSA","2022-11-01","Mohamed Alkoud","Riyadh","KSA retail","","175000"
+"KSA","2022-11-01","Mustfa Salah","Medina","KSA wholesaler","","120000"
+"KSA","2022-11-01","Mustfa Salah","Medina","KSA retail","","80000"
+"KSA","2022-11-01","Mahmoud Awawdeh","Tabuk","KSA retail","","200000"
+"KSA","2022-11-01","Mohammad Jebril","Tabuk","KSA wholesaler","","50000"
+"KSA","2022-11-01","Mohammad Jebril","Tabuk","KSA retail","","150000"
+"KSA","2022-12-01","Mohammed Al Hadidi","Jeddah","KSA retail","","100000"
+"KSA","2022-12-01","hamada","Jeddah","KSA retail","","80000"
+"KSA","2022-12-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","","800000"
+"KSA","2022-12-01","Mohammad Hijazzi","Jeddah","KSA retail","","100000"
+"KSA","2022-12-01","Hani Gamil","Dammam","KSA retail","","120000"
+"KSA","2022-12-01","Mohammad Khyair","Dammam","KSA retail","","105000"
+"KSA","2022-12-01","Mohammad Yaqoup","Dammam","KSA wholesaler","","400000"
+"KSA","2022-12-01","Mounir Falaha","Dammam","KSA retail","","100000"
+"KSA","2022-12-01","Yousif Taqi","Dammam","KSA retail","","175000"
+"KSA","2022-12-01","Mohammad Shetawi","Riyadh","KSA wholesaler","","150000"
+"KSA","2022-12-01","Mohammad Shetawi","Riyadh","KSA retail","","50000"
+"KSA","2022-12-01","Mahmoud shaker","Riyadh","KSA wholesaler","","800000"
+"KSA","2022-12-01","Mohamed Alkoud","Riyadh","KSA retail","","225000"
+"KSA","2022-12-01","Mustfa Salah","Medina","KSA wholesaler","","165000"
+"KSA","2022-12-01","Mustfa Salah","Medina","KSA retail","","85000"
+"KSA","2022-12-01","Mahmoud Awawdeh","Tabuk","KSA retail","","250000"
+"KSA","2022-12-01","Mohammad Jebril","Tabuk","KSA wholesaler","","50000"
+"KSA","2022-12-01","Mohammad Jebril","Tabuk","KSA retail","","200000"
+"KSA","2023-01-01","Mohammed Al Hadidi","Jeddah","KSA retail","","100000"
+"KSA","2023-01-01","hamada","Jeddah","KSA retail","","100000"
+"KSA","2023-01-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","","800000"
+"KSA","2023-01-01","Mohammad Hijazzi","Jeddah","KSA retail","","110000"
+"KSA","2023-01-01","Hani Gamil","Dammam","KSA retail","","130000"
+"KSA","2023-01-01","Mohammad Khyair","Dammam","KSA retail","","110000"
+"KSA","2023-01-01","Mohammad Yaqoup","Dammam","KSA wholesaler","","450000"
+"KSA","2023-01-01","Mounir Falaha","Dammam","KSA retail","","110000"
+"KSA","2023-01-01","Yousif Taqi","Dammam","KSA retail","","200000"
+"KSA","2023-01-01","Mohammad Shetawi","Riyadh","KSA retail","","250000"
+"KSA","2023-01-01","Mahmoud shaker","Riyadh","KSA wholesaler","","800000"
+"KSA","2023-01-01","Mohammad Alkoud","Riyadh","KSA retail","","275000"
+"KSA","2023-01-01","Omar Alamoudi","Medina","KSA wholesaler","","150000"
+"KSA","2023-01-01","Omar Alamoudi","Medina","KSA retail","","125000"
+"KSA","2023-01-01","Mahmoud Awawdeh","Tabuk","KSA retail","","275000"
+"KSA","2023-01-01","Mohammad Jebril","Tabuk","KSA wholesaler","","100000"
+"KSA","2023-01-01","Mohammad Jebril","Tabuk","KSA retail","","175000"
+"KSA","2023-02-01","Mohammed Al Hadidi","Jeddah","KSA retail","","100000"
+"KSA","2023-02-01","hamada","Jeddah","KSA retail","","80000"
+"KSA","2023-02-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","","800000"
+"KSA","2023-02-01","Mohammad Hijazzi","Jeddah","KSA retail","","100000"
+"KSA","2023-02-01","Hani Gamil","Dammam","KSA retail","","150000"
+"KSA","2023-02-01","Mohammad Khyair","Dammam","KSA retail","","110000"
+"KSA","2023-02-01","Mohammad Yaqoup","Dammam","KSA wholesaler","","350000"
+"KSA","2023-02-01","Mounir Falaha","Dammam","KSA retail","","110000"
+"KSA","2023-02-01","Yousif Taqi","Dammam","KSA retail","","200000"
+"KSA","2023-02-01","Mohammad Shetawi","Riyadh","KSA wholesaler","","125000"
+"KSA","2023-02-01","Mohammad Shetawi","Riyadh","KSA retail","","125000"
+"KSA","2023-02-01","Mahmoud shaker","Riyadh","KSA wholesaler","","700000"
+"KSA","2023-02-01","Mohammad Alkoud","Riyadh","KSA retail","","250000"
+"KSA","2023-02-01","Mustfa Salah","Medina","KSA wholesaler","","150000"
+"KSA","2023-02-01","Mustfa Salah","Medina","KSA retail","","125000"
+"KSA","2023-02-01","Mahmoud Awawdeh","Tabuk","KSA retail","","225000"
+"KSA","2023-02-01","Mohammad Jebril","Tabuk","KSA wholesaler","","100000"
+"KSA","2023-02-01","Mohammad Jebril","Tabuk","KSA retail","","125000"
+"KSA","2023-03-01","Mohammed Al Hadidi","Jeddah","KSA retail","","100000"
+"KSA","2023-03-01","hamada","Jeddah","KSA retail","","80000"
+"KSA","2023-03-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","","700000"
+"KSA","2023-03-01","Mohammad Hijazzi","Jeddah","KSA retail","","100000"
+"KSA","2023-03-01","Hani Gamil","Dammam","KSA retail","","150000"
+"KSA","2023-03-01","Mohammad Khyair","Dammam","KSA retail","","100000"
+"KSA","2023-03-01","Mohammad Yaqoup","Dammam","KSA wholesaler","","350000"
+"KSA","2023-03-01","Mounir Falaha","Dammam","KSA retail","","100000"
+"KSA","2023-03-01","Yousif Taqi","Dammam","KSA retail","","150000"
+"KSA","2023-03-01","Mohammad Shetawi","Riyadh","KSA wholesaler","","125000"
+"KSA","2023-03-01","Mohammad Shetawi","Riyadh","KSA retail","","125000"
+"KSA","2023-03-01","Mahmoud shaker","Riyadh","KSA wholesaler","","550000"
+"KSA","2023-03-01","Mohammad Alkoud","Riyadh","KSA retail","","200000"
+"KSA","2023-03-01","Mustfa Salah","Medina","KSA wholesaler","","100000"
+"KSA","2023-03-01","Mustfa Salah","Medina","KSA retail","","125000"
+"KSA","2023-03-01","Mahmoud Awawdeh","Tabuk","KSA retail","","200000"
+"KSA","2023-03-01","Mohammad Jebril","Tabuk","KSA wholesaler","","100000"
+"KSA","2023-03-01","Mohammad Jebril","Tabuk","KSA retail","","100000"
+"KSA","2023-04-01","Mohammed Al Hadidi","Jeddah","KSA retail","","100000"
+"KSA","2023-04-01","hamada","Jeddah","KSA retail","","80000"
+"KSA","2023-04-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","","700000"
+"KSA","2023-04-01","Mohammad Hijazzi","Jeddah","KSA retail","","100000"
+"KSA","2023-04-01","Hani Gamil","Dammam","KSA retail","","120000"
+"KSA","2023-04-01","Mohammad Khyair","Dammam","KSA retail","","100000"
+"KSA","2023-04-01","Mohammad Yaqoup","Dammam","KSA wholesaler","","205000"
+"KSA","2023-04-01","Mounir Falaha","Dammam","KSA retail","","100000"
+"KSA","2023-04-01","Yousif Taqi","Dammam","KSA retail","","120000"
+"KSA","2023-04-01","Mohammad Shetawi","Riyadh","KSA wholesaler","","100000"
+"KSA","2023-04-01","Mohammad Shetawi","Riyadh","KSA retail","","100000"
+"KSA","2023-04-01","Mahmoud shaker","Riyadh","KSA wholesaler","","550000"
+"KSA","2023-04-01","Mohamed Alkoud","Riyadh","KSA retail","","250000"
+"KSA","2023-04-01","Mustfa Salah","Medina","KSA wholesaler","","100000"
+"KSA","2023-04-01","Mustfa Salah","Medina","KSA retail","","125000"
+"KSA","2023-04-01","Mahmoud Awawdeh","Tabuk","KSA retail","","200000"
+"KSA","2023-04-01","Mohammad Jebril","Tabuk","KSA wholesaler","","100000"
+"KSA","2023-04-01","Mohammad Jebril","Tabuk","KSA retail","","100000"
+"KSA","2023-05-01","","Jeddah","","","1000000"
+"KSA","2023-05-01","","Jeddah","","",""
+"KSA","2023-05-01","","Jeddah","","",""
+"KSA","2023-05-01","","Jeddah","","",""
+"KSA","2023-05-01","","Dammam","","","3000000"
+"KSA","2023-05-01","","Dammam","","",""
+"KSA","2023-05-01","","Dammam","","",""
+"KSA","2023-05-01","","Dammam","","",""
+"KSA","2023-05-01","","Dammam","","",""
+"KSA","2023-05-01","","Riyadh","","","2835000"
+"KSA","2023-05-01","","Riyadh","","",""
+"KSA","2023-05-01","","Riyadh","","",""
+"KSA","2023-05-01","","Riyadh","","",""
+"KSA","2023-05-01","","Medina","","","600000"
+"KSA","2023-05-01","","Medina","","",""
+"KSA","2023-05-01","","Tabuk","","","245000"
+"KSA","2023-05-01","","Tabuk","","",""
+"KSA","2023-05-01","","Tabuk","","",""
+"KSA","2023-05-01","","Qassim","","","500000"
+"KSA","2023-05-01","","Hafer Baten","","","225000"
+"KSA","2023-05-01","","Hail","","","325000"
+"KSA","2023-05-01","","Jouf ","","","200000"
+"KSA","2023-06-01","Mohammed Al Hadidi","Jeddah","","Jeddah Warehouse","100000"
+"KSA","2023-06-01","hamada","Jeddah","","Jeddah Warehouse","80000"
+"KSA","2023-06-01","Mahmoud Ahmed","Jeddah","","Jeddah Warehouse","720000"
+"KSA","2023-06-01","Mohammad Hijazzi","Jeddah","","Jeddah Warehouse","100000"
+"KSA","2023-06-01","Hani Gamil","Dammam","","Dammam Warehouse","150000"
+"KSA","2023-06-01","Mohammad Khyair","Dammam","","Dammam Warehouse","120000"
+"KSA","2023-06-01","Mohammad Yaqoup","Dammam","","Dammam Warehouse","425000"
+"KSA","2023-06-01","Mounir Falaha","Dammam","","Dammam Warehouse","130000"
+"KSA","2023-06-01","Yousif Taqi","Dammam","","Dammam Warehouse","175000"
+"KSA","2023-06-01","Mohammad Shetawi","Riyadh","","Riyadh Warehouse","400000"
+"KSA","2023-06-01","Mahmoud shaker","Riyadh","","Riyadh Warehouse","700000"
+"KSA","2023-06-01","Mohammad Alkoud","Riyadh","","Riyadh Warehouse","500000"
+"KSA","2023-06-01","Ahmed Noor","Riyadh","","Riyadh Warehouse","150000"
+"KSA","2023-06-01","Shop in","Riyadh","","Riyadh Warehouse","250000"
+"KSA","2023-06-01","Omar Alamoudi","Medina","","Medina Warehouse","450000"
+"KSA","2023-06-01","Mahmoud Awawdeh","Tabuk","","Tabuk Warehouse","450000"
+"KSA","2023-06-01","Mohammed Sohag","Qassim","","Qassim Warehouse","150000"
+"KSA","2023-06-01","Ansar","Qassim","","Qassim Warehouse","200000"
+"KSA","2023-06-01","Fouz","Hafer Baten","","Hafar WareHouse","100000"
+"KSA","2023-06-01","MD Azadujaman","Hafer Baten","","Hafar WareHouse","100000"
+"KSA","2023-06-01","ANAS PALATHINGAL","Hail","","Hail Warehouse","300000"
+"KSA","2023-06-01","Ameera","Jouf","","Jouf WareHouse","225000"
+"KSA","2023-06-01","Dammam BX","","","","2250000"
+"KSA","2023-07-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","125000"
+"KSA","2023-07-01","hamada","Jeddah","KSA retail","Jeddah Warehouse","125000"
+"KSA","2023-07-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","825000"
+"KSA","2023-07-01","Mohammad Hijazzi","Jeddah","KSA retail","Jeddah Warehouse","125000"
+"KSA","2023-07-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","120000"
+"KSA","2023-07-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","100000"
+"KSA","2023-07-01","Mohammad Yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","170000"
+"KSA","2023-07-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","100000"
+"KSA","2023-07-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","125000"
+"KSA","2023-07-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","250000"
+"KSA","2023-07-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","800000"
+"KSA","2023-07-01","Mohammad Alkoud","Riyadh","KSA retail","Riyadh Warehouse","350000"
+"KSA","2023-07-01","Ahmed Noor","Riyadh","KSA retail","Riyadh Warehouse","0"
+"KSA","2023-07-01","Omar Alamoudi","Medina","KSA retail","Medina Warehouse","400000"
+"KSA","2023-07-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","200000"
+"KSA","2023-07-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","250000"
+"KSA","2023-07-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","300000"
+"KSA","2023-07-01","Rafeeq","Qassim","KSA retail","Qassim Warehouse","0"
+"KSA","2023-07-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","75000"
+"KSA","2023-07-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","100000"
+"KSA","2023-07-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","250000"
+"KSA","2023-07-01","Ameera","Jouf","KSA retail","Jouf WareHouse","165000"
+"KSA","2023-07-01","Dammam BX","","","","1885000"
+"KSA","2023-08-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2023-08-01","hamada","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2023-08-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","950000"
+"KSA","2023-08-01","Mohammad Hijazzi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2023-08-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","156600"
+"KSA","2023-08-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","72900"
+"KSA","2023-08-01","Mohammad Yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","227000"
+"KSA","2023-08-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","83100"
+"KSA","2023-08-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","160400"
+"KSA","2023-08-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","200000"
+"KSA","2023-08-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","785000"
+"KSA","2023-08-01","Ziad","Riyadh","KSA retail","Riyadh Warehouse","118500"
+"KSA","2023-08-01","Hassan","Riyadh","KSA retail","Riyadh Warehouse","119500"
+"KSA","2023-08-01","Muhammed Kutty","Riyadh","KSA retail","Riyadh Warehouse","107000"
+"KSA","2023-08-01","Mohamed Alkoud","Riyadh","KSA retail","Riyadh Warehouse","309500"
+"KSA","2023-08-01","Ahmed Noor","Riyadh","KSA retail","Riyadh Warehouse","110500"
+"KSA","2023-08-01","Omar Alamoudi","Medina","KSA retail","Medina Warehouse","450000"
+"KSA","2023-08-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","225000"
+"KSA","2023-08-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","250000"
+"KSA","2023-08-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2023-08-01","Rafeeq","Qassim","KSA retail","Qassim Warehouse","125000"
+"KSA","2023-08-01","Ansar","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2023-08-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","85000"
+"KSA","2023-08-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","100000"
+"KSA","2023-08-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","125000"
+"KSA","2023-08-02","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","175000"
+"KSA","2023-08-01","Niyas Beeran","Jouf","KSA retail","Jouf WareHouse","175000"
+"KSA","2023-08-01","Dammam BX","Dammam","","Dammam Warehouse","1787324"
+"KSA","2023-09-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","90000"
+"KSA","2023-09-01","hamada","Jeddah","KSA retail","Jeddah Warehouse","90000"
+"KSA","2023-09-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","730000"
+"KSA","2023-09-01","Mohammad Hijazzi","Jeddah","KSA retail","Jeddah Warehouse","90000"
+"KSA","2023-09-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","175000"
+"KSA","2023-09-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","125000"
+"KSA","2023-09-01","Mohammad Yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","250000"
+"KSA","2023-09-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","125000"
+"KSA","2023-09-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","175000"
+"KSA","2023-09-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","250000"
+"KSA","2023-09-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","812000"
+"KSA","2023-09-01","Ziad","Riyadh","KSA retail","Riyadh Warehouse","140000"
+"KSA","2023-09-01","Hassan","Riyadh","KSA retail","Riyadh Warehouse","131000"
+"KSA","2023-09-01","Muhammed Kutty","Riyadh","KSA retail","Riyadh Warehouse","131000"
+"KSA","2023-09-01","Mohamed Alkoud","Riyadh","KSA retail","Riyadh Warehouse","400000"
+"KSA","2023-09-01","Ahmed Noor","Riyadh","KSA retail","Riyadh Warehouse","136000"
+"KSA","2023-09-01","Mustfa Salah","Medina","KSA retail","Medina Warehouse","475000"
+"KSA","2023-09-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","225000"
+"KSA","2023-09-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","250000"
+"KSA","2023-09-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2023-09-01","Rafeeq","Qassim","KSA retail","Qassim Warehouse","150000"
+"KSA","2023-09-01","Ansar","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2023-09-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","75000"
+"KSA","2023-09-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","125000"
+"KSA","2023-09-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","125000"
+"KSA","2023-09-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","175000"
+"KSA","2023-09-01","Niyas Beeran","Jouf","KSA retail","Jouf WareHouse","185000"
+"KSA","2023-09-01","Dammam BX","Dammam","","Dammam Warehouse",""
+"KSA","2023-10-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","250000"
+"KSA","2023-10-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","750000"
+"KSA","2023-10-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","180000"
+"KSA","2023-10-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","130000"
+"KSA","2023-10-01","Mohammad yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","285000"
+"KSA","2023-10-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","125000"
+"KSA","2023-10-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","180000"
+"KSA","2023-10-01","Ahmad Noor","Riyadh","KSA retail","Riyadh Warehouse","100000"
+"KSA","2023-10-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","700000"
+"KSA","2023-10-01","Mohammad Alkoud","Riyadh","KSA retail","Riyadh Warehouse","400000"
+"KSA","2023-10-01","Hassan","Riyadh","KSA retail","Riyadh Warehouse","100000"
+"KSA","2023-10-01","Muhammed Kutty","Riyadh","KSA retail","Riyadh Warehouse","100000"
+"KSA","2023-10-01","Zaiyad","Riyadh","KSA retail","Riyadh Warehouse","100000"
+"KSA","2023-10-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","250000"
+"KSA","2023-10-01","Mustfa Salah","Medina","KSA retail","Medina Warehouse","130000"
+"KSA","2023-10-01","Omar Alamoudi","Medina","KSA retail","Medina Warehouse","150000"
+"KSA","2023-10-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","225000"
+"KSA","2023-10-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","275000"
+"KSA","2023-10-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","135000"
+"KSA","2023-10-01","Ansar","Qassim","KSA retail","Qassim Warehouse","135000"
+"KSA","2023-10-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","140000"
+"KSA","2023-10-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","200000"
+"KSA","2023-10-01","Niyas Beeran","Jouf","KSA retail","Jouf WareHouse","150000"
+"KSA","2023-10-01","Dammam BX","Dammam","","Dammam Warehouse",""
+"KSA","2023-11-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","150000"
+"KSA","2023-11-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","600000"
+"KSA","2023-11-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","185000"
+"KSA","2023-11-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","100000"
+"KSA","2023-11-01","Mohammad yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","275000"
+"KSA","2023-11-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","125000"
+"KSA","2023-11-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","185000"
+"KSA","2023-11-01","Ahmad Noor","Riyadh","KSA retail","Riyadh Warehouse","0"
+"KSA","2023-11-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","700000"
+"KSA","2023-11-01","Mohammad Alkoud","Riyadh","KSA retail","Riyadh Warehouse","500000"
+"KSA","2023-11-01","Hassan","Riyadh","KSA retail","Riyadh Warehouse","50000"
+"KSA","2023-11-01","Muhammed Kutty","Riyadh","KSA retail","Riyadh Warehouse","50000"
+"KSA","2023-11-01","Zaiyad","Riyadh","KSA retail","Riyadh Warehouse","0"
+"KSA","2023-11-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","200000"
+"KSA","2023-11-01","Mustfa Salah","Medina","KSA retail","Medina Warehouse","150000"
+"KSA","2023-11-01","Omar Alamoudi","Medina","KSA retail","Medina Warehouse","100000"
+"KSA","2023-11-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","200000"
+"KSA","2023-11-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","225000"
+"KSA","2023-11-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","125000"
+"KSA","2023-11-01","Ansar","Qassim","KSA retail","Qassim Warehouse","125000"
+"KSA","2023-11-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","175000"
+"KSA","2023-11-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","200000"
+"KSA","2023-11-01","Niyas Beeran","Jouf","KSA retail","Jouf WareHouse","175000"
+"KSA","2023-11-01","Dammam BX","Dammam","","Dammam Warehouse",""
+"KSA","2023-11-01","Riyadh Showroom","Riyadh","","",""
+"KSA","2023-12-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2023-12-01","Mohammad Hijazzi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2023-12-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","550000"
+"KSA","2023-12-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","140000"
+"KSA","2023-12-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","100000"
+"KSA","2023-12-01","Mohammad yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","250000"
+"KSA","2023-12-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","125000"
+"KSA","2023-12-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","175000"
+"KSA","2023-12-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","550000"
+"KSA","2023-12-01","Mohammad Alkoud","Riyadh","KSA retail","Riyadh Warehouse","400000"
+"KSA","2023-12-01","Hassan","Riyadh","KSA retail","Riyadh Warehouse","75000"
+"KSA","2023-12-01","Muhammed Kutty","Riyadh","KSA retail","Riyadh Warehouse","75000"
+"KSA","2023-12-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","225000"
+"KSA","2023-12-01","Omar Alamoudi","Medina","KSA retail","Medina Warehouse","150000"
+"KSA","2023-12-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","200000"
+"KSA","2023-12-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","225000"
+"KSA","2023-12-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2023-12-01","Ansar","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2023-12-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","130000"
+"KSA","2023-12-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","175000"
+"KSA","2023-12-01","Niyas Beeran","Jouf","KSA retail","Jouf WareHouse","150000"
+"KSA","2023-12-01","Dammam BX","Dammam","","Dammam Warehouse",""
+"KSA","2023-12-01","Riyadh Showroom","Riyadh","","",""
+"KSA","2024-01-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2024-01-01","Mohammad Hijazzi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2024-01-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","650000"
+"KSA","2024-01-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","160000"
+"KSA","2024-01-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","135000"
+"KSA","2024-01-01","Mohammad yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","275000"
+"KSA","2024-01-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","140000"
+"KSA","2024-01-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","190000"
+"KSA","2024-01-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","600000"
+"KSA","2024-01-01","Mohammad Alkoud","Riyadh","KSA retail","Riyadh Warehouse","350000"
+"KSA","2024-01-01","Hassan","Riyadh","KSA retail","Riyadh Warehouse","75000"
+"KSA","2024-01-01","Muhammed Kutty","Riyadh","KSA retail","Riyadh Warehouse","75000"
+"KSA","2024-01-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","200000"
+"KSA","2024-01-01","Omar Alamoudi","Medina","KSA retail","Medina Warehouse","150000"
+"KSA","2024-01-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","200000"
+"KSA","2024-01-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","225000"
+"KSA","2024-01-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2024-01-01","Ansar","Qassim","KSA retail","Qassim Warehouse","80000"
+"KSA","2024-01-01","Muhammed Rafeeq","Qassim","KSA retail","Qassim Warehouse","100000"
+"KSA","2024-01-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","175000"
+"KSA","2024-01-01","ANAS PALATHINGAL","Hail","KSA retail","Hail Warehouse","150000"
+"KSA","2024-01-01","Niyas Beeran","Jouf ","KSA retail","Jouf WareHouse","125000"
+"KSA","2024-01-01","Dammam BX","Dammam","","Dammam Warehouse",""
+"KSA","2024-01-01","Riyadh Showroom","Riyadh","","",""
+"KSA","2024-02-01","Mohammed Al Hadidi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2024-02-01","Mohammad Hijazzi","Jeddah","KSA retail","Jeddah Warehouse","100000"
+"KSA","2024-02-01","Mahmoud Ahmed","Jeddah","KSA wholesaler","Jeddah Warehouse","675000"
+"KSA","2024-02-01","Hani Gamil","Dammam","KSA retail","Dammam Warehouse","200000"
+"KSA","2024-02-01","Mohammad Khyair","Dammam","KSA retail","Dammam Warehouse","150000"
+"KSA","2024-02-01","Mohammad yaqoup","Dammam","KSA wholesaler","Dammam Warehouse","325000"
+"KSA","2024-02-01","Mounir Falaha","Dammam","KSA retail","Dammam Warehouse","150000"
+"KSA","2024-02-01","Yousif Taqi","Dammam","KSA retail","Dammam Warehouse","275000"
+"KSA","2024-02-01","Mahmoud shaker","Riyadh","KSA wholesaler","Riyadh Warehouse","700000"
+"KSA","2024-02-01","Shawgi Abdalrazeg Ahmed","Riyadh","KSA retail","Riyadh Warehouse","425000"
+"KSA","2024-02-01","Hassan","Riyadh","KSA retail","Riyadh Warehouse","125000"
+"KSA","2024-02-01","Muhammed Kutty","Riyadh","KSA retail","Riyadh Warehouse","100000"
+"KSA","2024-02-01","Mohammad Shetawi","Riyadh","KSA retail","Riyadh Warehouse","450000"
+"KSA","2024-02-01","Omar Alamoudi","Medina","KSA retail","Medina Warehouse","175000"
+"KSA","2024-02-01","Mahmoud Awawdeh","Tabuk","KSA retail","Tabuk Warehouse","200000"
+"KSA","2024-02-01","Mohammad Jebril","Tabuk","KSA retail","Tabuk Warehouse","250000"
+"KSA","2024-02-01","Mohammed Sohag","Qassim","KSA retail","Qassim Warehouse","50000"
+"KSA","2024-02-01","Ansar","Qassim","KSA retail","Qassim Warehouse","125000"
+"KSA","2024-02-01","Muhammed Rafeeq","Qassim","KSA retail","Qassim Warehouse","150000"
+"KSA","2024-02-01","MD Azadujaman","Hafer Baten","KSA retail","Hafar WareHouse","175000"
+"KSA","2024-02-01","Mansoor Khan","Hail","KSA retail","Hail Warehouse","200000"
+"KSA","2024-02-01","Niyas Beeran","Jouf ","KSA retail","Jouf WareHouse","175000"
+"KSA","2024-02-01","Dammam BX","Dammam","","Dammam Warehouse",""
+"KSA","2024-02-01","Riyadh Showroom","Riyadh","","",""
