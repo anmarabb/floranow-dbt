@@ -10,7 +10,8 @@ fulfilled_items,
 signed_items,
 signed_status,
 
-
+tags,
+city,
 
 number,
 order_number_check,
