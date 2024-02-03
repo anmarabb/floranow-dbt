@@ -12,6 +12,7 @@ signed_status,
 
 tags,
 city,
+stem_length,
 
 number,
 order_number_check,
