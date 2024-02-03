@@ -1,0 +1,108 @@
+semantic_models:
+  - name: transaction # A semantic model with the name Transactions
+    model: ref('fact_transactions') # References the dbt model named `fact_transactions`
+    description: "Transaction fact table at the transaction level. This table contains one row per transaction and includes the transaction timestamp."
+    defaults:
+      agg_time_dimension: transaction_date
+
+    entities: # Entities included in the table are defined here. MetricFlow will use these columns as join keys.
+      - name: transaction
+        type: primary
+        expr: transaction_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+
+    dimensions: # dimensions are qualitative values such as names, dates, or geographical data. They provide context to metrics and allow "metric by group" data slicing.
+      - name: transaction_date
+        type: time
+        type_params:
+          time_granularity: day
+
+      - name: transaction_location
+        type: categorical
+        expr: order_country
+
+    measures: # Measures are columns we perform an aggregation over. Measures are inputs to metrics.
+      - name: transaction_total
+        description: "The total value of the transaction."
+        agg: sum
+
+      - name: sales
+        description: "The total sale of the transaction."
+        agg: sum
+        expr: transaction_total
+
+      - name: median_sales
+        description: "The median sale of the transaction."
+        agg: median
+        expr: transaction_total
+
+  - name: customers # Another semantic model called customers.
+    model: ref('dim_customers')
+    description: "A customer dimension table."
+
+    entities:
+      - name: customer
+        type: primary
+        expr: customer_id
+
+    dimensions:
+      - name: first_name
+        type: categorical
+
+        
+  - name: orders
+    defaults:
+      agg_time_dimension: ordered_at
+    description: |
+      Order fact table. This table is at the order grain with one row per order. 
+    #The name of the dbt model and schema
+    model: ref('orders')
+    #Entities. These usually corespond to keys in the table.
+    entities:
+      - name: order_id
+        type: primary
+      - name: location
+        type: foreign
+        expr: location_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    #Measures. These are the aggregations on the columns in the table.
+    measures: 
+      - name: order_total
+        description: The total revenue for each order.
+        agg: sum
+      - name: order_count
+        expr: 1
+        agg: sum
+      - name: tax_paid
+        description: The total tax paid on each order. 
+        agg: sum
+      - name: customers_with_orders
+        description: Distinct count of customers placing orders
+        agg: count_distinct
+        expr: customer_id
+      - name: locations_with_orders
+        description: Distinct count of locations with order
+        expr: location_id
+        agg: count_distinct
+      - name: order_cost
+        description: The cost for each order item. Cost is calculated as a sum of the supply cost for each order item. 
+        agg: sum
+    #Dimensions. Either categorical or time. These add additional context to metrics. The typical querying pattern is Metric by Dimension.  
+    dimensions:
+      - name: ordered_at
+        type: time
+        type_params:
+          time_granularity: day 
+      - name: order_total_dim
+        type: categorical
+        expr: order_total
+      - name: is_food_order
+        type: categorical
+      - name: is_drink_order
+        type: categorical  
+
+

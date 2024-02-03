@@ -177,7 +177,7 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
     customer.allow_due_invoices,
     customer.user_category as customer_category,
     concat( customer.financial_administration," - ", customer.Warehouse," - ", customer.account_type," - ", customer.customer_type," - ", customer.user_category," - ", customer.debtor_number  ) as customer_details,
-
+    customer.city,
     case 
         when customer.payment_term = 'Without invoicing' then 'Without invoicing'
         when customer.payment_term = 'Cash on Delivery' then 'Cash on Delivery'
