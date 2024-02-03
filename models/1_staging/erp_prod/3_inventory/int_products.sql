@@ -15,7 +15,7 @@ with
                            
 
 
-                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND incident_type != 'EXTRA'  THEN pi.quantity ELSE 0 END) as last_30d_incidents_quantity,
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND incident_type != 'EXTRA'  THEN pi.quantity ELSE 0 END) as last_30d_incidents_quantity,
 
                     sum(case when incident_type !='EXTRA' and pi.stage = 'INVENTORY' and pi.location_id is not null then pi.quantity else 0 end) as incidents_quantity_location,
                     sum(case when incident_type ='CLEANUP_ADJUSTMENTS' then pi.quantity else 0 end) as cleanup_adjustments_quantity,
