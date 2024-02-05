@@ -1,4 +1,4 @@
-with a as (
+with budget as (
 
 select 
 account_manager,
