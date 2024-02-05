@@ -11,7 +11,7 @@ with unreconciled_payment as (
         account_manager,        
         user_category as client_category,
         company_name,
-        --warehouse,
+        warehouse,
         financial_administration,
         payment_method,
 
@@ -52,7 +52,7 @@ debtor_number,
 account_manager,
 user_category as client_category,
 company_name,
---warehouse,
+warehouse,
 financial_administration,
 payment_method,
 
