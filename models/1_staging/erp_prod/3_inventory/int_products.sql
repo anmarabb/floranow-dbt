@@ -125,9 +125,12 @@ with
 
             
 
-            s.supplier_name as Supplier,
+            
+            os.supplier_name as Supplier, --orginal supplier form product table.
             s.supplier_region as Origin,
-            os.supplier_name as orginal_supplier,
+
+           --os.supplier_name as orginal_supplier,
+           --s.supplier_name as Supplier, --supplier name form line_items table, the grandious not mapied for some reasion
 
             fs.feed_source_name as feed_source_name,
             origin_fs.feed_source_name as origin_feed_name,
