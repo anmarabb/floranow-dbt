@@ -1,5 +1,5 @@
 version: 2
-sources: 
+sources:
   - name: erp_prod_master
     database: floranow
     tables:
@@ -8,7 +8,7 @@ sources:
       - name: account_managers
       - name: manageable_accounts
       - name: financial_administrations
-      
+
       - name: suppliers
       - name: feed_source_regions
       - name: feed_sources
@@ -17,13 +17,10 @@ sources:
       - name: orders
       - name: order_builders
       - name: order_payloads
-      - name: standing_orders 
+      - name: standing_orders
       - name: line_items
         columns:
           - name: categorization
-            
-             
-            
 
       - name: packing_lists
       - name: packing_box_items
@@ -59,9 +56,6 @@ sources:
 
       - name: product_incidents
 
-
-
-
       - name: active_storage_attachments
       - name: active_storage_blobs
       - name: active_storage_variant_records
@@ -86,8 +80,15 @@ sources:
       - name: delivery_windows
       - name: delivery_window_assignments
 
- 
       - name: country
       - name: budget
       - name: collection
       - name: astra_budget
+
+      - name: fm_products
+      - name: fm_orders
+      - name: fm_outbound_stock_items
+      - name: fm_product_incidents
+      - name: fm_box_items
+      - name: fm_boxes
+      - name: fm_shipments

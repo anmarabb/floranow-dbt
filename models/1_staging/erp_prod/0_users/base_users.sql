@@ -151,7 +151,7 @@ select
 
 
 
-  w.warehouse_name as Warehouse,
+  w.warehouse_name as warehouse,
   u2.name as account_manager,
   uc.name as user_category,
 
