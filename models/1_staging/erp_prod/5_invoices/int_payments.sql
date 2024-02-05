@@ -23,7 +23,7 @@ customer.debtor_number,
 customer.account_manager,
 customer.user_category,
 customer.company_name,
-customer.Warehouse,
+customer.warehouse,
 fn.name as financial_administration,
 
 pt.payment_method,
