@@ -27,7 +27,7 @@ case when user_validity_filter = 'normal' then 1 else 0 end as registered_client
  
 
     user_category as customer_category,
-    warehouse,
+    --warehouse,
 
 
 
