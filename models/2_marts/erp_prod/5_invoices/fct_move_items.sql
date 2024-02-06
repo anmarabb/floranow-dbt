@@ -90,6 +90,13 @@ customer_type,
 account_type,
 user_validity_filter,
 
+m_1_remaining,
+m_2_remaining,
+m_3_remaining,
+mtd_remaining,
+
+
+
 current_timestamp() as insertion_timestamp 
 
 

@@ -3,7 +3,10 @@
 with unreconciled_payment as (
 
     select
-        case when cmi.date is not null then cmi.date else cmi.date end as master_date,
+
+        user_id,
+       -- case when cmi.date is not null then cmi.date else cmi.date end as master_date,
+        cmi.date as master_date,
         payment_received_at,
         
         Customer,
@@ -21,12 +24,17 @@ with unreconciled_payment as (
         approval_code,
 
 
+
+
         abs(cmi.residual) as payment_amount,
         null as  reconciled_payment_amount,
         abs(cmi.residual) as unreconciled_payment_amount,
 
         CASE WHEN LOWER(Customer) LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
 
+        case when  date_diff(date(cmi.date) , current_date() , MONTH) = 0 then abs(cmi.residual) else 0 end as mtd_paymnets,
+        case when  date_diff(date(cmi.date) , current_date() , MONTH) = 1 then abs(cmi.residual) else 0 end as m_1_paymnets,
+        case when  date_diff(date(cmi.date) , current_date() , MONTH) = 2 then abs(cmi.residual) else 0 end as m_2_paymnets,
 
     from {{ref('fct_move_items')}} as cmi 
     where cmi.entry_type='CREDIT'
@@ -43,6 +51,7 @@ from unreconciled_payment
 union all
 
 select
+user_id,
 master_date,  --case when pt.payment_received_at is not null then pt.payment_received_at else cmi.date end
 payment_received_at,
 
@@ -67,6 +76,10 @@ payment_amount as reconciled_payment_amount,
 null as unreconciled_payment_amount,
 
 CASE WHEN LOWER(Customer) LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
+
+        case when  date_diff(date(master_date) , current_date() , MONTH) = 0 then payment_amount else 0 end as mtd_paymnets,
+        case when  date_diff(date(master_date) , current_date() , MONTH) = 1 then payment_amount else 0 end as m_1_paymnets,
+        case when  date_diff(date(master_date) , current_date() , MONTH) = 2 then payment_amount else 0 end as m_2_paymnets,
 
 --current_timestamp() as insertion_timestamp,
 
