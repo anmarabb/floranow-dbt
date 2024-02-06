@@ -226,6 +226,7 @@ CASE WHEN  invoice_header_printed_at >= '2023-01-01' AND invoice_header_printed_
 suppliers_count,
 
 
+
 current_timestamp() as insertion_timestamp 
 
 

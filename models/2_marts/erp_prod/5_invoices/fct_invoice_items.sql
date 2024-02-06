@@ -179,6 +179,8 @@ line_items_link,
 pod_source_type,
 trading_model,
 
+stem_length,
+
 current_timestamp() as insertion_timestamp, 
 
 
