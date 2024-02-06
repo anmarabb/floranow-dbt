@@ -113,6 +113,9 @@ move_items AS
         sum(mi.m_2_remaining) as m_2_remaining,
         sum(mi.m_3_remaining) as m_3_remaining,
         sum(mi.mtd_remaining) as mtd_remaining,
+        sum(mi.aging_remaining) as aging_remaining,
+
+        
 
         --total_credit_not_value_per_customer
 
@@ -231,6 +234,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     mi.m_2_remaining,
     mi.m_3_remaining,
     mi.mtd_remaining,
+    mi.aging_remaining,
 
 
     b.current_month_budget,
