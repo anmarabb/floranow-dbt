@@ -101,12 +101,28 @@ lmtd_gross_revenue,
 lmtd_credit_note,
 lymtd_credit_note,
 lymtd_gross_revenue,
+
 m_1_gross_revenue,
 m_1_credit_note,
 m_2_gross_revenue,
 m_2_credit_note,
 m_3_gross_revenue,
 m_3_credit_note,
+
+ytd_gross_revenue,
+ytd_credit_note,
+lytd_gross_revenue,
+lytd_credit_note,
+
+
+m_1_remaining,
+m_2_remaining,
+m_3_remaining,
+mtd_remaining,
+
+mtd_paymnets,
+m_1_paymnets,
+m_2_paymnets,
 
 
 credit_balance,   

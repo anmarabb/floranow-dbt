@@ -51,6 +51,11 @@ invoice AS
         sum (m_3_gross_revenue) as m_3_gross_revenue,
         sum (m_3_credit_note) as m_3_credit_note,
 
+        sum (ytd_gross_revenue) as ytd_gross_revenue,
+        sum (ytd_credit_note) as ytd_credit_note,
+
+        sum (lytd_gross_revenue) as lytd_gross_revenue,
+        sum (lytd_credit_note) as lytd_credit_note,
 
 
         
@@ -103,14 +108,31 @@ move_items AS
         sum(mi.residual) as mi_residual,
         sum(mi.total_debits) as mi_total_order_value_per_customer, --with VAT
         sum(mi.collectible_amount) as collectible_amount,
+
+        sum(mi.m_1_remaining) as m_1_remaining,
+        sum(mi.m_2_remaining) as m_2_remaining,
+        sum(mi.m_3_remaining) as m_3_remaining,
+        sum(mi.mtd_remaining) as mtd_remaining,
+
         --total_credit_not_value_per_customer
-
-
-
 
     FROM  {{ ref('fct_move_items') }} as mi
     GROUP BY
         user_id
+),
+
+payments as (
+
+select
+    py.user_id,
+    sum(py.mtd_paymnets) as mtd_paymnets,
+    sum(py.m_1_paymnets) as m_1_paymnets,
+    sum(py.m_2_paymnets) as m_2_paymnets,
+
+from {{ ref('fct_payments') }} as py
+group by 1
+
+
 ),
 
 
@@ -187,6 +209,10 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     i.m_2_credit_note,
     i.m_3_gross_revenue,
     i.m_3_credit_note,
+    i.ytd_gross_revenue,
+    i.ytd_credit_note,
+    i.lytd_gross_revenue,
+    i.lytd_credit_note,
 
     i.total_gross_revenue_per_customer,
     i.total_credit_note_per_customer,
@@ -194,14 +220,25 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     i.total_tax_per_customer,
 
     mi.mi_total_order_value_per_customer,
-    mi.mi_residual,
+    
+
     mi.mi_credit_balance,
     mi.mi_debit_balance,
+
     mi.collectible_amount,
+    mi.mi_residual, --Outstanding Balance
+    mi.m_1_remaining,
+    mi.m_2_remaining,
+    mi.m_3_remaining,
+    mi.mtd_remaining,
 
 
     b.current_month_budget,
     b.mtd_budget,
+
+    py.mtd_paymnets,
+    py.m_1_paymnets,
+    py.m_2_paymnets,
 
 
 
@@ -214,4 +251,5 @@ LEFT JOIN line_items as li ON u.id = li.customer_id
 LEFT JOIN invoice as i ON u.id = i.customer_id
 LEFT JOIN invoice_items as ii ON u.id = ii.customer_id
 left join move_items as mi on u.id = mi.user_id 
+left join payments as py on u.id = py.user_id 
 left join budget as b on b.financial_administration = u.financial_administration and b.warehouse = u.warehouse and b.account_manager = u.account_manager
