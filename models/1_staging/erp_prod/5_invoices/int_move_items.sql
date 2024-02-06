@@ -138,10 +138,11 @@ case when date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) >
 case when date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) > 90 and date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) <= 120 then mi.residual else 0 end as between_91_to_120_days,
 case when date_diff( cast(current_date() as date ),cast(mi.date as date), DAY) > 120 then mi.residual else 0 end as more_than_120_days,
 
-case when date_diff(current_date(),date(mi.date), MONTH) = 1 then i.remaining_amount else 0 end as m_1_remaining,
-case when date_diff(current_date(),date(mi.date), MONTH) = 2 then i.remaining_amount else 0 end as m_2_remaining,
-case when date_diff(current_date(),date(mi.date), MONTH) = 3 then i.remaining_amount else 0 end as m_3_remaining,
-case when date_diff(current_date(),date(mi.date), MONTH) = 0 then i.remaining_amount else 0 end as mtd_remaining,
+case when date_diff(current_date(),date(mi.date), MONTH) = 1 then mi.residual else 0 end as m_1_remaining,
+case when date_diff(current_date(),date(mi.date), MONTH) = 2 then mi.residual else 0 end as m_2_remaining,
+case when date_diff(current_date(),date(mi.date), MONTH) = 3 then mi.residual else 0 end as m_3_remaining,
+case when date_diff(current_date(),date(mi.date), MONTH) = 0 then mi.residual else 0 end as mtd_remaining,
+case when date_diff(current_date(),date(mi.date), MONTH) > 3 then mi.residual else 0 end as aging_remaining,
 
 case when mi.due_date < current_date() then mi.residual else 0 end as collectible_amount,
 
