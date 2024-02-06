@@ -97,6 +97,7 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         li.li_record_type_details,
         li.feed_source_name,
         li.li_record_type,
+        li.stem_length,
 
 
         li.unit_landed_cost,
