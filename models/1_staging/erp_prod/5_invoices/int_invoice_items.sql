@@ -98,6 +98,14 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         li.feed_source_name,
         li.li_record_type,
         li.stem_length,
+        li.tags,
+        
+          CASE
+            WHEN REGEXP_CONTAINS(li.tags, 'Deals') THEN 'Promotion Offer'
+            WHEN REGEXP_CONTAINS(li.tags, 'Flash Sale') THEN 'Promotion Offer'
+            ELSE 'Regular Offer'
+          END AS offer_type,
+
 
 
         li.unit_landed_cost,
