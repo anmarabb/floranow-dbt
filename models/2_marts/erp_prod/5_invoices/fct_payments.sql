@@ -78,9 +78,9 @@ null as unreconciled_payment_amount,
 
 CASE WHEN LOWER(Customer) LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
 
-        case when  date_diff(date(master_date) , current_date() , MONTH) = 0 then COALESCE(payment_amount,0) else 0 end as mtd_paymnets,
-        case when  date_diff(date(master_date) , current_date() , MONTH) = 1 then COALESCE(payment_amount,0) else 0 end as m_1_paymnets,
-        case when  date_diff(date(master_date) , current_date() , MONTH) = 2 then COALESCE(payment_amount,0) else 0 end as m_2_paymnets,
+        case when  date_diff(current_date() , date(master_date)  , MONTH) = 0 then COALESCE(payment_amount,0) else 0 end as mtd_paymnets,
+        case when  date_diff(current_date() , date(master_date)  , MONTH) = 1 then COALESCE(payment_amount,0) else 0 end as m_1_paymnets,
+        case when  date_diff(current_date() , date(master_date)  , MONTH) = 2 then COALESCE(payment_amount,0) else 0 end as m_2_paymnets,
 
 --current_timestamp() as insertion_timestamp,
 
