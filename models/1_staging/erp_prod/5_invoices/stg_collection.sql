@@ -15,4 +15,5 @@
 
 
 
-    FROM {{ source(var('erp_source'), 'collection') }} as b
+    FROM {{ source(var('erp_source'), 'collection') }} as b 
+    
