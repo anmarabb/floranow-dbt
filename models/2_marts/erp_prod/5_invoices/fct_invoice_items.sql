@@ -181,6 +181,9 @@ trading_model,
 
 stem_length,
 
+tags,
+offer_type,
+
 current_timestamp() as insertion_timestamp, 
 
 
