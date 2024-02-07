@@ -1,3 +1,4 @@
+with a as (
 --query for unreconciled payment transactions amount
 
 with unreconciled_payment as (
@@ -5,8 +6,8 @@ with unreconciled_payment as (
     select
 
         user_id,
-       -- case when cmi.date is not null then cmi.date else cmi.date end as master_date,
-        cmi.date as master_date,
+        case when cmi.date is not null then cmi.date else cmi.date end as master_date,
+        --cmi.date as master_date,
         payment_received_at,
         
         Customer,
@@ -31,10 +32,10 @@ with unreconciled_payment as (
         abs(cmi.residual) as unreconciled_payment_amount,
 
         CASE WHEN LOWER(Customer) LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
-
-        case when  date_diff(date(cmi.date) , current_date() , MONTH) = 0 then abs(cmi.residual) else 0 end as mtd_paymnets,
-        case when  date_diff(date(cmi.date) , current_date() , MONTH) = 1 then abs(cmi.residual) else 0 end as m_1_paymnets,
-        case when  date_diff(date(cmi.date) , current_date() , MONTH) = 2 then abs(cmi.residual) else 0 end as m_2_paymnets,
+--
+        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 0 then COALESCE(cmi.residual,0) else 0 end as mtd_paymnets,
+        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 1 then COALESCE(cmi.residual,0) else 0 end as m_1_paymnets,
+        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 2 then COALESCE(cmi.residual,0) else 0 end as m_2_paymnets,
 
     from {{ref('fct_move_items')}} as cmi 
     where cmi.entry_type='CREDIT'
@@ -77,11 +78,16 @@ null as unreconciled_payment_amount,
 
 CASE WHEN LOWER(Customer) LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
 
-        case when  date_diff(date(master_date) , current_date() , MONTH) = 0 then payment_amount else 0 end as mtd_paymnets,
-        case when  date_diff(date(master_date) , current_date() , MONTH) = 1 then payment_amount else 0 end as m_1_paymnets,
-        case when  date_diff(date(master_date) , current_date() , MONTH) = 2 then payment_amount else 0 end as m_2_paymnets,
+        case when  date_diff(date(master_date) , current_date() , MONTH) = 0 then COALESCE(payment_amount,0) else 0 end as mtd_paymnets,
+        case when  date_diff(date(master_date) , current_date() , MONTH) = 1 then COALESCE(payment_amount,0) else 0 end as m_1_paymnets,
+        case when  date_diff(date(master_date) , current_date() , MONTH) = 2 then COALESCE(payment_amount,0) else 0 end as m_2_paymnets,
 
 --current_timestamp() as insertion_timestamp,
 
 
 from {{ref('int_payments')}} as py
+
+)
+
+select * from a
+

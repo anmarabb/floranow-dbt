@@ -133,6 +133,7 @@ select
     sum(py.m_2_paymnets) as m_2_paymnets,
 
 from {{ ref('fct_payments') }} as py
+--where user_id = 1527
 group by 1
 
 
