@@ -77,6 +77,7 @@ select
         li.currency,
         li.fob_currency,
         li.customer_id,
+        li.ordering_stock_type,
 
 
 
