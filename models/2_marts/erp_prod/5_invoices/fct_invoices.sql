@@ -224,7 +224,7 @@ CASE WHEN  invoice_header_printed_at >= '2022-01-01' AND invoice_header_printed_
 CASE WHEN  invoice_header_printed_at >= '2023-01-01' AND invoice_header_printed_at < '2024-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2023,
 
 suppliers_count,
-
+select_printed_date,
 
 
 current_timestamp() as insertion_timestamp 

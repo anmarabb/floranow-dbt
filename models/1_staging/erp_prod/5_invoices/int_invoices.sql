@@ -182,6 +182,20 @@ end as company_name,
 fn.registered_clients,
 
 
+CASE
+    WHEN DATE(i.invoice_header_printed_at) = CURRENT_DATE() THEN '1. Today'
+    WHEN DATE(i.invoice_header_printed_at) = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) THEN '2. Yesterday'
+    WHEN EXTRACT(WEEK FROM DATE(i.invoice_header_printed_at)) = EXTRACT(WEEK FROM CURRENT_DATE())
+         AND EXTRACT(YEAR FROM DATE(i.invoice_header_printed_at)) = EXTRACT(YEAR FROM CURRENT_DATE())
+         THEN CONCAT('3. WTD (Week ', CAST(EXTRACT(WEEK FROM DATE(i.invoice_header_printed_at)) AS STRING), ' of ', CAST(EXTRACT(YEAR FROM DATE(i.invoice_header_printed_at)) AS STRING), ')')
+    WHEN DATE(i.invoice_header_printed_at) >= DATE_TRUNC(CURRENT_DATE(), MONTH) THEN '4. Month To Date'
+    ELSE 'Other'
+END AS select_printed_date,
+
+
+
+
+
     current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_invoices')}} as i
