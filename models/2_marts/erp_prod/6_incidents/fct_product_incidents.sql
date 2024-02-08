@@ -57,6 +57,7 @@ select
 
     credited,
     ordering_stock_type,
+    feed_source_name,
 
 
 
