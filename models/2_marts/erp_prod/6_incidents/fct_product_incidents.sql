@@ -56,6 +56,7 @@ select
 
 
     credited,
+    ordering_stock_type,
 
 
 
