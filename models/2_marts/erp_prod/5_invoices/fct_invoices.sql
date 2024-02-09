@@ -130,7 +130,9 @@ case when due_date < current_date() then remaining_amount else 0 end as collecti
 account_manager,
 City,
 client_category,
-Customer,
+--Customer,
+case when customer_type != 'reseller' then Customer else 'Reseller' end as Customer,
+case when customer_type = 'reseller' then Customer else 'Customer' end as Reseller,
 debtor_number,
 warehouse,
 
