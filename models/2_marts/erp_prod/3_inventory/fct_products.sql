@@ -281,6 +281,13 @@ STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sol
 
 
 --max(case when fo.departure_ranking ='first_departure' then p.departure_date else null end) over (partition by p.product_name, p.warehouse) as first_departure_date,
+case
+when master_shipments_status in ('DRAFT' ) then 'Not Received - Draft'
+when master_shipments_status in ( 'PACKED' ) then 'Not Received - Packed (Comming Soon)'
+when master_shipments_status  in ( 'OPENED' ) then 'Received - Work In Progress'
+when master_shipments_status  in ('WAREHOUSED' ) then 'Received - Work Done'
+else 'Not Shipments'
+end as shipment_progress,
 
 case 
     when loc_status = 'null' and master_shipments_status in ('DRAFT') then '1. Not Received (Draft Master Shipments)'
@@ -290,10 +297,11 @@ case
     when loc_status = 'null' and master_shipments_status in ('OPENED') and shipments_status in ('PACKED') and  order_status = 'Not Fulfilled' then '4. Received Not Scanned (Work in Progress)'
 
     when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and fulfillment_status_details = '2. Fulfilled - with Full Item Incident' then '5. Received Full Incident'
-    when loc_status = 'null' and fulfillment_status_details = '3. Fulfilled - with Process Breakdown' then '6. Received without Scanned Location'
+    when loc_status = 'null' and fulfillment_status_details = '3. Fulfilled - with Process Breakdown' then '6. Received and Fulfilled without Scanned to Location'
     when loc_status = 'loc'  then '7. Received On Location'
     else '8. To Be Scoped'
     end as orders_progress, 
+
 
 
 
