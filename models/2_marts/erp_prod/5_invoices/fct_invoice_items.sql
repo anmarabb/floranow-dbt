@@ -276,6 +276,15 @@ with
             tags,
             offer_type,
 
+            case 
+            when warehouse in ('Riyadh Warehouse','Qassim Warehouse','Jouf WareHouse','Hail Warehouse') then 'Al Amir'
+            when warehouse in ('Dammam Warehouse','Hafar WareHouse') then 'Hani'
+            when warehouse in ('Jeddah Warehouse') then 'Mahmoud'
+            when warehouse in ('Tabuk Warehouse') then 'Majed'
+            when warehouse in ('Medina Warehouse') then 'Abd Alaziz'
+            else null end as astra_accountant,
+
+
             current_timestamp() as insertion_timestamp,
 
         from {{ ref("int_invoice_items") }} as ii
