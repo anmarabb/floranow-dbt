@@ -79,6 +79,7 @@ select
         li.customer_id,
         li.ordering_stock_type,
         li.feed_source_name,
+        li.unit_price,
 
 
 
