@@ -133,6 +133,12 @@ client_category,
 --Customer,
 case when customer_type != 'reseller' then Customer else 'Reseller' end as Customer,
 case when customer_type = 'reseller' then Customer else 'Customer' end as Reseller,
+case 
+    when debtor_number = '132008' then Customer 
+    when customer_type = 'reseller' then 'Reseller'
+    when customer_type != 'reseller' then 'Customer'
+    else 'Check My Logic' end as account_bucket,
+
 debtor_number,
 warehouse,
 
