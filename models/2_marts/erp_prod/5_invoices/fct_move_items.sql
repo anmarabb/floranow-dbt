@@ -3,6 +3,7 @@ with
 source as ( 
 
 select
+case when residual > 0 then 'SOA' else null end as statement_of_account,
 
 credit_note_number,
 payment_transaction_number,
