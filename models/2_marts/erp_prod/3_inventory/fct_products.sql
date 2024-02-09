@@ -284,7 +284,7 @@ STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sol
 
 case 
     when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and order_status = 'Not Fulfilled' then 'Received Not Scanned'
-    when loc_status = 'loc' and shipments_status not null then 'Received On Location'
+    when loc_status = 'loc' and shipments_status is not null then 'Received On Location'
     else 'To Be Scoped'
     end as orders_progress, 
 
