@@ -285,14 +285,11 @@ STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sol
 case 
     when loc_status = 'null' and shipments_status in ('DRAFT') then '1. Not Received (Draft Shipments)'
     when loc_status = 'null' and shipments_status in ('MISSING') then '2. Not Received (Full Missing Shipments)'
+    
+    when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and order_status = 'Not Fulfilled' then '3. Received Not Scanned'
 
-    when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and fulfillment_status_details = '2. Fulfilled - with Full Item Incident' then '3. Received Full Incident'
-
-
-    when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and order_status = 'Not Fulfilled' then '4. Received Not Scanned'
-
+    when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and fulfillment_status_details = '2. Fulfilled - with Full Item Incident' then '4. Received Full Incident'
     when loc_status = 'null' and fulfillment_status_details = '3. Fulfilled - with Process Breakdown' then '5. Received without Scanned Location'
-
     when loc_status = 'loc'  then '6. Received On Location'
     else '7. To Be Scoped'
     end as orders_progress, 
