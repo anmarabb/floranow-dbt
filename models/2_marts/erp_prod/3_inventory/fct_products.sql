@@ -292,8 +292,8 @@ case
     when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and order_status = 'Not Fulfilled' then '4. Received Not Scanned'
 
     when loc_status = 'null' and fulfillment_status_details = '3. Fulfilled - with Process Breakdown' then '5. Received without Scanned Location'
-    when loc_status = 'loc' and shipments_status is not null then '6. Received On Location'
 
+    when loc_status = 'loc'  then '6. Received On Location'
     else '7. To Be Scoped'
     end as orders_progress, 
 
