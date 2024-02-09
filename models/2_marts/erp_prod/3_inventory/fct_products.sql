@@ -282,11 +282,11 @@ STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sol
 
 --max(case when fo.departure_ranking ='first_departure' then p.departure_date else null end) over (partition by p.product_name, p.warehouse) as first_departure_date,
 case
-when master_shipments_status in ('DRAFT' ) then 'Not Received - Draft'
-when master_shipments_status in ( 'PACKED' ) then 'Not Received - Packed (Comming Soon)'
-when master_shipments_status  in ( 'OPENED' ) then 'Received - Work In Progress'
-when master_shipments_status  in ('WAREHOUSED' ) then 'Received - Work Done'
-else 'Not Shipments'
+when master_shipments_status in ('DRAFT' ) then '1. Not Received - Draft'
+when master_shipments_status in ( 'PACKED' ) then '2. Not Received - Packed (Comming Soon)'
+when master_shipments_status  in ( 'OPENED' ) then '3. Received - Work In Progress'
+when master_shipments_status  in ('WAREHOUSED' ) then '4. Received - Work Done'
+else '5. Not Shipment'
 end as shipment_progress,
 
 case 
