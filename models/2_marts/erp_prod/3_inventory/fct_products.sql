@@ -283,10 +283,10 @@ STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sol
 --max(case when fo.departure_ranking ='first_departure' then p.departure_date else null end) over (partition by p.product_name, p.warehouse) as first_departure_date,
 
 case 
-    when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and order_status = 'Not Fulfilled' then 'Received Not Scanned'
-    when loc_status = 'loc' and shipments_status is not null then 'Received On Location'
-    when order_type = 'RETURN' then 'Returned Orders'
-    else 'To Be Scoped'
+    when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and order_status = 'Not Fulfilled' then '2. Received Not Scanned'
+    when loc_status = 'loc' and shipments_status is not null then '3. Received On Location'
+    when order_type = shipments_status in ('DRAFT') then '1. Not Received (Draft Shipments)'
+    else '4. To Be Scoped'
     end as orders_progress, 
 
 ordering_stock_type,
