@@ -230,6 +230,7 @@ with
             li.line_item_link,
             li.master_shipment_id,
             li.shipment_id,
+            li.ordering_stock_type,
             
             
 
