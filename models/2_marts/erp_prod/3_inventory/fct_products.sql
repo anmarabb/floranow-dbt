@@ -290,6 +290,7 @@ case
     end as orders_progress, 
 
 ordering_stock_type,
+line_item_state,
 
 current_timestamp() as insertion_timestamp, 
 
