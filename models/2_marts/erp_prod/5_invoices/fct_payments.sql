@@ -33,9 +33,9 @@ with unreconciled_payment as (
 
         CASE WHEN LOWER(Customer) LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Include' END AS payment_filter,
 --
-        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 0 then COALESCE(cmi.residual,0) else 0 end as mtd_paymnets,
-        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 1 then COALESCE(cmi.residual,0) else 0 end as m_1_paymnets,
-        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 2 then COALESCE(cmi.residual,0) else 0 end as m_2_paymnets,
+        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 0 then COALESCE(abs(cmi.residual),0) else 0 end as mtd_paymnets,
+        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 1 then COALESCE(abs(cmi.residual),0) else 0 end as m_1_paymnets,
+        case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 2 then COALESCE(abs(cmi.residual),0) else 0 end as m_2_paymnets,
 
     from {{ref('fct_move_items')}} as cmi 
     where cmi.entry_type='CREDIT'
