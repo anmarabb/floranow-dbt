@@ -170,7 +170,7 @@ pod.source_type as pod_source_type,
 
 
 case 
-    when li.order_source = 'Express Inventory' then 'Re-Selling' --customers purchase flowers that are already in your inventory, allowing for faster delivery.
+    when li.order_source = 'Express Inventory' then 'Re-Selling (Express)' --customers purchase flowers that are already in your inventory, allowing for faster delivery.
     when li.order_source = 'Direct Supplier' then 'Pre-Selling' --Direct Supplier Model: customers purchase directly from the marketplace where suppliers list their flowers.
     when i.generation_type = 'MANUAL' then 'Manual Invoice'
     else 'Cheak Logic'

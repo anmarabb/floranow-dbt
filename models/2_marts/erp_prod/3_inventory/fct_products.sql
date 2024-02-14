@@ -56,6 +56,8 @@ case
         product_link,
         line_item_link,
 
+        master_shipment_id,
+
         flag_1,
         flag,
 
