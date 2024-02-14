@@ -259,7 +259,6 @@ CASE
 case when COALESCE(incidents_quantity, 0) + COALESCE(fulfilled_quantity, 0)  = ordered_quantity then 'Match' else 'Cheack' end as quantity_cheack,
 
 
-master_shipment_id,
 shipment_id,
 
 DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
