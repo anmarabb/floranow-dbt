@@ -52,6 +52,8 @@ select
                 ii.meta_data.supplier_code as meta_supplier_code,
                 ii.meta_data.supplier_name as meta_supplier_name,
 
+                ii.reason,
+
             --fct
                 ii.quantity,
                 ii.unit_price,

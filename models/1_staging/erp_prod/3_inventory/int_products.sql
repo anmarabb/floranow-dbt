@@ -227,6 +227,7 @@ with
             li.master_shipments_status,
             li.master_shipment,
             li.shipment_link,
+            li.master_shipment_link,
             li.line_item_link,
             li.master_shipment_id,
             li.shipment_id,

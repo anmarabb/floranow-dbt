@@ -275,6 +275,7 @@ with
 
             tags,
             offer_type,
+            reason,
 
             case 
             when warehouse in ('Riyadh Warehouse','Qassim Warehouse','Jouf WareHouse','Hail Warehouse') then 'Al Amir'
