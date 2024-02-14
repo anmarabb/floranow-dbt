@@ -7,11 +7,12 @@ select
 case 
     when debtor_number = '132008' then 'Filter Out'
     when customer_type = 'reseller' then 'Filter Out'
-    when invoice_header_status not in ('Printed','signed') then 'Filter Out'
+    --when invoice_header_status not in ('Printed','signed') then 'Filter Out'
     else 'Default Filter'
     end as reprot_filter,
     
-
+case when invoice_header_type = 'invoice' and invoice_header_status = 'Draft' then total_amount_without_tax else 0 end as draft_value, 
+case when invoice_header_type = 'invoice' and invoice_header_status = 'Draft' then 1 else 0 end as draft_count, 
 
 case when signed_at is not null then 1 else 0 end as signed_invoice,
 case when invoice_header_printed_at is not null then 1 else 0 end as printed_invoice,
@@ -148,7 +149,8 @@ customer_type,
 invoice_header_id,
 invoice_header_printed_at, -- it can be null
 
-case when date(invoice_header_printed_at) is not null then date(invoice_header_printed_at) else date(invoice_header_created_at) end as master_date,
+--case when date(invoice_header_printed_at) is not null then date(invoice_header_printed_at) else date(invoice_header_created_at) end as master_date,
+case when date(invoice_header_printed_at) is not null then date(invoice_header_printed_at) else date(invoice_header_printed_at) end as master_date,
 
 
 drop_id,
