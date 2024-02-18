@@ -120,6 +120,8 @@ move_items AS
         --total_credit_not_value_per_customer
 
     FROM  {{ ref('fct_move_items') }} as mi
+    where mi.company_name in ('Flora Express Flower Trading LLC', 'Global Floral Arabia tr')
+    and mi.user_aging_type = 'Floranow Aging'
     GROUP BY
         user_id
 ),

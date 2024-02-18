@@ -108,6 +108,7 @@ customer.credit_limit,
 customer.customer_type,
 customer.account_type,
 customer.user_validity_filter,
+customer.user_aging_type,
 --fct
    -- -mi.balance as paid_amount,
   --  -(mi.balance - mi.residual) as reconciled_amount,

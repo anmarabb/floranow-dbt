@@ -97,7 +97,7 @@ m_3_remaining,
 mtd_remaining,
 aging_remaining,
 
-
+user_aging_type,
 current_timestamp() as insertion_timestamp 
 
 
