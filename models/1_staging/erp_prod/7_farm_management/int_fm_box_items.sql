@@ -12,6 +12,13 @@ select
     p.number as Astra_id,
     p.product_name,
     p.color,
+    
+    p.main_group,
+    p.sub_group,
+    p.stem_length,
+    p.bud_height,
+    p.bud_count,
+
 
 --box_items
     bi.produced_quantity,
@@ -31,5 +38,5 @@ left join {{ref('stg_fm_boxes')}} as b on bi.fm_box_id = b.fm_boxe_id
 left join {{ref('stg_fm_shipments')}} as sh on b.fm_shipment_id = sh.fm_shipment_id
 
 
-left join {{ref('stg_fm_products')}} as p on bi.fm_product_id = p.fm_product_id
+left join {{ref('int_fm_products')}} as p on bi.fm_product_id = p.fm_product_id
 

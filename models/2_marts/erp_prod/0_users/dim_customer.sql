@@ -4,6 +4,7 @@ source as (
         
 select    
     user_validity_filter,
+    user_aging_type,
     u.id as customer_id,
     u.debtor_number,
     u.name as Customer,

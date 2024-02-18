@@ -92,3 +92,4 @@ sources:
       - name: fm_box_items
       - name: fm_boxes
       - name: fm_shipments
+      - name: astra_budget_2024
