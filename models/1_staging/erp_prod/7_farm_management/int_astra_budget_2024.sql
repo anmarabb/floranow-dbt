@@ -11,6 +11,7 @@ with produced_quantity as
     sum(produced_quantity) as produced_quantity,
 
     from   {{ ref('fct_fm_box_items') }} as boxitems
+    where shipment_type = 'Production'
     group by 1,2,3
   ),
 
