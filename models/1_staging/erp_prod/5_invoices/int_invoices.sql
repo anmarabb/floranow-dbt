@@ -92,6 +92,7 @@ select
 i.*,
 
 
+ 
     case when invoice_header_type = 'invoice' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as gross_revenue,
     case when invoice_header_type = 'credit note' and invoice_header_status in('Printed','signed')  then total_amount_without_tax else 0 end as credit_note,
 
@@ -194,6 +195,15 @@ END AS select_printed_date,
 
 
 
+case 
+  when customer.debtor_number in ('132008','130188') and i.invoice_header_printed_at < TIMESTAMP('2023-05-01') then 'Include'
+  when customer.debtor_number = '130257' and i.invoice_header_printed_at < TIMESTAMP('2023-03-19') then 'Include'
+  when customer.debtor_number = '130009' and i.invoice_header_printed_at < TIMESTAMP('2023-02-01') then 'Include'
+  when customer.debtor_number = '132009' and i.invoice_header_printed_at < TIMESTAMP('2023-03-10') then 'Include'
+  when customer.debtor_number = '130220' and i.invoice_header_printed_at < TIMESTAMP('2023-03-01') then 'Include'
+  when customer.debtor_number = '134002' and i.invoice_header_printed_at < TIMESTAMP('2023-04-01') then 'Include'
+  else null
+end as transaction_phase_segments,
 
 
     current_timestamp() as insertion_timestamp, 
