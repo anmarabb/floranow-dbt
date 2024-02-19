@@ -30,6 +30,9 @@ with
 
             tamimi_rema_customer,
 
+            user_validity_filter,
+            user_aging_type,
+
             case
                 when sales_source = 'Astra' and tamimi_rema_customer = 'Tamimi Customer'
                 then 'Astra - Tamimi Sales'
