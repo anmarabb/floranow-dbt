@@ -9,6 +9,9 @@ SELECT
     inbound_quantity,
     week_number,
     production_date,
+    stem_length,
+    bud_count,
+
 
 
 FROM  {{ref('int_fm_inbound_stock_items')}} as db
