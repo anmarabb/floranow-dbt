@@ -6,7 +6,8 @@ ins.*,
 p.product_name,
 p.color,
 p.sub_group,
-
+p.stem_length,
+p.bud_count,
 
 
 CONCAT(
