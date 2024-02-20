@@ -10,7 +10,7 @@ SELECT
     db.account_manager,
     --db.city,
     --db.client_category,
-    --db.warehouse,
+    db.warehouse,
 
     CASE
         WHEN ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager/*,city*/) = 1 THEN 
