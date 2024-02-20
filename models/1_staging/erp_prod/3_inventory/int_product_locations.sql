@@ -22,6 +22,7 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
 
  pl.quantity as location_quantity,
  pl.remaining_quantity as location_remaining_quantity,
+ pl.locationable_id,
 
  p.remaining_quantity,
  p.sold_quantity,

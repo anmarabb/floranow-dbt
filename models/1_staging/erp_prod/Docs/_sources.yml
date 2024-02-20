@@ -87,9 +87,10 @@ sources:
 
       - name: fm_products
       - name: fm_orders
-      - name: fm_outbound_stock_items
       - name: fm_product_incidents
       - name: fm_box_items
       - name: fm_boxes
       - name: fm_shipments
       - name: astra_budget_2024
+      - name: fm_inbound_stock_items
+      - name: fm_outbound_stock_items

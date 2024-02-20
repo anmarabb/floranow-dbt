@@ -9,7 +9,7 @@ when raw_color in ('Bicolor pink','bicolour','bicolour orange-yellow') then 'bic
 when raw_color in ('blue white','light blue','white blue','dark blue') then 'blue'
 when raw_color in ('dark red','burgundy') then 'red'
 when raw_color in ('Pink White','Light Pink','dark pink') then 'pink'
-when raw_color in ('bronze','violet','Mix','apricot','brown','peach','cream','lilac') then 'other color'
+when raw_color in ('bronze','violet','Mix','apricot','brown','peach','Peach','cream','lilac') then 'other color'
 when raw_color in ('fuchsia') then 'cerise'
 when raw_color in ('dark green') then 'green'
 else raw_color
