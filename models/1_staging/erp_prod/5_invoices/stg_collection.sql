@@ -6,7 +6,7 @@
         --b.city,
         b.date,
         --b.client_category,
-        --b.warehouse,
+        b.warehouse,
         b.collection_target,
 
         PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', b.date), '-01')) as year_month,

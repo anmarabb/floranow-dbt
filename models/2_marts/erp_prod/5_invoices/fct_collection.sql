@@ -7,7 +7,7 @@ select
     --b.client_category,
     b.monthly_budget,
     b.daily_budget,
-    --b.warehouse,
+    b.warehouse,
 
 FROM  {{ref('int_collection')}} as b   
 
