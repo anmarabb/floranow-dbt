@@ -24,6 +24,7 @@ with
 
             unit_price,
             unit_landed_cost,
+            unit_fob_price,
 
             gross_revenue,
             credit_note,

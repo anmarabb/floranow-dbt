@@ -101,6 +101,7 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
         li.li_record_type,
         li.stem_length,
         li.tags,
+        li.unit_fob_price,
         
           CASE
             WHEN REGEXP_CONTAINS(li.tags, 'Deals') THEN 'Promotion Offer'
