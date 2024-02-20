@@ -32,6 +32,7 @@ when p.product_name like '%Dracaena Massangeana Leaves%' THEN 'Greeneries'
 when p.product_name like '%Strelitzia Leaves%' THEN 'Greeneries' 
 
 when p.product_name like '%Cycas%' THEN 'Cycas' 
+when p.sub_group = 'Gerbera Mini' then 'Gerbera'
 
 when p.sub_group is null then p.main_group
 else p.sub_group
