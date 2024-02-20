@@ -13,5 +13,3 @@ SELECT
 
 
     FROM {{ source(var('erp_source'), 'astra_budget_2024') }} as b
-
-
