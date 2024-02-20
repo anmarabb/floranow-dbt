@@ -234,7 +234,7 @@ select
 else 'normal' end as user_validity_filter,
 
 case 
-when u.debtor_number in ('ASTMED','FNQSIM','132009','132008','130220','134002','130257','130188','LNDHAF','LNDHAI','LNDJOU','LNDQAS','Indmed','130009') then 'Internal Aging'
+when u.debtor_number in ('ASTMED','FNQSIM','132009','132008','130220','134002','130257','130188','LNDHAF','LNDHAI','LNDJOU','LNDQAS','lndmed','130009') then 'Internal Aging'
 when u.debtor_number in ('131379','131106','131380','131107','131381','131108','131382','131109','131383','131110','131384','131111','131112','131386','131113','133208') then 'Astra Aging'
 else 'Floranow Aging'
 end as user_aging_type,

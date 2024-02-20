@@ -30,5 +30,5 @@ incident_quantity_inventory_stage,
 live_stock,
 report_filter,
 full_stock_name,
-
+locationable_id,
 from  {{ref('int_product_locations')}} as pl
