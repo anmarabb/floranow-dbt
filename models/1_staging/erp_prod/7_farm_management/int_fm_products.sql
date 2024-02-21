@@ -12,6 +12,8 @@ when raw_color in ('Pink White','Light Pink','dark pink') then 'pink'
 when raw_color in ('bronze','violet','Mix','apricot','brown','peach','Peach','cream','lilac') then 'other color'
 when raw_color in ('fuchsia') then 'cerise'
 when raw_color in ('dark green') then 'green'
+when raw_color in ('gold') then 'yellow'
+
 else raw_color
 end as color,
 
