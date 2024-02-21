@@ -3,7 +3,7 @@
 SELECT
 
     sub_group,
-    color,
+    LOWER(color) as color,
     CONCAT(CAST(year AS STRING), ' - week ', CAST((week) AS STRING)) AS week_number,
      budget_quantity,
    -- week,
