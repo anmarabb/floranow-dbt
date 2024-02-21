@@ -28,6 +28,8 @@ with
 
             gross_revenue,
             credit_note,
+            auto_gross_revenue,
+            auto_credit_note,
 
             tamimi_rema_customer,
 

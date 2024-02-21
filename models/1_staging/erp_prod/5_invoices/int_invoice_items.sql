@@ -22,6 +22,10 @@ case when i.invoice_header_type = 'credit note' then -ii.quantity else ii.quanti
     case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as gross_revenue,
     case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as credit_note,
 
+    case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end as auto_gross_revenue,
+    case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end as auto_credit_note,
+
+
 
 
 case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end  as total_cost,
