@@ -12,6 +12,9 @@ SELECT
     stem_length,
     bud_count,
 
+    fm_shipment_id,
+
 
 
 FROM  {{ref('int_fm_inbound_stock_items')}} as db
+
