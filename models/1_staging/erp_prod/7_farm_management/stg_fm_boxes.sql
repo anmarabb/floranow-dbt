@@ -5,7 +5,7 @@ select
  
  
  --PK
-   id as fm_boxe_id,
+   id as fm_box_id,
 
  --FK
     user_id,
