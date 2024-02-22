@@ -11,7 +11,7 @@ with produced_quantity as
     sum(produced_quantity) as produced_quantity,
 
     from   {{ ref('fct_fm_box_items') }} as boxitems
-    where shipment_type = 'Production'
+    where shipment_type = 'Production' and fm_shipment_id not in (3555,3506,3511)
     group by 1,2,3
   ),
 
@@ -40,6 +40,7 @@ with produced_quantity as
     sum(inbound_quantity) as inbound_quantity,
 
     from   {{ ref('fct_fm_inbound_stock_items') }} as inbound
+    where fm_shipment_id not in (3555,3506,3511)
     group by 1,2,3
 
     )
