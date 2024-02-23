@@ -94,3 +94,5 @@ sources:
       - name: astra_budget_2024
       - name: fm_inbound_stock_items
       - name: fm_outbound_stock_items
+      - name: fm_stock_transactions
+      
