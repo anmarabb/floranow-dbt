@@ -14,7 +14,7 @@ u.name as reported_by,
 
 p.product_name,
 p.number as prodcut_number,
-
+p.fob_price,
 
 
 from   {{ ref('stg_fm_product_incidents') }} as pi

@@ -20,5 +20,13 @@ select
     p.bud_height,
     p.bud_count,
 
+    p.created_at,
+
+
+CASE
+    WHEN p.sub_group IN ('Alstroemeria', 'Aster', 'Cycas', 'Eucalyptus', 'Eustoma', 'Liatris', 'Gerbera', 'Trachelium', 'Sunflower', 'Statice', 'Solidago', 'Ruscus', 'Lily Or Double', 'Lily Or', 'Lily LA', 'Chrysanthemum Santini', 'Chrysanthemum Single', 'Chrysanthemum Spray') THEN 'Contract'
+    WHEN p.sub_group IN ('Antirrhinum', 'Carnation', 'Dianthus barbatus', 'Gypsophila', 'Rose', 'Spray Rose', 'Celosia', 'Greeneries') THEN 'Out Of Contract'
+    ELSE 'Unknown'
+  END AS contract_status,
 
 from   {{ ref('int_fm_products') }} as p
