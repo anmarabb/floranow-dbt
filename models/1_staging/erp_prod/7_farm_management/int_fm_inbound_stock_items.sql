@@ -9,6 +9,8 @@ p.sub_group,
 p.stem_length,
 p.bud_count,
 
+p.fob_price,
+
 
 sh.fm_shipment_id,
 
