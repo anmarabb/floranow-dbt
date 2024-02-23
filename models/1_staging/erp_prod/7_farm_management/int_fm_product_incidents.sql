@@ -15,10 +15,13 @@ u.name as reported_by,
 p.product_name,
 p.number as prodcut_number,
 p.fob_price,
+p.sub_group,
+p.color,
+
 
 
 from   {{ ref('stg_fm_product_incidents') }} as pi
-left join {{ ref('stg_fm_products') }} as p on pi.fm_product_id = p.fm_product_id
+left join {{ ref('fct_fm_products') }} as p on pi.fm_product_id = p.fm_product_id
 left join  {{ ref('base_users') }} as u on pi.reported_by_id = u.id
 
 --where pi.incident_type <> 'DAMAGED'

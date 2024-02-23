@@ -13,6 +13,6 @@ CAST(EXTRACT(ISOWEEK FROM shipmet_creation_date) AS STRING)
 ) AS week_number,
 
 
-case when fm_shipment_id not in (3555,3506,3511) then 'Opening Production Stock' else 'Regular Production Stock' end as fm_report_filter,
+case when fm_shipment_id  in (3555,3506,3511) then 'Opening Production Stock' else 'Regular Production Stock' end as fm_report_filter,
 
 from   {{ ref('int_fm_box_items') }} as bi
