@@ -2,7 +2,7 @@ select
 
     p.fm_product_id,
 
-    p.number,
+   -- p.number,
 
     p.product_name,
 
@@ -21,6 +21,7 @@ select
     p.bud_count,
 
     p.created_at,
+    p.astra_barcode,
 
 
 CASE

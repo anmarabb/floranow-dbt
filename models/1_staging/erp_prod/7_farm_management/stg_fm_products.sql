@@ -39,7 +39,7 @@ select
 
 
     fob_price,
-    number,
+    number as astra_barcode,
 
 
 
