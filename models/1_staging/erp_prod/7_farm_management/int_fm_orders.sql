@@ -30,7 +30,7 @@ fmso.fulfiled_quantity,
 
 --fm_products
     p.product_name,
-    p.number,
+    p.astra_barcode,
     --p.categorization,
     p.fob_price,
     p.color,
