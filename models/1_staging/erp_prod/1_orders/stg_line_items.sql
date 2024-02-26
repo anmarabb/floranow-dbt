@@ -92,7 +92,7 @@ With source as
                 li.pricing_type, --D2D (Door to door cost), FOB (Free on board cost, supplier cost only.), CIF (FOB, insurance and freight cost)
                 
                 li.landed_currency,
-                li.fob_currency,
+                li.fob_currency as raw_fob_currency,
                 li.currency,
 
                 --product
@@ -108,7 +108,7 @@ With source as
 
             --fct
                 li.unit_landed_cost,
-                li.unit_fob_price,
+                li.unit_fob_price as raw_unit_fob_price,
                 li.unit_price,      --price per unit price calculated by pricing engine
                 li.exchange_rate,
 
