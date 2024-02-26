@@ -10,6 +10,7 @@ p.stem_length,
 p.bud_count,
 
 p.fob_price,
+p.astra_barcode,
 
 
 sh.fm_shipment_id,
