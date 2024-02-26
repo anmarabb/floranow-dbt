@@ -9,7 +9,7 @@ select
 
 
 --products
-    p.number as Astra_id,
+    p.astra_barcode,
     p.product_name,
     p.color,
     
