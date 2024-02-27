@@ -23,7 +23,7 @@ p.contract_status,
 p.bud_count,
 p.stem_length,
 
-st.inbound_quantity - st.outbound_quantity as quantity,
+abs(st.inbound_quantity - st.outbound_quantity) as quantity,
 from a as st
 left join {{ ref('fct_fm_products') }} as p on st.fm_product_id = p.fm_product_id
 
