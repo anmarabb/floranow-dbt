@@ -22,7 +22,7 @@ updated_at,
 expired_at,
 
 
-transaction_type,
+transaction_type, --INBOUND, OUTBOUND
 sourceable_type,
 
 reason,

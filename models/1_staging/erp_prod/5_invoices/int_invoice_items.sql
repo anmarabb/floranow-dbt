@@ -153,13 +153,7 @@ else INITCAP(li.product_subcategory) end as product_subcategory,
 
 
 
-case 
-when li.Supplier in ('ASTRA Farms','Ward Flowers') then 'Commission Based'
-when li.order_source in ('Express Inventory') then 'Reselling'
-when li.order_source in ('Direct Supplier')  then 'Pre-Selling'
-when i.generation_type = 'MANUAL' then 'Manual Invoice'
-else 'To Be Scoped'
-end as stock_model,
+
 
 
 
@@ -182,6 +176,16 @@ case
     when i.generation_type = 'MANUAL' then 'Manual Invoice'
     else 'Cheak Logic'
     end as trading_model,
+
+case 
+when li.Supplier in ('ASTRA Farms','Ward Flowers') then 'Commission Based'
+when li.order_source in ('Express Inventory') then 'Reselling'
+when li.order_source in ('Direct Supplier')  then 'Pre-Selling'
+when i.generation_type = 'MANUAL' then 'Manual Invoice'
+else 'To Be Scoped'
+end as stock_model,
+
+
 
 li.order_source,
 

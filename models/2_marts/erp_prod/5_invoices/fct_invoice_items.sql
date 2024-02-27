@@ -183,7 +183,7 @@ with
             case
                 when date(invoice_header_printed_at) is not null
                 then date(invoice_header_printed_at)
-                else date(invoice_header_created_at)
+                else date(invoice_header_printed_at)
             end as master_date,
 
             -- This represents the total monetary value deducted from the Gross

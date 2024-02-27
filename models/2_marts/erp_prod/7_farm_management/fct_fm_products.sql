@@ -22,6 +22,7 @@ select
 
     p.created_at,
     p.astra_barcode,
+    p.fm_product_link,
 
 
 CASE
