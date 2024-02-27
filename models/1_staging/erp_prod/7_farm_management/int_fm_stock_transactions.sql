@@ -8,6 +8,7 @@ with a as (
         sum(case when transaction_type = 'OUTBOUND'then quantity else 0 end) as outbound_quantity,
 
         from   {{ ref('stg_fm_stock_transactions') }} as st
+        where production_date >='2024-01-01'
         --where  production_date is not null 
         group by 1,2
         order by 1,2
