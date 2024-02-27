@@ -1,6 +1,31 @@
+/*
+
+with inbound_stock_transactions as (
+
+select
+fm_product_id,
+production_date,
+transaction_type,
+
+sum(case when transaction_type = 'INBOUND'then quantity else 0 end) as inbound_quantity,
+sum(case when transaction_type = 'OUTBOUND'then quantity else 0 end) as outbound_quantity,
+
+from   {{ ref('stg_fm_stock_transactions') }} as st
+where transaction_type = 'INBOUND' and production_date is not null and fm_product_id = 2642
+group by 1,2,3
+order by production_date
+
+),
+
+*/
+
+
 
 select
     p.* EXCEPT(sub_group),
+
+
+    concat( "https://erp.floranow.com/fm/products/", p.fm_product_id) as fm_product_link,
 
 
 

@@ -13,4 +13,5 @@ expired_at,
     bud_count,
     stem_length,
     product_name,
+    transaction_type,
 from   {{ ref('int_fm_stock_transactions') }} as p
