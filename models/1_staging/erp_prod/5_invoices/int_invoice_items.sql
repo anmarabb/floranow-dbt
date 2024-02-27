@@ -186,6 +186,14 @@ case
 li.order_source,
 
 
+
+
+CASE 
+    WHEN ROW_NUMBER() OVER (PARTITION BY ii.invoice_header_id ORDER BY ii.invoice_item_id) = 1 THEN i.delivery_charge_amount 
+    ELSE 0 
+  END as delivery_charge_amount,
+
+
 current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_invoice_items') }} as ii
