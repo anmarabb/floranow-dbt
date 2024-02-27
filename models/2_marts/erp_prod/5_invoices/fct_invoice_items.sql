@@ -291,6 +291,8 @@ with
             when warehouse in ('Medina Warehouse') then 'Abd Alaziz'
             else null end as astra_accountant,
 
+            delivery_charge_amount,
+
 
             current_timestamp() as insertion_timestamp,
 
