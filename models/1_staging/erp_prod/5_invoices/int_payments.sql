@@ -79,3 +79,8 @@ left join {{ ref('stg_bank_accounts') }} as ba on customer.bank_account_id = ba.
     )
 
 select * from source
+
+--where payment_method is not null
+--where source_system = 'FLORANOW_ERP'  and payment_type is  null and  payment_method is not null
+
+--
