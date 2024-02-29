@@ -59,6 +59,8 @@ select
     ordering_stock_type,
     feed_source_name,
     unit_price,
+    unit_fob_price,
+    unit_landed_cost,
 
 
 

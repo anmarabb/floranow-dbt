@@ -52,6 +52,7 @@ select
         li.master_shipment,
         li.Shipment,
         li.unit_fob_price,
+        li.unit_landed_cost,
         li.order_number,
 
 
