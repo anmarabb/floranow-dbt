@@ -268,7 +268,8 @@ with
             pi.incident_quantity_inventory_stage,
             pi.extra_quantity,
             pi.inventory_extra_quantity,
-            pi.packing_extra_quantity,
+            --pi.packing_extra_quantity,
+            COALESCE(pi.packing_extra_quantity,0) as packing_extra_quantity,
             pi.cleanup_adjustments_quantity,
 
             pi.incident_quantity_packing_stage,
