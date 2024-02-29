@@ -209,7 +209,7 @@ with
 
             case 
             when li.shipments_status not in ('PACKED','WAREHOUSED') then 0
-            else li.ordered_quantity - COALESCE(pi.incident_quantity_packing_stage,0)
+            else li.ordered_quantity - COALESCE(pi.incident_quantity_packing_stage,0) + abs(COALESCE(pi.packing_extra_quantity,0))
             end as  packed_quantity,
 
 
