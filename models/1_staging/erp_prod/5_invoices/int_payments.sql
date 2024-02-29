@@ -27,6 +27,7 @@ customer.warehouse,
 fn.name as financial_administration,
 
 pt.payment_method,
+pt.transaction_type,
 pt.approval_code,
 
 
