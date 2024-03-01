@@ -65,9 +65,9 @@ company_name,
 warehouse,
 financial_administration,
  case 
- when  payment_method is not null then payment_method 
+ when payment_method is not null then payment_method 
  when payment_type is not null then UPPER(payment_type)
- else  transaction_type end as payment_method,
+ else transaction_type end as payment_method,
 
 
 payment_transaction_number,
@@ -94,4 +94,3 @@ from {{ref('int_payments')}} as py
 )
 
 select * from a
-
