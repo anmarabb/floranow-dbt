@@ -19,9 +19,9 @@ select
     customer_name,
     customer_email,
     customer_debtor_number,
-    buyer_order_number,
+    buyer_order_number, --line item
 
-    number,
+    number, --farm mangagmnet print stikers
     warehouse_name,
     fulfillment,
     status,
