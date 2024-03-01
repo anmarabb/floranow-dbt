@@ -25,3 +25,8 @@ left join {{ ref('base_users') }} as customer on customer.id = pt.user_id
     )
 
 select * from source
+
+
+--where payment_transaction_id = 966217
+
+--950491

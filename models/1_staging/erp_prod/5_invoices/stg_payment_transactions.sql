@@ -12,9 +12,9 @@ select
 
                 payment_received_by,
                 created_by,
-                updated_by,
+                --updated_by,
                 collected_by,
-                added_by,
+                --added_by,
 
             --dim
                 transaction_type,            --EXTERNAL, MANUAL, ONLINE, IN_SHOP
@@ -49,4 +49,4 @@ select
 current_timestamp() as ingestion_timestamp
 
  
-from source as i 
+from source as i
