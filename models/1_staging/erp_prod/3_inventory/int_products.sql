@@ -218,7 +218,7 @@ with
 
             li.loc_status,
             li.fulfillment_mode,
-            li.fulfillment,
+            li.fulfillment, --SUCCEED, PARTIAL, FAILED, UNACCOUNTED
             --li.delivery_date,
             li.User,
             li.order_type,

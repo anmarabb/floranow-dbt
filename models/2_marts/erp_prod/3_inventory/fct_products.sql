@@ -76,7 +76,12 @@ case
         --case when flag_1 != 'not_scaned'  and live_stock = 'Live Stock' and Stock = 'Inventory Stock' then remaining_quantity else 0 end as in_stock_quantity,
         in_stock_quantity,
         
-        case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
+        --case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
+        case when fulfillment in ('UNACCOUNTED') then ordered_quantity else 0 end as coming_quantity,
+
+
+
+
         case when select_departure_date not in ('Future', 'Today') then ordered_quantity else 0 end as past_ordered_quantity,
 
         case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and loc_status ='null' then p.ordered_quantity else 0 end as transit_quantity_awais,
