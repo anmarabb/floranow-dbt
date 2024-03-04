@@ -90,3 +90,4 @@ from {{ref('int_shipments')}} as sh
 select * from source
 
 --where  date_diff(cast(current_date() as date ),cast(departure_date as date), Year) = 0
+--where shipment_id= 30648
