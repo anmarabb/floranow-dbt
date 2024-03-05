@@ -17,8 +17,8 @@ select
 
 --dim
 
-    status,
-    picking_status,
+    status, --INSPECTED, IN_TRANSIT (for shipmnet fm_order_id is null) , PENDING, null
+    picking_status,  --NOT_PICKED, TOTALLY_PICKED, PARTIALLY_PICKED, null shipment
 
 
     created_at,
@@ -28,8 +28,15 @@ select
 
 --fct
 
-    quantity as produced_quantity,
+    --quantity as produced_quantity,
     quantity_unit,
+    case when fm_order_id is null then quantity else 0 end as produced_quantity,
+
+    case when fm_order_id is not null and picking_status = 'TOTALLY_PICKED' then quantity else 0 end as packed_quantity,
+
+    case when fm_order_id is not null and picking_status in ('PARTIALLY_PICKED','NOT_PICKED') then quantity else 0 end as unpacked_quantity,
+
+
 
 
 current_timestamp() as ingestion_timestamp,
