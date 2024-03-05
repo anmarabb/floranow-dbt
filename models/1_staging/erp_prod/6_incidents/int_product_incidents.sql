@@ -54,6 +54,7 @@ select
         li.unit_fob_price,
         li.unit_landed_cost,
         li.order_number,
+        li.production_date_array,
 
 
         pi.quantity * li.unit_fob_price as fob_value,
