@@ -19,6 +19,7 @@ select
 
     created_at,
     updated_at,
+    production_date,
 
 --fct
 

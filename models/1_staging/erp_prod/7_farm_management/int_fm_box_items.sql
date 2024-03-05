@@ -24,6 +24,8 @@ select
 
 --box_items
     bi.produced_quantity,
+    bi.packed_quantity,
+    bi.unpacked_quantity,
 
 --shipments
     sh.fm_shipment_id,
