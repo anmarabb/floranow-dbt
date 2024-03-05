@@ -13,6 +13,20 @@ with
          group by fm_order_id
          
          
+    ),
+
+    prep_box_items as 
+    (
+
+        select 
+            
+            sum(bi.packed_quantity) as packed_quantity,
+            sum(bi.unpacked_quantity) as unpacked_quantity,
+            bi.fm_order_id  
+            
+         from   {{ ref('stg_fm_box_items') }} as bi 
+         group by fm_order_id
+
     )
 
 select
@@ -55,6 +69,11 @@ sh.fm_shipment_id,
 
 customer.customer_type,
 
+
+bi.packed_quantity,
+bi.unpacked_quantity,
+
+
 from   {{ ref('stg_fm_orders') }} as o
 left join {{ ref('fct_fm_products') }} as p on o.fm_product_id = p.fm_product_id
 left join prep_order as fmso on fmso.fm_order_id = o.fm_order_id
@@ -62,3 +81,4 @@ left join {{ ref('stg_line_items') }} as li on o.buyer_order_number = li.number
 left join {{ ref('stg_fm_shipments') }} as sh on sh.fm_shipment_id = o.fm_shipment_id
 left join {{ref('base_users')}} as customer on customer.id = o.customer_id
 
+left join prep_box_items as bi on bi.fm_order_id = o.fm_order_id
