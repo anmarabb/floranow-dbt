@@ -501,6 +501,9 @@ case when li.parent_line_item_id is not null then pli.raw_unit_fob_price else li
 case when li.parent_line_item_id is not null then pli.raw_fob_currency else li.raw_fob_currency end as fob_currency,
 
 
+fmo.production_date_array,
+
+
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -565,8 +568,7 @@ left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
 left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
 left join product_incidents as pi on pi.line_item_id = li.line_item_id
 
-
-left join {{ref('stg_fm_orders')}}  as o on  o.buyer_order_number = li.number
+left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.number
 
 
 

@@ -63,6 +63,9 @@ select
     unit_landed_cost,
 
 
+    production_date_array,
+
+
 
     
 case when pi.stage in ('PACKING', 'RECEIVING')  then 'Pre Arrival' else 'Post Arrival' end as shipment_phase,
