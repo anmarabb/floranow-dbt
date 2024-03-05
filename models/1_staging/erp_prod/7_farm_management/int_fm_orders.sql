@@ -51,6 +51,8 @@ select
     o.customer_name,
     o.warehouse_name,
     o.quantity,
+    o.fm_order_id,
+    concat( "https://erp.floranow.com/fm/orders/", o.fm_order_id) as fm_order_link,
 
 
 fmso.fulfiled_quantity,
