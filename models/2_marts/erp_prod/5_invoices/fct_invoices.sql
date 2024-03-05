@@ -5,10 +5,10 @@ source as (
 select
 
 case 
-    when debtor_number = '132008' then 'Filter Out'
-    when customer_type = 'reseller' then 'Filter Out'
-    --when invoice_header_status not in ('Printed','signed') then 'Filter Out'
-    else 'Default Filter'
+    when invoice_header_status not in ('Printed','signed') then 'Filter Out'
+    when debtor_number = '132008' then 'Intercompany Sales'
+    when customer_type = 'reseller' then 'Intercompany Sales'
+    else 'Floranow Sales'
     end as reprot_filter,
     
 case when invoice_header_type = 'invoice' and invoice_header_status = 'Draft' then total_amount_without_tax else 0 end as draft_value, 

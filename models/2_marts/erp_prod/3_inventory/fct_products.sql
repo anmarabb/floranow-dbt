@@ -322,3 +322,5 @@ current_timestamp() as insertion_timestamp,
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
 
+--where p.product_id = 268380
+--where shipment_id =30798
