@@ -206,7 +206,7 @@ with
             -- dim
             financial_administration,  -- Market
             customer,
-            company_name,
+            --company_name,
             user_category,  -- Segment
             debtor_number,
             account_manager,

@@ -120,8 +120,17 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     customer.account_type,
     customer.customer_type,
     customer.user_validity_filter,
-    customer.company_name,
+    --customer.company_name,
     customer.user_aging_type,
+
+    case 
+        when mi.company_id = 3 then 'Bloomax Flowers LTD'
+        when mi.company_id = 2 then 'Global Floral Arabia tr'
+        when mi.company_id = 1 then 'Flora Express Flower Trading LLC'
+        when mi.company_id is null then 'null'
+        else  'To Be Scoped'
+    end as company_name,
+
 
 
     prep_payments.total_payments,
@@ -173,13 +182,6 @@ case when items_collection_method = 'delivery_date' then items_collection_date e
 
 mi.company_id,
 
-case 
-when mi.company_id = 3 then 'Bloomax Flowers LTD'
-when mi.company_id = 2 then 'Global Floral Arabia tr'
-when mi.company_id = 1 then 'Flora Express Flower Trading LLC'
-when mi.company_id is null then 'null'
-else  'To Be Scoped'
-end as company_name,
 
 
 
