@@ -119,6 +119,9 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     customer.payment_term,
     customer.account_type,
     customer.customer_type,
+    customer.user_validity_filter,
+    customer.company_name,
+    customer.user_aging_type,
 
 
     prep_payments.total_payments,
