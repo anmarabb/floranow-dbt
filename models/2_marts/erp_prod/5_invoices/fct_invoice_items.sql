@@ -5,7 +5,8 @@ with
         select
 
         case 
-    when invoice_item_status not in ('APPROVED') then 'Filter Out'    
+    when invoice_item_status not in ('APPROVED') then 'Filter Out' 
+    when debtor_number = 'FNSAMPLE' then 'Floranow Sample'
     when debtor_number = '132008' then 'Intercompany Sales'
     when customer_type = 'reseller' then 'Intercompany Sales'
     else 'Floranow Sales'
