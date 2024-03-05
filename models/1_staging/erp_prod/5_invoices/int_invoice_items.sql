@@ -41,6 +41,7 @@ case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_co
         customer.Warehouse as warehouse,
         customer.user_validity_filter,
         customer.user_aging_type,
+        customer.company_name,
         
 
 concat(customer.debtor_number,ii.delivery_date) as drop_id, 
