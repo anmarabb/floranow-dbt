@@ -65,6 +65,7 @@ fmso.fulfiled_quantity,
     --p.categorization,
     p.fob_price,
     p.color,
+    p.stem_length,
     p.sub_group,
 
 

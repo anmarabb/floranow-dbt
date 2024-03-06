@@ -16,9 +16,10 @@ select
 --dim
 
     incident_type, --EXTRA, DAMAGED, MISSING, RETURNED, HANDLING_ISSUE, INCORRECT_ITEM, QUALITY_ISSUES, CLEANUP_ADJUSTMENTS, TRANSACTIONAL_ISSUES, DELIVERY_CHARGE_REFUND
-    incidentable_type,   --PackageLineItem, LineItem, ProductLocation, InvoiceItem, Product
-    stage,               --PACKING, RECEIVING, INVENTORY, DELIVERY, AFTER_RETURN, BEFORE_SUPPLY
-    status,              --CLOSED, REPORTED, null
+    incidentable_type,   --Fm::Order, Fm::BoxItem, Fm::Location
+
+    stage,               --ORDER_FULFILLMENT, SHIPMENT_RECEIVING, INVENTORY
+    status,              --REPORTED
 
 
     deleted_at,
