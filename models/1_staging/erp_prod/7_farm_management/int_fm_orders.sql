@@ -108,6 +108,10 @@ bi.unpacked_quantity,
 
 osi.production_date_array,
 
+
+pi.incident_shortge_qunatity,
+
+
 from   {{ ref('stg_fm_orders') }} as o
 left join {{ ref('fct_fm_products') }} as p on o.fm_product_id = p.fm_product_id
 left join prep_order as fmso on fmso.fm_order_id = o.fm_order_id
