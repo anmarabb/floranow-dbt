@@ -16,7 +16,7 @@ case when items_collection_method = 'delivery_date' then items_collection_date e
 
 account_manager,
 City,
-client_category,
+user_category,
 
 invoice_header_id,
 invoice_header_printed_at, -- it can be null
