@@ -112,7 +112,7 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
 
     customer.account_manager,
     customer.City,
-    customer.user_category as client_category,
+    customer.user_category,
     customer.name as Customer,
     customer.Warehouse as warehouse,
     customer.debtor_number,

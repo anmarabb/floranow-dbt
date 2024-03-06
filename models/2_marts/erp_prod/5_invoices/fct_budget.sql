@@ -4,7 +4,7 @@ select
     b.financial_administration,
     b.account_manager,
     b.city,
-    b.client_category,
+    b.client_category as user_category,
     b.monthly_budget,
     b.daily_budget,
     b.warehouse,
