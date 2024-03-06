@@ -26,6 +26,7 @@ select
     bi.produced_quantity,
     bi.packed_quantity,
     bi.unpacked_quantity,
+    bi.order_status,
 
 --shipments
     sh.fm_shipment_id,
