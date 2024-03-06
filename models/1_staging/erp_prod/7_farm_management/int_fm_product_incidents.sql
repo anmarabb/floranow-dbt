@@ -29,6 +29,7 @@ stt.production_date,
 --orders
     o.customer_name,
     o.customer_debtor_number,
+    o.fm_order_id,
 
 --stt.sourceable_type,
 --stt.fm_stock_transaction_id,
