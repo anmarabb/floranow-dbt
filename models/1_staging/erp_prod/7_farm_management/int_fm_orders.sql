@@ -32,7 +32,7 @@ with
 
     prep_outbound_stock_items as (
 
-select 
+        select 
             
             osi.fm_order_id,
             array_agg(osi.production_date ignore nulls) as production_date_array,
@@ -40,8 +40,22 @@ select
          from   {{ ref('stg_fm_outbound_stock_items') }} as osi 
          group by fm_order_id
 
+    ),
+
+prep_fm_product_incidents as (
+
+select 
+            
+         pi.fm_order_id,
+         sum(case when pi.incident_type = 'SHORTAGE' then  pi.incident_quantity else 0 end) as incident_shortge_qunatity,
+            
+         from   {{ ref('int_fm_product_incidents') }} as pi 
+         group by fm_order_id
+
 
     )
+
+
 
 select
 
@@ -106,3 +120,4 @@ left join prep_box_items as bi on bi.fm_order_id = o.fm_order_id
 
 left join prep_outbound_stock_items as osi on osi.fm_order_id = o.fm_order_id
 
+left join prep_fm_product_incidents as pi on pi.fm_order_id = o.fm_order_id
