@@ -46,6 +46,6 @@ current_timestamp() as ingestion_timestamp,
 
 
 from source as bi
-
+where bi.__hevo__marked_deleted is false
 
 
