@@ -23,7 +23,7 @@ with invoices_daily as (
         COALESCE(SUM(pi.incident_cost_inventory_dmaged), 0) as Dmaged,
         FROM {{ ref('fct_product_incidents') }} pi
         where master_report_filter = 'inventory_dmaged' --and date(pi.incident_at) = '2024-01-1'
-        and Supplier != 'ASTRA Farms'
+        --and Supplier != 'ASTRA Farms'
         GROUP BY 1,2,3
 
         )
