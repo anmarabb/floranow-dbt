@@ -22,6 +22,7 @@ with
             
             sum(bi.packed_quantity) as packed_quantity,
             sum(bi.unpacked_quantity) as unpacked_quantity,
+            max(order_status) as order_status,
             bi.fm_order_id  
             
          from   {{ ref('stg_fm_box_items') }} as bi 
@@ -102,15 +103,15 @@ sh.fm_shipment_id,
 customer.customer_type,
 
 
-bi.packed_quantity,
-bi.unpacked_quantity,
 
 
 osi.production_date_array,
 
+COALESCE (bi.packed_quantity,0) as packed_quantity,
+COALESCE (bi.unpacked_quantity,0) as unpacked_quantity,
 
-pi.incident_shortge_qunatity,
-
+COALESCE (pi.incident_shortge_qunatity,0) as incident_shortge_qunatity,
+bi.order_status,
 
 from   {{ ref('stg_fm_orders') }} as o
 left join {{ ref('fct_fm_products') }} as p on o.fm_product_id = p.fm_product_id

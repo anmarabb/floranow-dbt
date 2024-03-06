@@ -36,7 +36,14 @@ select
 
     case when fm_order_id is not null and picking_status in ('PARTIALLY_PICKED','NOT_PICKED') then quantity else 0 end as unpacked_quantity,
 
+   case 
+        when picking_status != 'TOTALLY_PICKED'  then 'Not Fulfilled'
+        when picking_status = 'TOTALLY_PICKED'  and status = 'PENDING' then 'Fulfilled Not Dispatched'
+        when picking_status = 'TOTALLY_PICKED'  and status = 'IN_TRANSIT' then 'Dispatched'
 
+     else 'cheack my logic'
+
+     end as order_status,
 
 
 current_timestamp() as ingestion_timestamp,
