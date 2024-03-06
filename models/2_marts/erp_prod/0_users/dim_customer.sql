@@ -27,7 +27,7 @@ case when user_validity_filter = 'normal' then 1 else 0 end as registered_client
     have_master_id,
  
 
-    user_category as customer_category,
+    user_category,
     warehouse,
 
 
