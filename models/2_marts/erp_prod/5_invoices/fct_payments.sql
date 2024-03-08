@@ -13,7 +13,7 @@ with unreconciled_payment as (
         Customer,
         debtor_number, 
         account_manager,        
-        user_category as client_category,
+        user_category,
         company_name,
         warehouse,
         financial_administration,
