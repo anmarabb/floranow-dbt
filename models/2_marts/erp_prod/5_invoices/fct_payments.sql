@@ -22,7 +22,8 @@ with unreconciled_payment as (
         payment_transaction_number,
         credit_note_number,
         CAST(NULL AS STRING) as invoice_number,
-        approval_code,
+        --approval_code,
+        CAST(approval_code AS STRING) AS approval_code,
 
 
 
@@ -64,16 +65,20 @@ user_category,
 company_name,
 warehouse,
 financial_administration,
+
+payment_method,
+/*
  case 
  when payment_method is not null then payment_method 
  when payment_type is not null then UPPER(payment_type)
  else transaction_type end as payment_method,
-
+*/
 
 payment_transaction_number,
 credit_note_number,
 invoice_number,
-approval_code,
+--approval_code,
+CAST(approval_code AS STRING) AS approval_code,
 
 
 payment_amount,
