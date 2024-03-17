@@ -19,7 +19,15 @@ select
                 order_id,
                 supplier_product_id,
 
+                import_sheet_id,
+
                 original_supplier_id,
+                grower_id,
+
+                barcode,
+                number,
+                floricode_product_id,
+
             
 
             --dim
@@ -32,6 +40,7 @@ select
 
                 --product
                 product_name,
+                floricode_product_name,
                 supplier_product_name,
                 color,
                 stem_length,
@@ -39,10 +48,11 @@ select
                 images,
                 properties,
                 categorization,
+                floricode_categorization,
 
 
                 tags,
-                number,
+                
                 sales_unit_name,
 
                 visible,
@@ -66,6 +76,12 @@ select
                 age,
                 sales_unit,
                 published_sales_unit,
+
+                selling_price_currency,
+                selling_price,
+                selling_price_synch_status,
+                published_unit_price,
+
 
                 p.remaining_quantity * p.unit_price as remaining_value,
                 p.remaining_quantity * CAST(p.unit_landed_cost AS FLOAT64) as landed_remaining_value,

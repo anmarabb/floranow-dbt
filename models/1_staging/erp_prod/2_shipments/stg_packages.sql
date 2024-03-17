@@ -16,7 +16,14 @@ updated_at,
 
 
 package_type, --0, null
-status, -- PENDING, INSPECTED, WAREHOUSED, null
+status, 
+    -- PENDING: initial state
+    --INSPECTED: receive package line items
+    --WAREHOUSED: add package line items to location
+    --null
+    --The status for package line items reflect the status for the package.
+
+
 created_by,
 
 items_packing_type, --0, 1, null

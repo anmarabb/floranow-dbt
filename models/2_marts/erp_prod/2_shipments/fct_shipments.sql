@@ -34,6 +34,16 @@ select
         warehousing_boxes_count,
         total_fob,
 
+
+        expected_quantity,
+        expected_fob,
+        missing_quantity,
+        missing_fob,
+        damaged_quantity,
+        damaged_fob,
+        received_quantity,
+        received_fob,
+
        -- case when shipments_status not in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as expected_quantity,
        -- case when shipments_status in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as not_expected_quantity,
 
@@ -91,3 +101,4 @@ select * from source
 
 --where  date_diff(cast(current_date() as date ),cast(departure_date as date), Year) = 0
 --where shipment_id= 30648
+

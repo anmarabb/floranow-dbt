@@ -5,13 +5,21 @@ select
 
 
 id as package_line_item_id,
+
+
 package_id,
 line_item_id,
 
 
 created_at,
 updated_at,
-status,      --PENDING, WAREHOUSED, INSPECTED
+status,      
+    --PENDING --initial state
+    --INSPECTED: receive package line items
+    --WAREHOUSED: add package line items to location
+    
+
+
 fulfillment,  --UNACCOUNTED, FAILED, FAILED, PARTIAL
 damaged_note,
 
