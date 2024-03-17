@@ -26,6 +26,8 @@ select
                                -- RETURNED        The line item contains a returned quantity (  return the line item from customer )
                                -- QUALITY_ISSUES
                                -- TRANSACTIONAL_ISSUES
+                               -- BEFORE_SUPPLY: used when reporting an incident in the origin warehouse, which we consider it as supplier side in inner shipment between warehouses.
+
 
 
 

@@ -27,6 +27,9 @@ product_incidents as (
                                 sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
                                 sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
 
+                                sum(case when pi.stage = 'BEFORE_SUPPLY' then  pi.quantity else 0 end) as incident_quantity_before_supply_stage,
+
+
                                 max(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  li.order_id else 0 end) as incident_orders_receiving_stage,
                                 max(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  li.order_id else 0 end) as incident_orders_packing_stage,
                                 max(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then li.order_id else 0 end) as incident_orders_inventory_stage,
@@ -202,7 +205,7 @@ plis.supplier_name as parent_supplier,
     case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end as supplier_region, --Origin
 
 
-    sh.Supplier as shipment_Supplier,
+   -- sh.Supplier as shipment_Supplier,
     lis.supplier_name as raw_supplier,
 
 --order 
@@ -276,6 +279,8 @@ pi.incident_quantity_packing_stage,
 pi.incident_quantity_inventory_stage,
 pi.incident_quantity_delivery_stage,
 pi.incident_quantity_after_return_stage,
+
+COALESCE(pi.incident_quantity_before_supply_stage, 0) as incident_quantity_before_supply_stage,
 
 pi.incident_quantity_extra_packing,
 pi.incident_quantity_extra_receiving,
@@ -543,7 +548,7 @@ left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_i
 
 left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
 
-left join {{ref('int_shipments')}} as sh on li.shipment_id = sh.shipment_id
+left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.shipment_id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.master_shipment_id
 
 
