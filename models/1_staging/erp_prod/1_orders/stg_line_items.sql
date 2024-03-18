@@ -109,6 +109,8 @@ With source as
             --fct
                 li.unit_landed_cost,
                 li.unit_fob_price as raw_unit_fob_price,
+                li.packing_list_fob_price,
+                
                 li.unit_price,      --price per unit price calculated by pricing engine
                 li.exchange_rate,
 

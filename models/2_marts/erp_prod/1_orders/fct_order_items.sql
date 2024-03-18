@@ -5,6 +5,9 @@ source as (
  
 select 
 
+
+packed_quantity,
+
 dispatched_items,
 fulfilled_items,
 signed_items,
@@ -53,7 +56,10 @@ stock_order_ids,
     li.unit_price,
     li.total_price_without_tax, -- (li.quantity * li.unit_price)
     li.unit_landed_cost,
+    
     li.unit_fob_price,
+    li.packing_list_fob_price,
+    li.fob_currency,
 
     customer_id,
 
