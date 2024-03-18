@@ -5,6 +5,7 @@ with lineItems as
         li.shipment_id,
         SUM(li.ordered_quantity - li.splitted_quantity - li.incident_quantity_before_supply_stage) AS expected_quantity,
         SUM((li.ordered_quantity - li.splitted_quantity - li.incident_quantity_before_supply_stage) * li.unit_fob_price) AS expected_fob,
+        count(li.line_item_id) as line_items_count,
 
         from {{ ref('fct_order_items') }} as li
         --where shipment_id = 31174
@@ -74,6 +75,7 @@ case
 
 li.expected_quantity,
 li.expected_fob,
+li.line_items_count,
 
 pli.missing_quantity,
 pli.missing_fob,

@@ -44,6 +44,8 @@ select
         received_quantity,
         received_fob,
 
+        line_items_count,
+
        -- case when shipments_status not in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as expected_quantity,
        -- case when shipments_status in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as not_expected_quantity,
 
@@ -72,6 +74,7 @@ select
 
     --fct
         master_total_quantity,
+        
 
 
 
