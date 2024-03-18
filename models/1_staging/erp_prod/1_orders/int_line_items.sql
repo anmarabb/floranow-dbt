@@ -60,6 +60,8 @@ PackageLineItems as
 SELECT
 
 COALESCE(PackageLineItems.packed_quantity,0) as packed_quantity,
+COALESCE(PackageLineItems.pli_fulfilled_quantity,0) as pli_fulfilled_quantity,
+ COALESCE(PackageLineItems.pli_fulfilled_quantity,0) * li.raw_unit_fob_price as received_fob,
 
 li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type),
 
