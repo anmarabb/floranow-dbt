@@ -1,88 +1,65 @@
+        
+        
 with 
---prep_registered_clients as (select financial_administration,count(*) as registered_clients from {{ ref('base_users') }} where account_type in ('External') group by financial_administration),   
---prep_product_locations as (select  pl.locationable_id, max(pl.product_location_id) as product_location_id from {{ ref('stg_product_locations') }} as pl group by 1),
---prep_picking_products as (select  pk.line_item_id, max(pk.picking_product_id) as picking_product_id from {{ ref('stg_picking_products') }} as pk group by 1)
 
-product_incidents as (
+productIncidents as 
+        
+      (
 
-                        select 
-                            pi.line_item_id,
-                            concat( "https://erp.floranow.com/line_items/", pi.line_item_id) as line_item_link,
+        select 
+        pi.line_item_id,
+        concat( "https://erp.floranow.com/line_items/", pi.line_item_id) as line_item_link,
+        count(*) as incidents_count,
+        count(case when incident_type !='EXTRA'  then 1 else null end) as incidents_count_without_extra,
+        count(case when incident_type ='EXTRA'  then 1 else null end) as extra_count,
+        count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then 1 else null end) as incidents_count_inventory_dmaged,
+        count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' OR incident_type ='EXTRA' then null else 1 end) as incidents_count_without_extra_without_inventory_dmaged,
+        sum(pi.quantity) as incident_quantity,
+        sum(case when incident_type !='EXTRA'  then pi.quantity else 0 end) as incident_quantity_without_extra,
+        sum(case when incident_type ='EXTRA'  then  pi.quantity else 0 end) as extra_quantity,
+        sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_dmaged,
+        sum(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
+        sum(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
+        sum(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then pi.quantity else 0 end) as incident_quantity_inventory_stage,
+        sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
+        sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
+        sum(case when pi.stage = 'BEFORE_SUPPLY' then  pi.quantity else 0 end) as incident_quantity_before_supply_stage,
+        max(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  li.order_id else 0 end) as incident_orders_receiving_stage,
+        max(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  li.order_id else 0 end) as incident_orders_packing_stage,
+        max(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then li.order_id else 0 end) as incident_orders_inventory_stage,
+        max(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then li.order_id else 0 end) as incident_orders_delivery_stage,
+        max(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then li.order_id else 0 end) as incident_orders_after_return_stage,
+        sum( pi.quantity * li.unit_landed_cost ) as incident_cost,
+        sum(case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_without_extra,
+        sum(case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as extra_cost,
+        sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_inventory_dmaged,
+        sum(case when incident_type ='EXTRA' and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_extra_packing,
+        sum(case when incident_type ='EXTRA' and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_extra_receiving,
+        sum(case when incident_type ='EXTRA' and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_extra_inventory,
+        sum(case when after_sold is false and pi.stage = 'INVENTORY' and incident_type ='MISSING' then pi.quantity else 0 end) as inventory_missing_quantity,
 
-                            count(*) as incidents_count,
-                                count(case when incident_type !='EXTRA'  then 1 else null end) as incidents_count_without_extra,
-                                count(case when incident_type ='EXTRA'  then 1 else null end) as extra_count,
-                                count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then 1 else null end) as incidents_count_inventory_dmaged,
-                                count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' OR incident_type ='EXTRA' then null else 1 end) as incidents_count_without_extra_without_inventory_dmaged,
+        from {{ ref('stg_product_incidents') }} as pi  
+        left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
+        where li.customer_id not in (1289,1470,2816,11123)
+        group by pi.line_item_id
 
-                            sum(pi.quantity) as incident_quantity,
-                                sum(case when incident_type !='EXTRA'  then pi.quantity else 0 end) as incident_quantity_without_extra,
-                                sum(case when incident_type ='EXTRA'  then  pi.quantity else 0 end) as extra_quantity,
+      ),
 
-                                sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity else 0 end) as incident_quantity_inventory_dmaged,
+PackageLineItems as 
+      (
+        select 
+        line_item_id, 
+        sum(quantity) as packed_quantity, --Packed Qty.
+        sum(fulfilled_quantity) as pli_fulfilled_quantity,
+        from {{ ref('stg_package_line_items') }} as pli
+        group by 1
+      )
 
-                                sum(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
-                                sum(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
-                                sum(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then pi.quantity else 0 end) as incident_quantity_inventory_stage,
-                                sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
-                                sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
-
-                                sum(case when pi.stage = 'BEFORE_SUPPLY' then  pi.quantity else 0 end) as incident_quantity_before_supply_stage,
-
-
-                                max(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  li.order_id else 0 end) as incident_orders_receiving_stage,
-                                max(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  li.order_id else 0 end) as incident_orders_packing_stage,
-                                max(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then li.order_id else 0 end) as incident_orders_inventory_stage,
-                                max(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then li.order_id else 0 end) as incident_orders_delivery_stage,
-                                max(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then li.order_id else 0 end) as incident_orders_after_return_stage,
-
-
-                            sum( pi.quantity * li.unit_landed_cost ) as incident_cost,
-                                sum(case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_without_extra,
-                                sum(case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as extra_cost,
-                                sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_inventory_dmaged,
-
-
-
-                            
-
-
-
-                            
-                            sum(case when incident_type ='EXTRA' and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_extra_packing,
-                            sum(case when incident_type ='EXTRA' and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_extra_receiving,
-                            sum(case when incident_type ='EXTRA' and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_extra_inventory,
-
-
-
-                            sum(case when after_sold is false and pi.stage = 'INVENTORY' and incident_type ='MISSING' then pi.quantity else 0 end) as inventory_missing_quantity,
-
-                            from {{ ref('stg_product_incidents') }} as pi  
-                            left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
-                            where li.customer_id not in (1289,1470,2816,11123)
-
-                        group by pi.line_item_id
-
-                    )
-
-/*
-product_incidents_orders as (
-
-                        select 
-                            li.order_id,
-
-                                count(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' OR incident_type ='EXTRA' then null else 1 end) as incidents_order_level,
-
-                            from {{ ref('stg_product_incidents') }} as pi  
-                            left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
-                            where li.customer_id not in (1289,1470,2816,11123) 
-                        group by li.order_id
-
-                    )
-
-*/
+-- requsted qty, conformed qty, packed qty, recvied qty, invoiced qty.
 
 SELECT
+
+COALESCE(PackageLineItems.packed_quantity,0) as packed_quantity,
 
 li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type),
 
@@ -492,14 +469,6 @@ sh.master_shipment_id,
 
 
 
-/*
-case 
-    when pio.incidents_order_level is null then null
-    when pio.incidents_order_level =0 then null
-    else pio.order_id
-    end as order_with_incidents,
-
-*/
 
 
 case when li.parent_line_item_id is not null then pli.raw_unit_fob_price else li.raw_unit_fob_price end as unit_fob_price,
@@ -514,12 +483,10 @@ from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
 left join {{ref('stg_order_payloads')}} as opl on li.order_payload_id = opl.order_payload_id
-
 left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id and ii.invoice_item_type = 'invoice'
 --left join {{ref('stg_invoice_items')}} as ii2 on ii2.line_item_id=li.line_item_id and ii2.invoice_item_type = 'credit note'
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
 left join {{ref('base_users')}} as master on master.id = li.customer_master_id
-
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as reseller on reseller.id = li.reseller_id
 left join {{ref('base_users')}} as user on user.id = li.user_id
@@ -528,60 +495,22 @@ left join {{ref('base_users')}} as returned_by on returned_by.id = li.returned_b
 left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_id
 left join {{ref('base_users')}} as split_by on split_by.id = li.split_by_id
 left join {{ref('base_users')}} as order_requested_by on order_requested_by.id = orr.created_by_id
-
-
 left join {{ref('base_suppliers')}} as lis on lis.supplier_id = li.supplier_id
-
 left join {{ ref('stg_products') }} as pp on pp.line_item_id = li.parent_line_item_id 
 left join {{ref('stg_line_items')}} as pli on pli.line_item_id = li.parent_line_item_id
-
-
 left join {{ref('stg_line_items')}} as ppli on ppli.line_item_id = pli.parent_line_item_id
-
-
-
-
-
-
 left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_id
-
-
 left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
-
 left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.shipment_id
 left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.master_shipment_id
-
-
 left join {{ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
-
-
---left join {{ref('stg_feed_sources')}} as origin_fs on origin_fs.feed_source_id = p.origin_feed_source_id
-
 left join {{ref('stg_feed_sources')}} as fs on fs.feed_source_id = li.feed_source_id
-
-
 left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
-
-
-
-
 left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=li.line_item_id
-
 left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
- 
-
 left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
-left join product_incidents as pi on pi.line_item_id = li.line_item_id
-
+left join productIncidents as pi on pi.line_item_id = li.line_item_id
 left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.number
 
-
-
-
---left join product_incidents_orders as pio on pio.order_id = li.order_id
-
---left join prep_product_locations as prep_ploc on prep_ploc.locationable_id = p.product_id 
---left join prep_picking_products as prep_picking_products on prep_picking_products.line_item_id = li.line_item_id
---left join prep_registered_clients as prep_registered_clients on prep_registered_clients.financial_administration = customer.financial_administration
-
---where pi.line_item_id = 279976
+left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
+    
