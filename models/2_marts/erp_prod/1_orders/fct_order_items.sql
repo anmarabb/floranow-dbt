@@ -61,6 +61,9 @@ stock_order_ids,
     li.packing_list_fob_price,
     li.fob_currency,
 
+    received_fob,
+    pli_fulfilled_quantity,
+
     customer_id,
 
 --quantity
