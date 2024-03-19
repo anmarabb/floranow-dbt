@@ -17,10 +17,11 @@ status,
     --PENDING --initial state
     --INSPECTED: receive package line items
     --WAREHOUSED: add package line items to location
-    
-
 
 fulfillment,  --UNACCOUNTED, FAILED, FAILED, PARTIAL
+
+
+
 damaged_note,
 
 

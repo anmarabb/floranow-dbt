@@ -3,7 +3,7 @@ With source as (
 )
 select 
 
-id,
+id as package_id,
 shipment_id,
 number,
 sequential_id,
@@ -13,6 +13,8 @@ name,
 
 created_at,
 updated_at,
+
+fulfillment, --SUCCEED, FAILED, PARTIAL, UNACCOUNTED, null
 
 
 package_type, --0, null
@@ -29,7 +31,7 @@ created_by,
 items_packing_type, --0, 1, null
 
 items_packing_keys,
-fulfillment,
+
 packing_errors,
 sub_master_shipment_id,
 
