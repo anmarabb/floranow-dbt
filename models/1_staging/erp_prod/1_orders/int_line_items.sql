@@ -54,6 +54,7 @@ PackageLineItems as
         count(distinct pli.package_line_item_id) as packages_count,
         
         from {{ ref('stg_package_line_items') }} as pli
+        where pli.fulfillment != 'FAILED'
         --where line_item_id = 1215269
         group by 1
       )
