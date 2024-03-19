@@ -51,7 +51,9 @@ PackageLineItems as
         line_item_id, 
         sum(quantity) as packed_quantity, --Packed Qty.
         sum(fulfilled_quantity) as pli_fulfilled_quantity,
+        count(distinct pli.package_id) as packages_count,
         from {{ ref('stg_package_line_items') }} as pli
+        --where line_item_id = 1215269
         group by 1
       )
 
@@ -62,6 +64,7 @@ SELECT
 COALESCE(PackageLineItems.packed_quantity,0) as packed_quantity,
 COALESCE(PackageLineItems.pli_fulfilled_quantity,0) as pli_fulfilled_quantity,
  COALESCE(PackageLineItems.pli_fulfilled_quantity,0) * li.raw_unit_fob_price as received_fob,
+ PackageLineItems.packages_count,
 
 li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type),
 

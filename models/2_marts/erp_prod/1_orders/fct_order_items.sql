@@ -5,8 +5,12 @@ source as (
  
 select 
 
+--PackageLineItems
+    packed_quantity,
+    packages_count,
+    pli_fulfilled_quantity,
 
-packed_quantity,
+
 
 dispatched_items,
 fulfilled_items,
@@ -62,7 +66,7 @@ stock_order_ids,
     li.fob_currency,
 
     received_fob,
-    pli_fulfilled_quantity,
+    
 
     customer_id,
 
