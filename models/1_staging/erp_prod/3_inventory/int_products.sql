@@ -213,7 +213,8 @@ with
             end as  packed_quantity,
 
 
-            case when li.requested_quantity is not null then li.requested_quantity else li.ordered_quantity end as requested_quantity,
+            --case when li.requested_quantity is not null then li.requested_quantity else li.ordered_quantity end as requested_quantity,
+            li.requested_quantity,
 
 
             li.loc_status,

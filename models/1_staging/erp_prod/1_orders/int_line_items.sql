@@ -51,7 +51,8 @@ PackageLineItems as
         line_item_id, 
         sum(quantity) as packed_quantity, --Packed Qty.
         sum(fulfilled_quantity) as pli_fulfilled_quantity,
-        count(distinct pli.package_id) as packages_count,
+        count(distinct pli.package_line_item_id) as packages_count,
+        
         from {{ ref('stg_package_line_items') }} as pli
         --where line_item_id = 1215269
         group by 1
@@ -214,7 +215,8 @@ plis.supplier_name as parent_supplier,
     case when li.replaced_quantity is not null then 'Replaced Qty.' else null end as replaced_quantity_cheack,
 
 
-    orr.quantity as requested_quantity,
+    --orr.quantity as requested_quantity,
+    case when orr.quantity is not null then orr.quantity else li.quantity end as requested_quantity,
 
 
 --order_payloads
@@ -255,14 +257,17 @@ pi.incident_cost,
    
 
 
-pi.inventory_missing_quantity,
-pi.incident_quantity_receiving_stage,
-pi.incident_quantity_packing_stage,
-pi.incident_quantity_inventory_stage,
-pi.incident_quantity_delivery_stage,
-pi.incident_quantity_after_return_stage,
 
+COALESCE(pi.inventory_missing_quantity, 0) as inventory_missing_quantity,
+
+COALESCE(pi.incident_quantity_packing_stage, 0) as incident_quantity_packing_stage,
+COALESCE(pi.incident_quantity_receiving_stage, 0) as incident_quantity_receiving_stage,
+COALESCE(pi.incident_quantity_inventory_stage, 0) as incident_quantity_inventory_stage,
+COALESCE(pi.incident_quantity_delivery_stage, 0) as incident_quantity_delivery_stage,
+COALESCE(pi.incident_quantity_after_return_stage, 0) as incident_quantity_after_return_stage,
 COALESCE(pi.incident_quantity_before_supply_stage, 0) as incident_quantity_before_supply_stage,
+
+
 
 pi.incident_quantity_extra_packing,
 pi.incident_quantity_extra_receiving,
