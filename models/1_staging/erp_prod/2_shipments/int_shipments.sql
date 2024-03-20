@@ -23,15 +23,25 @@ packageLineItems as
         COALESCE(SUM(pli.damaged_quantity), 0) AS damaged_quantity,
         SUM(COALESCE(pli.damaged_quantity, 0) * pli.raw_unit_fob_price) AS damaged_fob,
         COALESCE(SUM(pli.fulfilled_quantity), 0) AS received_quantity,
-        SUM(COALESCE(pli.fulfilled_quantity, 0) * pli.raw_unit_fob_price) AS received_fob
+        SUM(COALESCE(pli.fulfilled_quantity, 0) * pli.raw_unit_fob_price) AS received_fob,
+
+
         from  {{ ref('int_package_line_items') }} as pli
+
+        --left join lineItems as li on li.line_item_id = pli.line_item_id
+
         group by pli.shipment_id
     )
-
-
     
  select 
  
+(pli.received_quantity - li.expected_quantity) as shipment_quantity_variance,
+(pli.received_fob - li.expected_fob) as shipment_value_variance,
+
+
+--(pli.received_quantity - li.expected_quantity) * pli.fob_price as value_variance,
+
+
 sh.* EXCEPT(ingestion_timestamp,master_shipment_id,departure_date),
 
 

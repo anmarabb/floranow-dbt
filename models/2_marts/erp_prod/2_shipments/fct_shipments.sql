@@ -44,6 +44,9 @@ select
         received_quantity,
         received_fob,
 
+        shipment_quantity_variance,
+        shipment_value_variance,
+
         line_items_count,
 
        -- case when shipments_status not in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as expected_quantity,
