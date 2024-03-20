@@ -238,24 +238,28 @@ w.warehouse_name as warehouse,
 w.warehouse_id,
 
 
-pi.incident_quantity,
-    pi.incident_quantity_without_extra,
-    pi.extra_quantity,
-    pi.incident_quantity_inventory_dmaged,
 
 
-pi.incidents_count,
-    pi.incidents_count_without_extra,
-    pi.extra_count,
-    pi.incidents_count_inventory_dmaged,
-    incidents_count_without_extra_without_inventory_dmaged,
+COALESCE(pi.incident_quantity, 0) as incident_quantity,
+COALESCE(pi.incident_quantity_without_extra, 0) as incident_quantity_without_extra,
+COALESCE(pi.extra_quantity, 0) as extra_quantity,
+COALESCE(pi.incident_quantity_inventory_dmaged, 0) as incident_quantity_inventory_dmaged,
 
 
-pi.incident_cost,
-    pi.incident_cost_without_extra,
-    pi.extra_cost,
-    pi.incident_cost_inventory_dmaged,
-   
+COALESCE(pi.incidents_count, 0) as incidents_count,
+COALESCE(pi.incidents_count_without_extra, 0) as incidents_count_without_extra,
+COALESCE(pi.extra_count, 0) as extra_count,
+COALESCE(pi.incidents_count_inventory_dmaged, 0) as incidents_count_inventory_dmaged,
+COALESCE(pi.incidents_count_without_extra_without_inventory_dmaged, 0) as incidents_count_without_extra_without_inventory_dmaged,
+
+
+
+COALESCE(pi.incident_cost, 0) as incident_cost,
+COALESCE(pi.incident_cost_without_extra, 0) as incident_cost_without_extra,
+COALESCE(pi.extra_cost, 0) as extra_cost,
+COALESCE(pi.incident_cost_inventory_dmaged, 0) as incident_cost_inventory_dmaged,
+
+
 
 
 
@@ -270,16 +274,18 @@ COALESCE(pi.incident_quantity_before_supply_stage, 0) as incident_quantity_befor
 
 
 
-pi.incident_quantity_extra_packing,
-pi.incident_quantity_extra_receiving,
-pi.incident_quantity_extra_inventory,
+
+COALESCE(pi.incident_quantity_extra_packing, 0) as incident_quantity_extra_packing,
+COALESCE(pi.incident_quantity_extra_receiving, 0) as incident_quantity_extra_receiving,
+COALESCE(pi.incident_quantity_extra_inventory, 0) as incident_quantity_extra_inventory,
 
 
-pi.incident_orders_packing_stage,
-pi.incident_orders_receiving_stage,
-pi.incident_orders_inventory_stage,
-pi.incident_orders_delivery_stage,
-pi.incident_orders_after_return_stage,
+COALESCE(pi.incident_orders_packing_stage, 0) as incident_orders_packing_stage,
+COALESCE(pi.incident_orders_receiving_stage, 0) as incident_orders_receiving_stage,
+COALESCE(pi.incident_orders_inventory_stage, 0) as incident_orders_inventory_stage,
+
+COALESCE(pi.incident_orders_delivery_stage, 0) as incident_orders_delivery_stage,
+COALESCE(pi.incident_orders_after_return_stage, 0) as incident_orders_after_return_stage,
 
 
 
