@@ -18,7 +18,7 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "dbt_packages"
 
 vars:
-  erp_source: 'erp_prod_rds'
+  erp_source: 'erp_prod_master'
   mkp_source: 'marketplace_prod_master'
 
 
