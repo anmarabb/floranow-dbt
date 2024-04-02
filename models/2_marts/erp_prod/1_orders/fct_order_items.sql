@@ -5,6 +5,8 @@ source as (
  
 select 
 
+null as anmar, 
+
 --PackageLineItems
     packed_quantity,
     packages_count,
