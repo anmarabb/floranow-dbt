@@ -100,7 +100,7 @@ o.delivery_date,
 
 --sh.fm_shipment_id,
 
---customer.customer_type,
+customer.customer_type,
 
 
 
@@ -117,8 +117,10 @@ from   {{ ref('stg_fm_orders') }} as o
 left join {{ ref('fct_fm_products') }} as p on o.fm_product_id = p.fm_product_id
 left join prep_order as fmso on fmso.fm_order_id = o.fm_order_id
 left join {{ ref('stg_line_items') }} as li on o.buyer_order_number = li.number
+
+
 --left join {{ ref('stg_fm_shipments') }} as sh on sh.fm_shipment_id = o.fm_shipment_id
---left join {{ref('base_users')}} as customer on customer.id = o.customer_id
+left join {{ref('base_users')}} as customer on customer.debtor_number = o.customer_debtor_number
 
 left join prep_box_items as bi on bi.fm_order_id = o.fm_order_id
 
