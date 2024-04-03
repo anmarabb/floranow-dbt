@@ -38,8 +38,8 @@ unblock_amount, -- 0, 100
 
 
 statement_type,
-invoicing_method,
-payment_condition,
+--invoicing_method,
+--payment_condition,
 
 
 send_email,
