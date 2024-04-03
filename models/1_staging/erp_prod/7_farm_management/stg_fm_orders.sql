@@ -9,10 +9,10 @@ select
 
  --FK
     fm_product_id,
-    fm_box_item_id,
-    fm_shipment_id,
+    --fm_box_item_id,
+    --fm_shipment_id,
     destination_warehouse_id,
-    customer_id,
+    --customer_id,
 
 --dim
 

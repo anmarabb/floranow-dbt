@@ -1,6 +1,6 @@
 version: 2
 sources:
-  - name: erp_prod_master
+  - name: erp_prod_rds
     database: floranow
     tables:
       - name: users
@@ -83,7 +83,6 @@ sources:
       - name: country
       - name: budget
       - name: collection
-      - name: astra_budget
 
       - name: fm_products
       - name: fm_orders

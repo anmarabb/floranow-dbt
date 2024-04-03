@@ -9,7 +9,7 @@ select
 
  --FK
     reported_by_id,
-    fm_stock_lot_count_id,
+    --fm_stock_lot_count_id,
     fm_product_id,
     incidentable_id,
 
@@ -22,7 +22,7 @@ select
     status,              --REPORTED
 
 
-    deleted_at,
+    --deleted_at,
     created_at,
     updated_at,
 
