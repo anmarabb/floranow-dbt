@@ -2,7 +2,8 @@ with
 
 source as ( 
         
-select    
+select 
+null as norhan,   
     user_validity_filter,
     user_aging_type,
     u.id as customer_id,
