@@ -2,7 +2,8 @@ with
 
 source as ( 
         
-select    
+select 
+   
     user_validity_filter,
     user_aging_type,
     u.id as customer_id,
