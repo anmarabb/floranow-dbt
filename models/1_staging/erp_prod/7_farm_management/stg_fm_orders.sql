@@ -12,13 +12,14 @@ select
     --fm_box_item_id,
     --fm_shipment_id,
     destination_warehouse_id,
-    --customer_id,
+
+    customer_debtor_number,
 
 --dim
 
     customer_name,
     customer_email,
-    customer_debtor_number,
+    
     buyer_order_number, --line item
 
     number, --farm mangagmnet print stikers
