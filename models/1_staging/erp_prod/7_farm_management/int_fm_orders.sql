@@ -70,6 +70,8 @@ select
     o.customer_debtor_number,
     o.customer_name,
     o.warehouse_name,
+    case when o.warehouse_name in ("Riyadh Warehouse", "Hail Warehouse","Jouf WareHouse") 
+    then "Riyadh Warehouse" else o.warehouse_name end as hub_warehouse,
     o.quantity,
     o.fm_order_id,
     concat( "https://erp.floranow.com/fm/orders/", o.fm_order_id) as fm_order_link,
