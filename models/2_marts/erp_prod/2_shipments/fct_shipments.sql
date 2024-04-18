@@ -35,19 +35,8 @@ select
         total_fob,
 
 
-        expected_quantity,
-        expected_fob,
-        missing_quantity,
-        missing_fob,
-        damaged_quantity,
-        damaged_fob,
-        received_quantity,
-        received_fob,
 
-        shipment_quantity_variance,
-        shipment_value_variance,
 
-        line_items_count,
 
        -- case when shipments_status not in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as expected_quantity,
        -- case when shipments_status in  ('CANCELED','DRAFT' ) then supplier_shipment_total_quantity else 0 end as not_expected_quantity,
