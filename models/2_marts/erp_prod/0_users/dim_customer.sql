@@ -11,6 +11,7 @@ select
     u.name as Customer,
     u.financial_administration, --UAE, Saudi, Qatar, Jordan, Kuwait, Bulk, Internal
     u.email,
+    u.phone_number,
 
 case when user_validity_filter = 'normal' and client_engagement_status = 'Active' then 1 else 0 end as active_clients,
 case when user_validity_filter = 'normal' and client_engagement_status = 'Churned' then 1 else 0 end as churned_clients,
