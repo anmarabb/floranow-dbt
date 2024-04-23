@@ -61,7 +61,7 @@ case
         flag_1,
         flag,
 
-        
+        stock_id,
      
     
 
