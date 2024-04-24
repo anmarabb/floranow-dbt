@@ -70,8 +70,10 @@ select
     o.customer_debtor_number,
     o.customer_name,
     o.warehouse_name,
-    case when o.warehouse_name in ("Riyadh Warehouse", "Hail Warehouse","Jouf WareHouse") 
-    then "Riyadh Warehouse" else o.warehouse_name end as hub_warehouse,
+    case 
+        when o.warehouse_name in ("Riyadh Warehouse", "Hail Warehouse","Qassim Warehouse") then "Riyadh Warehouse" 
+        when o.warehouse_name in ("Hafar WareHouse", "Dammam Warehouse") then "Dammam Warehouse"
+        else o.warehouse_name end as hub_warehouse,
 
     null as anmar, 
     
