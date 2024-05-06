@@ -104,7 +104,7 @@ fmso.fulfiled_quantity,
 
 cast(o.created_at as date) as Created_date,
 
-time_add(cast(o.created_at as time), INTERVAL 3 hour) as Created_time,
+cast(o.created_at as time) as Created_time,
 
 o.departure_date,
 
