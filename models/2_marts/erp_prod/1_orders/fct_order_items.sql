@@ -557,7 +557,7 @@ incident_orders_inventory_stage,
 incident_orders_delivery_stage,
 incident_orders_after_return_stage,
 
-
+variety_mask,
 
 
 current_timestamp() as insertion_timestamp, 
