@@ -152,7 +152,7 @@ with
 
 
             reseller.name as Reseller,
-            concat(st.stock_id, " - ", st.stock_name, " - ", reseller.name  ) as full_stock_name,
+            concat(st.stock_id, " - ", st.stock_type, " Stock - ", reseller.name  ) as full_stock_name,
 
             case when p.visible is true then 'Visible' else 'Not Visible' end as Visibility,
             case when p.remaining_quantity > 0 then 'Live Stock'  else 'Total Stock' end as live_stock,
@@ -471,9 +471,7 @@ li.parent_id_check,
         left join {{ref('base_warehouses')}} as w on w.warehouse_id = st.warehouse_id
       --  left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
 
-        
 
-        
 
     
 
