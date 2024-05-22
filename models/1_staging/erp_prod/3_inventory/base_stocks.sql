@@ -38,7 +38,8 @@ st.availability_type,
 st.has_custom_sales_unit,
 --st.custom_sales_unit,
 
-
+st.label as modified_stock_model_details,
+TRIM(IF(STRPOS(label, '-') > 0,SUBSTR(label, 1, STRPOS(label, '-') - 1),label)) AS modified_stock_model,
 case 
 when st.id in (12,13) then 'Internal - Jumeriah'
 when st.id in (10,11,618,619) then 'Internal - Spinnyes'
@@ -74,7 +75,6 @@ end as stock_model,
 
 current_timestamp() as ingestion_timestamp,
  
-
 
 
 
