@@ -180,7 +180,8 @@ Reseller,
 li_record_type_details,
 li_record_type,
 order_source,
-
+modified_stock_model,
+modified_stock_model_details,
 
 reseller_type,
 current_timestamp() as insertion_timestamp, 
