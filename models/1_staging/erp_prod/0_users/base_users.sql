@@ -171,7 +171,7 @@ select
            when u.email  like '%fake_%' and w.warehouse_name != 'Riyadh Warehouse' then 'fake_temp_others' 
            when u.email  like '%temp_%' and f.name != 'UAE' and w.warehouse_name != 'Riyadh Warehouse'  then 'fake_temp_others'
 
-           when u.internal is true then 'Internal'
+           when u.internal is true or u.debtor_number = '130188' then 'Internal'
            when uc.name in ('Closed','Deleted Customers') then 'Category Closed'
            WHEN u.debtor_number IN (
                '4383', '132005', '132013', '132014', '132031', '132077', '132081', '132083', '132091', '132092',
@@ -227,7 +227,7 @@ select
                '133101', '133173', '133074', '133186', '133176', '133148', '133205', '133151', '133175',
                '133161', '133190', '133147', '133048', '133072', '133121', '133248', '133227', '133057',
                '133168', '133162', '133171', '133172', '133191', '133167', '133193', '133170', '133194', '133189',
-               'YASER', 'm.masri', 'mmustafa', 'FSTUU', '130188'
+               'YASER', 'm.masri', 'mmustafa', 'FSTUU'
            )
            THEN 'Faisal Comment'
 
