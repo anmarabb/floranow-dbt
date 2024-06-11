@@ -2,7 +2,7 @@ select
 
 
 production_date,
-
+fm_product_id as product_id,
 --product
     sub_group,
     color,
