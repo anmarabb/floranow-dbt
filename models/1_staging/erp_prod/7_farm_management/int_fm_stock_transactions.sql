@@ -15,7 +15,7 @@ with a as (
     )
 select
 st.production_date,
-
+st.fm_product_id,
 p.product_name,
 p.sub_group,
 p.color,
