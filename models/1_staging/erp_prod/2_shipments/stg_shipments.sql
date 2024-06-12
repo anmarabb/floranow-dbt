@@ -76,7 +76,7 @@ select
 
                 
                 canceled_at,
-                --deleted_at,
+                deleted_at,
 
             --fct
                 total_quantity as supplier_shipment_total_quantity,                     --Summation of line item quantities in each shipment.
