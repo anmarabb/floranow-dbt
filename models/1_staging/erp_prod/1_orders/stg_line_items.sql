@@ -62,7 +62,7 @@ With source as
                 li.split_at,
                 li.returned_at,
                 li.updated_at,
-                --li.received_at,
+                li.received_at,
 
 
                 --order
