@@ -27,6 +27,7 @@ select
                 barcode,
                 number,
                 floricode_product_id,
+                parent_product_id,
 
             
 
