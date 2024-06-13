@@ -316,7 +316,7 @@ case
 
 ordering_stock_type,
 line_item_state,
-
+online_item,
 current_timestamp() as insertion_timestamp, 
 
 from {{ref('int_products')}} as p 
