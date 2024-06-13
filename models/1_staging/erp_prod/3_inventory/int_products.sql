@@ -89,7 +89,7 @@ with
  select
  
   --products
-            p.* EXCEPT(quantity,published_quantity,remaining_quantity,visible,product_expired_at,product_category,departure_date),
+            p.* EXCEPT(quantity,published_quantity,visible,remaining_quantity,product_expired_at,product_category,departure_date),
            -- case when pl.quantity is null and  lis.sold_quantity is not null   then li.ordered_quantity else pl.quantity end as location_quantity,      
 
 
@@ -434,6 +434,7 @@ case
     when li.order_type ='MOVEMENT' then 'movement_inventory_item_id'
     else  'inventory_item_id'
 end as inventory_item_type,
+
 
 
 li.parent_parent_id_check,
