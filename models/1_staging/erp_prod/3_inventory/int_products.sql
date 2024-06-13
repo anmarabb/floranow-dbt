@@ -436,10 +436,17 @@ case
 end as inventory_item_type,
 
 
-
 li.parent_parent_id_check,
 li.parent_id_check,
 
+case when   st.stock_status = 'visible' 
+            and st.availability_type = 'NORMAL'
+            and st.out_feed_source_id is not null 
+            and p.parent_product_id is null 
+            and p.remaining_quantity > 0
+            and p.visible = true 
+            then true else null 
+            end as online_item,
 
 
         from {{ ref('stg_products')}} as p
