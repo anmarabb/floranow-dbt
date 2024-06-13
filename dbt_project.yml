@@ -1,9 +1,8 @@
-
-name: 'floranow'
-version: '1.0.0'
+name: "floranow"
+version: "1.0.0"
 config-version: 2
 
-profile: 'default'
+profile: "default"
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
@@ -12,15 +11,14 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-target-path: "target"  # directory which will store compiled SQL files
-clean-targets:         # directories to be removed by `dbt clean`
+target-path: "target" # directory which will store compiled SQL files
+clean-targets: # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
 vars:
-  erp_source: 'erp_prod_rds'
-  mkp_source: 'marketplace_prod_master'
-
+  erp_source: "erp_prod_rds"
+  mkp_source: "marketplace_prod_master"
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
@@ -32,10 +30,9 @@ models:
   floranow:
     # Applies to all files under models/example/
     1_staging:
-        +enabled: true
-        +materialized: view
-        +schema: stg
-      
+      +enabled: true
+      +materialized: view
+      +schema: stg
 
     2_marts:
       +enabled: true
@@ -43,5 +40,3 @@ models:
       +schema: dwh
       dim_date:
         +materialized: view
-
-
