@@ -159,7 +159,7 @@ with
             case when p.remaining_quantity > 0 then 'Live Stock'  else 'Total Stock' end as live_stock,
 
 
-
+            st.stock_type,
 
         --product_locations
            pl.location_quantity,
