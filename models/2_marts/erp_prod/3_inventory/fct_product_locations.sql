@@ -9,7 +9,9 @@ days_until_expiry,
 
 warehouse,
 Location,
-
+case 
+when Location = 'A1 - X' then 'X-Location'
+when Location = 'X - FN' then 'Floranow Location' end as type,
 product_link,
 product_location_link,
 
