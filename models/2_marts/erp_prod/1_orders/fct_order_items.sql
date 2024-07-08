@@ -10,6 +10,8 @@ null as anmar,
 --PackageLineItems
     packed_quantity,
     packages_count,
+    supplied_quantity,
+    pli_missing_quantity,
     pli_fulfilled_quantity,
 
 
