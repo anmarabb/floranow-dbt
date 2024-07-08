@@ -51,6 +51,7 @@ PackageLineItems as
         line_item_id, 
         sum(quantity) as packed_quantity, --Packed Qty.
         sum(fulfilled_quantity) as pli_fulfilled_quantity,
+        SUM(missing_quantity) AS pli_missing_quantity,
         count(distinct pli.package_line_item_id) as packages_count,
         
         from {{ ref('stg_package_line_items') }} as pli
@@ -65,7 +66,9 @@ SELECT
 
 COALESCE(PackageLineItems.packed_quantity,0) as packed_quantity,
 COALESCE(PackageLineItems.pli_fulfilled_quantity,0) as pli_fulfilled_quantity,
- COALESCE(PackageLineItems.pli_fulfilled_quantity,0) * li.raw_unit_fob_price as received_fob,
+COALESCE(PackageLineItems.pli_missing_quantity,0) as pli_missing_quantity,
+COALESCE(PackageLineItems.pli_fulfilled_quantity,0) * li.raw_unit_fob_price as received_fob,
+(COALESCE(PackageLineItems.packed_quantity,0) - COALESCE(PackageLineItems.pli_missing_quantity,0)) as supplied_quantity,
  PackageLineItems.packages_count,
 
 li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type),
@@ -286,7 +289,6 @@ COALESCE(pi.incident_orders_inventory_stage, 0) as incident_orders_inventory_sta
 
 COALESCE(pi.incident_orders_delivery_stage, 0) as incident_orders_delivery_stage,
 COALESCE(pi.incident_orders_after_return_stage, 0) as incident_orders_after_return_stage,
-
 
 
 
@@ -530,4 +532,3 @@ left join productIncidents as pi on pi.line_item_id = li.line_item_id
 left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.number
 
 left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
-    
