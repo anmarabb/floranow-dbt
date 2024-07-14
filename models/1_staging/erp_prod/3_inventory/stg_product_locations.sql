@@ -28,6 +28,7 @@ select
             --fct
             quantity,
             remaining_quantity,
+            deleted_at,
 
 
 current_timestamp() as ingestion_timestamp,
