@@ -1,4 +1,16 @@
-With source as (
+with product_incidents as (
+    select incidentable_id,
+           sum(case when incident_type = 'MISSING' then incident_quantity end) as missing_quantity,
+           sum(case when incident_type = 'DAMAGED' then incident_quantity end) as damaged_quantity,
+           sum(case when incident_type = 'EXTRA' then incident_quantity end) as extra_quantity,
+           --sum(case when incident_type = 'CLEANUP_ADJUSTMENTS' then incident_quantity end) as cleanup_adjustments_quantity,
+    from  {{ref('int_product_incidents')}}
+    where incidentable_type = 'ProductLocation' and deleted_at is null
+    group by incidentable_id
+
+),
+
+ source as (
 
     
 select
@@ -34,7 +46,9 @@ p.live_stock,
 p.report_filter,
 p.full_stock_name,
 
-
+pi.missing_quantity,
+pi.damaged_quantity,
+pi.extra_quantity
 
 
 
@@ -44,7 +58,7 @@ left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
 
 left join {{ ref('fct_products')}} as p on pl.locationable_id = p.product_id
 
-
+left join product_incidents as pi on pl.product_location_id = pi.incidentable_id
 --left join {{ ref('stg_picking_products')}} as pick on pick.product_location_id = pl.product_location_id
 
 
