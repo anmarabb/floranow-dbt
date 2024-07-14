@@ -62,7 +62,7 @@ left join product_incidents as pi on pl.product_location_id = pi.incidentable_id
 --left join {{ ref('stg_picking_products')}} as pick on pick.product_location_id = pl.product_location_id
 
 
-where pl.locationable_type = "Product"
+where pl.locationable_type = "Product" and pl.deleted_at is null
  
 )
 select 
