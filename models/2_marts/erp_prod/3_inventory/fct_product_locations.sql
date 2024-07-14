@@ -33,4 +33,10 @@ live_stock,
 report_filter,
 full_stock_name,
 locationable_id,
+
+missing_quantity,
+damaged_quantity,
+extra_quantity
+
+
 from  {{ref('int_product_locations')}} as pl
