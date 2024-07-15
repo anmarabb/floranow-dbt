@@ -45,6 +45,7 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
 p.live_stock,
 p.report_filter,
 p.full_stock_name,
+p.number,
 
 pi.missing_quantity,
 pi.damaged_quantity,
