@@ -24,11 +24,11 @@ productIncidents as
         sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
         sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
         sum(case when pi.stage = 'BEFORE_SUPPLY' then  pi.quantity else 0 end) as incident_quantity_before_supply_stage,
-        max(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  li.order_id else 0 end) as incident_orders_receiving_stage,
-        max(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  li.order_id else 0 end) as incident_orders_packing_stage,
-        max(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then li.order_id else 0 end) as incident_orders_inventory_stage,
-        max(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then li.order_id else 0 end) as incident_orders_delivery_stage,
-        max(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then li.order_id else 0 end) as incident_orders_after_return_stage,
+        max(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  li.order_number else null end) as incident_orders_receiving_stage,
+        max(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  li.order_number else null end) as incident_orders_packing_stage,
+        max(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then li.order_number else null end) as incident_orders_inventory_stage,
+        max(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then li.order_number else null end) as incident_orders_delivery_stage,
+        max(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then li.order_number else null end) as incident_orders_after_return_stage,
         sum( pi.quantity * li.unit_landed_cost ) as incident_cost,
         sum(case when incident_type !='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as incident_cost_without_extra,
         sum(case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end) as extra_cost,
@@ -283,12 +283,12 @@ COALESCE(pi.incident_quantity_extra_receiving, 0) as incident_quantity_extra_rec
 COALESCE(pi.incident_quantity_extra_inventory, 0) as incident_quantity_extra_inventory,
 
 
-COALESCE(pi.incident_orders_packing_stage, 0) as incident_orders_packing_stage,
-COALESCE(pi.incident_orders_receiving_stage, 0) as incident_orders_receiving_stage,
-COALESCE(pi.incident_orders_inventory_stage, 0) as incident_orders_inventory_stage,
+COALESCE(pi.incident_orders_packing_stage, null) as incident_orders_packing_stage,
+COALESCE(pi.incident_orders_receiving_stage, null) as incident_orders_receiving_stage,
+COALESCE(pi.incident_orders_inventory_stage, null) as incident_orders_inventory_stage,
 
-COALESCE(pi.incident_orders_delivery_stage, 0) as incident_orders_delivery_stage,
-COALESCE(pi.incident_orders_after_return_stage, 0) as incident_orders_after_return_stage,
+COALESCE(pi.incident_orders_delivery_stage, null) as incident_orders_delivery_stage,
+COALESCE(pi.incident_orders_after_return_stage, null) as incident_orders_after_return_stage,
 
 
 
