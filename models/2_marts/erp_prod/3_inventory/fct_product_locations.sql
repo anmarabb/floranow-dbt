@@ -36,7 +36,8 @@ locationable_id,
 
 missing_quantity,
 damaged_quantity,
-extra_quantity
+extra_quantity,
+number
 
 
 from  {{ref('int_product_locations')}} as pl
