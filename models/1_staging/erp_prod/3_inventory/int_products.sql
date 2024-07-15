@@ -235,7 +235,6 @@ with
             li.shipment_id,
             li.ordering_stock_type,
             li.state as line_item_state,
-            li.number,
 
 
 
