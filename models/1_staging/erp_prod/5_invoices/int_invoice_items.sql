@@ -1,4 +1,5 @@
 
+
 with 
 prep_registered_clients 
          as (
