@@ -1,7 +1,7 @@
 With source as (
  select * from {{ source(var('erp_source'), 'invoice_items') }}
 )
-select 
+select distinct
             --PK
                 ii.id as invoice_item_id,
             --FK
