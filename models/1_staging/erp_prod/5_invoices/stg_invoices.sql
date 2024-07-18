@@ -5,7 +5,7 @@ With source as (
  from {{ source(var('erp_source'), 'invoices') }} as i
  left join  {{ ref('stg_financial_administrations') }} as fn on fn.id = i.financial_administration_id
 
-)
+), data as (
 select 
             --PK
                 i.id as invoice_header_id,
@@ -113,6 +113,8 @@ select
             price_without_discount,
             total_amount - total_tax as total_amount_without_tax,
             delivery_charge_amount,
+            ROW_NUMBER() OVER (PARTITION BY id ORDER BY updated_at DESC) as row_num, 
+
 
 case
 when i.payment_status = 0 then "Not paid"
@@ -129,3 +131,6 @@ current_timestamp() as ingestion_timestamp
 from source as i 
 
 where i.deleted_at IS NULL
+)
+select *
+from data where row_num = 1
