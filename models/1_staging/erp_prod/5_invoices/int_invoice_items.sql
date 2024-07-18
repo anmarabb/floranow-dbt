@@ -204,18 +204,7 @@ CASE
 current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_invoice_items') }} as ii
-left join (SELECT 
-  * 
-FROM 
-  (
-    SELECT 
-      *, 
-      ROW_NUMBER() OVER (PARTITION BY invoice_header_id ORDER BY updated_at DESC) as row_num 
-    FROM 
-       {{ ref('stg_invoices') }}
-  ) 
-WHERE 
-row_num = 1) as i on i.invoice_header_id = ii.invoice_header_id
+left join {{ ref('stg_invoices') }} as i on i.invoice_header_id = ii.invoice_header_id
 
 left join {{ ref('base_users') }} as customer on customer.id = ii.customer_id
 left join {{ref('base_users')}} as approved_by_id on approved_by_id.id = ii.approved_by_id
