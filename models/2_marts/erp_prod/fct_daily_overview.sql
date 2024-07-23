@@ -18,7 +18,7 @@ with invoices_daily as (
         SELECT
         date(pi.incident_at) as incident_at,
         pi.warehouse,
-        case when pi.financial_administration = "Internal" then "UAE" else pi.financial_administration end as financial_administration,
+        case when pi.financial_administration = "Internal" and pi.warehouse = 'Dubai Warehouse' then "UAE" else pi.financial_administration end as financial_administration,
 
         COALESCE(SUM(pi.incident_cost_inventory_dmaged), 0) as Dmaged,
         FROM {{ ref('fct_product_incidents') }} pi
