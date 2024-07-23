@@ -14,7 +14,8 @@ warehouse_list AS (
         'Hafar WareHouse',
         'Qassim Warehouse',
         'Hail Warehouse',
-        'Tabuk Warehouse'
+        'Tabuk Warehouse',
+        'Project X WareHouse'
 
 
     ]) AS warehouse
