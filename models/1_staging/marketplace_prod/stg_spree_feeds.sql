@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source(var('vrp_source'), 'prices') }}
+ select * from {{ source(var('mkp_source'), 'spree_feeds') }}
 )
 select 
 *,
@@ -10,5 +10,5 @@ current_timestamp() as ingestion_timestamp,
 
 
 
-from source 
+from source as loc
 
