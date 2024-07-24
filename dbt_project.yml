@@ -19,6 +19,7 @@ clean-targets: # directories to be removed by `dbt clean`
 vars:
   erp_source: "erp_prod_rds"
   mkp_source: "marketplace_prod_master"
+  vrp_source: "vendor_portal_prod_rds"
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
