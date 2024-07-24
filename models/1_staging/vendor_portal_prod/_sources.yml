@@ -3,4 +3,17 @@ sources:
   - name: vendor_portal_prod_rds
     database: floranow
     tables:
+      - name: prices
+      - name: specification_values
+      - name: specifications
+      - name: stocks
+      - name: offers
+      - name: products
+      - name: growers
+      - name: offer_templates
+      - name: quantity_units
       - name: feeds
+      - name: accounts
+  
+
+
