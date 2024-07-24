@@ -1,0 +1,13 @@
+With source as (
+ select * from {{ source(var('vrp_source'), 'products') }}
+)
+select 
+*,
+
+
+current_timestamp() as ingestion_timestamp,
+ 
+
+
+
+from source as loc
