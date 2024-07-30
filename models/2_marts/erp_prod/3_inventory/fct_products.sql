@@ -78,7 +78,7 @@ case
         in_stock_quantity,
         
         --case when select_departure_date in ('Future', 'Today') then ordered_quantity else 0 end as coming_quantity,
-        case when fulfillment in ('UNACCOUNTED') then ordered_quantity else 0 end as coming_quantity,
+        case when fulfillment in ('UNACCOUNTED') AND p.departure_date >= CURRENT_DATE then ordered_quantity else 0 end as coming_quantity,
 
 
 
