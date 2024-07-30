@@ -301,7 +301,7 @@ with
             when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) < 0.15 then 'Low Margin' end as Flag,
 
             case 
-            when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) <= 0 then 'Neative'
+            when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) <= 0 then 'Negative'
             when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) > 0 and (auto_gross_revenue + auto_credit_note - total_cost)/gross_revenue < 0.26 then 'Critical'
             when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) >= 0.26 and (auto_gross_revenue + auto_credit_note - total_cost)/gross_revenue < 0.35 then 'Risky'
             when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) >= 0.35 then 'Healthy' end as Flag2,
