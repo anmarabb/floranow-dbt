@@ -42,7 +42,7 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
  p.sold_quantity,
  p.incident_quantity_inventory_dmaged,
  p.incident_quantity_inventory_stage,
-
+ p.Reseller,
 
 p.live_stock,
 p.report_filter,
