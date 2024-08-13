@@ -27,7 +27,7 @@ remaining_quantity,
 sold_quantity,
 incident_quantity_inventory_dmaged,
 incident_quantity_inventory_stage,
-
+Reseller,
 
 live_stock,
 report_filter,
