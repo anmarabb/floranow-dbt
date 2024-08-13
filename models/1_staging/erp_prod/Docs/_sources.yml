@@ -99,3 +99,7 @@ sources:
       - name: fm_additional_items
       - name: fm_catalog_items
       - name: fm_locations
+      - name: product_location_movements
+      - name: picked_items
+      - name: item_movement_requests
+      - name: shopping_cart_items
