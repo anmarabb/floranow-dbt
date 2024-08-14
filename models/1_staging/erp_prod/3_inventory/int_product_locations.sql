@@ -51,7 +51,8 @@ p.number,
 
 pi.missing_quantity,
 pi.damaged_quantity,
-pi.extra_quantity
+pi.extra_quantity, 
+pl.locationable_type
 
 
 
