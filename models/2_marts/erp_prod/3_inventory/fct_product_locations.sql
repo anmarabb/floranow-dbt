@@ -40,6 +40,6 @@ extra_quantity,
 number,
 created_at,
 updated_at,
-
+locationable_type
 
 from  {{ref('int_product_locations')}} as pl
