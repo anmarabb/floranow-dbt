@@ -54,6 +54,8 @@ select li.line_item_id,
        li.Product, 
        li.stem_length, 
        li.customer,
+       li.Supplier,
+       li.warehouse,
        li.order_date,
  
 
