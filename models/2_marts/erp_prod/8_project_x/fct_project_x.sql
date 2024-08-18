@@ -47,6 +47,15 @@ stock_movement as (
     from {{ref('stg_product_location_movements')}} plm
  
     group by 1
+),
+
+picked_quantity as (
+    select line_item_id,
+           sum(ordered_quantity) as picked_quantity,
+
+    from {{ref('fct_order_items')}} 
+    where order_type = "PICKED_ORDER"
+    group by 1
 )
 
 select li.line_item_id,
@@ -80,6 +89,7 @@ select li.line_item_id,
        ii.price_without_tax as price_without_tax,
        ii.outside_price_without_tax as outside_price_without_tax,
        moved_in_quantity as a1_x_moved_in_qty,
+       picked_quantity,
 
 
 
@@ -91,6 +101,6 @@ left join product_location as pl on p.product_id = pl.locationable_id
 left join pi on pi.line_item_id = li.line_item_id
 left join invoices as ii on ii.parent_line_item_id = li.line_item_id 
 left join stock_movement as sm on sm.product_id = li.product_id
+left join picked_quantity as pq on pq.line_item_id = li.line_item_id
 
-
-where li.Reseller = "RUH Project X Stock" and li.order_type != "picked_order"
+where li.Reseller = "RUH Project X Stock" and li.order_type != "PICKED_ORDER"
