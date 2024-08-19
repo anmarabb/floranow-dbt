@@ -487,7 +487,7 @@ END AS ordering_source_details,
 sh.master_shipment_id,
 
 
-
+li.supplier_product_name as supplier_product,
 
 
 case when li.parent_line_item_id is not null then pli.raw_unit_fob_price else li.raw_unit_fob_price end as unit_fob_price,
