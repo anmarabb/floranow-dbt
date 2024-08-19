@@ -488,7 +488,7 @@ sh.master_shipment_id,
 
 
 li.supplier_product_name as supplier_product,
-
+li.colour as product_color,
 
 case when li.parent_line_item_id is not null then pli.raw_unit_fob_price else li.raw_unit_fob_price end as unit_fob_price,
 case when li.parent_line_item_id is not null then pli.raw_fob_currency else li.raw_fob_currency end as fob_currency,
