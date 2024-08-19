@@ -42,7 +42,7 @@ With source as
                 li.returned_by_id,
                 li.created_by_id,
                 li.split_by_id, --Referenced to Users, User who split the proof of delivery and cause this line item to split/move to new delivery date
-                
+                li.supplier_product_name,
                 li.replace_for_id, --Referenced to line_items, Line item which has been replaced by this line item, related to replacement
 
 
