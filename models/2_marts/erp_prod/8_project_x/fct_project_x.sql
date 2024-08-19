@@ -96,4 +96,4 @@ left join pi on pi.line_item_id = li.line_item_id
 left join invoices as ii on ii.parent_line_item_id = li.line_item_id 
 left join stock_movement as sm on sm.product_id = li.product_id
 
-where li.Reseller = "RUH Project X Stock" and li.order_type != "PICKED_ORDER"
+where li.Reseller in ('RUH Project X Stock', 'DMM Project X Stock') and li.order_type != "PICKED_ORDER"
