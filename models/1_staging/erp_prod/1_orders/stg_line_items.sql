@@ -64,6 +64,8 @@ With source as
                 li.updated_at,
                 li.received_at,
 
+                li.color as colour,
+
 
                 --order
                 li.fulfillment, --SUCCEED (Set on fulfilling, when adding the full quantity to location or proof of delivery), PARTIAL (Set on fulfilling, when adding the part of the quantity to location or proof of delivery), FAILED (Set on fulfilling, when full quantity is missing),UNACCOUNTED (Set on placing order till receiving)
