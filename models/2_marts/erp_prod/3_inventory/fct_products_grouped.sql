@@ -153,7 +153,7 @@ DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
 left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin and  p.Supplier = ow.Supplier  
-where  stock_model in ('Reselling', 'Commission Based')
+where  stock_model in ('Reselling', 'Commission Based') or stock_model_details in ('Internal - Project X')
 
 --and p.Product = 'Rose Ever Red'
 --and p.warehouse='Dubai Warehouse'
