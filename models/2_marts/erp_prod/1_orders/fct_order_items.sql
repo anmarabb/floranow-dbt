@@ -560,7 +560,8 @@ incident_orders_delivery_stage,
 incident_orders_after_return_stage,
 
 variety_mask,
-
+supplier_product,
+product_color,
 
 current_timestamp() as insertion_timestamp, 
 
