@@ -161,9 +161,9 @@ max(ow.current_departure_date) as current_departure_date,
 
 DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_lead_time, --days_to_next_shipment_departure
 
-sum(sold_quantity_last_year_month) as sold_quantity_this_month_last_year_month,
+avg(sold_quantity_last_year_month) as sold_quantity_this_month_last_year_month,
 
-sum(sold_quantity_last_year_day) as sold_quantity_today_last_year
+avg(sold_quantity_last_year_day) as sold_quantity_today_last_year
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
