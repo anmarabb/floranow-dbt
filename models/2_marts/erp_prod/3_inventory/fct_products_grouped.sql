@@ -62,7 +62,7 @@ last_year_demand as (
     Supplier,
     SUM(CASE WHEN year_month_departure_date = DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 1 YEAR) THEN sold_quantity ELSE 0 END) AS sold_quantity_last_year_month,
     SUM(CASE WHEN departure_date = DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR) THEN sold_quantity ELSE 0 END) AS sold_quantity_last_year_day
-FROM `dbt_prod_dwh.fct_products`
+FROM {{ref('fct_products')}}
 --where year_month_departure_date = "2023-08-01" and warehouse = "Jouf WareHouse" and Product = 'Spray Rose Vanessa'
 GROUP BY 1, 2, 3
 )
