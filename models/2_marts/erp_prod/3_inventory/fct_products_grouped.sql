@@ -54,7 +54,18 @@ with monthly_demand as (
 
                         from aggregated as md
 
-          )
+          ), 
+last_year_demand as (
+    SELECT 
+    Product,
+    warehouse,
+    Supplier,
+    SUM(CASE WHEN year_month_departure_date = DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 1 YEAR) THEN sold_quantity ELSE 0 END) AS sold_quantity_last_year_month,
+    SUM(CASE WHEN departure_date = DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR) THEN sold_quantity ELSE 0 END) AS sold_quantity_last_year_day
+FROM `dbt_prod_dwh.fct_products`
+--where year_month_departure_date = "2023-08-01" and warehouse = "Jouf WareHouse" and Product = 'Spray Rose Vanessa'
+GROUP BY 1, 2, 3
+)
 
 select
 p.Product,
@@ -149,10 +160,15 @@ max(ow.current_departure_date) as current_departure_date,
 
 DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_lead_time, --days_to_next_shipment_departure
 
+sum(sold_quantity_last_year_month) as sold_quantity_this_month_last_year_month,
+
+sum(sold_quantity_last_year_day) as sold_quantity_today_last_year
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
-left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin and  p.Supplier = ow.Supplier  
+left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin and  p.Supplier = ow.Supplier
+left join last_year_demand lyd on lyd.Product = p.Product and lyd.warehouse = p.warehouse and lyd.Supplier = p.Supplier
+
 where  stock_model in ('Reselling', 'Commission Based') or stock_model_details in ('Internal - Riyadh Project X', 'Internal - Dammam Project X')
 
 --and p.Product = 'Rose Ever Red'
