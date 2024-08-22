@@ -155,7 +155,7 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
 
 
 --customer
-    user.name as user,
+    -- user.name as user,
     case when li.reseller_id is not null then  'Reseller' else customer.name  end as customer,
     customer.country,
     customer.financial_administration,
@@ -508,7 +508,7 @@ left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
 left join {{ref('base_users')}} as master on master.id = li.customer_master_id
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as reseller on reseller.id = li.reseller_id
-left join {{ref('base_users')}} as user on user.id = li.user_id
+-- left join {{ref('base_users')}} as user on user.id = li.user_id
 left join {{ref('base_users')}} as dispatched_by on dispatched_by.id = li.dispatched_by_id
 left join {{ref('base_users')}} as returned_by on returned_by.id = li.returned_by_id
 left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_id
