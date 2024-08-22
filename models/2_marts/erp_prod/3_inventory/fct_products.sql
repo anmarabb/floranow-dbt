@@ -167,7 +167,8 @@ case
     
 --line_items_sold
     sold_quantity,
-        last_30d_sold_quantity,
+    last_30d_sold_quantity,
+    last_year_30d_sold_quantity,
     child_incident_quantity,
     item_sold,
     customer_ordered,
