@@ -399,55 +399,55 @@ customer_master_id_check,
 proof_of_delivery_id_check,
 
 
-CASE    -- Hail
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date < '2023-02-01' THEN 'regular phase'
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-02-01' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-07-10' THEN 'FN phase'
-        -- Jouf
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date < '2023-03-01' THEN 'regular phase'
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-03-01' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-07-10' THEN 'FN phase'
-         --Hafer
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date < '2023-03-10' THEN 'regular phase'
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-03-10' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-07-10' THEN 'FN phase'
+-- CASE    -- Hail
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date < '2023-02-01' THEN 'regular phase'
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-02-01' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and delivery_date >= '2023-07-10' THEN 'FN phase'
+--         -- Jouf
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date < '2023-03-01' THEN 'regular phase'
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-03-01' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and delivery_date >= '2023-07-10' THEN 'FN phase'
+--          --Hafer
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date < '2023-03-10' THEN 'regular phase'
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-03-10' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and delivery_date >= '2023-07-10' THEN 'FN phase'
 
-        --Qaseem
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date < '2023-03-17' THEN 'regular phase'
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-03-17' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-07-10' THEN 'FN phase'
-        ELSE 'other' 
-    END AS phase_segment,
+--         --Qaseem
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date < '2023-03-17' THEN 'regular phase'
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-03-17' AND delivery_date < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-05-01' AND delivery_date < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and delivery_date >= '2023-07-10' THEN 'FN phase'
+--         ELSE 'other' 
+--     END AS phase_segment,
 
 
 
-CASE    -- Hail
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at < '2023-02-01' THEN 'regular phase'
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-02-01' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-07-10' THEN 'FN phase'
-        -- Jouf
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at < '2023-03-01' THEN 'regular phase'
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-03-01' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-07-10' THEN 'FN phase'
-         --Hafer
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at < '2023-03-10' THEN 'regular phase'
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-03-10' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-07-10' THEN 'FN phase'
+-- CASE    -- Hail
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at < '2023-02-01' THEN 'regular phase'
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-02-01' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('130009','ASTHAI','EVEHAI','LNDHAI') and created_at >= '2023-07-10' THEN 'FN phase'
+--         -- Jouf
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at < '2023-03-01' THEN 'regular phase'
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-03-01' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('130220', 'ASTJOU', 'LNDJOU','EVEJOU') and created_at >= '2023-07-10' THEN 'FN phase'
+--          --Hafer
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at < '2023-03-10' THEN 'regular phase'
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-03-10' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('132009','ASTHAF','LNDHAF','EVEHAF') and created_at >= '2023-07-10' THEN 'FN phase'
 
-        --Qaseem
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at < '2023-03-17' THEN 'regular phase'
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-03-17' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
-            WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-07-10' THEN 'FN phase'
-        ELSE 'other' 
-    END AS phase_segment_order_date,
+--         --Qaseem
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at < '2023-03-17' THEN 'regular phase'
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-03-17' AND created_at < '2023-05-01' THEN 'interim phase BMX procurement'
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-05-01' AND created_at < '2023-07-10' THEN 'interim phase FN procurement' 
+--             WHEN debtor_number in ('130257','LNDQAS','EVEQAS','ASTQAS') and created_at >= '2023-07-10' THEN 'FN phase'
+--         ELSE 'other' 
+--     END AS phase_segment_order_date,
 
 
 --feed soure
