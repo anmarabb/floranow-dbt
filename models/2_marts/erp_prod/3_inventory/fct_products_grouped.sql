@@ -124,6 +124,7 @@ sum(aging_stock_quantity) as aging_stock_quantity,
 sum(coming_quantity) as coming_quantity,
 sum(sold_quantity) as sold_quantity,
 sum(last_30d_sold_quantity) as last_30d_sold_quantity,
+sum(last_year_30d_sold_quantity) as last_year_30d_sold_quantity,
 sum(last_30d_incident_quantity_inventory_dmaged) as last_30d_incident_quantity_inventory_dmaged,
 
 
