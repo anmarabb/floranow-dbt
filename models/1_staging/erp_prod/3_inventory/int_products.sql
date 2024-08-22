@@ -50,8 +50,10 @@ with
                     sum(li.quantity) as sold_quantity, 
                     sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
 
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30d_sold_quantity
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30d_sold_quantity,
                     --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
+                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) >= 0 THEN li.quantity ELSE 0 END) as last_year_30d_sold_quantity
+
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
                     --where p.product_id=149074
@@ -253,6 +255,7 @@ with
             lis.sold_quantity,
             lis.child_incident_quantity,
             lis.last_30d_sold_quantity,
+            lis.last_year_30d_sold_quantity,
             lis.customer_ordered,
 
 
