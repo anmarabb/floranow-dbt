@@ -290,7 +290,7 @@ end as go_live_date,
 
     country,
     financial_administration,
-    User,
+    -- User,
     customer_type,
     ksa_resellers,
 
