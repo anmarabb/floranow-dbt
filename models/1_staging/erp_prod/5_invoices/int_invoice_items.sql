@@ -100,12 +100,12 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
 
 
         li.supplier_id,
-        li.Origin,
+        --li.Origin,
         li.fulfillment_mode,
-        li.order_status,
+        --li.order_status,
         li.li_record_type_details,
-        li.feed_source_name,
-        li.li_record_type,
+        --li.feed_source_name,
+        --li.li_record_type,
         li.stem_length,
         li.tags,
         li.unit_fob_price,
@@ -161,7 +161,7 @@ else INITCAP(li.product_subcategory) end as product_subcategory,
 
 
 case when ii.line_item_id is not null then 'line_item_id' else null end as line_item_id_check,
-li.parent_id_check,
+-- li.parent_id_check,
 
 
 
