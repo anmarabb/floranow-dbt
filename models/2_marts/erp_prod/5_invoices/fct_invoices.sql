@@ -246,5 +246,5 @@ from {{ref('int_invoices')}} as i
 )
 
 select * from source
-where date(invoice_header_created_at) >='2023-01-01'
+
 
