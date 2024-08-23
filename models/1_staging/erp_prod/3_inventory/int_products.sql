@@ -125,7 +125,7 @@ with
             
 
             li.order_source,
-            li.persona,
+            -- li.persona,
 
             
 
@@ -204,9 +204,9 @@ with
             
             --li.inventory_quantity,
             li.fulfilled_quantity,
-            li.li_record_type,
+            -- li.li_record_type,
             li.li_record_type_details,
-            li.order_status,
+            -- li.order_status,
             li.fulfillment_status,
             li.fulfillment_status_details,
             li.warehouse, --from customer
@@ -222,18 +222,18 @@ with
             li.requested_quantity,
 
 
-            li.loc_status,
+            -- li.loc_status,
             li.fulfillment_mode,
             li.fulfillment, --SUCCEED, PARTIAL, FAILED, UNACCOUNTED
             --li.delivery_date,
-            li.User,
+            -- li.User,
             li.order_type,
             li.Shipment,
             li.shipments_status,
-            li.master_shipments_status,
-            li.master_shipment,
+            -- li.master_shipments_status,
+            -- li.master_shipment,
             li.shipment_link,
-            li.master_shipment_link,
+            -- li.master_shipment_link,
             li.line_item_link,
             li.master_shipment_id,
             li.shipment_id,
@@ -353,7 +353,7 @@ else INITCAP(p.product_category )
 end as product_category,
 
 
-li.route_name,
+-- li.route_name,
 
 
 
@@ -440,8 +440,8 @@ case
 end as inventory_item_type,
 
 
-li.parent_parent_id_check,
-li.parent_id_check,
+-- li.parent_parent_id_check,
+-- li.parent_id_check,
 
 case when   st.stock_status = 'visible' 
             and st.availability_type = 'NORMAL'
