@@ -288,4 +288,4 @@ select
 current_timestamp() as ingestion_timestamp, 
 
 from source as li
-where date(created_at) >= '2023-01-01'
+-- where date(created_at) >= '2023-01-01'
