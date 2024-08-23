@@ -72,7 +72,7 @@ order_id,
     received_fob,
     
 
---     customer_id,
+   customer_id,
 
 --quantity
     li.ordered_quantity,
