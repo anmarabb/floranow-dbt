@@ -3,7 +3,7 @@ with
 source as ( 
 
  
-select *
+select * EXCEPT(created_at),
 
 -- null as anmar, 
 
@@ -220,7 +220,7 @@ select *
 --     delivery_date,
 --     departure_date,
 --     dispatched_at,
---     created_at as order_date,
+  created_at as order_date,
 --     select_delivery_date,
 --     dim_date,
 
