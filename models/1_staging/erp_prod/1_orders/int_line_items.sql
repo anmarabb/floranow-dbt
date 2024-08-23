@@ -74,13 +74,13 @@ COALESCE(PackageLineItems.pli_fulfilled_quantity,0) * li.raw_unit_fob_price as r
 li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type),
 
 
--- case 
---     when li.persona = 'Reseller' and customer.account_type = 'External' then 'External Reseller'
---     when li.persona = 'Reseller' and customer.account_type = 'Internal' then 'Internal Reseller'
---     when li.persona = 'Customer' and customer.account_type = 'External' then 'External Customer'
---     when li.persona = 'Customer' and customer.account_type = 'Internal' then 'Internal Customer'
---     else li.persona
---     end as persona,
+case 
+    when li.persona = 'Reseller' and customer.account_type = 'External' then 'External Reseller'
+    when li.persona = 'Reseller' and customer.account_type = 'Internal' then 'Internal Reseller'
+    when li.persona = 'Customer' and customer.account_type = 'External' then 'External Customer'
+    when li.persona = 'Customer' and customer.account_type = 'Internal' then 'Internal Customer'
+    else li.persona
+    end as persona,
 
 case 
     when li.li_record_type_details != 'To Be Scoped' then li.li_record_type_details
@@ -88,11 +88,11 @@ case
     else 'To Be Scoped'
 end as li_record_type_details,
 
--- case 
---     when li.li_record_type = 'To Be Scoped' and customer.debtor_number in ('132008','scriyadh')  then 'Purchase Order'  --'BlooMax Flowers - Al khubar'. --Shop Customer Riyadh then li.li_record_type 
---     when li.li_record_type != 'To Be Scoped' then li.li_record_type
---     else 'To Be Scoped'
--- end as li_record_type,
+case 
+    when li.li_record_type = 'To Be Scoped' and customer.debtor_number in ('132008','scriyadh')  then 'Purchase Order'  --'BlooMax Flowers - Al khubar'. --Shop Customer Riyadh then li.li_record_type 
+    when li.li_record_type != 'To Be Scoped' then li.li_record_type
+    else 'To Be Scoped'
+end as li_record_type,
 
 
 
@@ -155,7 +155,7 @@ case when li.departure_date is null then date(li.created_at) else li.departure_d
 
 
 --customer
-    -- user.name as user,
+    user.name as user,
     case when li.reseller_id is not null then  'Reseller' else customer.name  end as customer,
     customer.country,
     customer.financial_administration,
@@ -196,7 +196,7 @@ case when li.departure_date is null then date(li.created_at) else li.departure_d
     lis.supplier_name as raw_supplier,
 
 --order 
-    -- pli.order_type as parent_order_type,
+    pli.order_type as parent_order_type,
 
     case 
         when li.li_record_type_details in ('Customer Sale Order From Fly-stock Inventory','Customer Sale Order From Direct Supplier') then 'Shipment Order To POD'  -- From Shipment External
@@ -233,9 +233,9 @@ case when li.departure_date is null then date(li.created_at) else li.departure_d
     sh.Shipment,
     --sh.shipment_id,
     concat( "https://erp.floranow.com/shipments/", sh.shipment_id) as shipment_link,
-    -- concat( "https://erp.floranow.com/master_shipments/", msh.master_shipment_id) as master_shipment_link,
-    -- msh.master_shipments_status,
-    -- msh.master_shipment,
+    concat( "https://erp.floranow.com/master_shipments/", msh.master_shipment_id) as master_shipment_link,
+    msh.master_shipments_status,
+    msh.master_shipment,
 
 w.warehouse_name as warehouse,
 w.warehouse_id,
@@ -355,7 +355,7 @@ win.name as delivery_window,
 -- else 'Invoice Number' end as invoice_number_check,
 
 
--- case when li.parent_line_item_id is not null then 'Parent ID' else null end as parent_id_check,
+case when li.parent_line_item_id is not null then 'Parent ID' else null end as parent_id_check,
 
 -- case when ppli.line_item_id is not null then 'Parent Parent ID' else null end as parent_parent_id_check,
 
@@ -393,9 +393,9 @@ concat( "https://erp.floranow.com/line_items/", li.parent_line_item_id) as paren
 
 
 
--- fs.feed_source_name,
--- fs.feed_type,
--- fs.supplier_name as feed_source_supplier,
+fs.feed_source_name,
+fs.feed_type,
+fs.supplier_name as feed_source_supplier,
 reseller.name as Reseller,
 -- master.name as Master,
 
@@ -510,7 +510,7 @@ left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
 -- left join {{ref('base_users')}} as master on master.id = li.customer_master_id
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as reseller on reseller.id = li.reseller_id
--- left join {{ref('base_users')}} as user on user.id = li.user_id
+left join {{ref('base_users')}} as user on user.id = li.user_id
 -- left join {{ref('base_users')}} as dispatched_by on dispatched_by.id = li.dispatched_by_id
 -- left join {{ref('base_users')}} as returned_by on returned_by.id = li.returned_by_id
 -- left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_id
@@ -523,9 +523,9 @@ left join {{ref('stg_line_items')}} as pli on pli.line_item_id = li.parent_line_
 left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_id
 -- left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
 left join {{ref('stg_shipments')}} as sh on li.shipment_id = sh.shipment_id
--- left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.master_shipment_id
+left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh.master_shipment_id
 left join {{ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
--- left join {{ref('stg_feed_sources')}} as fs on fs.feed_source_id = li.feed_source_id
+left join {{ref('stg_feed_sources')}} as fs on fs.feed_source_id = li.feed_source_id
 left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
 -- left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=li.line_item_id
 -- left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
