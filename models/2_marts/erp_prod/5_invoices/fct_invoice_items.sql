@@ -314,6 +314,6 @@ with
 select *
 from
     source
-where date(invoice_header_created_at) >='2023-01-01'
+
     -- where invoice_type != 'credit note' and generation_type !='MANUAL'
     
