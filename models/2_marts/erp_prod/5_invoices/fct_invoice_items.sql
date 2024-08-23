@@ -232,9 +232,9 @@ with
             line_item_id,
             supplier,
             supplier_id,
-            origin,
+            -- origin,
             fulfillment_mode,
-            order_status,
+            -- order_status,
             order_number,
             order_type,
             stock_model,
@@ -256,7 +256,7 @@ with
             generation_type,
             record_type,
             li_record_type_details,
-            li_record_type,
+            -- li_record_type,
             invoice_number,
 
             -- date
@@ -269,9 +269,9 @@ with
 
             registered_clients,
 
-            feed_source_name,
+            -- feed_source_name,
             line_item_id_check,
-            parent_id_check,
+            -- parent_id_check,
 
             invoice_items_link,
             invoice_link,
