@@ -485,7 +485,7 @@ case when   st.stock_status = 'visible'
       --  left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
 
 
-
+where date(product_created_at) >= '2023-01-01'
     
 
 
