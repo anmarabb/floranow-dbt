@@ -24,7 +24,7 @@ WITH OfferPrices AS (
   SELECT
 
     o.id AS offer_id,
-    g.name AS supplier,
+    g.name AS Supplier,
     o.name AS offer_name,
     ot.name AS offer_template,
     a.floranow_account_id,
@@ -51,7 +51,7 @@ WITH OfferPrices AS (
     st.last_published_at AS stocks_last_published_at,
     MAX(o.created_at) OVER (PARTITION BY g.name) AS last_publisheded, -- need TO UPDATE it TO be ON LAST (updated_at)
    
-    p.name AS product,
+    p.name AS Product,
     p.color,
     p.flori_main_group_name AS product_group,
     p.flori_sub_group_name AS product_sub_group,
