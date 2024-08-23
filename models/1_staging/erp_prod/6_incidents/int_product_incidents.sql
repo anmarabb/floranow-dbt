@@ -54,7 +54,7 @@ select
         li.unit_fob_price,
         li.unit_landed_cost,
         li.order_number,
-        li.production_date_array,
+        -- li.production_date_array,
 
 
         pi.quantity * li.unit_fob_price as fob_value,
@@ -77,7 +77,7 @@ select
         pi.quantity * li.unit_fob_price as incident_fob_value,
 
         li.currency,
-        li.fob_currency,
+        -- li.fob_currency,
         li.customer_id,
         li.ordering_stock_type,
         li.feed_source_name,
