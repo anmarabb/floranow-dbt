@@ -155,7 +155,7 @@ case when li.departure_date is null then date(li.created_at) else li.departure_d
 
 
 --customer
-    user.name as user,
+    -- user.name as user,
     case when li.reseller_id is not null then  'Reseller' else customer.name  end as customer,
     customer.country,
     customer.financial_administration,
@@ -175,7 +175,7 @@ case when li.departure_date is null then date(li.created_at) else li.departure_d
         end as payment_term_type,
 
     case when customer.debtor_number in ('WANDE','95110') then 'Internal Invoicing' else 'Normal Invoicing' end as internal_invoicing,
-
+        -- li.dispatched_at,
     -- case when li.received_quantity > 0 then 'Received' else 'Not Received' end as ops_status1,
     -- case when li.state in ('PENDING','CANCELED') then 'Not Fulfilled' else 'Fulfilled' end as ops_status2,
     -- case when li.location = 'pod' then 'Prepared' else 'Not Prepared' end as ops_status3,
@@ -510,7 +510,7 @@ left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
 -- left join {{ref('base_users')}} as master on master.id = li.customer_master_id
 left join {{ref('base_users')}} as customer on customer.id = li.customer_id
 left join {{ref('base_users')}} as reseller on reseller.id = li.reseller_id
-left join {{ref('base_users')}} as user on user.id = li.user_id
+-- left join {{ref('base_users')}} as user on user.id = li.user_id
 -- left join {{ref('base_users')}} as dispatched_by on dispatched_by.id = li.dispatched_by_id
 -- left join {{ref('base_users')}} as returned_by on returned_by.id = li.returned_by_id
 -- left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_id
