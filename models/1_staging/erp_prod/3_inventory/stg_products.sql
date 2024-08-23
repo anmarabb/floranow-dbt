@@ -108,3 +108,4 @@ current_timestamp() as ingestion_timestamp,
 
 from source as p
 --where CONCAT('SKU_', LOWER(TO_HEX(MD5(product_name))))='SKU_c9ca13deb2644bebb2e567c45fc13b9c'
+where date(created_at) >= '2023-01-01'
