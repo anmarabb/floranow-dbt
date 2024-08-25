@@ -63,7 +63,7 @@ select
     unit_landed_cost,
 
 
-    -- production_date_array,
+    production_date_array,
 
 
 
@@ -140,7 +140,7 @@ financial_administration,
 debtor_number,
 
 currency,
--- fob_currency,
+fob_currency,
 
 
 invoice_item_id,
