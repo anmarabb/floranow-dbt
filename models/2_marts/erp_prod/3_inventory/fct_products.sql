@@ -85,11 +85,11 @@ case
 
         case when select_departure_date not in ('Future', 'Today') then ordered_quantity else 0 end as past_ordered_quantity,
 
-        -- case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and loc_status is null then p.ordered_quantity else 0 end as transit_quantity_awais,
+        case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and loc_status is null then p.ordered_quantity else 0 end as transit_quantity_awais,
         -- case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and loc_status is null then p.remaining_quantity else 0 end as transit_quantity,
 
         
-        --case when (select_departure_date = 'last_10_days' and loc_status is null) and ( shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident') then p.ordered_quantity else 0 end as transit_quantity,
+        case when (select_departure_date = 'last_10_days' and loc_status is null) and ( shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident') then p.ordered_quantity else 0 end as transit_quantity,
 
         --case when select_departure_date in ('Future', 'Today') then MIN(departure_date) else null end AS next_departure_date,
 
@@ -132,23 +132,23 @@ case
 
 --line_items
     --dim
-        -- li_record_type,
+        li_record_type,
         li_record_type_details,
         fulfillment,
         fulfillment_status,
         fulfillment_status_details,
         fulfillment_mode,
-        -- User,
-        -- loc_status,
-        -- order_status,
+        User,
+        loc_status,
+        order_status,
         order_type,
         p.warehouse,
         Shipment,
         shipments_status,
-        -- master_shipments_status,
-        -- master_shipment,
+        master_shipments_status,
+        master_shipment,
 
-        -- route_name,
+        route_name,
 
     --date
         delivery_date,    --from line item
@@ -248,8 +248,8 @@ order_source,
 line_item_id,
 source_line_item_id,
 
--- parent_parent_id_check,
--- parent_id_check,
+parent_parent_id_check,
+parent_id_check,
 
 
 DATE_DIFF(date(p.departure_date), date(p.order_date), DAY) AS lead_time,
@@ -293,26 +293,26 @@ STDDEV_POP(sold_quantity) over (partition by p.product_name, p.warehouse) AS sol
 
 
 --max(case when fo.departure_ranking ='first_departure' then p.departure_date else null end) over (partition by p.product_name, p.warehouse) as first_departure_date,
--- case
--- when master_shipments_status in ('DRAFT' ) then '1. Not Received - Draft'
--- when master_shipments_status in ( 'PACKED' ) then '2. Not Received - Packed (Comming Soon)'
--- when master_shipments_status  in ( 'OPENED' ) then '3. Received - Work In Progress'
--- when master_shipments_status  in ('WAREHOUSED' ) then '4. Received - Work Done'
--- else '5. Not Shipment'
--- end as shipment_progress,
+case
+when master_shipments_status in ('DRAFT' ) then '1. Not Received - Draft'
+when master_shipments_status in ( 'PACKED' ) then '2. Not Received - Packed (Comming Soon)'
+when master_shipments_status  in ( 'OPENED' ) then '3. Received - Work In Progress'
+when master_shipments_status  in ('WAREHOUSED' ) then '4. Received - Work Done'
+else '5. Not Shipment'
+end as shipment_progress,
 
--- case 
---     when loc_status = 'null' and master_shipments_status in ('DRAFT') then '1. Not Received (Draft Master Shipments)'
---     when loc_status = 'null' and master_shipments_status in ('PACKED') and shipments_status not in ('MISSING') then '2. Not Received (Packed Master Shipments)'
---     when loc_status = 'null' and shipments_status in ('MISSING') then '3. Not Received (Full Missing Shipments)'
+case 
+    when loc_status = 'null' and master_shipments_status in ('DRAFT') then '1. Not Received (Draft Master Shipments)'
+    when loc_status = 'null' and master_shipments_status in ('PACKED') and shipments_status not in ('MISSING') then '2. Not Received (Packed Master Shipments)'
+    when loc_status = 'null' and shipments_status in ('MISSING') then '3. Not Received (Full Missing Shipments)'
     
---     when loc_status = 'null' and master_shipments_status in ('OPENED') and shipments_status in ('PACKED') and  order_status = 'Not Fulfilled' then '4. Received Not Scanned (Work in Progress)'
+    when loc_status = 'null' and master_shipments_status in ('OPENED') and shipments_status in ('PACKED') and  order_status = 'Not Fulfilled' then '4. Received Not Scanned (Work in Progress)'
 
---     when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and fulfillment_status_details = '2. Fulfilled - with Full Item Incident' then '5. Received Full Incident'
---     when loc_status = 'null' and fulfillment_status_details = '3. Fulfilled - with Process Breakdown' then '6. Received and Fulfilled without Scanned to Location'
---     when loc_status = 'loc'  then '7. Received On Location'
---     else '8. To Be Scoped'
---     end as orders_progress, 
+    when loc_status = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and fulfillment_status_details = '2. Fulfilled - with Full Item Incident' then '5. Received Full Incident'
+    when loc_status = 'null' and fulfillment_status_details = '3. Fulfilled - with Process Breakdown' then '6. Received and Fulfilled without Scanned to Location'
+    when loc_status = 'loc'  then '7. Received On Location'
+    else '8. To Be Scoped'
+    end as orders_progress, 
 
 
 
