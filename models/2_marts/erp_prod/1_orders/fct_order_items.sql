@@ -16,9 +16,9 @@ null as anmar,
 
 
 
--- dispatched_items,
--- fulfilled_items,
--- signed_items,
+dispatched_items,
+fulfilled_items,
+signed_items,
 signed_status,
 
 tags,
@@ -26,21 +26,21 @@ city,
 stem_length,
 
 number,
--- order_number_check,
--- order_id_check,
+order_number_check,
+order_id_check,
 
 order_source,  --Direct Supplier, Express Inventory
---order_channel,
+-- order_channel,
 
 potential_revenue,
 
 order_id,
 
 
--- direct_line_order_count,
--- stock_line_order_count,
--- direct_order_ids,
--- stock_order_ids,
+direct_line_order_count,
+stock_line_order_count,
+direct_order_ids,
+stock_order_ids,
 
 
 --invoices as i
@@ -48,15 +48,15 @@ order_id,
 
 --proof_of_deliveries as pod
     proof_of_delivery_id,
-    -- route_name,
-    -- source_type,
-    -- pod_status,  --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
+    route_name,
+    source_type,
+    pod_status,  --DRAFT, READY, DISPATCHED, DELIVERED, SKIPPED
 
 
 
 
 --actions
-    -- dispatched_by,
+    dispatched_by,
 
 --line order
     line_item_id,
@@ -67,7 +67,7 @@ order_id,
     
     li.unit_fob_price,
     li.packing_list_fob_price,
-    -- li.fob_currency,
+    li.fob_currency,
 
     received_fob,
     
@@ -119,18 +119,18 @@ case
 
     location as loc_status,    -- pod, loc, null
 
-    -- ops_status1,               -- Received, Not Received
-    -- ops_status2,               -- Fulfilled, Not Fulfilled
-    -- ops_status3,               -- Prepared, Not Prepared
-    -- ops_status4,               -- Dispatched, Not Dispatched
-    -- ops_status5,               -- Signed, Not Signed
+    ops_status1,               -- Received, Not Received
+    ops_status2,               -- Fulfilled, Not Fulfilled
+    ops_status3,               -- Prepared, Not Prepared
+    ops_status4,               -- Dispatched, Not Dispatched
+    ops_status5,               -- Signed, Not Signed
 
     state,                     --PENDING, FULFILLED, DISPATCHED, DELIVERED, CANCELED, RETURNED
     fulfillment,               --SUCCEED, PARTIAL, FAILED, UNACCOUNTED
     order_request_status,      --REQUESTED, PLACED, PARTIALLY_PLACED, REJECTED, CANCELED
     order_request_link,
-    -- order_request_cheack,
-    -- replaced_quantity_cheack,
+    order_request_cheack,
+    replaced_quantity_cheack,
     requested_quantity,
     
 
@@ -140,7 +140,7 @@ case
     shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
     master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
     master_shipment,
-    -- order_payloads_status,   -- true, false, null
+    order_payloads_status,   -- true, false, null
     master_shipment_id,
     shipment_id,
 
@@ -184,16 +184,16 @@ fulfillment_status,
 dispatched_status,
     fulfillment_status_details,
     case when fulfillment_status_details like '%Not Fulfilled%' then 'Not Fulfilled' else 'Fulfilled' end as stage_gate2,
-    -- case when li.dispatched_at is not null then 'Dispatched' else 'Not Dispatched' end as stage_gate3,
+    case when li.dispatched_at is not null then 'Dispatched' else 'Not Dispatched' end as stage_gate3,
     
-    -- case when fulfillment_mode not in ('Purchase Order For Inventory','Customer Sales Order From Shop') and fulfillment_status_details not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
+    case when fulfillment_mode not in ('Purchase Order For Inventory','Customer Sales Order From Shop') and fulfillment_status_details not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
     
 
    case 
         when fulfillment_status_details like '%Not Fulfilled%' then 'Not Fulfilled' 
         when fulfillment_status_details in ('2. Fulfilled - with Full Item Incident') then 'Fulfilled Full Incident'
-        -- when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is null then 'Fulfilled Not Dispatched'
-        -- when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
+        when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is null then 'Fulfilled Not Dispatched'
+        when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
         else 'cheak'
         end as order_status,
         
@@ -201,7 +201,7 @@ dispatched_status,
 
 
 
---fulfilled mean the item added to loc, or pod. 
+-- fulfilled mean the item added to loc, or pod. 
     
     
     
@@ -219,12 +219,12 @@ internal_invoicing,
 --date
     delivery_date,
     departure_date,
-    -- dispatched_at,
+    dispatched_at,
   created_at as order_date,
     select_delivery_date,
-    -- dim_date,
+    dim_date,
 
-    -- signed_at, -- form ivoice level (Waqas)
+    signed_at, -- form ivoice level (Waqas)
 
 
 
@@ -273,7 +273,7 @@ CAST(EXTRACT(ISOWEEK FROM delivery_date) AS STRING)
     end as warehouse_type,
 
     Reseller,
-    -- Master,
+    Master,
 
 /*
 case 
@@ -290,13 +290,13 @@ end as go_live_date,
 
     country,
     financial_administration,
-    -- User,
+    User,
     customer_type,
-    -- ksa_resellers,
+    ksa_resellers,
 
 
     
--- samer_warehouses,
+samer_warehouses,
     
 
 persona,
@@ -305,11 +305,11 @@ persona,
 Supplier,
 -- parent_supplier,
 supplier_region as Origin,
--- raw_supplier,
+raw_supplier,
 
 --product
     product_name as Product,
-    --product_crop as Crop,
+    -- product_crop as Crop,
     product_category,
     product_subcategory,
 
@@ -367,36 +367,36 @@ incident_quantity_extra_inventory,
 delivery_window,
 delivery_time,
 
--- line_item_id_check,
--- shipment_id_check,
--- additional_id_check,
--- additional_item_link,
--- source_line_item_link,
+line_item_id_check,
+shipment_id_check,
+additional_id_check,
+additional_item_link,
+source_line_item_link,
 
 
--- invoice_id_check,
--- invoice_number_check,
+invoice_id_check,
+invoice_number_check,
 
 parent_id_check,
--- parent_parent_id_check,
--- product_id_check,
--- source_id_check,
+parent_parent_id_check,
+product_id_check,
+source_id_check,
 
 
 product_id,
 product_link,
 parent_line_item_link,
-offer_id,
--- offer_id_check,
+order_offer_id,
+offer_id_check,
 
--- reseller_id_check,
--- customer_id_check,
--- supplier_id_check,
+reseller_id_check,
+customer_id_check,
+supplier_id_check,
 
--- reseller_customer_id_check,
+reseller_customer_id_check,
 reseller_id,
--- customer_master_id_check,
--- proof_of_delivery_id_check,
+customer_master_id_check,
+proof_of_delivery_id_check,
 
 
 -- CASE    -- Hail
@@ -459,23 +459,23 @@ case
     when EXTRACT(MONTH FROM delivery_date) = EXTRACT(MONTH FROM created_at) and EXTRACT(YEAR FROM delivery_date) = EXTRACT(YEAR FROM created_at) then 'Same Month Creation and Delivery'
     else 'Corner case' end as out_of_period_check,
 
--- additional_status,
--- additional_creation_stage,
+additional_status,
+additional_creation_stage,
 
 
--- case 
---             when route_name in ('Ajman','Abu Dhabi out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 'Boxer'
---             when route_name in ('Al Ain' ,'Al Ain 1', 'DXB Same Day Express', 'AUH Same Day Express') then 'Hiace'
---             else null end as vehicle_type, 
+case 
+            when route_name in ('Ajman','Abu Dhabi out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 'Boxer'
+            when route_name in ('Al Ain' ,'Al Ain 1', 'DXB Same Day Express', 'AUH Same Day Express') then 'Hiace'
+            else null end as vehicle_type, 
 
---     case 
---             when route_name in ('Ajman','Abu Dhabi out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 11573
---             when route_name in ('Al Ain' ,'Al Ain 1') then 2090
+    case 
+            when route_name in ('Ajman','Abu Dhabi out of City', 'Abu Dhabi City','Dubai Out of City', 'Dubai City', 'Sharjah', 'Northern Emirates', 'Ras Al Khaimah', 'Umm Al Quwain')  then 11573
+            when route_name in ('Al Ain' ,'Al Ain 1') then 2090
 
---             when route_name in ('DXB Same Day Express', 'AUH Same Day Express') then 2164
---             else null end as vehicle_capacity, 
+            when route_name in ('DXB Same Day Express', 'AUH Same Day Express') then 2164
+            else null end as vehicle_capacity, 
 
--- vehicle_destination, 
+vehicle_destination, 
 
 
 case 
@@ -523,7 +523,7 @@ case
     end as pods_with_incidents,
 
 
---order_with_incidents,
+-- order_with_incidents,
 
 case when incidents_count is not null then 1 else 0 end as line_order_with_incidents,
 case when incidents_count is  null then 1 else 0 end as line_order_without_incidents,
@@ -542,14 +542,14 @@ case when delivery_date is not null then 'Delivery Date' else null end as delive
 case when departure_date is not null then 'Departure Date' else null end as departure_date_check,
 
 
--- root_shipment_id_check,
+root_shipment_id_check,
 li.source_line_item_id,
 
 
--- parent_product_id,
+parent_product_id,
 
 
--- ordering_source_details,
+ordering_source_details,
 
 concat(debtor_number,delivery_date) as drop_id, 
 
