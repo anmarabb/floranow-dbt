@@ -110,8 +110,8 @@ sum(ordered_quantity) as ordered_quantity,
 sum(past_ordered_quantity) as past_ordered_quantity,
 
 
--- sum(transit_quantity) as transit_quantity,
--- sum(transit_quantity_awais) as transit_quantity_awais,
+sum(transit_quantity) as transit_quantity,
+sum(transit_quantity_awais) as transit_quantity_awais,
 sum(in_stock_quantity) as in_stock_quantity,
 sum(active_in_stock_quantity) as active_in_stock_quantity,
 
