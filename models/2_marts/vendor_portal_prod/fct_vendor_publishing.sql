@@ -26,6 +26,7 @@ WITH OfferPrices AS (
 
     o.id AS offer_id,
     g.name AS Supplier,
+    g.name AS Supplier_Name,
     o.name AS offer_name,
     ot.name AS offer_template,
     a.floranow_account_id,
