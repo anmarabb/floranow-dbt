@@ -23,6 +23,7 @@ WITH OfferPrices AS (
      )
   SELECT
 
+
     o.id AS offer_id,
     g.name AS Supplier,
     o.name AS offer_name,
