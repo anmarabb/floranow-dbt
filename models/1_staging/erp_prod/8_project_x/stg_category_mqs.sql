@@ -3,7 +3,7 @@ With source as (
 
 select INITCAP(main_group) as sub_category,
        sub_group,
-       Product,
+       -- Product,
        product_color,
        MQS,
 
