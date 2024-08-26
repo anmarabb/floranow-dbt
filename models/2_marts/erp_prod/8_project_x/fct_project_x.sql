@@ -59,6 +59,7 @@ select li.line_item_id,
        li.Supplier,
        li.warehouse,
        li.order_date,
+       li.product_color,
  
 
        li.ordered_quantity,
