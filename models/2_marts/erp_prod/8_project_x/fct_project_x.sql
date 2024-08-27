@@ -60,6 +60,9 @@ select li.line_item_id,
        li.warehouse,
        li.order_date,
        li.product_color,
+       li.product_category,
+       li.product_subcategory,
+       li.product_subgroup,
  
 
        li.ordered_quantity,
