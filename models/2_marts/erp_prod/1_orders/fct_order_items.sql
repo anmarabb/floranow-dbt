@@ -5,7 +5,7 @@ source as (
  
 select
 
-    sub_group, 
+    sub_group as product_subgroup, 
 
 --PackageLineItems
     packed_quantity,
