@@ -4,7 +4,7 @@ With source as (
 select INITCAP(main_group) as sub_category,
        sub_group,
        -- Product,
-       product_color,
+       lower(product_color) as product_color,
        MQS,
 
 
