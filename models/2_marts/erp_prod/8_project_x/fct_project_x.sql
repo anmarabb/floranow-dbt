@@ -63,6 +63,7 @@ select li.line_item_id,
        li.product_category,
        li.product_subcategory,
        li.product_subgroup,
+       CONCAT(coalesce(li.product_subcategory,''), coalesce(li.product_subgroup,''), coalesce(li.product_color,'')) as linking,
  
 
        li.ordered_quantity,
