@@ -25,21 +25,22 @@ product_location as (
 
 targets as (
     select Product,
-           min(consistent_random_value) as weekly_target,
-           round(min(consistent_random_value) * 2 / 7,2)  AS wadi_target,
-           round(min(consistent_random_value) - (min(consistent_random_value) * 2 / 7),2) as soli_target
+           warehouse,
+           MIN(consistent_random_value) AS weekly_target,
+           ROUND(MIN(consistent_random_value) * 2 / 7, 2) AS wadi_target,
+           ROUND(MIN(consistent_random_value) - (MIN(consistent_random_value) * 2 / 7), 2) AS soli_target
     from (
-          select Product,
-                 400 + CAST(FLOOR(800 * (ABS(MOD(FARM_FINGERPRINT(CAST(Product AS STRING)), 10000)) / 10000.0)) AS INT64) AS consistent_random_value
-          FROM {{ref('fct_order_items')}} as li
-          where li.Reseller in ('RUH Project X Stock', 'DMM Project X Stock') and li.order_type != "PICKED_ORDER"
+            select Product,
+                   warehouse,
+                   400 + CAST(FLOOR(800 * (ABS(MOD(FARM_FINGERPRINT(CAST(CONCAT(Product, warehouse) AS STRING)), 10000)) / 10000.0)) AS INT64) AS consistent_random_value
+            from {{ref('fct_order_items')}} li
+            where li.Reseller IN ('RUH Project X Stock', 'DMM Project X Stock') AND li.order_type != "PICKED_ORDER"
          )
--- where Product = 'Rose Athena'
-    group by 1)
+    GROUP BY 1,2)
 
 select li.Product, 
       --  li.stem_length, 
-      --  li.warehouse,
+       li.warehouse,
       --  li.product_color,
       --  li.product_subcategory as product_main_group,
       --  li.product_subgroup as product_sub_group,
@@ -74,7 +75,7 @@ left join product_location as pl on p.product_id = pl.locationable_id
 -- left join pi on pi.line_item_id = li.line_item_id
 left join invoices as ii on ii.parent_line_item_id = li.line_item_id 
 -- left join stock_movement as sm on sm.product_id = li.product_id
-left join targets as t on t.Product = li.Product
+left join targets as t on t.Product = li.Product and li.warehouse = t.warehouse
 
 where li.Reseller in ('RUH Project X Stock', 'DMM Project X Stock') and li.order_type != "PICKED_ORDER" --and li.Product = 'Rose Athena'
-group by 1 --, 2, 3, 4, 5, 6
+group by 1, 2 --, 3, 4, 5, 6
