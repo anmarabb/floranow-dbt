@@ -24,19 +24,22 @@ product_location as (
 ),
 
 targets as (
-    select Product,
+    with data as (
+        SELECT li.Product,
+               li.warehouse,
+               sum(ii.last_month_sold_quantity) / DATE_DIFF(DATE_TRUNC(CURRENT_DATE(), MONTH), DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 1 MONTH), DAY) * 7 as weekly_sold_quantity,
+        FROM {{ref('fct_order_items')}} li
+        left join invoices as ii on ii.parent_line_item_id = li.line_item_id
+        group by 1, 2)
+
+    SELECT Product,
            warehouse,
-           MIN(consistent_random_value) AS weekly_target,
-           ROUND(MIN(consistent_random_value) * 2 / 7, 2) AS wadi_target,
-           ROUND(MIN(consistent_random_value) - (MIN(consistent_random_value) * 2 / 7), 2) AS soli_target
-    from (
-            select Product,
-                   warehouse,
-                   400 + CAST(FLOOR(800 * (ABS(MOD(FARM_FINGERPRINT(CAST(CONCAT(Product, warehouse) AS STRING)), 10000)) / 10000.0)) AS INT64) AS consistent_random_value
-            from {{ref('fct_order_items')}} li
-            where li.Reseller IN ('RUH Project X Stock', 'DMM Project X Stock') AND li.order_type != "PICKED_ORDER"
-         )
-    GROUP BY 1,2)
+           ROUND(SUM(weekly_sold_quantity) * (1 + (0.20 * (MOD(FARM_FINGERPRINT(CONCAT(Product, warehouse)), 2) * 2 - 1))), -- ±20% adjustment
+            2) AS weekly_target,
+           ROUND(SUM(weekly_sold_quantity) * (1 + (0.20 * (MOD(FARM_FINGERPRINT(CONCAT(Product, warehouse)), 2) * 2 - 1))), -- ±20% adjustment
+            2) / 7 * 2 AS wadi_target,
+    FROM data
+    group by 1, 2)
 
 select li.Product, 
       --  li.stem_length, 
