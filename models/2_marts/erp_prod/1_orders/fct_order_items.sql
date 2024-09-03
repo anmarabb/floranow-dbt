@@ -4,7 +4,7 @@ source as (
 
  
 select
-
+    CONCAT(coalesce(product_subcategory,''), coalesce(sub_group,''), coalesce(li.product_color,'')) as li_category_linking,
     sub_group as product_subgroup, 
 
 --PackageLineItems
