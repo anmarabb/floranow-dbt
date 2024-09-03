@@ -1,9 +1,141 @@
-with
+WITH color_list AS (  
+SELECT lower('Light Purple') as color 
+ UNION ALL SELECT lower('Peach') as color 
+ UNION ALL SELECT lower('Transparent') as color 
+ UNION ALL SELECT lower('fuchsia') as color 
+ UNION ALL SELECT lower('mixed in tray') as color 
+ UNION ALL SELECT lower('sand') as color 
+ UNION ALL SELECT lower('dark brown') as color 
+ UNION ALL SELECT lower('red brown') as color 
+ UNION ALL SELECT lower('green brown') as color 
+ UNION ALL SELECT lower('white lilac') as color 
+ UNION ALL SELECT lower('classic red') as color 
+ UNION ALL SELECT lower('color supported') as color 
+ UNION ALL SELECT lower('white') as color 
+ UNION ALL SELECT lower('dark red') as color 
+ UNION ALL SELECT lower('White Green') as color 
+ UNION ALL SELECT lower('light blue') as color 
+ UNION ALL SELECT lower('orange brown') as color 
+ UNION ALL SELECT lower('light yellow') as color 
+ UNION ALL SELECT lower('light green') as color 
+ UNION ALL SELECT lower('beige') as color 
+ UNION ALL SELECT lower('blued') as color 
+ UNION ALL SELECT lower('blue white') as color 
+ UNION ALL SELECT lower('white purple') as color 
+ UNION ALL SELECT lower('yellow') as color 
+ UNION ALL SELECT lower('cerise') as color 
+ UNION ALL SELECT lower('blue') as color 
+ UNION ALL SELECT lower('bicolour') as color 
+ UNION ALL SELECT lower('violet') as color 
+ UNION ALL SELECT lower('red yellow') as color 
+ UNION ALL SELECT lower('lemon') as color 
+ UNION ALL SELECT lower('Pink flamed') as color 
+ UNION ALL SELECT lower('grey') as color 
+ UNION ALL SELECT lower('Mix') as color 
+ UNION ALL SELECT lower('champagne') as color 
+ UNION ALL SELECT lower('pink green') as color 
+ UNION ALL SELECT lower('teal') as color 
+ UNION ALL SELECT lower('Coffee') as color 
+ UNION ALL SELECT lower('Red/Pink') as color 
+ UNION ALL SELECT lower('purple blue') as color 
+ UNION ALL SELECT lower('red pink') as color 
+ UNION ALL SELECT lower('apricot') as color 
+ UNION ALL SELECT lower('pink purple') as color 
+ UNION ALL SELECT lower('pale yellow') as color 
+ UNION ALL SELECT lower('green grey') as color 
+ UNION ALL SELECT lower('purple green') as color 
+ UNION ALL SELECT lower('bicolour pink-cream') as color 
+ UNION ALL SELECT lower('tricolor') as color 
+ UNION ALL SELECT lower('silver') as color 
+ UNION ALL SELECT lower('white red') as color 
+ UNION ALL SELECT lower('Bicolor pink') as color 
+ UNION ALL SELECT lower('Wooden color') as color 
+ UNION ALL SELECT lower('bronze') as color 
+ UNION ALL SELECT lower('classic dark purple') as color 
+ UNION ALL SELECT lower('grey green') as color 
+ UNION ALL SELECT lower('chocolate') as color 
+ UNION ALL SELECT lower('classic purple') as color 
+ UNION ALL SELECT lower('blue purple') as color 
+ UNION ALL SELECT lower('tinted') as color 
+ UNION ALL SELECT lower('dark yellow') as color 
+ UNION ALL SELECT lower('aubergine') as color 
+ UNION ALL SELECT lower('magenta') as color 
+ UNION ALL SELECT lower('green lilac') as color 
+ UNION ALL SELECT lower('coral') as color 
+ UNION ALL SELECT lower('marble') as color 
+ UNION ALL SELECT lower('copper') as color 
+ UNION ALL SELECT lower('pink') as color 
+ UNION ALL SELECT lower('dark pink') as color 
+ UNION ALL SELECT lower('red green') as color 
+ UNION ALL SELECT lower('purple red') as color 
+ UNION ALL SELECT lower('four color') as color 
+ UNION ALL SELECT lower('classic green') as color 
+ UNION ALL SELECT lower('various colours') as color 
+ UNION ALL SELECT lower('mixed') as color 
+ UNION ALL SELECT lower('lavender') as color 
+ UNION ALL SELECT lower('Light Pink') as color 
+ UNION ALL SELECT lower('bicolour orange-yellow') as color 
+ UNION ALL SELECT lower('Pink White') as color 
+ UNION ALL SELECT lower('100% blue') as color 
+ UNION ALL SELECT lower('oldrose') as color 
+ UNION ALL SELECT lower('dark purple') as color 
+ UNION ALL SELECT lower('gold') as color 
+ UNION ALL SELECT lower('yellow red') as color 
+ UNION ALL SELECT lower('light red') as color 
+ UNION ALL SELECT lower('brown red') as color 
+ UNION ALL SELECT lower('green red') as color 
+ UNION ALL SELECT lower('Semaforo') as color 
+ UNION ALL SELECT lower('dark pink red') as color 
+ UNION ALL SELECT lower('orange red') as color 
+ UNION ALL SELECT lower('yellow green') as color 
+ UNION ALL SELECT lower('green pink') as color 
+ UNION ALL SELECT lower('dark green') as color 
+ UNION ALL SELECT lower('green purple') as color 
+ UNION ALL SELECT lower('hot pink') as color 
+ UNION ALL SELECT lower('black white') as color 
+ UNION ALL SELECT lower('light gray') as color 
+ UNION ALL SELECT lower('purple') as color 
+ UNION ALL SELECT lower('mixed colours') as color 
+ UNION ALL SELECT lower('white pink') as color 
+ UNION ALL SELECT lower('terracotta') as color 
+ UNION ALL SELECT lower('green') as color 
+ UNION ALL SELECT lower('pale pink') as color 
+ UNION ALL SELECT lower('green white') as color 
+ UNION ALL SELECT lower('milka') as color 
+ UNION ALL SELECT lower('orange pink') as color 
+ UNION ALL SELECT lower('orange') as color 
+ UNION ALL SELECT lower('white orange') as color 
+ UNION ALL SELECT lower('yellow brown') as color 
+ UNION ALL SELECT lower('red') as color 
+ UNION ALL SELECT lower('cream') as color 
+ UNION ALL SELECT lower('darkgreen') as color 
+ UNION ALL SELECT lower('peach') as color 
+ UNION ALL SELECT lower('Purple White') as color 
+ UNION ALL SELECT lower('burgundy') as color 
+ UNION ALL SELECT lower('Classic') as color 
+ UNION ALL SELECT lower('ivory') as color 
+ UNION ALL SELECT lower('light brown') as color 
+ UNION ALL SELECT lower('brown') as color 
+ UNION ALL SELECT lower('lilac') as color 
+ UNION ALL SELECT lower('black') as color 
+ UNION ALL SELECT lower('red white') as color 
+ UNION ALL SELECT lower('bicolour cream-pink') as color 
+ UNION ALL SELECT lower('salmon') as color 
+ UNION ALL SELECT lower('dark blue') as color 
+ UNION ALL SELECT lower('lime green') as color 
+ UNION ALL SELECT lower('salmon pink') as color 
+ UNION ALL SELECT lower('yellow orange') as color 
+ UNION ALL SELECT lower('light blue pink') as color
+ )
 
-source as ( 
 
  
 select
+   (SELECT color
+             FROM color_list cl
+             WHERE REGEXP_CONTAINS(lower(product_name), r'\b' || cl.color)
+             limit 1) AS matched_color,
+             product_name as mmmmm,
     CONCAT(coalesce(product_subcategory,''), coalesce(sub_group,''), coalesce(li.product_color,'')) as li_category_linking,
     sub_group as product_subgroup, 
 
@@ -567,8 +699,6 @@ current_timestamp() as insertion_timestamp,
 
 
 from {{ref('int_line_items')}} as li 
-)
 
-select * from source
 
 
