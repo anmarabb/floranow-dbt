@@ -57,7 +57,7 @@ select li.Product,
        
        ceil(round(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),2)) as daily_demand,
        ceil(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * 7) as weekly_demand,
-       ceil(sum(ct.MQS)/COUNT(distinct li.Product) OVER (PARTITION BY li.product_subcategory, li.product_subgroup)) as category_weekly_target,
+       ceil(sum(ct.MQS)/COUNT(distinct li.Product) OVER (PARTITION BY li.product_subcategory, li.product_subgroup, li.product_color)) as category_weekly_target,
     --    ceil(min(t.weekly_target)) as weekly_target,
 
        --case when DATE_DIFF(MAX(li.departure_date), MIN(li.departure_date), DAY) = 0 then 1 else DATE_DIFF(MAX(li.departure_date), MIN(li.departure_date), DAY) end as date_range,
