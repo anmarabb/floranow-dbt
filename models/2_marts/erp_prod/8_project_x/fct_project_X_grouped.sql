@@ -47,7 +47,7 @@ targets as (
     group by 1, 2)
 -- , data as (
 select li.Product, 
-      --  li.stem_length, 
+       li.li_category_linking,
        li.warehouse,
        li.product_color,
        li.product_subcategory as product_main_group,
@@ -57,7 +57,7 @@ select li.Product,
        
        ceil(round(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),2)) as daily_demand,
        ceil(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * 7) as weekly_demand,
-       ceil(sum(ct.MQS)/COUNT(distinct li.Product) OVER (PARTITION BY li.product_subcategory, li.product_subgroup, li.product_color)) as category_weekly_target,
+       ceil(min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)) as category_weekly_target,
     --    ceil(min(t.weekly_target)) as weekly_target,
 
        --case when DATE_DIFF(MAX(li.departure_date), MIN(li.departure_date), DAY) = 0 then 1 else DATE_DIFF(MAX(li.departure_date), MIN(li.departure_date), DAY) end as date_range,
@@ -72,12 +72,12 @@ select li.Product,
        sum(remaining_qty_A1_X) as wadi_stock,
     --    ceil(min(t.wadi_target)) as wadi_target,
 
-       ceil(sum(ct.MQS)/COUNT(distinct li.Product) OVER (PARTITION BY li.product_subcategory, li.product_subgroup)*2/7) as category_wadi_target,
+       ceil(min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)*2/7) as category_wadi_target,
     --    ceil(min(t.wadi_target)) as wadi_target,
 
        sum(remaining_qty_X_FN) as sullay_stock,
        date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) as days_to_next_departure,
-       ceil(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - sum(ct.MQS)/COUNT(distinct li.Product) OVER (PARTITION BY li.product_subcategory, li.product_subgroup)*2/7) as category_sullay_target,
+       ceil(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)*2/7) as category_sullay_target,
        
        sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN) as total_qty, 
        floor((sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN))/(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day))) as stock_enough_for,
@@ -97,7 +97,7 @@ left join targets as t on t.Product = li.Product and li.warehouse = t.warehouse
 left join category_target ct on ct.category_linking = li.li_category_linking
 
 where li.Reseller in ('RUH Project X Stock', 'DMM Project X Stock') and li.order_type != "PICKED_ORDER" --and li.Product = 'Rose Athena'
-group by 1, 2 , 3, 4, 5
+group by 1, 2 , 3, 4, 5, 6
 
 -- )
 -- select count(*)
