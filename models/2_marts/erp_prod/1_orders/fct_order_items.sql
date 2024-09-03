@@ -693,12 +693,14 @@ incident_orders_after_return_stage,
 
 variety_mask,
 supplier_product,
-product_color,
+case when product_color in ('colour unknown', null) then    (SELECT color
+             FROM color_list cl
+             WHERE REGEXP_CONTAINS(lower(product_name), r'\b' || cl.color)
+             limit 1) else product_color end as product_color,
 
 current_timestamp() as insertion_timestamp, 
 
 
 from {{ref('int_line_items')}} as li 
-
 
 
