@@ -72,12 +72,12 @@ select li.Product,
        sum(remaining_qty_A1_X) as wadi_stock,
     --    ceil(min(t.wadi_target)) as wadi_target,
 
-       ceil(min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)*2/7) as category_wadi_target,
+       min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)*2/7 as category_wadi_target,
     --    ceil(min(t.wadi_target)) as wadi_target,
 
        sum(remaining_qty_X_FN) as sullay_stock,
        date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) as days_to_next_departure,
-       ceil(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)*2/7) as category_sullay_target,
+       sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)*2/7 as category_sullay_target,
        
        sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN) as total_qty, 
        floor((sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN))/(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day))) as stock_enough_for,
