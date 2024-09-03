@@ -105,3 +105,5 @@ sources:
       - name: item_movement_requests
       - name: shopping_cart_items
       - name: category_mqs
+      - name: product_mqs
+
