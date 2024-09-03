@@ -128,15 +128,12 @@ SELECT lower('Light Purple') as color
  UNION ALL SELECT lower('light blue pink') as color
  )
 
-
+, data as(
  
 select
-   (SELECT color
-             FROM color_list cl
-             WHERE REGEXP_CONTAINS(lower(product_name), r'\b' || cl.color)
-             limit 1) AS matched_color,
+   (SELECT color FROM color_list cl WHERE REGEXP_CONTAINS(lower(product_name), r'\b' || cl.color) limit 1) AS matched_color,
              product_name as mmmmm,
-    CONCAT(coalesce(product_subcategory,''), coalesce(sub_group,''), coalesce(li.product_color,'')) as li_category_linking,
+
     sub_group as product_subgroup, 
 
 --PackageLineItems
@@ -703,4 +700,8 @@ current_timestamp() as insertion_timestamp,
 
 from {{ref('int_line_items')}} as li 
 
-
+)
+select *,    
+CONCAT(coalesce(product_subcategory,''), coalesce(product_subgroup,''), coalesce(product_color,'')) as li_category_linking,
+CONCAT(coalesce(product,''), coalesce(product_color,'')) as li_product_linking
+from data 
