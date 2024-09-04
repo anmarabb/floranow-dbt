@@ -91,9 +91,10 @@ left join invoices as ii on ii.parent_line_item_id = li.line_item_id
 left join category_target ct on ct.category_linking = li.li_category_linking
 left join product_target pt on pt.product_linking = li.li_product_linking
 
-where li.Reseller in ('RUH Project X Stock', 'DMM Project X Stock') and li.order_type != "PICKED_ORDER" --and li.Product = 'Rose Athena'
+where li.Reseller in ('RUH Project X Stock') and li.order_type != "PICKED_ORDER" --and li.Product = 'Rose Athena'
 group by 1, 2 , 3, 4, 5, 6
 
 -- )
 -- select count(*)
--- from data
+-- from data 
+-- 'DMM Project X Stock'
