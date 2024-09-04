@@ -38,6 +38,7 @@ product_target as(
 -- , data as (
 select li.Product, 
        li.li_category_linking,
+       li.product_category,
        li.warehouse,
        li.product_color,
        li.product_subcategory as product_main_group,
@@ -92,7 +93,7 @@ left join category_target ct on ct.category_linking = li.li_category_linking
 left join product_target pt on pt.product_linking = li.li_product_linking
 
 where li.Reseller in ('RUH Project X Stock') and li.order_type != "PICKED_ORDER" --and li.Product = 'Rose Athena'
-group by 1, 2 , 3, 4, 5, 6
+group by 1, 2 , 3, 4, 5, 6,7
 
 -- )
 -- select count(*)
