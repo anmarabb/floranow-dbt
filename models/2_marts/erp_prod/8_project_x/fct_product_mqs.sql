@@ -1,6 +1,6 @@
 select Product,
        product_color,
-       CONCAT(coalesce(Product,''), coalesce(product_color,'')) as product_linking,
+       CONCAT(coalesce(Product,''), coalesce(lower(product_color),'')) as product_linking,
        MQS
        
 
