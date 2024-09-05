@@ -322,8 +322,8 @@ line_item_state,
 online_item,
 stock_type,
 current_timestamp() as insertion_timestamp, 
-number
-
+number,
+financial_administration
 
 
 from {{ref('int_products')}} as p 
