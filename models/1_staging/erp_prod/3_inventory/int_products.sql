@@ -451,7 +451,7 @@ case when   st.stock_status = 'visible'
             and p.visible = true 
             then true else null 
             end as online_item,
-
+li.financial_administration
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
