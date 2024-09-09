@@ -44,6 +44,8 @@ with invoices_daily as (
       COALESCE(SUM(remaining_value), 0) as inventory_value,
 
       from {{ref("fct_products")}} p
+      where report_filter is not null and stock_model_details in ('Reselling', 'Internal - Riyadh Project X', 'Internal - Dammam Project X', 'Commission Based - Astra Express')
+
       group by 1, 2, 3
 
      )
