@@ -51,24 +51,20 @@ with
                     sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
                     sum(ii.quantity) as i_sold_quantity,
 
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30d_sold_quantity,
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 7 THEN li.quantity ELSE 0 END) as last_7d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 7 THEN li.quantity ELSE 0 END) as last_7d_sold_quantity,
                     
                     --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
-                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) >= 0 THEN li.quantity ELSE 0 END) as last_year_30d_sold_quantity,
-                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) >= 0 THEN li.quantity ELSE 0 END) as last_year_7d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN li.quantity ELSE 0 END) as last_year_30d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN li.quantity ELSE 0 END) as last_year_7d_sold_quantity,
                     
-                    SUM(CASE WHEN DATE_DIFF(case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end,date_sub(current_date() , interval 1 year), DAY) > 0 THEN li.quantity ELSE 0 END) as last_year_next_7d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(li.mod_delivery_date, date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(li.mod_delivery_date,date_sub(current_date() , interval 1 year), DAY) > 0 THEN li.quantity ELSE 0 END) as last_year_next_7d_sold_quantity,
 
 
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 THEN ii.quantity ELSE 0 END) as i_last_30d_sold_quantity,
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 7 THEN ii.quantity ELSE 0 END) as i_last_7d_sold_quantity,        
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 30 THEN ii.quantity ELSE 0 END) as i_last_30d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 7 THEN ii.quantity ELSE 0 END) as i_last_7d_sold_quantity,        
                     --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
-                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) >= 0 THEN ii.quantity ELSE 0 END) as i_last_year_30d_sold_quantity,
 
-                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, DAY) >= 0 THEN ii.quantity ELSE 0 END) as i_last_year_7d_sold_quantity,
-                    
-                    SUM(CASE WHEN DATE_DIFF(case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end, date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end,date_sub(current_date() , interval 1 year), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_next_7d_sold_quantity
 
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
@@ -281,9 +277,9 @@ with
 
             lis.i_last_30d_sold_quantity,
             lis.i_last_7d_sold_quantity,
-            lis.i_last_year_30d_sold_quantity,
-            lis.i_last_year_7d_sold_quantity,
-            lis.i_last_year_next_7d_sold_quantity,
+            -- lis.i_last_year_30d_sold_quantity,
+            -- lis.i_last_year_7d_sold_quantity,
+            -- lis.i_last_year_next_7d_sold_quantity,
 
             lis.customer_ordered,
 
