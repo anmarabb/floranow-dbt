@@ -239,8 +239,8 @@ select_printed_date,
 
 transaction_phase_segments,
 
-current_timestamp() as insertion_timestamp 
-
+current_timestamp() as insertion_timestamp,
+CONCAT(coalesce(financial_administration,''), coalesce(account_manager,''), coalesce(city,''), coalesce(user_category,''), coalesce(warehouse,'')) as budget_link
 
 from {{ref('int_invoices')}} as i
 )
