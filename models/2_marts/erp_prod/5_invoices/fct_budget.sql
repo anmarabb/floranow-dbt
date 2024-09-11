@@ -11,6 +11,7 @@ select
     
     b.mtd_budget,
     b.current_month_budget,
+    CONCAT(coalesce(financial_administration,''), coalesce(account_manager,''), coalesce(city,''), coalesce(user_category,''), coalesce(warehouse,'')) as budget_link
 
 FROM  {{ref('int_budget')}} as b   
 
