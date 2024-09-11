@@ -130,7 +130,7 @@ current_timestamp() as ingestion_timestamp
  
 from source as i 
 
-where i.deleted_at IS NULL and date(created_at) >= '2023-06-01'
+where i.deleted_at IS NULL --and date(created_at) >= '2023-06-01'
 )
 select *
 from data where row_num = 1
