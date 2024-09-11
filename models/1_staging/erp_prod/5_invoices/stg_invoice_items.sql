@@ -82,4 +82,4 @@ select distinct
 current_timestamp() as ingestion_timestamp,
 
 from source as ii
-where ii.deleted_at is null and  ii.__hevo__marked_deleted is not true and date(ii.created_at) >='2023-06-01'
+where ii.deleted_at is null and  ii.__hevo__marked_deleted is not true --and date(ii.created_at) >='2023-06-01'
