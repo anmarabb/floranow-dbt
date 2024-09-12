@@ -264,6 +264,8 @@ parent_id_check,
 
 
 DATE_DIFF(date(p.departure_date), date(p.order_date), DAY) AS lead_time,
+case when extract(year from p.departure_date) = 2023 then DATE_DIFF(date(p.departure_date), date(p.order_date), DAY) end AS lead_time_2023,
+
 PARSE_DATE('%Y-%m-%d', CONCAT(FORMAT_TIMESTAMP('%Y-%m', p.departure_date), '-01')) as year_month_departure_date,
 
 
