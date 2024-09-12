@@ -170,9 +170,20 @@ case
     last_30d_sold_quantity,
     last_7d_sold_quantity,
     last_year_30d_sold_quantity,
+    last_year_7d_sold_quantity,
+    last_year_next_7d_sold_quantity,
     child_incident_quantity,
     item_sold,
     customer_ordered,
+
+
+--line_items_inv_sold
+    i_sold_quantity,
+    i_last_30d_sold_quantity,
+    i_last_7d_sold_quantity,
+    i_last_year_30d_sold_quantity,
+    i_last_year_7d_sold_quantity,
+    i_last_year_next_7d_sold_quantity,
     
 
 --product_incidents
