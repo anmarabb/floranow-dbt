@@ -9,7 +9,8 @@ with monthly_demand as (
                         year_month_departure_date,
                         count(distinct year_month_departure_date) over (partition by Product, warehouse)  as months_count,
                         sum(sold_quantity) as total_demand_for_month_supplier, -- Total demand for each month and origin
-                        sum(case when extract(year from year_month_departure_date) = extract(year from current_date) -1  then sold_quantity end) as total_demand_for_month_last_year_supplier,
+                        sum(i_sold_quantity) as i_total_demand_for_month_supplier,
+                        sum(case when extract(year from year_month_departure_date) = extract(year from current_date) -1  then i_sold_quantity end) as i_total_demand_for_month_last_year_supplier,
                        -- COALESCE(sum(sold_quantity),0) as monthly_demand,
                         avg(lead_time)/30.5 as month_lead_time,
                         avg(lead_time) as lead_time,
@@ -31,7 +32,8 @@ with monthly_demand as (
                         warehouse,
                         Supplier,
                         sum(total_demand_for_month_supplier) as total_demand_by_supplier, -- Total demand per origin
-                        sum(total_demand_for_month_last_year_supplier) as total_demand_by_supplier_last_year,
+                        sum(i_total_demand_for_month_supplier) as i_total_demand_by_supplier,
+                        sum(i_total_demand_for_month_last_year_supplier) as i_total_demand_by_supplier_last_year,
                         months_count
                     from anmar
                     group by Product, warehouse, Supplier, months_count
@@ -44,7 +46,8 @@ with monthly_demand as (
                         Supplier,
                         --Supplier,
                        SAFE_DIVIDE(total_demand_by_supplier,months_count) as avg_monthly_demand, -- Calculate average monthly demand per origin
-                       SAFE_DIVIDE(total_demand_by_supplier_last_year,12) as avg_monthly_demand_last_year
+                       SAFE_DIVIDE(i_total_demand_by_supplier,months_count) as i_avg_monthly_demand,
+                       SAFE_DIVIDE(i_total_demand_by_supplier_last_year,12) as i_avg_monthly_demand_last_year
 
 
                         --stddev_pop (md.monthly_demand) as std_dev_monthly_demand,
@@ -79,7 +82,8 @@ p.Supplier,
 max(p.Origin) as Origin,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
-avg(md.avg_monthly_demand_last_year) as avg_monthly_demand_last_year,
+avg(md.i_avg_monthly_demand) as i_avg_monthly_demand,
+avg(md.i_avg_monthly_demand_last_year) as i_avg_monthly_demand_last_year,
 --max(md.std_dev_monthly_demand) as std_dev_monthly_demand,
 
 --max(sqrt_avg_lead_time_per_month) as sqrt_avg_lead_time_per_month,
