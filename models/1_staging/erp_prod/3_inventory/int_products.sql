@@ -49,26 +49,22 @@ with
                     count(distinct li.customer_id) as customer_ordered,
                     sum(li.quantity) as sold_quantity, 
                     sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
-                    sum(ii.quantity) as i_sold_quantity,
+
+
 
                     SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30d_sold_quantity,
                     SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 7 THEN li.quantity ELSE 0 END) as last_7d_sold_quantity,
-                    
                     --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
                     SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN li.quantity ELSE 0 END) as last_year_30d_sold_quantity,
+
                     SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN li.quantity ELSE 0 END) as last_year_7d_sold_quantity,
                     
                     SUM(CASE WHEN DATE_DIFF(li.mod_delivery_date, date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(li.mod_delivery_date,date_sub(current_date() , interval 1 year), DAY) > 0 THEN li.quantity ELSE 0 END) as last_year_next_7d_sold_quantity,
 
 
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 30 THEN ii.quantity ELSE 0 END) as i_last_30d_sold_quantity,
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 7 THEN ii.quantity ELSE 0 END) as i_last_7d_sold_quantity,        
-                    --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
-
-
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
-                    left join {{ ref("fct_invoice_items")}} as ii on ii.line_item_id = li.line_item_id and ii.record_type = 'Invoice - AUTO'
+
                     --where p.product_id=149074
                 group by 1
                 
@@ -97,6 +93,27 @@ with
 
                 where pl.locationable_type = "Product" --and pl.locationable_id = 212559
                 group by pl.locationable_id
+            ),
+ line_items_inv_sold as (
+                select
+                    p.product_id,
+                    sum(ii.quantity) as i_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 30 THEN ii.quantity ELSE 0 END) as i_last_30d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 7 THEN ii.quantity ELSE 0 END) as i_last_7d_sold_quantity,        
+                    --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
+                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN ii.quantity ELSE 0 END) as i_last_year_30d_sold_quantity,
+
+                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN ii.quantity ELSE 0 END) as i_last_year_7d_sold_quantity,
+                    
+                    SUM(CASE WHEN DATE_DIFF(li.mod_delivery_date, date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(li.mod_delivery_date,date_sub(current_date() , interval 1 year), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_next_7d_sold_quantity,
+
+                    from {{ ref('stg_line_items')}} as li
+                    left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
+                    left join {{ ref('fct_invoice_items')}} as ii on ii.line_item_id = li.line_item_id and ii.record_type = 'Invoice - AUTO'
+
+                    --where p.product_id=149074
+                group by 1
+                
             )
 
             
@@ -266,7 +283,6 @@ with
         --line_items_sold
             lis.item_sold,
             lis.sold_quantity,
-            lis.i_sold_quantity,
             lis.child_incident_quantity,
 
             lis.last_30d_sold_quantity,
@@ -275,13 +291,19 @@ with
             lis.last_year_7d_sold_quantity,
             lis.last_year_next_7d_sold_quantity,
 
-            lis.i_last_30d_sold_quantity,
-            lis.i_last_7d_sold_quantity,
-            -- lis.i_last_year_30d_sold_quantity,
-            -- lis.i_last_year_7d_sold_quantity,
-            -- lis.i_last_year_next_7d_sold_quantity,
-
             lis.customer_ordered,
+
+        --line_items_inv_sold
+
+            liis.i_sold_quantity,
+            
+            liis.i_last_30d_sold_quantity,
+            liis.i_last_7d_sold_quantity,
+            liis.i_last_year_30d_sold_quantity,
+            liis.i_last_year_7d_sold_quantity,
+            liis.i_last_year_next_7d_sold_quantity,
+
+            
 
 
         --product_incidents
@@ -504,6 +526,7 @@ li.financial_administration
         left join ordered_quantity as ordered_quantity on ordered_quantity.product_id = p.product_id
 
         left join {{ref('base_warehouses')}} as w on w.warehouse_id = st.warehouse_id
+        left join line_items_inv_sold as liis on liis.product_id = p.product_id
       --  left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
 
 
