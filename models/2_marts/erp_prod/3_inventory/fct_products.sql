@@ -20,6 +20,33 @@
                 FROM CTE
                 
 
+            ),
+
+             requested_orders as(
+                with data as (
+                select 
+                    p.product_id,
+                    p.Product,
+                    p.warehouse,
+                    li.departure_date,
+                    --orr.id,
+                    sum(li.requested_quantity) as requested_quantity,
+                    DENSE_RANK() OVER (PARTITION BY p.warehouse,p.Product ORDER BY li.departure_date) AS departure_rank,
+                    --case when DENSE_RANK() OVER (PARTITION BY p.warehouse,p.Product ORDER BY orr.departure_date) = 1 then "right" end as norhan
+                from `dbt_prod_dwh.fct_products` p
+                left join `dbt_prod_dwh.fct_order_items` li on p.line_item_id = li.line_item_id
+                -- left join `dbt_prod_stg.stg_order_requests` orr on orr.id = li.order_request_id
+                WHERE li.departure_date >= CURRENT_DATE() -- and p.Product = 'Alstroemeria Elegance'  --and orr.departure_date is not null
+                group by 1, 2, 3, 4--, 5
+                            )
+                select *,
+                case 
+                    when departure_rank = 1 then 'first_departure'
+                    when departure_rank = 2 then 'second_departure'
+                    else null end as departure_request_rank,
+          
+                FROM data
+
             )
                 
             
@@ -154,7 +181,7 @@ case
         delivery_date,    --from line item
   
     --fct
-    requested_quantity,
+    p.requested_quantity,
     ordered_quantity,
         last_30d_ordered_quantity,
     received_quantity,
@@ -336,11 +363,13 @@ online_item,
 stock_type,
 current_timestamp() as insertion_timestamp, 
 number,
-financial_administration
+financial_administration,
 
+case when ro.departure_request_rank ='first_departure' then ro.requested_quantity else 0 end as first_departure_requested_quantity,
+case when ro.departure_request_rank ='first_departure' then ro.departure_date else null end as first_request_departure_date,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
-
+left join requested_orders as ro on ro.product_id = p.product_id
 --where p.product_id = 268380
 --where shipment_id =30798
