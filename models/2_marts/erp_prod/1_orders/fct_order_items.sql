@@ -696,7 +696,7 @@ case when product_color in ('colour unknown', null) then    (SELECT color
              limit 1) else product_color end as product_color,
 
 current_timestamp() as insertion_timestamp, 
-
+order_request_id
 
 from {{ref('int_line_items')}} as li 
 
