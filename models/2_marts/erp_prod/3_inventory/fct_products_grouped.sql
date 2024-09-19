@@ -182,7 +182,12 @@ DATE_DIFF(max(date(ow.current_departure_date)), CURRENT_DATE(), DAY) AS dynamic_
 
 avg(sold_quantity_last_year_month) as sold_quantity_this_month_last_year_month,
 
-avg(sold_quantity_last_year_day) as sold_quantity_today_last_year
+avg(sold_quantity_last_year_day) as sold_quantity_today_last_year,
+
+max(first_request_departure_date) as first_request_departure_date,
+
+sum(first_departure_requested_quantity) as first_departure_requested_quantity,
+
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
