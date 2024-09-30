@@ -5,7 +5,7 @@ With source as (
 
 )
 select 
-
+                null as static,
             --PK
                 id as product_id,
             --FK
