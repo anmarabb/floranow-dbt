@@ -307,6 +307,7 @@ with
             when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) >= 0.35 then 'Healthy' end as Flag2,
 
             current_timestamp() as insertion_timestamp,
+            city,
 
         from {{ ref("int_invoice_items") }} as ii
     )
