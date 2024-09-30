@@ -191,7 +191,7 @@ end as stock_model,
 
 
 li.order_source,
-
+customer.city,
 
 
 
