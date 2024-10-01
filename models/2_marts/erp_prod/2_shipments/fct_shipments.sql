@@ -27,13 +27,22 @@ select
         
 
     --fct
-        supplier_shipment_total_quantity,
-        supplier_shipment_total_received_quantity,
-        supplier_shipment_total_missing_quantity,
-        supplier_shipment_total_damaged_quantity,
+        -- supplier_shipment_total_quantity,
+        -- supplier_shipment_total_received_quantity,
+        -- supplier_shipment_total_missing_quantity,
+        -- supplier_shipment_total_damaged_quantity,
         shipping_boxes_count,
         warehousing_boxes_count,
+        -- total_fob,
+
+        total_quantity,
         total_fob,
+        missing_quantity,
+        missing_fob,
+        damaged_quantity,
+        damaged_fob,
+        received_quantity,
+        received_fob,
 
 
 
