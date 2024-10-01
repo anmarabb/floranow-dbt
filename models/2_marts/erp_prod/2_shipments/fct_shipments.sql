@@ -7,6 +7,7 @@ select
 
 --Supplier Shipments
     --dim
+        invoice_amount,
         Shipment,
         shipment_id,
         shipment_link,
