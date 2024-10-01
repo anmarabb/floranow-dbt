@@ -43,6 +43,7 @@ select
         damaged_fob,
         received_quantity,
         received_fob,
+        requested_quantity,
 
 
 
