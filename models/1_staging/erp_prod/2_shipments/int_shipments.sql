@@ -1,15 +1,16 @@
 with shipment_details as (
     select li.shipment_id,
-           SUM(li.quantity - li.splitted_quantity - COALESCE(temp_pi.quantity, 0)) AS total_quantity,
-           SUM((li.quantity - li.splitted_quantity - COALESCE(temp_pi.quantity, 0)) * li.raw_unit_fob_price) AS total_fob,
+           SUM(li.ordered_quantity - li.splitted_quantity - COALESCE(temp_pi.quantity, 0)) AS total_quantity,
+           SUM((li.ordered_quantity - li.splitted_quantity - COALESCE(temp_pi.quantity, 0)) * li.raw_unit_fob_price) AS total_fob,
            COALESCE(SUM(pli.missing_quantity), 0) AS missing_quantity,
            SUM(COALESCE(pli.missing_quantity, 0) * li.raw_unit_fob_price) AS missing_fob,
            COALESCE(SUM(pli.damaged_quantity), 0) AS damaged_quantity,
            SUM(COALESCE(pli.damaged_quantity, 0) * li.raw_unit_fob_price) AS damaged_fob,
            COALESCE(SUM(pli.fulfilled_quantity), 0) AS received_quantity,
-           SUM(COALESCE(pli.fulfilled_quantity, 0) * li.raw_unit_fob_price) AS received_fob
+           SUM(COALESCE(pli.fulfilled_quantity, 0) * li.raw_unit_fob_price) AS received_fob,
+           SUM(COALESCE(li.requested_quantity, 0)) AS requested_quantity,
 
-    from {{ref('stg_line_items')}} li
+    from {{ref('int_line_items')}} li
     left join {{ref('stg_package_line_items')}} pli on li.line_item_id = pli.line_item_id
     left join
     (
@@ -83,7 +84,7 @@ case
     sd.damaged_fob,
     sd.received_quantity,
     sd.received_fob,
-
+    sd.requested_quantity,
  
 
     current_timestamp() as ingestion_timestamp,
