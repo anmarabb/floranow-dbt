@@ -48,7 +48,7 @@ select li.Product,
       --  CAST(200 + RAND() * (1000 - 200) AS INT64) AS random_value,
       --  200 + CAST(FLOOR(800 * (ABS(MOD(FARM_FINGERPRINT(CAST(li.Product AS STRING)), 10000)) / 10000.0)) AS INT64) AS weekly_demand,
        
-       ceil(round(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),2)) as daily_demand,
+       ceil(round(sum(ii.last_month_sold_quantity)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),1),2)) as daily_demand,
        ceil(sum(ii.last_month_sold_quantity)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * 7, 1)) as weekly_demand,
        
        min(ct.MQS)/coalesce(count(*) OVER (PARTITION BY li.li_category_linking),1) as category_weekly_target,
@@ -72,12 +72,12 @@ select li.Product,
 
        sum(remaining_qty_X_FN) as sullay_stock,
        date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) as days_to_next_departure,
-       sum(ii.last_month_sold_quantity)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - min(ct.MQS)/count(*) OVER (PARTITION BY li.li_category_linking)*2/7,1) as category_sullay_target,
-       sum(ii.last_month_sold_quantity)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - min(pt.MQS)/count(*) OVER (PARTITION BY li.li_product_linking) *2/7,1) as product_sullay_target,
+       sum(ii.last_month_sold_quantity)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),1) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - min(ct.MQS)/coalesce(count(*) OVER (PARTITION BY li.li_category_linking),1)*2/7 as category_sullay_target,
+       sum(ii.last_month_sold_quantity)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),1) * date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) - min(pt.MQS)/coalesce(count(*) OVER (PARTITION BY li.li_product_linking),1) *2/7 as product_sullay_target,
 
        sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN) as total_qty, 
-       floor((sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN))/coalesce(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),1)) as stock_enough_for,
-       floor((sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN))/coalesce(sum(ii.last_month_sold_quantity)/date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),1)) - date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day) as stock_for,
+       floor((sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN))/coalesce(sum(ii.last_month_sold_quantity),1)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),1)) as stock_enough_for,
+       floor((sum(remaining_qty_A1_X) + sum(remaining_qty_X_FN))/coalesce(sum(ii.last_month_sold_quantity),1)/coalesce(date_diff(date_trunc(current_date(), month), date_sub(date_trunc(current_date(), month), interval 1 month), day),1) - date_diff(DATE_ADD(CURRENT_DATE(), INTERVAL MOD(5 - EXTRACT(DAYOFWEEK FROM CURRENT_DATE()) + 7, 7) DAY), current_date(), day)) as stock_for,
 
 
 from {{ref('fct_order_items')}} as li
