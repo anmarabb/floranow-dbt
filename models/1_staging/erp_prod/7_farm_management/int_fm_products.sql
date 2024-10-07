@@ -1,13 +1,3 @@
-with products as (
-  select offer_id,
-
-         sum(in_stock_quantity) as in_stock_quantity
-  from {{ref("stg_line_items")}} li
-  left join {{ref("fct_products")}} p on li.line_item_id = p.line_item_id 
-  where feed_source_id = 408 
-  group by 1
-)
-
 /*
 
 with inbound_stock_transactions as (
@@ -74,7 +64,7 @@ when p.sub_group = 'Gerbera Mini' then 'Gerbera'
 when p.sub_group is null then p.main_group
 else p.sub_group
 end as sub_group,
-pr.in_stock_quantity,
+
 
 from   {{ ref('stg_fm_products') }} as p
-left join products pr on p.astra_barcode = pr.offer_id
+
