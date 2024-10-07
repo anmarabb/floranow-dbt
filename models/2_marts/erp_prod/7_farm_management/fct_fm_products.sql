@@ -30,5 +30,6 @@ CASE
     WHEN p.sub_group IN ('Antirrhinum', 'Carnation', 'Dianthus barbatus', 'Gypsophila', 'Rose', 'Spray Rose', 'Celosia', 'Greeneries') THEN 'Out Of Contract'
     ELSE 'Unknown'
   END AS contract_status,
+  'KSA National Warehouse' as warehouse
 
 from   {{ ref('int_fm_products') }} as p
