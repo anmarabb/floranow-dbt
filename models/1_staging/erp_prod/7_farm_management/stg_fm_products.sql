@@ -116,5 +116,5 @@ pr.in_stock_quantity,
 
 
 from source as p
-left join products pr on p.astra_barcode = pr.offer_id
+left join products pr on p.number = pr.offer_id
 where p.__hevo__marked_deleted is false
