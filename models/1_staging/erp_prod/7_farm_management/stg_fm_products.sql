@@ -1,6 +1,15 @@
 With source as (
  select * from {{ source(var('erp_source'), 'fm_products') }}
 )
+, products as (
+  select offer_id,
+
+         sum(in_stock_quantity) as in_stock_quantity
+  from `dbt_prod_stg.stg_line_items` li
+  left join `dbt_prod_dwh.fct_products` p on li.line_item_id = p.line_item_id 
+  where feed_source_id = 408 
+  group by 1
+)
 select 
  
  
@@ -103,9 +112,9 @@ case when pn.p2 in ('S22') then s2_value else null end as bud_count,
 current_timestamp() as ingestion_timestamp,
  
 
-
+pr.in_stock_quantity,
 
 
 from source as p
-
+left join products pr on p.astra_barcode = pr.offer_id
 where p.__hevo__marked_deleted is false
