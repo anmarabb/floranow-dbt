@@ -23,7 +23,7 @@ select
     p.created_at,
     p.astra_barcode,
     p.fm_product_link,
-    p.in_stock_quantity,
+
 
 CASE
     WHEN p.sub_group IN ('Alstroemeria', 'Aster', 'Cycas', 'Eucalyptus', 'Eustoma', 'Liatris', 'Gerbera', 'Trachelium', 'Sunflower', 'Statice', 'Solidago', 'Ruscus', 'Lily Or Double', 'Lily Or', 'Lily LA', 'Chrysanthemum Santini', 'Chrysanthemum Single', 'Chrysanthemum Spray') THEN 'Contract'
