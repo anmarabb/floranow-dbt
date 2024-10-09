@@ -60,6 +60,11 @@ case
   else null 
   end as report_filter,
 
+
+case 
+  when Stock = 'Inventory Stock' and live_stock = 'Live Stock' and stock_model in ('Reselling', 'Commission Based') and flag_1 in ('scaned_flag', 'scaned_good') then in_stock_quantity 
+  end as current_in_stock_quantity,
+
 --Products
     --dim
         product_name as Product,
