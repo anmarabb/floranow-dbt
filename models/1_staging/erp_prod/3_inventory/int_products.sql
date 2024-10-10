@@ -98,15 +98,14 @@ with
                 select
                     p.product_id,
                     sum(ii.quantity) as i_sold_quantity,
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 30 THEN ii.quantity ELSE 0 END) as i_last_30d_sold_quantity,
-                    SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.mod_delivery_date, DAY) <= 7 THEN ii.quantity ELSE 0 END) as i_last_7d_sold_quantity,        
-                    --SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), li.order_date, DAY) <= 30 THEN li.quantity ELSE 0 END) as last_30_days_quantity
-                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN ii.quantity ELSE 0 END) as i_last_year_30d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(ii.invoice_header_printed_at), DAY) <= 30 THEN ii.quantity ELSE 0 END) as i_last_30d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(ii.invoice_header_printed_at), DAY) <= 7 THEN ii.quantity ELSE 0 END) as i_last_7d_sold_quantity,        
 
-                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), li.mod_delivery_date, DAY) >= 0 THEN ii.quantity ELSE 0 END) as i_last_year_7d_sold_quantity,
+                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), date(ii.invoice_header_printed_at), DAY) <= 30 and DATE_DIFF(date_sub(current_date() , interval 1 year), date(ii.invoice_header_printed_at), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_30d_sold_quantity,
+
+                    SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), date(ii.invoice_header_printed_at), DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), date(ii.invoice_header_printed_at), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_7d_sold_quantity,
                     
-                    SUM(CASE WHEN DATE_DIFF(li.mod_delivery_date, date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(li.mod_delivery_date,date_sub(current_date() , interval 1 year), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_next_7d_sold_quantity,
-
+                    SUM(CASE WHEN DATE_DIFF(date(ii.invoice_header_printed_at), date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(date(ii.invoice_header_printed_at),date_sub(current_date() , interval 1 year), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_next_7d_sold_quantity,
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
                     left join {{ ref('fct_invoice_items')}} as ii on ii.line_item_id = li.line_item_id and ii.record_type = 'Invoice - AUTO'
