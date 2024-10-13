@@ -35,15 +35,7 @@ select
         warehousing_boxes_count,
         -- total_fob,
 
-        total_quantity,
-        total_fob,
-        missing_quantity,
-        missing_fob,
-        damaged_quantity,
-        damaged_fob,
-        received_quantity,
-        received_fob,
-        requested_quantity,
+
 
 
 
@@ -81,20 +73,23 @@ select
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        total_quantity,
     
+        damaged_packing_quantity,
+        received_quantity,
+        requested_quantity,
+        packed_quantity,
+
+
+        missing_packing_quantity,
+        incident_quantity_receiving_stage,
+        missing_quantity_receiving_stage,
+        damaged_quantity_receiving_stage,
+        extra_quantity_receiving_stage,
+
+        packing_additional_quantity,
+
+        extra_packing_stage,
 
 
 
