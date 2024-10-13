@@ -38,7 +38,7 @@ WITH shipment_details as (
 
          SUM(case when ad.creation_stage = 'PACKING' then ad.quantity end) AS packing_additional_quantity,
 
-         SUM(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity end) as extra_packing_stage,
+         SUM(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity end) as extra_packing_quantity,
 
   FROM {{ref("int_line_items")}} li
   LEFT JOIN package_line_items pli on li.line_item_id = pli.line_item_id
