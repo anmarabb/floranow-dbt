@@ -110,7 +110,7 @@ case
 
     sd.packing_additional_quantity,
 
-    sd.extra_packing_stage,
+    sd.extra_packing_quantity,
  
 
     current_timestamp() as ingestion_timestamp,
