@@ -1,32 +1,50 @@
-with shipment_details as (
-    select li.shipment_id,
-           SUM(li.ordered_quantity - li.splitted_quantity - COALESCE(temp_pi.quantity, 0)) AS total_quantity,
-           SUM((li.ordered_quantity - li.splitted_quantity - COALESCE(temp_pi.quantity, 0)) * li.raw_unit_fob_price) AS total_fob,
-           COALESCE(SUM(pli.missing_quantity), 0) AS missing_quantity,
-           SUM(COALESCE(pli.missing_quantity, 0) * li.raw_unit_fob_price) AS missing_fob,
-           COALESCE(SUM(pli.damaged_quantity), 0) AS damaged_quantity,
-           SUM(COALESCE(pli.damaged_quantity, 0) * li.raw_unit_fob_price) AS damaged_fob,
-           COALESCE(SUM(pli.fulfilled_quantity), 0) AS received_quantity,
-           SUM(COALESCE(pli.fulfilled_quantity, 0) * li.raw_unit_fob_price) AS received_fob,
-           SUM(COALESCE(li.requested_quantity, 0)) AS requested_quantity,
+WITH shipment_details as (
+  with package_line_items as (
+      SELECT line_item_id,
+             sum(quantity) as quantity,
+             sum(fulfilled_quantity) as fulfilled_quantity,
+             sum(damaged_quantity) as damaged_quantity,
+      FROM {{ref("stg_package_line_items")}}
+      GROUP BY 1
+    ), 
+        product_incident as (
+        SELECT pi.line_item_id,
+               sum(case when pi.stage = 'BEFORE_SUPPLY' then pi.quantity end) AS quantity,
+               sum(case when pi.stage = 'PACKING' and pi.incident_type = 'MISSING' then pi.quantity end) AS missing_packing_quantity,
+               sum(case when pi.stage = 'RECEIVING' and after_sold = False then pi.quantity end) AS incident_quantity_receiving_stage,
+               sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'MISSING' then pi.quantity end) AS missing_quantity_receiving_stage,
+               sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'DAMAGED' then pi.quantity end) AS damaged_quantity_receiving_stage,
+               sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'EXTRA' then pi.quantity end) AS extra_quantity_receiving_stage,
+        FROM {{ref("stg_product_incidents")}} pi
 
-    from {{ref('int_line_items')}} li
-    left join {{ref('stg_package_line_items')}} pli on li.line_item_id = pli.line_item_id
-    left join
-    (
-        SELECT
-            SUM(pi.quantity) AS quantity,
-            pi.line_item_id
-        FROM
-            {{ref("stg_product_incidents")}} pi
-        WHERE
-            pi.stage = 'BEFORE_SUPPLY'
-        GROUP BY
-            pi.line_item_id
-    ) AS temp_pi ON temp_pi.line_item_id = li.line_item_id
+        GROUP BY pi.line_item_id
+    ) 
     
-    group by shipment_id
 
+  SELECT li.shipment_id,
+         SUM(li.ordered_quantity - li.splitted_quantity - COALESCE(temp_pi.quantity, 0)) AS total_quantity,
+    
+         COALESCE(SUM(pli.damaged_quantity), 0) AS damaged_packing_quantity,
+         COALESCE(SUM(pli.fulfilled_quantity), 0) AS received_quantity,
+         SUM(COALESCE(li.requested_quantity, 0)) AS requested_quantity,
+         COALESCE(SUM(pli.quantity), 0) AS packed_quantity,
+
+
+         SUM(COALESCE(temp_pi.missing_packing_quantity, 0)) AS missing_packing_quantity,
+         SUM(COALESCE(temp_pi.incident_quantity_receiving_stage, 0)) AS incident_quantity_receiving_stage,
+         SUM(COALESCE(temp_pi.missing_quantity_receiving_stage, 0)) AS missing_quantity_receiving_stage,
+         SUM(COALESCE(temp_pi.damaged_quantity_receiving_stage, 0)) AS damaged_quantity_receiving_stage,
+         SUM(COALESCE(temp_pi.extra_quantity_receiving_stage, 0)) AS extra_quantity_receiving_stage,
+
+         SUM(case when ad.creation_stage = 'PACKING' then ad.quantity end) AS packing_additional_quantity,
+
+         SUM(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity end) as extra_packing_stage,
+
+  FROM {{ref("int_line_items")}} li
+  LEFT JOIN package_line_items pli on li.line_item_id = pli.line_item_id
+  LEFT JOIN {{ref("stg_additional_items_reports")}} ad on ad.line_item_id=li.line_item_id
+  LEFT JOIN product_incident temp_pi on  li.line_item_id = temp_pi.line_item_id 
+  GROUP BY shipment_id
 )
     
  select 
@@ -77,14 +95,22 @@ case
 
  
     sd.total_quantity,
-    sd.total_fob,
-    sd.missing_quantity,
-    sd.missing_fob,
-    sd.damaged_quantity,
-    sd.damaged_fob,
+    
+    sd.damaged_packing_quantity,
     sd.received_quantity,
-    sd.received_fob,
     sd.requested_quantity,
+    sd.packed_quantity,
+
+
+    sd.missing_packing_quantity,
+    sd.incident_quantity_receiving_stage,
+    sd.missing_quantity_receiving_stage,
+    sd.damaged_quantity_receiving_stage,
+    sd.extra_quantity_receiving_stage,
+
+    sd.packing_additional_quantity,
+
+    sd.extra_packing_stage,
  
 
     current_timestamp() as ingestion_timestamp,
