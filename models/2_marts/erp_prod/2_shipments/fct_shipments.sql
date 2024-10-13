@@ -89,7 +89,7 @@ select
 
         packing_additional_quantity,
 
-        extra_packing_stage,
+        extra_packing_quantity,
 
 
 
