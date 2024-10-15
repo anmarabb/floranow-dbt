@@ -192,6 +192,7 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
 
    -- sh.Supplier as shipment_Supplier,
     lis.supplier_name as raw_supplier,
+    lis.supplier_region as raw_supplier_region,
 
 --order 
     pli.order_type as parent_order_type,
