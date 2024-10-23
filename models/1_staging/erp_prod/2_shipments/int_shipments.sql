@@ -27,7 +27,7 @@ WITH shipment_details as (
          COALESCE(SUM(pli.damaged_quantity), 0) AS damaged_packing_quantity,
          COALESCE(SUM(pli.fulfilled_quantity), 0) AS received_quantity,
          SUM(COALESCE(li.requested_quantity, 0)) AS requested_quantity,
-         COALESCE(SUM(pli.quantity), 0) AS packed_quantity,
+         SUM(CASE WHEN pli.quantity > 0 THEN COALESCE(pli.quantity, 0) - COALESCE(temp_pi.missing_packing_quantity, 0) END) AS packed_quantity,
 
 
          SUM(COALESCE(temp_pi.missing_packing_quantity, 0)) AS missing_packing_quantity,
@@ -36,9 +36,9 @@ WITH shipment_details as (
          SUM(COALESCE(temp_pi.damaged_quantity_receiving_stage, 0)) AS damaged_quantity_receiving_stage,
          SUM(COALESCE(temp_pi.extra_quantity_receiving_stage, 0)) AS extra_quantity_receiving_stage,
 
-         SUM(case when ad.creation_stage = 'PACKING' then ad.quantity end) AS packing_additional_quantity,
+         SUM(case when ad.creation_stage = 'PACKING' then ad.quantity END) AS packing_additional_quantity,
 
-         SUM(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity end) as extra_packing_quantity,
+         SUM(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END) as extra_packing_quantity,
 
   FROM {{ref("int_line_items")}} li
   LEFT JOIN package_line_items pli on li.line_item_id = pli.line_item_id
