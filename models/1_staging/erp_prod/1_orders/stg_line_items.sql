@@ -47,7 +47,8 @@ With source as
 
 
                 li.source_invoice_id, --Referenced to invoices, Invoice related to the line item before cancel or move line item’s delivery date, related to cancel order and move line item
-
+                
+                li.import_sheet_id,
             --dim
                 --date
                                     -- we need received_at and fulfilled_at to compalte the cycle.
