@@ -27,7 +27,7 @@ WITH shipment_details as (
          COALESCE(SUM(pli.damaged_quantity), 0) AS damaged_packing_quantity,
          COALESCE(SUM(pli.fulfilled_quantity), 0) AS received_quantity,
          sum(case when li.order_type not in ('ADDITIONAL', 'EXTRA') then COALESCE(li.requested_quantity, 0) end) AS requested_quantity,
-         SUM(CASE WHEN pli.quantity > 0 and li.order_type not in ('ADDITIONAL', 'EXTRA') THEN COALESCE(pli.quantity, 0) - COALESCE(temp_pi.missing_packing_quantity, 0) END) AS packed_quantity,
+         SUM(CASE WHEN pli.quantity > 0 THEN COALESCE(pli.quantity, 0) - COALESCE(temp_pi.missing_packing_quantity, 0) END) AS packed_quantity,
 
 
          SUM(COALESCE(temp_pi.missing_packing_quantity, 0)) AS missing_packing_quantity,
