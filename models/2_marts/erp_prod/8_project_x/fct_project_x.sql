@@ -89,8 +89,9 @@ select li.line_item_id,
        ii.outside_price_without_tax as outside_price_without_tax,
        moved_in_quantity as a1_x_moved_in_qty,
  
-       im.created_by, 
-       im.created_at
+       im.created_by as created_by_id, 
+       im.created_at,
+       u.name as created_by,
 
 
 
@@ -101,5 +102,5 @@ left join pi on pi.line_item_id = li.line_item_id
 left join invoices as ii on ii.parent_line_item_id = li.line_item_id 
 left join stock_movement as sm on sm.product_id = li.product_id
 left join {{ref('stg_import_sheets')}} im on li.import_sheet_id = im.id
-
+left join {{ref('base_users')}} u on im.created_by = u.id
 where li.Reseller in ('RUH Project X Stock', 'DMM Project X Stock') and li.order_type != "PICKED_ORDER"
