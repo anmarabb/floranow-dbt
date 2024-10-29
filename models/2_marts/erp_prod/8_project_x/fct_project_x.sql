@@ -93,8 +93,8 @@ select li.line_item_id,
        im.created_at,
        u.name as created_by,
        li.reseller,
-       concat(li.unit_fob_price) as fob_price,
-       concat(li.total_price_without_tax) as value,
+       li.unit_fob_price as fob_price,
+       li.total_price_without_tax as value,
        li.fob_currency
 
 
