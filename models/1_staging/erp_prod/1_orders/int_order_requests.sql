@@ -1,6 +1,6 @@
 select orr.*,
        s.supplier_name as Supplier,
-       s.supplier_region as origin, 
+       s.supplier_region as Origin, 
        w.warehouse_name as warehouse, 
 
 from {{ref("stg_order_requests")}} as orr
