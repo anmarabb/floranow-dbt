@@ -41,6 +41,7 @@ number,
 created_at,
 updated_at,
 locationable_type,
-product_color
+product_color,
+unit_price
 
 from  {{ref('int_product_locations')}} as pl
