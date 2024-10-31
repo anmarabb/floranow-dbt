@@ -53,7 +53,8 @@ pi.missing_quantity,
 pi.damaged_quantity,
 pi.extra_quantity, 
 pl.locationable_type,
-product_color
+product_color,
+unit_price,
 
 
 from {{ ref('stg_product_locations') }} as pl
