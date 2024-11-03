@@ -308,6 +308,7 @@ with
 
             current_timestamp() as insertion_timestamp,
             city,
+            currency,
 
         from {{ ref("int_invoice_items") }} as ii
     )
