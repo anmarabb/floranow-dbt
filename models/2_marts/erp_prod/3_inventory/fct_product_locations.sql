@@ -43,6 +43,6 @@ updated_at,
 locationable_type,
 product_color,
 unit_price,
-location_remaining_quantity * unit_price as remaining_value,
+location_remaining_quantity * unit_price as location_remaining_value,
 
 from  {{ref('int_product_locations')}} as pl
