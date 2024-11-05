@@ -95,7 +95,8 @@ select li.line_item_id,
        li.reseller,
        li.unit_fob_price as fob_price,
        li.total_price_without_tax as value,
-       li.fob_currency
+       li.fob_currency,
+       li.unit_price,
 
 
 
