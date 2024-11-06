@@ -99,7 +99,7 @@ select li.line_item_id,
        li.unit_price,
        li.source_warehouse,
        li.destination_warehouse,
-
+       li.fulfilled_quantity,
 
 
 from {{ref('fct_order_items')}} as li
