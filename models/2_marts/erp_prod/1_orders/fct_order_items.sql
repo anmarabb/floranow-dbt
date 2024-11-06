@@ -700,6 +700,7 @@ order_request_id,
 import_sheet_id,
 source_warehouse,
 destination_warehouse,
+created_by,
 
 from {{ref('int_line_items')}} as li 
 
