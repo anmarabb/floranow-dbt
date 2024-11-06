@@ -497,8 +497,8 @@ case when li.parent_line_item_id is not null then pli.raw_fob_currency else li.r
 
 fmo.production_date_array,
 
-
-
+origin.warehouse_name as source_warehouse,
+destination.warehouse_name as destination_warehouse,
 
 
 from {{ref('stg_line_items')}} as li
@@ -528,6 +528,8 @@ left join  {{ref('stg_master_shipments')}} as msh on sh.master_shipment_id = msh
 left join {{ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
 left join {{ref('stg_feed_sources')}} as fs on fs.feed_source_id = li.feed_source_id
 left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
+left join {{ref('base_warehouses')}} as origin on origin.warehouse_id = li.origin_warehouse_id
+left join {{ref('base_warehouses')}} as destination on destination.warehouse_id = li.destination_warehouse_id
 left join {{ref('stg_additional_items_reports')}}  as ad on ad.line_item_id=li.line_item_id
 left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
 left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
