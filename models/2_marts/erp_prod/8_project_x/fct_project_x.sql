@@ -100,7 +100,7 @@ select li.line_item_id,
        li.source_warehouse,
        li.destination_warehouse,
        li.fulfilled_quantity,
-       --li.created_by as created_by,
+       li.created_by as created_by,
        
 
 
