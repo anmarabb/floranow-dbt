@@ -265,8 +265,10 @@ delivery_time_window.delivery_time,
     -- It's important to note that these are calculated metrics derived from the URL structure and not directly fetched from the database.
 
         
-        case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end as mod_delivery_date
+        case when li.delivery_date is null and li.order_type in ('IMPORT_INVENTORY', 'EXTRA','MOVEMENT') then date(li.created_at) else li.delivery_date end as mod_delivery_date,
         
+        origin_warehouse_id,
+        destination_warehouse_id,
         
         from {{ source(var('erp_source'), 'line_items') }} as li
          where li.deleted_at is null 
