@@ -89,9 +89,9 @@ select li.line_item_id,
        ii.outside_price_without_tax as outside_price_without_tax,
        moved_in_quantity as a1_x_moved_in_qty,
  
-       im.created_by as created_by_id, 
-       im.created_at,
-       u.name as created_by,
+       im.created_by as import_sheet_created_by_id, 
+       im.created_at as import_sheet_created_at,
+       u.name as import_sheet_created_by,
        li.reseller,
        li.unit_fob_price as fob_price,
        li.total_price_without_tax as value,
@@ -100,6 +100,8 @@ select li.line_item_id,
        li.source_warehouse,
        li.destination_warehouse,
        li.fulfilled_quantity,
+       --li.created_by as created_by,
+       
 
 
 from {{ref('fct_order_items')}} as li
