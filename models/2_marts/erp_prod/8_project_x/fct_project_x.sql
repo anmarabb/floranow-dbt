@@ -97,6 +97,8 @@ select li.line_item_id,
        li.total_price_without_tax as value,
        li.fob_currency,
        li.unit_price,
+       li.source_warehouse,
+       li.destination_warehouse,
 
 
 
