@@ -113,5 +113,5 @@ from source as pi
 where  pi.deleted_at is null
 
 and reported_by != 10988 
-and date(created_at) >= '2023-01-01'
+
 
