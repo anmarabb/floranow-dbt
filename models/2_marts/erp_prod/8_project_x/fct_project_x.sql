@@ -112,4 +112,4 @@ left join invoices as ii on ii.parent_line_item_id = li.line_item_id
 left join stock_movement as sm on sm.product_id = li.product_id
 left join {{ref('stg_import_sheets')}} im on li.import_sheet_id = im.id
 left join {{ref('base_users')}} u on im.created_by = u.id
-where li.Reseller in ('RUH Project X Stock', 'DMM Project X Stock') and li.order_type != "PICKED_ORDER"
+where li.order_type != "PICKED_ORDER"
