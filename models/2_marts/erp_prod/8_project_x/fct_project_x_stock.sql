@@ -28,7 +28,7 @@ select mr.created_at,
        pm.confirmed_quantity,
        pm.warehoused_quantity,
        pm.incident_quantity,
-       concat(mr.product_name, mr.color, w.warehouse_name) as key1,
+       concat(coalesce(mr.product_name, '') , coalesce(mr.color,'') , coalesce(w.warehouse_name, '')) as key1,
        
 
 from {{ref ('stg_item_movement_requests')}} mr
