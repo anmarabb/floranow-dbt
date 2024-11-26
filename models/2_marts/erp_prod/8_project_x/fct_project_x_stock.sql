@@ -22,6 +22,7 @@ with pm as (
 select mr.product_name,
        mr.color,
        --p.Supplier as farm_name,
+       w.warehouse_name as warehouse,
        mr.requested_quantity,
        pm.confirmed_quantity,
        pm.warehoused_quantity,
@@ -29,3 +30,4 @@ select mr.product_name,
 
 from {{ref ('stg_item_movement_requests')}} mr
 left join pm on mr.id = pm.item_movement_request_id
+left join {{ref ('base_warehouses')}} w on mr.destination_warehouse_id = w.warehouse_id
