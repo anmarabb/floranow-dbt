@@ -28,7 +28,8 @@ select mr.created_at,
        pm.confirmed_quantity,
        pm.warehoused_quantity,
        pm.incident_quantity,
-       concat(mr.product_name, mr.color) as key4
+       concat(mr.product_name, mr.color) as key1,
+       
 
 from {{ref ('stg_item_movement_requests')}} mr
 left join pm on mr.id = pm.item_movement_request_id
