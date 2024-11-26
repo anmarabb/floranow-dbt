@@ -19,7 +19,8 @@ with pm as (
         )
 
 
-select mr.product_name,
+select mr.created_at,
+       mr.product_name,
        mr.color,
        --p.Supplier as farm_name,
        w.warehouse_name as warehouse,
