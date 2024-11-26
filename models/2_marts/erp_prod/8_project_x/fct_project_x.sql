@@ -102,7 +102,7 @@ select li.line_item_id,
        li.fulfilled_quantity,
        li.created_by as created_by,
        
-       concat(li.Product, li.product_color, li.destination_warehouse) as key1,
+       concat(coalesce(li.Product,''), coalesce(li.product_color, ''), coalesce(li.destination_warehouse, '')) as key1,
 
 from {{ref('fct_order_items')}} as li
 left join {{ref('fct_products')}} as p on li.line_item_id = p.line_item_id
