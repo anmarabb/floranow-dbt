@@ -20,6 +20,8 @@ select
 
 case when i.invoice_header_type = 'credit note' then -ii.quantity else ii.quantity end  as quantity,
 
+quantity as inventory_quantity,
+
     case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as gross_revenue,
     case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end as credit_note,
 
