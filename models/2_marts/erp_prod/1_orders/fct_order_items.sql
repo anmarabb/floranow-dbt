@@ -706,6 +706,9 @@ created_by,
 auto_gross_revenue,
 auto_credit_note,
 total_cost,
+gross_revenue,
+credit_note,
+delivery_charge_amount,
 
 from {{ref('int_line_items')}} as li 
 
