@@ -63,6 +63,9 @@ invoice_details as(
            sum(case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end) as auto_gross_revenue,
            sum(case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end) as auto_credit_note,
            sum(case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end ) as total_cost,
+           sum(case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as gross_revenue,
+           sum(case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' then ii.price_without_tax else 0 end) as credit_note,
+           sum(delivery_charge_amount) as delivery_charge_amount,
 
     from {{ref("stg_invoice_items")}} ii
     left join {{ref('stg_invoices')}} i on ii.invoice_header_id = i.invoice_header_id
@@ -515,6 +518,9 @@ destination.warehouse_name as destination_warehouse,
 auto_gross_revenue,
 auto_credit_note,
 total_cost,
+gross_revenue,
+credit_note,
+ind.delivery_charge_amount,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
