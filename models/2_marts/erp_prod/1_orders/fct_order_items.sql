@@ -696,11 +696,16 @@ case when product_color in ('colour unknown', null) then    (SELECT color
              limit 1) else product_color end as product_color,
 
 current_timestamp() as insertion_timestamp, 
+
 order_request_id,
 import_sheet_id,
 source_warehouse,
 destination_warehouse,
 created_by,
+
+auto_gross_revenue,
+auto_credit_note,
+total_cost,
 
 from {{ref('int_line_items')}} as li 
 
