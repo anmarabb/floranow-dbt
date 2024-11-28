@@ -56,7 +56,19 @@ PackageLineItems as
         where pli.fulfillment != 'FAILED'
         --where line_item_id = 1215269
         group by 1
-      )
+      ),
+
+invoice_details as(
+    select ii.line_item_id,
+           sum(case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end) as auto_gross_revenue,
+           sum(case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end) as auto_credit_note,
+           sum(case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end ) as total_cost,
+
+    from {{ref("stg_invoice_items")}} ii
+    left join {{ref('stg_invoices')}} i on ii.invoice_header_id = i.invoice_header_id
+    left join {{ref ('stg_line_items')}} li on ii.line_item_id = li.line_item_id
+    group by 1
+)
 
 -- requsted qty, conformed qty, packed qty, recvied qty, invoiced qty.
 
@@ -500,6 +512,9 @@ fmo.production_date_array,
 origin.warehouse_name as source_warehouse,
 destination.warehouse_name as destination_warehouse,
 
+auto_gross_revenue,
+auto_credit_note,
+total_cost,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -537,3 +552,4 @@ left join productIncidents as pi on pi.line_item_id = li.line_item_id
 left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.number
 
 left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
+left join invoice_details ind on ind.line_item_id = li.line_item_id
