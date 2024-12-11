@@ -27,7 +27,7 @@ invoice_items as (
     sum(case when ii.invoice_header_type = 'invoice' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'To Be Scoped' then ii.price_without_tax else 0 end) as tbs_gross_revenue,
     sum(case when ii.invoice_header_type = 'credit note' and ii.invoice_item_status = 'APPROVED' and ii.sales_source = 'To Be Scoped' then ii.price_without_tax else 0 end) as tbs_credit_note,
 
-
+    max(case when product_name like 'consultation fee%' or product_name like 'IT service%' or product_name like 'service fee%' then 'filter out' else 'included'end) as manual_invoicing_filtration
 
     from {{ ref('int_invoice_items') }} as ii 
 
@@ -210,8 +210,9 @@ case
   else null
 end as transaction_phase_segments,
 
+manual_invoicing_filtration,
 
-    current_timestamp() as insertion_timestamp, 
+current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_invoices')}} as i
 left join {{ ref('base_users') }} as printed_by on printed_by.id = i.printed_by_id
