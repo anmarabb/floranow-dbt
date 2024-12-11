@@ -205,6 +205,8 @@ CASE
 
 current_timestamp() as insertion_timestamp, 
 
+case when ii.product_name like 'consultation fee%' or ii.product_name like 'IT service%' or ii.product_name like 'service fee%' then 'filter out' else 'included'end as manual_invoicing_filtration
+
 from {{ ref('stg_invoice_items') }} as ii
 left join {{ ref('stg_invoices') }} as i on i.invoice_header_id = ii.invoice_header_id
 
