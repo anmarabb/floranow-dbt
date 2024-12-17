@@ -38,6 +38,8 @@ with unreconciled_payment as (
         case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 1 then COALESCE(abs(cmi.residual),0) else 0 end as m_1_paymnets,
         case when  date_diff(current_date() , date(cmi.date)  , MONTH) = 2 then COALESCE(abs(cmi.residual),0) else 0 end as m_2_paymnets,
 
+        null as created_by,
+
     from {{ref('fct_move_items')}} as cmi 
     where cmi.entry_type='CREDIT'
     and  round(cmi.residual, 2) != 0 
@@ -93,6 +95,7 @@ CASE WHEN LOWER(Customer) LIKE '%bloomax%' THEN 'Bloomax Customers'  ELSE 'Inclu
 
 --current_timestamp() as insertion_timestamp,
 
+created_by,
 
 from {{ref('int_payments')}} as py
 
