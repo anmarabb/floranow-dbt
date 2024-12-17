@@ -36,7 +36,7 @@ case when (pt.payment_transaction_id is null and cn.invoice_header_id is null an
 case when i.invoice_header_id is null and dmi.source_system = 'ODOO'   then 'ODOO' else i.invoice_number end as invoice_number,
 
 
-pt.payment_received_by as created_by,
+pt.created_by_name as created_by,
 
 
     
@@ -55,7 +55,7 @@ left join {{ ref('stg_move_items') }} as dmi on py.debit_move_item_id = dmi.move
 left join {{ ref('stg_move_items') }} as cmi on py.credit_move_item_id = cmi.move_item_id
 
 
-left join {{ ref('stg_payment_transactions') }} as pt on pt.payment_transaction_id = cmi.documentable_id and cmi.documentable_type = 'PaymentTransaction' and  cmi.entry_type = 'CREDIT'
+left join {{ ref('int_payment_transactions') }} as pt on pt.payment_transaction_id = cmi.documentable_id and cmi.documentable_type = 'PaymentTransaction' and  cmi.entry_type = 'CREDIT'
 
 left join {{ref('stg_invoices')}} as i on dmi.documentable_id = i.invoice_header_id and dmi.documentable_type = 'Invoice' and dmi.entry_type = 'DEBIT'
 left join {{ref('stg_invoices')}} as cn on cmi.documentable_id = cn.invoice_header_id and cmi.documentable_type = 'Invoice' and cmi.entry_type = 'CREDIT'
