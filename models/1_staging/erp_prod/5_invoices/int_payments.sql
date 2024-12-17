@@ -36,7 +36,7 @@ case when (pt.payment_transaction_id is null and cn.invoice_header_id is null an
 case when i.invoice_header_id is null and dmi.source_system = 'ODOO'   then 'ODOO' else i.invoice_number end as invoice_number,
 
 
-
+pt.payment_received_by as created_by,
 
 
     
