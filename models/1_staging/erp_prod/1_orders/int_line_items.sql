@@ -521,7 +521,7 @@ total_cost,
 gross_revenue,
 credit_note,
 ind.delivery_charge_amount,
-ordered_quantity * li.unit_landed_cost as total_cost_mod,
+
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
