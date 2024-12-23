@@ -709,7 +709,7 @@ total_cost,
 gross_revenue,
 credit_note,
 delivery_charge_amount,
-total_cost_mod,
+unit_landed_cost * ordered_quantity as total_cost_mod,
 
 from {{ref('int_line_items')}} as li 
 
