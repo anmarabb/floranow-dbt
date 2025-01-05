@@ -29,6 +29,7 @@ with invoices_daily as (
         FROM {{ ref('fct_product_incidents') }} pi
         where master_report_filter = 'inventory_dmaged' --and date(pi.incident_at) = '2024-01-1'
         --and Supplier != 'ASTRA Farms'
+        and after_sold = false
         GROUP BY 1,2,3
 
         ),
