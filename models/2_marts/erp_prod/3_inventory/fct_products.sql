@@ -381,7 +381,7 @@ damaged_quantity_receiving_stage,
 extra_quantity_receiving_stage,
 total_quantity,
 pli_packed_quantity,
-extra_packing_quantity,
+li_extra_packing_quantity,
 packing_additional_quantity,
 pli_received_quantity,
 
