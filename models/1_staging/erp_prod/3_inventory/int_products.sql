@@ -113,6 +113,9 @@ with
                     SUM(CASE WHEN DATE_DIFF(date_sub(current_date() , interval 1 year), date(ii.invoice_header_printed_at), DAY) <= 7 and DATE_DIFF(date_sub(current_date() , interval 1 year), date(ii.invoice_header_printed_at), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_7d_sold_quantity,
                     
                     SUM(CASE WHEN DATE_DIFF(date(ii.invoice_header_printed_at), date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(date(ii.invoice_header_printed_at),date_sub(current_date() , interval 1 year), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_next_7d_sold_quantity,
+
+                    sum(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then li.quantity END) as li_extra_packing_quantity,
+
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
                     left join {{ ref('fct_invoice_items')}} as ii on ii.line_item_id = li.line_item_id and ii.record_type = 'Invoice - AUTO'
@@ -521,9 +524,10 @@ pi.damaged_quantity_receiving_stage,
 pi.extra_quantity_receiving_stage,
 case when li.order_type not in ('ADDITIONAL', 'EXTRA') then li.ordered_quantity - li.splitted_quantity - COALESCE(pi.quantity, 0) end AS total_quantity,
 CASE WHEN pli.quantity > 0 THEN COALESCE(pli.quantity, 0) - COALESCE(pi.missing_packing_quantity, 0) END AS pli_packed_quantity,
-case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as li_extra_packing_quantity,
+--case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as li_extra_packing_quantity,
 case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_additional_quantity,
 pli.fulfilled_quantity AS pli_received_quantity,
+li_extra_packing_quantity,
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
