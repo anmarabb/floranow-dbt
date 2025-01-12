@@ -521,7 +521,7 @@ pi.damaged_quantity_receiving_stage,
 pi.extra_quantity_receiving_stage,
 case when li.order_type not in ('ADDITIONAL', 'EXTRA') then li.ordered_quantity - li.splitted_quantity - COALESCE(pi.quantity, 0) end AS total_quantity,
 CASE WHEN pli.quantity > 0 THEN COALESCE(pli.quantity, 0) - COALESCE(pi.missing_packing_quantity, 0) END AS pli_packed_quantity,
-case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as extra_packing_quantity,
+case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as li_extra_packing_quantity,
 case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_additional_quantity,
 pli.fulfilled_quantity AS pli_received_quantity,
 
