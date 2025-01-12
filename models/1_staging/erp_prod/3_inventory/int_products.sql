@@ -114,8 +114,6 @@ with
                     
                     SUM(CASE WHEN DATE_DIFF(date(ii.invoice_header_printed_at), date_sub(current_date() , interval 1 year), DAY) <= 7 and DATE_DIFF(date(ii.invoice_header_printed_at),date_sub(current_date() , interval 1 year), DAY) > 0 THEN ii.quantity ELSE 0 END) as i_last_year_next_7d_sold_quantity,
 
-                    sum(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then li.quantity END) as li_extra_packing_quantity,
-
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
                     left join {{ ref('fct_invoice_items')}} as ii on ii.line_item_id = li.line_item_id and ii.record_type = 'Invoice - AUTO'
@@ -131,7 +129,15 @@ with
                 sum(damaged_quantity) as damaged_quantity,
             FROM {{ref("int_package_line_items")}}
             GROUP BY 1
-    )
+    ),
+ line_item_packed as (
+    select line_item_id,
+           sum(case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then li.quantity END) as li_extra_packing_quantity,
+    
+    from {{ref("stg_line_items")}} li
+    group by 1
+
+ )
 
             
             
@@ -527,7 +533,7 @@ CASE WHEN pli.quantity > 0 THEN COALESCE(pli.quantity, 0) - COALESCE(pi.missing_
 --case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as li_extra_packing_quantity,
 case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_additional_quantity,
 pli.fulfilled_quantity AS pli_received_quantity,
-li_extra_packing_quantity,
+py.li_extra_packing_quantity,
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
@@ -562,6 +568,8 @@ li_extra_packing_quantity,
       --  left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
 
         left join package_line_items as pli on li.line_item_id = pli.line_item_id
+
+        left join line_item_packed py on p.line_item_id = py.line_item_id
 
 
     
