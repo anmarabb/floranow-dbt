@@ -372,7 +372,19 @@ financial_administration,
 
 case when ro.departure_request_rank ='first_departure' then ro.requested_quantity else 0 end as first_departure_requested_quantity,
 case when ro.departure_request_rank ='first_departure' then ro.departure_date else null end as first_request_departure_date,
-product_color
+product_color,
+
+missing_packing_quantity,
+incident_quantity_receiving_stage_with_extra,
+missing_quantity_receiving_stage,
+damaged_quantity_receiving_stage,
+extra_quantity_receiving_stage,
+total_quantity,
+pli_packed_quantity,
+extra_packing_quantity,
+packing_additional_quantity,
+pli_received_quantity,
+
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
