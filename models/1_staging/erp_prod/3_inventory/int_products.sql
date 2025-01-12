@@ -27,12 +27,19 @@ with
                     sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as toat_damaged_quantity,
 
                         SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' then pi.quantity ELSE 0 END) as last_30d_incident_quantity_inventory_dmaged,
-                        sum(case when incident_type !='EXTRA'  and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
+                        sum(case when incident_type !='EXTRA' and after_sold = False and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
                         sum(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
                         sum(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then pi.quantity else 0 end) as incident_quantity_inventory_stage,
                         sum(case when incident_type !='EXTRA' and pi.stage = 'DELIVERY'  then pi.quantity else 0 end) as incident_quantity_delivery_stage,
                         sum(case when incident_type !='EXTRA' and pi.stage = 'AFTER_RETURN'  then pi.quantity else 0 end) as incident_quantity_after_return_stage,
 
+                    
+                    sum(case when pi.stage = 'BEFORE_SUPPLY' then pi.quantity end) AS quantity,
+                    sum(case when pi.stage = 'PACKING' and pi.incident_type = 'MISSING' then pi.quantity end) AS missing_packing_quantity,
+                    sum(case when pi.stage = 'RECEIVING' and after_sold = False then pi.quantity end) AS incident_quantity_receiving_stage_with_extra,
+                    sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'MISSING' then pi.quantity end) AS missing_quantity_receiving_stage,
+                    sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'DAMAGED' then pi.quantity end) AS damaged_quantity_receiving_stage,
+                    sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'EXTRA' then pi.quantity end) AS extra_quantity_receiving_stage,
 
 
                     from {{ ref('stg_product_incidents')}}  as pi 
@@ -113,7 +120,15 @@ with
                     --where p.product_id=149074
                 group by 1
                 
-            )
+            ),
+ package_line_items as (
+            SELECT line_item_id,
+                sum(quantity) as quantity,
+                sum(fulfilled_quantity) as fulfilled_quantity,
+                sum(damaged_quantity) as damaged_quantity,
+            FROM {{ref("int_package_line_items")}}
+            GROUP BY 1
+    )
 
             
             
@@ -495,7 +510,20 @@ case when   st.stock_status = 'visible'
             then true else null 
             end as online_item,
 li.financial_administration,
-product_color
+product_color,
+
+
+
+pi.missing_packing_quantity,
+pi.incident_quantity_receiving_stage_with_extra,
+pi.missing_quantity_receiving_stage,
+pi.damaged_quantity_receiving_stage,
+pi.extra_quantity_receiving_stage,
+case when li.order_type not in ('ADDITIONAL', 'EXTRA') then li.ordered_quantity - li.splitted_quantity - COALESCE(pi.quantity, 0) end AS total_quantity,
+CASE WHEN pli.quantity > 0 THEN COALESCE(pli.quantity, 0) - COALESCE(pi.missing_packing_quantity, 0) END AS pli_packed_quantity,
+case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as extra_packing_quantity,
+case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_additional_quantity,
+pli.fulfilled_quantity AS pli_received_quantity,
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
@@ -528,6 +556,8 @@ product_color
         left join {{ref('base_warehouses')}} as w on w.warehouse_id = st.warehouse_id
         left join line_items_inv_sold as liis on liis.product_id = p.product_id
       --  left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
+
+        left join package_line_items as pli on li.line_item_id = pli.line_item_id
 
 
     
