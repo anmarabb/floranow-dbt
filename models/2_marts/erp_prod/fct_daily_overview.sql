@@ -2,6 +2,9 @@ with invoices as (
     SELECT li.line_item_id, 
            SUM(ii.gross_revenue) as gross_revenue, 
            SUM(ii.credit_note) as credit_note, 
+           SUM(ii.auto_gross_revenue) as auto_gross_revenue,
+           SUM(ii.auto_credit_note) as auto_credit_note,
+           SUM(ii.total_cost) as total_cost,
 
     FROM {{ref ("int_line_items")}} as li
     left join {{ref ("int_line_items")}} cli on li.line_item_id = cli.parent_line_item_id
@@ -38,6 +41,9 @@ SELECT d.* ,
        COALESCE(p.in_stock_quantity, 0) as in_stock_quantity,
        COALESCE(p.inventory_value, 0) as inventory_value,
        COALESCE(pi.Dmaged, 0) as Dmaged,
+       COALESCE(i.auto_gross_revenue, 0) as auto_gross_revenue,
+       COALESCE(i.auto_credit_note, 0) as auto_credit_note,
+       COALESCE(i.total_cost, 0) as total_cost,
 
 FROM  {{ ref('stg_daily_overview') }} as d
 left join invoices i on d.line_item_id = i.line_item_id
