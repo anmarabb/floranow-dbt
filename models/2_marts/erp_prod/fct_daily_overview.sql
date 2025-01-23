@@ -20,6 +20,7 @@ product_incidents as (
 
 SELECT li.supplier_region as Origin,
        li.Supplier as Supplier,
+       li.product_name as Ptoduct,
        d.invoice_header_printed_at,
        d.delivery_date,
        d.financial_administration,
