@@ -211,6 +211,7 @@ case
 end as transaction_phase_segments,
 
 manual_invoicing_filtration,
+delivery_charge_amount as delivery_charge,
 
 current_timestamp() as insertion_timestamp, 
 
