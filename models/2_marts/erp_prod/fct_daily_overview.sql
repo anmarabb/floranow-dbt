@@ -40,3 +40,4 @@ FROM  {{ ref('stg_daily_overview') }} as d
 left join {{ ref('int_line_items') }} li on d.line_item_id = li.line_item_id
 left join products p on p.line_item_id = d.line_item_id
 left join product_incidents pi on pi.line_item_id = d.line_item_id
+WHERE d.inv_items_reprot_filter = 'Floranow Sales'
