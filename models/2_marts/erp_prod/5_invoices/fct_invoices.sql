@@ -242,7 +242,8 @@ transaction_phase_segments,
 
 current_timestamp() as insertion_timestamp,
 CONCAT(coalesce(financial_administration,''), coalesce(account_manager,''), coalesce(city,''), coalesce(user_category,''), coalesce(warehouse,'')) as budget_link,
-manual_invoicing_filtration
+manual_invoicing_filtration,
+delivery_charge,
 
 from {{ref('int_invoices')}} as i
 )
