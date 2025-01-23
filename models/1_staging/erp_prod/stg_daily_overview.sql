@@ -1,6 +1,6 @@
-SELECT supplier_region as Origin,
+SELECT --supplier_region as Origin,
        Supplier,
-       product_name as Product,
+       --product_name as Product,
        invoice_header_printed_at,
        delivery_date,
        --order_date,
@@ -8,7 +8,7 @@ SELECT supplier_region as Origin,
        warehouse,
        line_item_id, 
 
-FROM {{ref ("int_line_items")}}
+FROM {{ref ("fct_invoice_items")}}
 
 
 
