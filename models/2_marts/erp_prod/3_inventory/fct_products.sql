@@ -385,6 +385,13 @@ li_extra_packing_quantity,
 packing_additional_quantity,
 pli_received_quantity,
 
+case 
+    when reseller = 'Dammam Event' then 'Dammam Warehouse'
+    when reseller = 'Floranow UAE Event' then 'Dubai Warehouse'
+    when reseller = 'Riyadh Event' then 'Riyadh Warehouse'
+    when reseller = 'Tabuk Event' then 'Tabuk Warehouse'
+    else p.warehouse end as warehouse_modified,
+
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
