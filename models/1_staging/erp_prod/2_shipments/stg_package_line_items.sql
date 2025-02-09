@@ -43,3 +43,4 @@ current_timestamp() as ingestion_timestamp,
 
 
 from source as packages_li
+where __hevo__marked_deleted = False
