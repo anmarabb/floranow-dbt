@@ -78,10 +78,9 @@ when st.id in (730,522,484,567,566,531,530,523,485,373,372,301,300,199,198,131,1
 else 'Others'
 end as stock_model,
 
+
 current_timestamp() as ingestion_timestamp,
  
-
-
 
 from {{source(var('erp_source'), 'stocks')}} as st
 left join {{ ref('base_users') }} as re on re.id = st.reseller_id
