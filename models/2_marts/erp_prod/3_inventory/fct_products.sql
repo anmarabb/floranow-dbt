@@ -117,7 +117,7 @@ case
 
         case when select_departure_date not in ('Future', 'Today') then ordered_quantity else 0 end as past_ordered_quantity,
 
-        case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and loc_status is null then p.ordered_quantity else 0 end as transit_quantity_awais,
+        case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and (loc_status is null or loc_status = 'null') then p.ordered_quantity else 0 end as transit_quantity_awais,
         -- case when select_departure_date = 'last_10_days'  and  shipments_status != 'DRAFT' and order_status != 'Fulfilled Full Incident' and loc_status is null then p.remaining_quantity else 0 end as transit_quantity,
 
         
