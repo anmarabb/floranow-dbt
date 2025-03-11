@@ -3,7 +3,7 @@
     SELECT 
         b.financial_administration,
         b.account_manager,
-        b.city as City,
+        b.city as city_related,
         b.date,
         b.client_category as user_category ,
         b.warehouse,
