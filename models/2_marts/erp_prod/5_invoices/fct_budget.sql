@@ -3,7 +3,7 @@ select
     b.date,
     b.financial_administration,
     b.account_manager,
-    b.City,
+    b.City as City,
     b.user_category,
     b.monthly_budget,
     b.daily_budget,
