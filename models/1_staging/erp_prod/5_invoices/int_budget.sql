@@ -8,7 +8,7 @@ SELECT
     db.daily_budget,
     db.financial_administration,
     db.account_manager,
-    db.city_related,
+    db.City,
     db.user_category,
     db.warehouse,
     case when  date_diff(date(d) , current_date() , MONTH) = 0 then db.daily_budget else 0 end as mtd_budget,
@@ -19,8 +19,8 @@ SELECT
 
 
     CASE
-        WHEN ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager,city_related) = 1 THEN 
-            SUM(db.daily_budget) OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager,city_related)
+        WHEN ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager,City) = 1 THEN 
+            SUM(db.daily_budget) OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager,City)
         ELSE 
             NULL 
     END AS monthly_budget,
