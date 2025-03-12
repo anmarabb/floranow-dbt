@@ -8,7 +8,7 @@ SELECT
     db.daily_budget,
     db.financial_administration,
     db.account_manager,
-    db.City,
+    db.City as Country,
     db.user_category,
     db.warehouse,
     case when  date_diff(date(d) , current_date() , MONTH) = 0 then db.daily_budget else 0 end as mtd_budget,
