@@ -535,6 +535,10 @@ case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_addition
 pli.fulfilled_quantity AS pli_received_quantity,
 py.li_extra_packing_quantity,
 
+li.total_price_without_tax,
+li.li_invoice_number,
+li.local_supplier_name
+
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
         left join {{ ref('fct_order_items')}} as li on p.line_item_id = li.line_item_id
