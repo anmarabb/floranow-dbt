@@ -84,7 +84,7 @@ COALESCE(PackageLineItems.pli_fulfilled_quantity,0) * li.raw_unit_fob_price as r
 (COALESCE(PackageLineItems.packed_quantity,0) - COALESCE(PackageLineItems.pli_missing_quantity,0)) as supplied_quantity,
  PackageLineItems.packages_count,
 
-li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type),
+li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type, invoice_number),
 
 
 case 
@@ -521,6 +521,8 @@ total_cost,
 gross_revenue,
 credit_note,
 ind.delivery_charge_amount,
+
+li.invoice_number as li_invoice_number,
 
 
 from {{ref('stg_line_items')}} as li
