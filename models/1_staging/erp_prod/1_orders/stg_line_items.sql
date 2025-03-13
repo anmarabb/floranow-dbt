@@ -269,6 +269,9 @@ delivery_time_window.delivery_time,
         
         origin_warehouse_id,
         destination_warehouse_id,
+
+        invoice_number,
+        local_supplier_name,
         
         from {{ source(var('erp_source'), 'line_items') }} as li
          where li.deleted_at is null 
