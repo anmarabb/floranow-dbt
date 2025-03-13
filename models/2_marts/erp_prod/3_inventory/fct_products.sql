@@ -392,6 +392,12 @@ case
     when reseller = 'Tabuk Event' then 'Tabuk Warehouse'
     else p.warehouse end as warehouse_modified,
 
+sales_unit,
+li_invoice_number,
+local_supplier_name,
+total_price_without_tax,
+currency
+
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
