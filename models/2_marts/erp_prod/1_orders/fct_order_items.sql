@@ -711,6 +711,10 @@ credit_note,
 delivery_charge_amount,
 unit_landed_cost * ordered_quantity as total_cost_mod,
 
+li_invoice_number,
+sales_unit,
+local_supplier_name
+
 from {{ref('int_line_items')}} as li 
 
 )
