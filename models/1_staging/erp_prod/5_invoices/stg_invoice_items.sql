@@ -62,7 +62,8 @@ select distinct
                 ii.price_without_tax,
                 ii.price_without_discount,
                 ii.price,
-                ii.discount_amount,               
+                ii.discount_amount,  
+                ii.cost_price,            
 
 
 
