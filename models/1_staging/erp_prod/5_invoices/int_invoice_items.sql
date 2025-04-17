@@ -16,11 +16,11 @@ prep_registered_clients
                 select 
                 ii.invoice_item_id, 
                 case 
-                when i.invoice_header_type = 'invoice' and ii.item_unit_price is null then ii.unit_price 
+                when i.invoice_header_type = 'invoice' and (ii.item_unit_price is null or item_unit_price = 0) then ii.unit_price 
                 when i.invoice_header_type = 'invoice' then ii.item_unit_price -- invoice 
                 when i.invoice_header_type = 'credit note' then 
                 coalesce((case when ii.creditable_type = 'InvoiceItem' then 
-                (select case when item_unit_price is null then unit_price else item_unit_price end from {{ ref('stg_invoice_items')}} where invoice_item_id = ii.creditable_id) 
+                (select case when item_unit_price is null or item_unit_price = 0 then unit_price else item_unit_price end from {{ ref('stg_invoice_items')}} where invoice_item_id = ii.creditable_id) 
                 when ii.creditable_type = 'Invoice' then ii.unit_price end), ii.unit_price)
                 end as unit_price_modified
 
