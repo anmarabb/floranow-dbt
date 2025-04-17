@@ -46,7 +46,7 @@ quantity as inventory_quantity,
 
 
 
-case when i.invoice_header_type = 'invoice' then ii.quantity * li.unit_landed_cost else 0 end  as total_cost,
+case when i.invoice_header_type = 'invoice' then ii.quantity * (case when i.generation_type = 'MANUAL' then ii.cost_price else li.unit_landed_cost end) else 0 end  as total_cost,
 
         approved_by_id.name as approved_by,
 
