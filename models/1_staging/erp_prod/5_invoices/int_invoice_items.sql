@@ -43,8 +43,15 @@ quantity as inventory_quantity,
     case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end as auto_gross_revenue,
     case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' and i.generation_type = 'AUTO' then ii.price_without_tax else 0 end as auto_credit_note,
 
-    case when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  and i.generation_type = 'AUTO' then ii.quantity * mc.unit_price_modified else 0 end as auto_gross_revenue_mod,
-    case when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' and i.generation_type = 'AUTO' then ii.quantity * mc.unit_price_modified else 0 end as auto_credit_note_mod,
+    case 
+        when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  and generation_type = 'AUTO' then quantity * unit_price_modified 
+        when invoice_header_type = 'invoice' and invoice_item_status = 'APPROVED'  and generation_type = 'MANUAL' then quantity * unit_price_modified 
+        else 0 end as gross_revenue_mod,
+        
+    case 
+        when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' and generation_type = 'AUTO' then quantity * unit_price_modified
+        when invoice_header_type = 'credit note' and invoice_item_status = 'APPROVED' and generation_type = 'MANUAL' then quantity * unit_price_modified
+        else 0 end as credit_note_mod,
 
 
 case when i.invoice_header_type = 'invoice' then ii.quantity * (case when i.generation_type = 'MANUAL' then ii.cost_price else li.unit_landed_cost end) else 0 end  as total_cost,
