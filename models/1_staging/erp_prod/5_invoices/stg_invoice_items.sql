@@ -77,6 +77,8 @@ select distinct
             when ii.currency is null then ii.price_without_tax * 0.27229408
             end as usd_price_without_tax,
 
+        ii.item_unit_price,
+
 
 
 
