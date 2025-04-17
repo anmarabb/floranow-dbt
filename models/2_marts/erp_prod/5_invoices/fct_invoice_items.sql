@@ -312,8 +312,8 @@ with
             manual_invoicing_filtration,
             unit_price_modified,
 
-            auto_gross_revenue_mod,
-            auto_credit_note_mod,
+            gross_revenue_mod,
+            credit_note_mod,
 
         from {{ ref("int_invoice_items") }} as ii
     )
