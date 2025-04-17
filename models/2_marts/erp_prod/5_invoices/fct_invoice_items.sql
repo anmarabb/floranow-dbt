@@ -309,7 +309,8 @@ with
             current_timestamp() as insertion_timestamp,
             city,
             currency,
-            manual_invoicing_filtration
+            manual_invoicing_filtration,
+            unit_price_modified,
 
         from {{ ref("int_invoice_items") }} as ii
     )
