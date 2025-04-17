@@ -11,7 +11,22 @@ prep_registered_clients
                 where account_type in ('External') 
                 group by financial_administration
             )
+, modified_calculation 
+         as (
+                select 
+                ii.invoice_item_id, 
+                case 
+                when i.invoice_header_type = 'invoice' and ii.item_unit_price is null then ii.unit_price 
+                when i.invoice_header_type = 'invoice' then ii.item_unit_price -- invoice 
+                when i.invoice_header_type = 'credit note' then 
+                coalesce((case when ii.creditable_type = 'InvoiceItem' then 
+                (select case when item_unit_price is null then unit_price else item_unit_price end from {{ ref('stg_invoice_items')}} where invoice_item_id = ii.creditable_id) 
+                when ii.creditable_type = 'Invoice' then ii.unit_price end), ii.unit_price)
+                end as unit_price_modified
 
+                from {{ ref('stg_invoice_items')}} ii
+                left join {{ ref('stg_invoices')}} i on i.invoice_header_id = ii.invoice_header_id
+         )
 select     
 
 --Invoice Items
@@ -201,11 +216,13 @@ CASE
     WHEN ROW_NUMBER() OVER (PARTITION BY ii.invoice_header_id ORDER BY ii.invoice_item_id) = 1 THEN i.delivery_charge_amount 
     ELSE 0 
   END as delivery_charge_amount,
+ 
 
+case when ii.product_name like 'consultation fee%' or ii.product_name like 'IT service%' or ii.product_name like 'service fee%' then 'filter out' else 'included'end as manual_invoicing_filtration,
 
-current_timestamp() as insertion_timestamp, 
+unit_price_modified,
 
-case when ii.product_name like 'consultation fee%' or ii.product_name like 'IT service%' or ii.product_name like 'service fee%' then 'filter out' else 'included'end as manual_invoicing_filtration
+current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_invoice_items') }} as ii
 left join {{ ref('stg_invoices') }} as i on i.invoice_header_id = ii.invoice_header_id
@@ -222,7 +239,7 @@ left join {{ ref('stg_proof_of_deliveries') }} as pod on li.proof_of_delivery_id
 
 left join prep_registered_clients as prep_registered_clients on prep_registered_clients.financial_administration = customer.financial_administration
 
-
+left join modified_calculation as mc on mc.invoice_item_id = ii.invoice_item_id
 
 
 
