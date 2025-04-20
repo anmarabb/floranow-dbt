@@ -19,11 +19,11 @@ SELECT
 
 
     CASE
-        WHEN ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager,City) = 1 THEN 
-            SUM(db.daily_budget) OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager,City)
-        ELSE 
-            NULL 
-    END AS monthly_budget,
+        WHEN ROW_NUMBER() OVER (
+            PARTITION BY DATE_TRUNC(d, MONTH),db.financial_administration,db.account_manager,db.City,db.user_category) = 1 THEN 
+            SUM(db.daily_budget) OVER (PARTITION BY DATE_TRUNC(d, MONTH),db.financial_administration,db.account_manager,
+                    db.City,db.user_category)
+        ELSE NULL END AS monthly_budget,
 
 
     CASE
