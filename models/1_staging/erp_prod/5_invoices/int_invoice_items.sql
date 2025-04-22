@@ -58,8 +58,9 @@ quantity as inventory_quantity,
         else 0 end as manual_credit_note,
 
 
-case when i.invoice_header_type = 'invoice' then ii.quantity * (case when i.generation_type = 'MANUAL' then ii.cost_price else li.unit_landed_cost end) else 0 end  as total_cost,
+case when i.invoice_header_type = 'invoice' then ii.quantity * unit_landed_cost else 0 end  as total_cost, --(case when i.generation_type = 'MANUAL' then ii.cost_price else li.unit_landed_cost end)
 
+case when i.invoice_header_type = 'invoice' then ii.quantity * (case when i.generation_type = 'MANUAL' then ii.cost_price else li.unit_landed_cost end) else 0 end  as total_cost_with_manual,
         approved_by_id.name as approved_by,
 
 
