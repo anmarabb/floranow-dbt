@@ -147,8 +147,8 @@ concat(customer.debtor_number,ii.delivery_date) as drop_id,
           END AS offer_type,
 
 
-
-        case when i.generation_type = 'MANUAL' then ii.cost_price else li.unit_landed_cost end as unit_landed_cost,
+        li.unit_landed_cost as unit_landed_cost,
+        case when i.generation_type = 'MANUAL' then ii.cost_price else li.unit_landed_cost end as unit_landed_cost_mod,
         li.ordering_stock_type,
 
 
