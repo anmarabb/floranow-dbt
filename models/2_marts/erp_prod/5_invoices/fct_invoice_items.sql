@@ -316,6 +316,8 @@ with
             manual_gross_revenue,
             auto_credit_note_mod,
             manual_credit_note,
+            unit_landed_cost_mod,
+            total_cost_with_manual,
 
         from {{ ref("int_invoice_items") }} as ii
     )
