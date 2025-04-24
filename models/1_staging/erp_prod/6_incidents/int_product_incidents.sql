@@ -150,6 +150,13 @@ end as reseller_type,
 --Bloomax - Hafer Al baten - 132009
 --BX Shop Express Riyadh - 11123
 
+CASE 
+    WHEN li.order_type ='MOVEMENT' Then 'Indirect Damage'   
+    WHEN li.order_type ='OFFLINE' AND li.feed_source_name IN ('DMM Project X','JED Project X','Project X','Grandiose TBF','TBF RUH',
+        'FN WEDDINGS AND EVENTS RES','RUH Wedding and Events','GRD Stock','Jumerah','MAF Stock','Spinneys',
+        'Spinneys Stock Order','The buqat factory')
+    Then 'Indirect Damage'else 'Direct Damage' END AS damage_type,
+
 current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_product_incidents')}} as pi
