@@ -190,7 +190,7 @@ current_timestamp() as insertion_timestamp,
 
 from {{ref('int_product_incidents')}} as pi 
 
-where pi.customer_id not in (1289,1470,2816,11123) --why??
+-- where pi.customer_id not in (1289,1470,2816,11123) --why??
 )
 
 select * from source
