@@ -2,7 +2,7 @@
 select
 
 outbound.*,
-p.product_name,
+p.Product,
 p.color,
 p.sub_group,
 p.available_quantity,
