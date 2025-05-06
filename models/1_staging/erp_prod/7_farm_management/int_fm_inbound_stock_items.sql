@@ -3,7 +3,7 @@ select
 
 ins.*,
 
-p.product_name,
+p.Product,
 p.color,
 p.sub_group,
 p.stem_length,
