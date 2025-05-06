@@ -4,7 +4,7 @@ select
 
    -- p.number,
 
-    p.product_name,
+    p.product_name as Product,
 
     p.color,
     p.raw_color,
