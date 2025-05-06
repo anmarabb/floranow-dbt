@@ -9,7 +9,7 @@ fm_product_id as product_id,
     contract_status,
     bud_count,
     stem_length,
-    product_name,
+    Product,
 
     quantity,
 
