@@ -15,7 +15,7 @@ select
 
 u.name as reported_by,
 
-p.product_name,
+p.Product,
 p.astra_barcode,
 p.fob_price,
 p.sub_group,
