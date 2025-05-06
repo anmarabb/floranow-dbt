@@ -3,7 +3,7 @@ SELECT
 
 
 --fm_products
-    product_name,
+    Product,
     color,
     sub_group,
     inbound_quantity,
