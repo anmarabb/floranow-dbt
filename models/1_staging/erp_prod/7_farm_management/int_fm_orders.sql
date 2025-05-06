@@ -87,7 +87,7 @@ fmso.fulfiled_quantity,
 
 
 --fm_products
-    p.product_name,
+    p.Product,
     p.astra_barcode,
     --p.categorization,
     p.fob_price,
