@@ -319,6 +319,8 @@ with
             unit_landed_cost_mod,
             total_cost_with_manual,
 
+            FORMAT_DATE('%b', invoice_header_printed_at) as month_invoice_header_printed_at,
+
         from {{ ref("int_invoice_items") }} as ii
     )
 
