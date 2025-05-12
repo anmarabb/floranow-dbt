@@ -236,8 +236,8 @@ case when ii.product_name like 'consultation fee%' or ii.product_name like 'IT s
 unit_price_modified,
 
 case 
-    when ii.currency = 'SAR' then 3.77
-    when ii.currency = 'AED' then 3.72
+    when ii.currency = 'SAR' then 1/3.77
+    when ii.currency = 'AED' then 1/3.72
     when ii.currency = 'KWD' then 3.26
     when ii.currency = 'QAR' then 0.27
     when ii.currency = 'QR' then 0.27
