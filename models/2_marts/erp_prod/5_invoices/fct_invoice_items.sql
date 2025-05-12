@@ -328,7 +328,7 @@ with
                 when currency = 'KWD' then 3.26
                 when currency = 'QAR' then 0.27
                 when currency = 'QR' then 0.27
-                when currency = 'EUR' then 1.161591278
+                when currency = 'EUR' then 1.12
                 when currency = 'USD' then 1
             end as base_metric_usd
 
