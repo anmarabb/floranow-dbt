@@ -322,15 +322,12 @@ with
             EXTRACT(MONTH FROM invoice_header_printed_at) AS month_invoice_header_printed_at,
             -- FORMAT_DATE('%b', invoice_header_printed_at) as month_invoice_header_printed_at,
 
-            case 
-                when currency = 'SAR' then 3.77
-                when currency = 'AED' then 3.72
-                when currency = 'KWD' then 3.26
-                when currency = 'QAR' then 0.27
-                when currency = 'QR' then 0.27
-                when currency = 'EUR' then 1.12
-                when currency = 'USD' then 1
-            end as base_metric_usd
+            base_metric_usd,
+
+            base_metric_usd * gross_revenue as gross_revenue_usd,
+            base_metric_usd * credit_note as credit_note_usd,
+
+
 
         from {{ ref("int_invoice_items") }} as ii
     )
