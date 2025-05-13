@@ -338,7 +338,27 @@ with
                 ELSE warehouse
             END AS main_hub,
 
+            case when  date_diff(date(invoice_header_printed_at) , current_date() , MONTH) = 0 then gross_revenue else 0 end as mtd_gross_revenue,
+            case when  date_diff(date(invoice_header_printed_at) , current_date() , MONTH) = 0 then credit_note else 0 end as mtd_credit_note,
 
+            case when date_diff(current_date(),date(invoice_header_printed_at), MONTH) = 1 and extract(day FROM invoice_header_printed_at) <= extract(day FROM current_date()) then gross_revenue else 0 end as lmtd_gross_revenue,
+            case when date_diff(current_date(),date(invoice_header_printed_at), MONTH) = 1 and extract(day FROM invoice_header_printed_at) <= extract(day FROM current_date()) then credit_note else 0 end as lmtd_credit_note,
+
+            case when date_diff(current_date(), date(invoice_header_printed_at), YEAR) = 1 and extract(month FROM invoice_header_printed_at) = extract(month FROM current_date()) 
+            and extract(day FROM invoice_header_printed_at) <= extract(day FROM current_date()) then gross_revenue else 0 end as lymtd_gross_revenue,
+            case when date_diff(current_date(), date(invoice_header_printed_at), YEAR) = 1 and extract(month FROM invoice_header_printed_at) = extract(month FROM current_date()) 
+            and extract(day FROM invoice_header_printed_at) <= extract(day FROM current_date()) then credit_note else 0 end as lymtd_credit_note,
+
+            CASE WHEN EXTRACT(YEAR FROM invoice_header_printed_at) = EXTRACT(YEAR FROM current_date()) AND date(invoice_header_printed_at) <= current_date() THEN gross_revenue ELSE 0 END AS ytd_gross_revenue,
+            CASE WHEN EXTRACT(YEAR FROM invoice_header_printed_at) = EXTRACT(YEAR FROM current_date()) AND date(invoice_header_printed_at) <= current_date() THEN credit_note ELSE 0 END AS ytd_credit_note,
+
+            CASE WHEN EXTRACT(YEAR FROM invoice_header_printed_at) = EXTRACT(YEAR FROM CURRENT_DATE()) - 1 AND DATE(invoice_header_printed_at) <= DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR) THEN gross_revenue ELSE 0 END AS lytd_gross_revenue,
+            CASE WHEN EXTRACT(YEAR FROM invoice_header_printed_at) = EXTRACT(YEAR FROM CURRENT_DATE()) - 1 AND DATE(invoice_header_printed_at) <= DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR) THEN credit_note ELSE 0 END AS lytd_credit_note,
+
+            -- CASE WHEN  invoice_header_printed_at >= '2022-01-01' AND invoice_header_printed_at < '2023-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2022,
+            -- CASE WHEN  invoice_header_printed_at >= '2023-01-01' AND invoice_header_printed_at < '2024-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2023,
+            -- CASE WHEN  invoice_header_printed_at >= '2024-01-01' AND invoice_header_printed_at < '2025-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2024,
+            -- CASE WHEN  invoice_header_printed_at >= '2025-01-01' AND invoice_header_printed_at < '2026-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2025,
 
         from {{ ref("int_invoice_items") }} as ii
     )
