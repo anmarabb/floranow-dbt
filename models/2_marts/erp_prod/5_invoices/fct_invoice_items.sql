@@ -327,6 +327,17 @@ with
             base_metric_usd * gross_revenue as gross_revenue_usd,
             base_metric_usd * credit_note as credit_note_usd,
 
+            CASE
+                WHEN warehouse IN ('Dammam Project X', 'Dammam Warehouse', 'Hafar WareHouse') THEN 'Dammam'
+                WHEN warehouse = 'Dubai Warehouse' THEN 'Dubai'
+                WHEN warehouse IN ('Riyadh Warehouse', 'Riyadh Project X', 'Qassim Warehouse', 'Hail Warehouse') THEN 'Riyadh'
+                WHEN warehouse IN ('Jeddah Warehouse', 'Tabuk Warehouse', 'Medina Warehouse', 'Jouf WareHouse', 'Jeddah Project X') THEN 'Jeddah'
+                WHEN warehouse = 'Qatar Warehouse' THEN 'Qatar'
+                WHEN warehouse = 'Kuwait Warehouse' THEN 'Kuwait'
+                WHEN warehouse = 'Jordan Warehouse' THEN 'Jordan'
+                ELSE warehouse
+            END AS main_hub,
+
 
 
         from {{ ref("int_invoice_items") }} as ii
