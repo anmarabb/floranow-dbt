@@ -11,7 +11,7 @@ SELECT
     db.City as Country,
     db.user_category,
     db.warehouse,
-    case when  date_diff(date(d) , current_date() , MONTH) = 0 then db.daily_budget else 0 end as mtd_budget,
+    -- case when  date_diff(date(d) , current_date() , MONTH) = 0 then db.daily_budget else 0 end as mtd_budget,
       CASE 
             WHEN EXTRACT(YEAR FROM date(d)) = EXTRACT(YEAR FROM CURRENT_DATE()) AND EXTRACT(MONTH FROM date(d)) = EXTRACT(MONTH FROM CURRENT_DATE()) THEN db.daily_budget
             ELSE 0
