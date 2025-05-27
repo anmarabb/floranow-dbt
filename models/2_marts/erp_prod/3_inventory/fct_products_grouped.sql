@@ -188,6 +188,8 @@ max(first_request_departure_date) as first_request_departure_date,
 
 sum(first_departure_requested_quantity) as first_departure_requested_quantity,
 
+sum(incident_quantity_receiving_stage) as incident_quantity_receiving_stage,
+
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier

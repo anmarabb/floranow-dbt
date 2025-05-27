@@ -25,6 +25,8 @@ customer.debtor_number,
 li.Supplier,
 li.departure_date,
 li.master_shipment,
+li.product_name,
+li.stem_length,
 
 case when li.line_item_id is not null then 'Line Item ID' else null end as line_item_id_check,
 case when p.line_item_id is not null then 'Product ID' else null end as product_id_check,
