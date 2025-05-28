@@ -396,7 +396,8 @@ sales_unit,
 li_invoice_number,
 local_supplier_name,
 total_price_without_tax,
-currency
+currency,
+packing_list_fob_price,
 
 
 from {{ref('int_products')}} as p 
