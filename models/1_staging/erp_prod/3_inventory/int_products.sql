@@ -537,7 +537,8 @@ py.li_extra_packing_quantity,
 
 li.total_price_without_tax,
 li.li_invoice_number,
-li.local_supplier_name
+li.local_supplier_name,
+li.packing_list_fob_price,
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
