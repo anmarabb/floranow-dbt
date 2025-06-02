@@ -247,7 +247,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     py.m_1_paymnets,
     py.m_2_paymnets,
 
-
+    ct.target_budget,
 
 
 
@@ -260,3 +260,4 @@ LEFT JOIN invoice_items as ii ON u.id = ii.customer_id
 left join move_items as mi on u.id = mi.user_id 
 left join payments as py on u.id = py.user_id 
 left join budget as b on b.financial_administration = u.financial_administration and b.warehouse = u.warehouse and b.account_manager = u.account_manager
+left join {{ source(var('erp_source'), 'customers_target') }} ct on u.debtor_number = ct.debtor_number
