@@ -248,6 +248,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     py.m_2_paymnets,
 
     ct.target_budget,
+    ct.warehouse as master_warehouse_name,
 
 
 
