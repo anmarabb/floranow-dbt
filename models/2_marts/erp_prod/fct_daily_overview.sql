@@ -19,6 +19,7 @@ select Product,
        0 as sales_target,
        0 as payment_amount,
        0 as collection_target,
+       0 as target_budget,
 
 from {{ref("fct_products")}} p
 WHERE report_filter is not null and stock_model_details in ('Reselling', 'Internal - Riyadh Project X', 'Internal - Dammam Project X', 'Internal - Jeddah Project X', 'Commission Based - Astra Express')
@@ -46,6 +47,7 @@ select Product,
        0 as sales_target,
        0 as payment_amount,
        0 as collection_target,
+       0 as target_budget,
 
 from {{ref("fct_product_incidents")}} pi
 WHERE master_report_filter = 'inventory_dmaged' and after_sold = false
@@ -73,6 +75,7 @@ select Product,
        0 as sales_target,
        0 as payment_amount,
        0 as collection_target,
+       0 as target_budget,
 
 from {{ref("stg_daily_overview")}} 
 WHERE inv_items_reprot_filter = 'Floranow Sales'
@@ -100,6 +103,7 @@ select null as Product,
        monthly_budget as sales_target,
        0 as payment_amount,
        0 as collection_target,
+       0 as target_budget,
 
 from {{ref("fct_budget")}}
 
@@ -126,6 +130,7 @@ select null as Product,
        0 as sales_target,
        payment_amount,
        0 as collection_target,
+       0 as target_budget,
 
 from {{ref("fct_payments")}} 
 
@@ -152,5 +157,33 @@ select null as Product,
        0 as sales_target,
        0 as payment_amount,
        monthly_budget as collection_target,
+       0 as target_budget,
 
 from {{ref("fct_collection")}} 
+
+UNION ALL
+
+select null as Product,
+       null as Supplier,
+       null as Origin,
+       null as product_subcategory,
+       DATE_TRUNC(CURRENT_DATE(), MONTH) as master_date,
+       financial_administration,
+       warehouse,
+       null as account_manager,
+       null as user_category,
+
+       0 as inventory_stock,
+       0 as inventory_value,
+       0 as Damaged,
+       0 as gross_revenue, 
+       0 as credit_note, 
+       0 as auto_gross_revenue,
+       0 as auto_credit_note,
+       0 as total_cost,
+       0 as sales_target,
+       0 as payment_amount,
+       0 as collection_target,
+       target_budget,
+
+from {{ref("dim_customer")}} 
