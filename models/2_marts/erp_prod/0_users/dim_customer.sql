@@ -153,6 +153,7 @@ collectible_amount,
 current_month_budget,
 mtd_budget,
 target_budget,
+master_warehouse_name,
 
 current_timestamp() as insertion_timestamp, 
 
