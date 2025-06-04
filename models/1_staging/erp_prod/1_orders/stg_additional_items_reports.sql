@@ -50,7 +50,8 @@ select
 
 current_timestamp() as ingestion_timestamp,
  
-
+product_name,
+stem_length,
 
 
 
