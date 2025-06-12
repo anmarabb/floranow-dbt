@@ -250,8 +250,14 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     ct.target_budget,
     ct.warehouse as master_warehouse_name,
 
-
-
+    co.payment_term as collection_payment_term,
+    co.total_receivable,
+    co.up_to_30_days,
+    co.31_to_60_days,
+    co.61_to_90_days,
+    co.91_to_120_days,
+    co.up_to_120_days,
+    co.collection_target
 
 
 from   {{ ref('base_users') }} as u 
@@ -262,3 +268,4 @@ left join move_items as mi on u.id = mi.user_id
 left join payments as py on u.id = py.user_id 
 left join budget as b on b.financial_administration = u.financial_administration and b.warehouse = u.warehouse and b.account_manager = u.account_manager
 left join {{ source(var('erp_source'), 'customers_target') }} ct on u.debtor_number = ct.debtor_number
+left join {{ source(var('erp_source'), 'collection_target') }} co on u.debtor_number = co.debtor_number
