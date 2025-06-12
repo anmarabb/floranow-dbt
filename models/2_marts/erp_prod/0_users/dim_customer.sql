@@ -155,6 +155,15 @@ mtd_budget,
 target_budget,
 master_warehouse_name,
 
+collection_payment_term,
+total_receivable,
+up_to_30_days,
+from_31_to_60_days,
+from_61_to_90_days,
+from_91_to_120_days,
+up_to_120_days,
+collection_target,
+
 current_timestamp() as insertion_timestamp, 
 
 from {{ ref('int_customer')}} as u
