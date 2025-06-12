@@ -255,7 +255,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     co.up_to_30_days,
     co.31_to_60_days as from_31_to_60_days,
     co.61_to_90_days as from_61_to_90_days,
-    co.91_to_120_days as frpm_91_to_120_days,
+    co.91_to_120_days as from_91_to_120_days,
     co.up_to_120_days,
     co.collection_target
 
