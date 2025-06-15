@@ -725,6 +725,10 @@ CASE
     ELSE warehouse
 END AS main_hub,
 
+case
+    when li.order_source in ('Express Inventory') then 'Reselling'
+    when li.order_source in ('Direct Supplier')  then 'Pre-Selling'
+end as selling_stage,
 
 from {{ref('int_line_items')}} as li 
 
