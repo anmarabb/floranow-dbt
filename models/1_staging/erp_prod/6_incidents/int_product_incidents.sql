@@ -82,8 +82,9 @@ select
         li.ordering_stock_type,
         li.feed_source_name,
         li.unit_price,
+        li.selling_stage,
 
-
+        case when li.selling_stage = 'Reseling' then incident_cost_inventory_dmaged else 0 end as reselling_damages,
 
      
         case 
