@@ -36,7 +36,7 @@ select Product,
        warehouse,
        null as account_manager,
        null as user_category,
-       null as selling_stage,
+       selling_stage,
 
        0 as inventory_stock,
        0 as inventory_value,
