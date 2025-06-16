@@ -186,7 +186,7 @@ modified_stock_model_details,
 reseller_type,
 damage_type,
 
-reselling_damages,
+
 
 current_timestamp() as insertion_timestamp, 
 
