@@ -360,6 +360,8 @@ with
             -- CASE WHEN  invoice_header_printed_at >= '2024-01-01' AND invoice_header_printed_at < '2025-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2024,
             -- CASE WHEN  invoice_header_printed_at >= '2025-01-01' AND invoice_header_printed_at < '2026-01-01' THEN gross_revenue ELSE 0 END AS gross_revenue_2025,
 
+            selling_stage,
+        
         from {{ ref("int_invoice_items") }} as ii
     )
 
