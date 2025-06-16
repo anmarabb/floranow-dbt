@@ -157,6 +157,8 @@ CASE
     'MAF Stock','Spinneys','Spinneys Stock Order','The buqat factory')
     Then 'Indirect Damage'else 'Direct Damage' END AS damage_type,
 
+customer.account_manager,
+
 current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_product_incidents')}} as pi
