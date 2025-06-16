@@ -188,6 +188,9 @@ damage_type,
 
 selling_stage,
 
+account_manager,
+user_category,
+
 current_timestamp() as insertion_timestamp, 
 
 
