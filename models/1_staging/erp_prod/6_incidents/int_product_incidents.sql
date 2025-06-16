@@ -158,6 +158,7 @@ CASE
     Then 'Indirect Damage'else 'Direct Damage' END AS damage_type,
 
 customer.account_manager,
+customer.user_category,
 
 current_timestamp() as insertion_timestamp,
 
