@@ -524,6 +524,10 @@ ind.delivery_charge_amount,
 
 li.invoice_number as li_invoice_number,
 
+case
+    when li.order_source in ('Express Inventory') then 'Reselling'
+    when li.order_source in ('Direct Supplier')  then 'Pre-Selling'
+end as selling_stage,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
