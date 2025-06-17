@@ -268,7 +268,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     co.up_to_120_days,
     co.collection_target,
 
-    CASE WHEN zoc.id IS NOT NULL THEN 1 ELSE 0 END AS is_zero_order
+    CASE WHEN zoc.id IS NOT NULL THEN True ELSE False END AS is_zero_order
 
 
 from   {{ ref('base_users') }} as u 
