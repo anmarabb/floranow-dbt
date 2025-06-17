@@ -5,7 +5,7 @@
         b.account_manager,
         --b.city,
         b.date,
-        --b.client_category,
+        b.client_category as user_category,
         b.warehouse,
         b.collection_target,
 
