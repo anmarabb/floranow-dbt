@@ -164,6 +164,8 @@ from_91_to_120_days,
 up_to_120_days,
 collection_target,
 
+is_zero_order,
+
 current_timestamp() as insertion_timestamp, 
 
 from {{ ref('int_customer')}} as u
