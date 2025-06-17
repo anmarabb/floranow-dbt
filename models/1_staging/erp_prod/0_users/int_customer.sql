@@ -156,6 +156,15 @@ where financial_administration is not null and warehouse != ''
 group by 1,2,3
 
 
+),
+
+zero_order_customers as (
+
+select u.id
+from {{ ref('base_users') }} as u
+LEFT JOIN {{ref('stg_line_items')}} as li ON u.id = li.customer_id 
+where li.line_item_id is null
+
 )
 
 
@@ -257,7 +266,9 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     co.61_to_90_days as from_61_to_90_days,
     co.91_to_120_days as from_91_to_120_days,
     co.up_to_120_days,
-    co.collection_target
+    co.collection_target,
+
+    CASE WHEN zoc.id IS NOT NULL THEN 1 ELSE 0 END AS is_zero_order
 
 
 from   {{ ref('base_users') }} as u 
@@ -269,3 +280,4 @@ left join payments as py on u.id = py.user_id
 left join budget as b on b.financial_administration = u.financial_administration and b.warehouse = u.warehouse and b.account_manager = u.account_manager
 left join {{ source(var('erp_source'), 'customers_target') }} ct on u.debtor_number = ct.debtor_number
 left join {{ source(var('erp_source'), 'collection_target') }} co on u.debtor_number = co.debtor_number
+left join zero_order_customers zoc on u.id = zoc.id
