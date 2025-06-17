@@ -9,12 +9,12 @@ SELECT
     db.financial_administration,
     db.account_manager,
     --db.city,
-    --db.client_category,
+    db.user_category,
     db.warehouse,
 
     CASE
-        WHEN ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager/*,city*/) = 1 THEN 
-            SUM(db.daily_budget) OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager/*,city*/)
+        WHEN ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager/*,city*/, user_category) = 1 THEN 
+            SUM(db.daily_budget) OVER (PARTITION BY DATE_TRUNC(date, MONTH),financial_administration,account_manager/*,city*/, user_category)
         ELSE 
             NULL 
     END AS monthly_budget,
