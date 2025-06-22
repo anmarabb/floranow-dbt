@@ -727,6 +727,19 @@ END AS main_hub,
 
 selling_stage,
 
+damaged_packing_quantity,
+sh_received_quantity,
+sh_requested_quantity,
+sh_packed_quantity,
+
+missing_packing_quantity,
+sh_incident_quantity_receiving_stage,
+missing_quantity_receiving_stage,
+damaged_quantity_receiving_stage,
+extra_quantity_receiving_stage,
+packing_additional_quantity,
+extra_packing_quantity,
+
 from {{ref('int_line_items')}} as li 
 
 )
