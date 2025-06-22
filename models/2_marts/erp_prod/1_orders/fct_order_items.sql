@@ -727,6 +727,7 @@ END AS main_hub,
 
 selling_stage,
 
+total_quantity,
 damaged_packing_quantity,
 sh_received_quantity,
 sh_requested_quantity,
