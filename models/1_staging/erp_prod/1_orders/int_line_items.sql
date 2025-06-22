@@ -36,6 +36,12 @@ productIncidents as
         sum(case when incident_type ='EXTRA' and pi.stage = 'INVENTORY' then  pi.quantity else 0 end) as incident_quantity_extra_inventory,
         sum(case when after_sold is false and pi.stage = 'INVENTORY' and incident_type ='MISSING' then pi.quantity else 0 end) as inventory_missing_quantity,
 
+       sum(case when pi.stage = 'PACKING' and pi.incident_type = 'MISSING' then pi.quantity end) AS missing_packing_quantity,
+       sum(case when pi.stage = 'RECEIVING' and after_sold = False then pi.quantity end) AS sh_incident_quantity_receiving_stage,
+       sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'MISSING' then pi.quantity end) AS missing_quantity_receiving_stage,
+       sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'DAMAGED' then pi.quantity end) AS damaged_quantity_receiving_stage,
+       sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'EXTRA' then pi.quantity end) AS extra_quantity_receiving_stage,
+
         from {{ ref('stg_product_incidents') }} as pi  
         left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
         where li.customer_id not in (1289,1470,2816,11123)
@@ -71,9 +77,17 @@ invoice_details as(
     left join {{ref('stg_invoices')}} i on ii.invoice_header_id = i.invoice_header_id
     left join {{ref ('stg_line_items')}} li on ii.line_item_id = li.line_item_id
     group by 1
-)
+),
 
--- requsted qty, conformed qty, packed qty, recvied qty, invoiced qty.
+package_line_items as (
+    SELECT line_item_id,
+             sum(quantity) as quantity,
+             sum(fulfilled_quantity) as fulfilled_quantity,
+             sum(damaged_quantity) as damaged_quantity,
+
+    FROM {{ ref('stg_package_line_items') }}
+    GROUP BY 1
+)
 
 SELECT
 
@@ -529,6 +543,20 @@ case
     when li.order_source in ('Direct Supplier')  then 'Pre-Selling'
 end as selling_stage,
 
+case when li.order_type not in ('ADDITIONAL', 'EXTRA') then li.quantity - li.splitted_quantity - COALESCE(pi.incident_quantity_before_supply_stage, 0) end AS total_quantity,
+pg.damaged_quantity AS damaged_packing_quantity,
+pg.fulfilled_quantity AS sh_received_quantity,
+case when li.order_type not in ('ADDITIONAL', 'EXTRA') then COALESCE(case when orr.quantity is not null then orr.quantity else li.quantity end, 0) end AS sh_requested_quantity,
+CASE WHEN pg.quantity > 0 THEN COALESCE(pg.quantity, 0) - COALESCE(pi.missing_packing_quantity, 0) END AS sh_packed_quantity,
+
+pi.missing_packing_quantity,
+pi.sh_incident_quantity_receiving_stage,
+pi.missing_quantity_receiving_stage,
+damaged_quantity_receiving_stage,
+pi.extra_quantity_receiving_stage AS extra_quantity_receiving_stage,
+case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_additional_quantity,
+case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as extra_packing_quantity,
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
@@ -566,3 +594,4 @@ left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.numbe
 
 left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
 left join invoice_details ind on ind.line_item_id = li.line_item_id
+LEFT JOIN package_line_items pg on li.line_item_id = pg.line_item_id 
