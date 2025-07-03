@@ -192,6 +192,9 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
     customer.account_type,
     customer.payment_term,
     customer.allow_due_invoices,
+    customer.phone_number as customer_phone_number,
+    customer.email as customer_email,
+
     customer.user_category as customer_category,
     concat( customer.financial_administration," - ", customer.Warehouse," - ", customer.account_type," - ", customer.customer_type," - ", customer.user_category," - ", customer.debtor_number  ) as customer_details,
     customer.city,
