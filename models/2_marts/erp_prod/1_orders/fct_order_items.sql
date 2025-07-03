@@ -422,7 +422,9 @@ end as go_live_date,
     User,
     customer_type,
     ksa_resellers,
-
+    customer_phone_number,
+    customer_email,
+    
 
     
 samer_warehouses,
