@@ -213,6 +213,8 @@ end as transaction_phase_segments,
 manual_invoicing_filtration,
 delivery_charge_amount as delivery_charge,
 
+CASE WHEN invoice_header_status = 'Draft' THEN total_amount_without_tax ELSE 0 END AS draft_invoice_amount,
+
 current_timestamp() as insertion_timestamp, 
 
 from {{ ref('stg_invoices')}} as i
