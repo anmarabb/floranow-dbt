@@ -399,6 +399,9 @@ total_price_without_tax,
 currency,
 packing_list_fob_price,
 
+modified_stock_model,
+modified_stock_model_details,
+
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
