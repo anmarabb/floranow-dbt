@@ -245,6 +245,8 @@ CONCAT(coalesce(financial_administration,''), coalesce(account_manager,''), coal
 manual_invoicing_filtration,
 gross_revenue - delivery_charge_amount as total_gross,
 
+draft_invoice_amount,
+
 from {{ref('int_invoices')}} as i
 )
 
