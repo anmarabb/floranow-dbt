@@ -30,6 +30,8 @@ pod.created_at as order_date,
 pod.source_type,
 pod.ids_count,
 pod.pod_status,
+pod.delivered_at,
+pod.window_starts_at,
 
 
 customer.name as Customer,
@@ -54,6 +56,7 @@ rou.route_name,
 
 date.dim_date,
 
+customer.debtor_number,
 
 current_timestamp() as insertion_timestamp, 
 
