@@ -44,6 +44,10 @@ item_count,
 
     else "Past" end as select_delivery_date,
 
+    delivered_at,
+    window_starts_at,
+    debtor_number,
+
 
     current_timestamp() as insertion_timestamp, 
 
