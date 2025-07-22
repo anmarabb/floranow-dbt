@@ -55,7 +55,7 @@ when st.id in (622,623) then 'Internal - Grandiose'
 when st.id in (808,809) then 'Internal - Riyadh Project X'
 when st.id in (812,813) then 'Internal - Dammam Project X'
 when st.id in (836,837) then 'Internal - Jeddah Project X'
-when st.id in (730,522,484,567,566,531,530,523,485,373,372,301,300,199,198,131,130,127,126,57,56,21,20,7,6,2,1,303,805,825,823,827,807,93,233) then  'Reselling'
+when st.id in (730,522,484,567,566,531,530,523,485,373,372,301,300,199,198,131,130,127,126,57,56,21,20,7,6,2,1,303,805,825,823,827,807,93,233, 859, 855, 857, 861) then  'Reselling'
      
 else 'Others'
 end as stock_model_details,
@@ -74,7 +74,7 @@ when st.id in (621,620) then 'Internal'
 when st.id in (622,623) then 'Internal'
 when st.id in (808,809) then 'Internal - Project X'
 when st.id in (812,813,836,837) then 'Internal - Project X'
-when st.id in (730,522,484,567,566,531,530,523,485,373,372,301,300,199,198,131,130,127,126,57,56,21,20,7,6,2,1,303,805,825,823,827,807,93,233) then  'Reselling'
+when st.id in (730,522,484,567,566,531,530,523,485,373,372,301,300,199,198,131,130,127,126,57,56,21,20,7,6,2,1,303,805,825,823,827,807,93,233, 859, 855, 857, 861) then  'Reselling'
 else 'Others'
 end as stock_model,
 
