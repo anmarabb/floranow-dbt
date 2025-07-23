@@ -4,6 +4,8 @@ select
 proof_of_delivery_id,
 count (*) as item_count ,
 min(created_at) as order_date,
+sum(fulfilled_quantity) as fulfilled_quantity,
+sum(fulfilled_value) as fulfilled_value,
 from {{ ref('stg_line_items') }}
 group by proof_of_delivery_id
  ),
@@ -59,6 +61,9 @@ date.dim_date,
 customer.debtor_number,
 
 delivery_at,
+
+fulfilled_quantity,
+fulfilled_value,
 
 current_timestamp() as insertion_timestamp, 
 
