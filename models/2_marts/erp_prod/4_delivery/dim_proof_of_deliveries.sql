@@ -49,6 +49,9 @@ item_count,
     debtor_number,
 
 
+    FORMAT_TIMESTAMP('%H:%M', window_starts_at, 'Asia/Dubai') AS window_start_time_dubai_tz,
+
+
     current_timestamp() as insertion_timestamp, 
 
 from {{ ref('int_proof_of_deliveries')}} as pod
