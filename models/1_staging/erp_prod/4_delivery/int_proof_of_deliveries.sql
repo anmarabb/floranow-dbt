@@ -58,6 +58,8 @@ date.dim_date,
 
 customer.debtor_number,
 
+delivery_at,
+
 current_timestamp() as insertion_timestamp, 
 
  from {{ ref('stg_proof_of_deliveries') }} as pod
