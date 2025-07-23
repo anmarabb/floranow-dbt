@@ -55,6 +55,9 @@ item_count,
 
     current_timestamp() as insertion_timestamp, 
 
+    fulfilled_quantity,
+    fulfilled_value,
+
 from {{ ref('int_proof_of_deliveries')}} as pod
 
 
