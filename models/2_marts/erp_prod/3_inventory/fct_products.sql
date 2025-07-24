@@ -47,7 +47,21 @@
           
                 FROM data
 
-            )
+            ),
+            flags as (
+  select product_name,
+         departure_date,
+         sum(in_stock_quantity) as daily_qoh,
+         first_value(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between unbounded preceding and unbounded following) as first_batch_qoh,
+         max(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between 1 following and unbounded following) as max_future_qoh,
+         case when max(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between 1 following and unbounded following) is null then 0
+              when first_value(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between unbounded preceding and unbounded following) > max(sum(in_stock_quantity)) 
+              over (partition by product_name order by departure_date rows between 1 following and unbounded following) then 1 else 0
+         end as fifo_flag
+
+  from {{ref("int_products")}}
+  group by product_name, departure_date
+)
                 
             
 
@@ -67,7 +81,7 @@ case
 
 --Products
     --dim
-        product_name as Product,
+        p.product_name as Product,
         stem_length,
         product_subcategory,
         product_category,
@@ -402,9 +416,12 @@ packing_list_fob_price,
 modified_stock_model,
 modified_stock_model_details,
 
+f.fifo_flag,
+
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
 left join requested_orders as ro on ro.product_id = p.product_id
+left join flags f on p.product_name = f.product_name and p.departure_date = f.departure_date
 --where p.product_id = 268380
 --where shipment_id =30798
