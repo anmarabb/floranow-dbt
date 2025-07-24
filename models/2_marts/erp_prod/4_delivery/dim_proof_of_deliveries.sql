@@ -58,6 +58,8 @@ item_count,
     fulfilled_quantity,
     fulfilled_value,
 
+    concat( "https://erp.floranow.com/proof_of_deliveries/", proof_of_delivery_id) as proof_of_delivery_link,
+
 from {{ ref('int_proof_of_deliveries')}} as pod
 
 
