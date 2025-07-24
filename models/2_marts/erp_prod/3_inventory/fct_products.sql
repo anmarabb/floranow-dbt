@@ -61,6 +61,19 @@
 
   from {{ref("int_products")}}
   group by product_name, departure_date
+),
+express_data as (
+    select p.product_id, 
+           date(cli.created_at) as order_date,
+           li.fulfilled_quantity, 
+           cli.ordered_quantity as withdrown_quantity,
+    from {{ref("int_products")}} p
+    left join {{ref ("base_stocks")}} s on p.stock_id = s.stock_id
+    left join {{ref ("int_line_items")}} li on li.line_item_id = p.line_item_id
+    left join{{ref ("int_line_items")}} cli on cli.parent_line_item_id = li.line_item_id and cli.customer_type != 'retail'
+    left join {{ref("stg_feed_sources")}} fs on cli.feed_source_id = fs.feed_source_id 
+    where s.out_feed_source_id in (277, 271, 578, 991, 445, 886, 1025, 683, 615, 986, 614, 887, 545, 990, 443, 989, 987, 988, 1026)
+
 )
                 
             
@@ -115,7 +128,7 @@ case
     --date
         product_expired_at,
         p.departure_date,   --from product
-        order_date,
+        p.order_date,
   
     --fct
         
@@ -147,7 +160,7 @@ case
         age,
 
         
-        fulfilled_quantity,
+        p.fulfilled_quantity,
         packed_quantity,
 
         unit_landed_cost,
@@ -326,7 +339,7 @@ CASE
     END AS sold_quantity_2023,
 
 
-case when COALESCE(incidents_quantity, 0) + COALESCE(fulfilled_quantity, 0)  = ordered_quantity then 'Match' else 'Cheack' end as quantity_cheack,
+case when COALESCE(incidents_quantity, 0) + COALESCE(p.fulfilled_quantity, 0)  = ordered_quantity then 'Match' else 'Cheack' end as quantity_cheack,
 
 
 shipment_id,
@@ -418,10 +431,14 @@ modified_stock_model_details,
 
 f.fifo_flag,
 
+ed.order_date as express_order_date,
+ed.fulfilled_quantity as total_fulfilled_quantity_express, 
+ed.withdrown_quantity as withdrown_quantity_express,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
 left join requested_orders as ro on ro.product_id = p.product_id
 left join flags f on p.product_name = f.product_name and p.departure_date = f.departure_date
+left join express_data ed on ed.product_id = p.product_id
 --where p.product_id = 268380
 --where shipment_id =30798
