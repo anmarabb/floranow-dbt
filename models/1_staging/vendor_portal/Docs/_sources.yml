@@ -1,0 +1,6 @@
+version: 2
+sources:
+  - name: vendor_portal_prod_rds
+    database: floranow
+    tables:
+      - name: vp_order_items
