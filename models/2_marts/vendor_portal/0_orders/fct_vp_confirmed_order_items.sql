@@ -1,2 +1,2 @@
 select *
-from {{ref ("vp_confirmed_order_items")}}
+from {{ref ("stg_vp_confirmed_order_items")}}
