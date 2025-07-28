@@ -5,3 +5,5 @@ sources:
     tables:
       - name: vp_order_items
       - name: vp_offers
+      - name: vp_canceled_order_items
+      - name: vp_confirmed_order_items
