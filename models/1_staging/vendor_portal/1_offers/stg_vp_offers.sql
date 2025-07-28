@@ -29,9 +29,4 @@ select
 
 
 
-
-
-
-
-
 from {{ source(var('erp_source'), 'vp_offers') }}
