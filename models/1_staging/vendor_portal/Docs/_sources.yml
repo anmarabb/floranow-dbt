@@ -4,3 +4,4 @@ sources:
     database: floranow
     tables:
       - name: vp_order_items
+      - name: vp_offers
