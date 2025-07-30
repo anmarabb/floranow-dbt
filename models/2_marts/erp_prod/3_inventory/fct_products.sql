@@ -60,6 +60,7 @@
          end as fifo_flag
 
   from {{ref("int_products")}}
+  where Stock = 'Inventory Stock' and live_stock = 'Live Stock' and stock_model in ('Reselling', 'Commission Based', 'Internal', 'Internal - Project X') and flag_1 in ('scaned_flag', 'scaned_good') 
   group by product_name, departure_date
 ),
 express_data as (
