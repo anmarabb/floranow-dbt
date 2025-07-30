@@ -440,6 +440,8 @@ ed.withdrown_quantity as withdrown_quantity_express,
 ed.li_order_date,
 ed.express_remaining_quantity,
 
+reseller_label,
+
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
 left join requested_orders as ro on ro.product_id = p.product_id
