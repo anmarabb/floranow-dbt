@@ -540,6 +540,8 @@ li.li_invoice_number,
 li.local_supplier_name,
 li.packing_list_fob_price,
 
+reseller.reseller_label,
+
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
         left join {{ ref('fct_order_items')}} as li on p.line_item_id = li.line_item_id
