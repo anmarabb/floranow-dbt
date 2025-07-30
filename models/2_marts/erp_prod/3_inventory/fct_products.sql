@@ -65,6 +65,8 @@
 express_data as (
     select p.product_id, 
            date(cli.created_at) as order_date,
+           date(li.created_at) as li_order_date,
+           p.remaining_quantity as express_remaining_quantity,
            li.fulfilled_quantity, 
            cli.ordered_quantity as withdrown_quantity,
     from {{ref("int_products")}} p
@@ -434,6 +436,8 @@ f.fifo_flag,
 ed.order_date as express_order_date,
 ed.fulfilled_quantity as total_fulfilled_quantity_express, 
 ed.withdrown_quantity as withdrown_quantity_express,
+ed.li_order_date,
+ed.express_remaining_quantity,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
