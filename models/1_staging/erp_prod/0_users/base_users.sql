@@ -240,6 +240,7 @@ else 'Floranow Aging'
 end as user_aging_type,
 
 concat( "https://erp.floranow.com/users/", u.id) as user_link,
+u.label,
 
 
 
