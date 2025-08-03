@@ -4,7 +4,7 @@
         b.financial_administration,
         b.account_manager,
         b.City,
-        b.data_date,
+        b.data_date as date,
         b.client_category as user_category ,
         b.warehouse,
         b.budget,
