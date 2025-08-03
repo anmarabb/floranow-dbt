@@ -27,6 +27,7 @@ select
     ordertype as order_type,
     farmname as Farm,
     vendorname as Vendor,
+    offernumber as offer_number,
 
 
 from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
