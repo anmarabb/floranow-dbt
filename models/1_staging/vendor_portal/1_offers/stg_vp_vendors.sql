@@ -5,7 +5,7 @@ select
 
     -- Data
     floranownumber as floranow_number,
-    name as vendor_name,
+    name as Vendor,
     contactname as contact_name,
     email as vendor_email,
     case when active = True then "active" else "inactive" end as vendor_status,
