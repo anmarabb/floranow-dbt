@@ -8,3 +8,4 @@ sources:
       - name: vp_canceled_order_items
       - name: vp_confirmed_order_items
       - name: vp_farm_catalog_variations
+      - name: vp_vendors
