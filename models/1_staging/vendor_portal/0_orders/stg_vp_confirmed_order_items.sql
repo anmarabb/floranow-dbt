@@ -25,6 +25,8 @@ select
     quantity,
     status as order_item_status,
     ordertype as order_type,
+    farmname as Farm,
+    vendorname as Vendor,
 
 
 from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
