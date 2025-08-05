@@ -159,11 +159,12 @@ CASE
 
 customer.account_manager,
 customer.user_category,
-
+customer.reseller_label,
 current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_product_incidents')}} as pi
 left join {{ref('int_line_items')}} as li on pi.line_item_id = li.line_item_id
+
 left join {{ref('int_products')}} as p on p.line_item_id = li.line_item_id 
 
 left join {{ref('base_users')}} as reported_by on reported_by.id = pi.reported_by_id
