@@ -190,6 +190,7 @@ selling_stage,
 
 account_manager,
 user_category,
+reseller_label,
 
 current_timestamp() as insertion_timestamp, 
 
