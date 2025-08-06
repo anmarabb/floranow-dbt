@@ -246,6 +246,7 @@ case
 end as base_metric_usd,
 
 selling_stage,
+li.product_color,
 
 current_timestamp() as insertion_timestamp,
 
