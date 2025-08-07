@@ -60,7 +60,7 @@
          end as fifo_flag
 
   from {{ref("int_products")}}
-  where Stock = 'Inventory Stock' and live_stock = 'Live Stock' and stock_model in ('Reselling', 'Commission Based', 'Internal', 'Internal - Project X') and flag_1 in ('scaned_flag', 'scaned_good') 
+  where Stock = 'Inventory Stock' and live_stock = 'Live Stock' and modified_stock_model in ('Reselling', 'SCaaS', 'TBF', 'Internal') and flag_1 in ('scaned_flag', 'scaned_good') 
   group by product_name, departure_date
 ),
 express_data as (
@@ -75,7 +75,8 @@ express_data as (
     left join {{ref ("int_line_items")}} li on li.line_item_id = p.line_item_id
     left join{{ref ("int_line_items")}} cli on cli.parent_line_item_id = li.line_item_id and cli.customer_type != 'retail'
     left join {{ref("stg_feed_sources")}} fs on cli.feed_source_id = fs.feed_source_id 
-    where reseller_label = 'Express'
+    where reseller_label = 'Express' and p.Stock = 'Inventory Stock' and live_stock = 'Live Stock' 
+    and p.modified_stock_model in ('Reselling', 'SCaaS', 'TBF', 'Internal') and flag_1 in ('scaned_flag', 'scaned_good') 
 
 )
                 
