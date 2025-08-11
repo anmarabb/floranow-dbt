@@ -558,6 +558,7 @@ pi.missing_quantity_receiving_stage,
 damaged_quantity_receiving_stage,
 pi.extra_quantity_receiving_stage AS extra_quantity_receiving_stage,
 case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_additional_quantity,
+case when ad.creation_stage = 'INVENTORY' then ad.quantity END AS inventory_additional_quantity,
 case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as extra_packing_quantity,
 
 from {{ref('stg_line_items')}} as li
