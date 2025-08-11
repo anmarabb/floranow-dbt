@@ -561,6 +561,8 @@ case when ad.creation_stage = 'PACKING' then ad.quantity END AS packing_addition
 case when ad.creation_stage = 'INVENTORY' then ad.quantity END AS inventory_additional_quantity,
 case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as extra_packing_quantity,
 
+case when li.shipment_id is not null and li.warehoused_quantity > 0 then li.warehoused_quantity else 0 end as shipment_quantity,
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
