@@ -743,6 +743,7 @@ extra_quantity_receiving_stage,
 packing_additional_quantity,
 extra_packing_quantity,
 inventory_additional_quantity,
+shipment_quantity,
 
 from {{ref('int_line_items')}} as li 
 
