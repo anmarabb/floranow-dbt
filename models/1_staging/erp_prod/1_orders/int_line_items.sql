@@ -563,6 +563,10 @@ case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered
 
 case when li.shipment_id is not null and li.warehoused_quantity > 0 then li.warehoused_quantity else 0 end as shipment_quantity,
 
+case when li.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'retail' then li.quantity else 0 end as retail_picked_qty,
+
+case when li.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'reseller' then li.quantity else 0 end as reseller_moved_qty,
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
