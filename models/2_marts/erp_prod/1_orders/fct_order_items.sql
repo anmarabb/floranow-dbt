@@ -749,6 +749,7 @@ retail_picked_qty,
 reseller_moved_qty,
 
 incident_quantity_in_warehouse,
+reseller_label,
 
 from {{ref('int_line_items')}} as li 
 
