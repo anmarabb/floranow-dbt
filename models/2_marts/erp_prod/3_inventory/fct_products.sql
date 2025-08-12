@@ -75,7 +75,7 @@ express_data as (
     left join {{ref ("int_line_items")}} li on li.line_item_id = p.line_item_id
     left join{{ref ("int_line_items")}} cli on cli.parent_line_item_id = li.line_item_id and cli.customer_type != 'retail'
     left join {{ref("stg_feed_sources")}} fs on cli.feed_source_id = fs.feed_source_id 
-    where reseller_label = 'Express' and p.Stock = 'Inventory Stock' and live_stock = 'Live Stock' 
+    where p.reseller_label = 'Express' and p.Stock = 'Inventory Stock' and live_stock = 'Live Stock' 
     and p.modified_stock_model in ('Reselling', 'SCaaS', 'TBF', 'Internal') and flag_1 in ('scaned_flag', 'scaned_good') 
 
 )
@@ -444,7 +444,7 @@ ed.withdrown_quantity as withdrown_quantity_express,
 ed.li_order_date,
 ed.express_remaining_quantity,
 
-reseller_label,
+p.reseller_label,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
