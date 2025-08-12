@@ -745,6 +745,9 @@ extra_packing_quantity,
 inventory_additional_quantity,
 shipment_quantity,
 
+retail_picked_qty,
+reseller_moved_qty,
+
 from {{ref('int_line_items')}} as li 
 
 )
