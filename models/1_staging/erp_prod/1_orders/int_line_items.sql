@@ -41,7 +41,8 @@ productIncidents as
        sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'MISSING' then pi.quantity end) AS missing_quantity_receiving_stage,
        sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'DAMAGED' then pi.quantity end) AS damaged_quantity_receiving_stage,
        sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'EXTRA' then pi.quantity end) AS extra_quantity_receiving_stage,
-
+       sum(case when pi.incidentable_type = 'ProductLocation' and  pi.incident_type != 'EXTRA' then pi.quantity end) AS incident_quantity_in_warehouse,
+        
         from {{ ref('stg_product_incidents') }} as pi  
         left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
         where li.customer_id not in (1289,1470,2816,11123)
@@ -566,6 +567,8 @@ case when li.shipment_id is not null and li.warehoused_quantity > 0 then li.ware
 case when li.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'retail' then li.quantity else 0 end as retail_picked_qty,
 
 case when li.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'reseller' then li.quantity else 0 end as reseller_moved_qty,
+
+incident_quantity_in_warehouse,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
