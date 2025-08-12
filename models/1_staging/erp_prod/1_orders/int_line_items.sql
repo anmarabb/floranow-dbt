@@ -429,6 +429,7 @@ fs.feed_source_name,
 fs.feed_type,
 fs.supplier_name as feed_source_supplier,
 reseller.name as Reseller,
+reseller.reseller_label,
 master.name as Master,
 
 ii.quantity as inv_quantity,
