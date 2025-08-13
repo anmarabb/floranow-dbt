@@ -565,9 +565,9 @@ case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered
 
 case when li.shipment_id is not null and li.warehoused_quantity > 0 then li.warehoused_quantity else 0 end as shipment_quantity,
 
-case when cli.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'retail' then cli.quantity else 0 end as retail_picked_qty,
+-- case when cli.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'retail' then cli.quantity else 0 end as retail_picked_qty,
 
-case when cli.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'reseller' then cli.quantity else 0 end as reseller_moved_qty,
+-- case when cli.ordering_stock_type = 'INVENTORY' and customer.customer_type = 'reseller' then cli.quantity else 0 end as reseller_moved_qty,
 
 incident_quantity_in_warehouse,
 
@@ -607,7 +607,7 @@ left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
 left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
 left join productIncidents as pi on pi.line_item_id = li.line_item_id
 left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.number
-left join {{ref ("stg_line_items")}} cli on cli.parent_line_item_id = li.line_item_id
+-- left join {{ref ("stg_line_items")}} cli on cli.parent_line_item_id = li.line_item_id
 
 left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
 left join invoice_details ind on ind.line_item_id = li.line_item_id
