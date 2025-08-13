@@ -745,8 +745,8 @@ extra_packing_quantity,
 inventory_additional_quantity,
 shipment_quantity,
 
-retail_picked_qty,
-reseller_moved_qty,
+-- retail_picked_qty,
+-- reseller_moved_qty,
 
 incident_quantity_in_warehouse,
 reseller_label,
