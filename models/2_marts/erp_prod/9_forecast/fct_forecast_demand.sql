@@ -18,14 +18,18 @@ select Product,
        date(departure_date) as date, 
        0 as requested_quantity,
        sum(coming_quantity) as coming_quantity,
-       sum(remaining_quantity) as remaining_quantity,
+       sum(case 
+                when p.Stock = 'Inventory Stock' 
+                and live_stock = 'Live Stock' 
+                and p.modified_stock_model in ('Reselling', 'SCaaS', 'TBF', 'Internal') 
+                and flag_1 in ('scaned_flag', 'scaned_good') then remaining_quantity else 0 
+            end) as remaining_quantity,
        0 as actual_quantity,
        0 as forecast_quantity,
 
 from {{ref("fct_products")}} p
 where Product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
-and p.reseller_label = 'Express' and p.Stock = 'Inventory Stock' and live_stock = 'Live Stock' 
-and p.modified_stock_model in ('Reselling', 'SCaaS', 'TBF', 'Internal') and flag_1 in ('scaned_flag', 'scaned_good') 
+and p.reseller_label = 'Express' 
 group by 1, 2
 
 UNION ALL
