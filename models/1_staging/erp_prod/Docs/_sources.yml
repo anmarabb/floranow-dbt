@@ -112,3 +112,4 @@ sources:
       - name: collection_target
       
       - name: client_status_summary
+      - name: forecast_demand
