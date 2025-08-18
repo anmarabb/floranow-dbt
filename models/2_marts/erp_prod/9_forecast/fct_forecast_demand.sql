@@ -18,6 +18,21 @@ select Product,
        date(departure_date) as date, 
        0 as requested_quantity,
        sum(coming_quantity) as coming_quantity,
+       0 as remaining_quantity,
+       0 as actual_quantity,
+       0 as forecast_quantity,
+
+from {{ref("fct_products")}} p
+where Product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
+and p.reseller_label = 'Express' 
+group by 1, 2
+
+UNION ALL
+
+select Product,
+       current_date() as date, 
+       0 as requested_quantity,
+       0 as coming_quantity,
        sum(case 
                 when p.Stock = 'Inventory Stock' 
                 and live_stock = 'Live Stock' 
