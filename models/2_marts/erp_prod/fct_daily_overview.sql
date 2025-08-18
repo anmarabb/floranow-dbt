@@ -24,7 +24,7 @@ select Product,
        0 as target_budget,
 
 from {{ref("fct_products")}} p
-WHERE report_filter is not null and stock_model_details in ('Reselling', 'Internal - Riyadh Project X', 'Internal - Dammam Project X', 'Internal - Jeddah Project X', 'Commission Based - Astra Express')
+WHERE report_filter is not null --and stock_model_details in ('Reselling', 'Internal - Riyadh Project X', 'Internal - Dammam Project X', 'Internal - Jeddah Project X', 'Commission Based - Astra Express')
 
 UNION ALL
 
