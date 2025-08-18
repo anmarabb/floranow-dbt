@@ -1,4 +1,4 @@
- select product_name as Product,
+ select Product,
        date(departure_date) as date, 
        sum(quantity) as requested_quantity,
        0 as coming_quantity,
