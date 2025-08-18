@@ -43,7 +43,7 @@ approved_at,
 canceled_at,
 
 product_type,
-product_name,
+product_name as Product,
 --product_selection_type,
 color,
 stem_length,
