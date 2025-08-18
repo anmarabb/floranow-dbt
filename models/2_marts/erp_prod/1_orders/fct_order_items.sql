@@ -127,8 +127,18 @@ SELECT lower('Light Purple') as color
  UNION ALL SELECT lower('yellow orange') as color 
  UNION ALL SELECT lower('light blue pink') as color
  )
+,
+quantity_tracking as(
+    select li.line_item_id,
+           sum(case when cli.ordering_stock_type = 'INVENTORY' and cli.customer_type = 'retail' then cli.ordered_quantity else 0 end) as retail_picked_qty,
+           sum(case when cli.ordering_stock_type = 'INVENTORY' and cli.customer_type = 'reseller' then cli.ordered_quantity else 0 end) as reseller_moved_qty,
 
-, data as(
+    from {{ref ("int_line_items")}} li 
+    left join {{ref ("int_line_items")}} cli on cli.parent_line_item_id = li.line_item_id
+    group by 1
+)
+
+
  
 select
    (SELECT color FROM color_list cl WHERE REGEXP_CONTAINS(lower(product_name), r'\b' || cl.color) limit 1) AS matched_color,
@@ -188,7 +198,7 @@ stock_order_ids,
     dispatched_by,
 
 --line order
-    line_item_id,
+    li.line_item_id,
     line_item_link,
     li.unit_price,
     li.total_price_without_tax, -- (li.quantity * li.unit_price)
@@ -745,16 +755,11 @@ extra_packing_quantity,
 inventory_additional_quantity,
 shipment_quantity,
 
--- retail_picked_qty,
--- reseller_moved_qty,
+qt.retail_picked_qty,
+qt.reseller_moved_qty,
 
 incident_quantity_in_warehouse,
 reseller_label,
 
 from {{ref('int_line_items')}} as li 
-
-)
-select *,    
-CONCAT(coalesce(product_subcategory,''), coalesce(product_subgroup,''), coalesce(product_color,'')) as li_category_linking,
-CONCAT(coalesce(product,''), coalesce(product_color,'')) as li_product_linking
-from data 
+left join quantity_tracking qt on li.line_item_id = qt.line_item_id
