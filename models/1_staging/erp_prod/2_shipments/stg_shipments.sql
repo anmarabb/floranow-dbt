@@ -103,7 +103,7 @@ is_local,
 
 
 current_timestamp() as ingestion_timestamp,
- 
+warehousing_datetime,
 
 
 
