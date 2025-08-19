@@ -64,6 +64,7 @@ delivery_at,
 
 fulfilled_quantity,
 fulfilled_value,
+pod_ready_datetime,
 
 current_timestamp() as insertion_timestamp, 
 
