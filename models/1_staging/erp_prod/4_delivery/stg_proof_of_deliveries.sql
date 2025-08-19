@@ -68,7 +68,7 @@ select
 
 delivery_at,
 
-
+pod_ready_datetime,
 
 
 current_timestamp() as ingestion_timestamp,
