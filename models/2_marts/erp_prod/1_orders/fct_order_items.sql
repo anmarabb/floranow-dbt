@@ -762,5 +762,8 @@ qt.reseller_moved_qty,
 incident_quantity_in_warehouse,
 reseller_label,
 
+origin_warehouse_id,
+destination_warehouse_id,
+
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
