@@ -571,7 +571,7 @@ case when li.shipment_id is not null and li.warehoused_quantity > 0 then li.ware
 
 incident_quantity_in_warehouse,
 
-
+reseller_parent.name as parent_reseller,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -589,9 +589,13 @@ left join {{ref('base_users')}} as returned_by on returned_by.id = li.returned_b
 left join {{ref('base_users')}} as created_by on created_by.id = li.created_by_id
 left join {{ref('base_users')}} as split_by on split_by.id = li.split_by_id
 left join {{ref('base_users')}} as order_requested_by on order_requested_by.id = orr.created_by_id
+
 left join {{ref('base_suppliers')}} as lis on lis.supplier_id = li.supplier_id
 left join {{ ref('stg_products') }} as pp on pp.line_item_id = li.parent_line_item_id 
 left join {{ref('stg_line_items')}} as pli on pli.line_item_id = li.parent_line_item_id
+
+left join {{ref('base_users')}} as reseller_parent on reseller_parent.id = pli.reseller_id
+
 left join {{ref('stg_line_items')}} as ppli on ppli.line_item_id = pli.parent_line_item_id
 left join {{ref('base_suppliers')}} as plis on plis.supplier_id = pli.supplier_id
 left join {{ ref('dim_proof_of_deliveries') }} as pod on li.proof_of_delivery_id = pod.proof_of_delivery_id
@@ -607,6 +611,7 @@ left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
 left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
 left join productIncidents as pi on pi.line_item_id = li.line_item_id
 left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.number
+
 -- left join {{ref ("stg_line_items")}} cli on cli.parent_line_item_id = li.line_item_id
 
 left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
