@@ -135,7 +135,7 @@ p.stock_model_details,
 p.stock_model,
 p.full_stock_name,
 p.modified_stock_model,
-p.modified_stock_model_details,
+p.stock_label,
 
 concat('NCR-', FORMAT_TIMESTAMP('%y%m%d', li.departure_date), '-', li.shipment_id) as NCR,
 
