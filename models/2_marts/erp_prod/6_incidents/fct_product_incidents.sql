@@ -181,7 +181,7 @@ li_record_type_details,
 li_record_type,
 order_source,
 modified_stock_model,
-modified_stock_model_details,
+stock_label,
 
 reseller_type,
 damage_type,
