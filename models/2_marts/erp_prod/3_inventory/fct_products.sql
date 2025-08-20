@@ -434,7 +434,7 @@ currency,
 packing_list_fob_price,
 
 modified_stock_model,
-modified_stock_model_details,
+stock_label,
 
 f.fifo_flag,
 
