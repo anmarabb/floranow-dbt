@@ -38,7 +38,7 @@ st.availability_type,
 st.has_custom_sales_unit,
 --st.custom_sales_unit,
 
-st.label as modified_stock_model_details,
+st.label as stock_label,
 TRIM(IF(STRPOS(label, '-') > 0,SUBSTR(label, 1, STRPOS(label, '-') - 1),label)) AS modified_stock_model,
 case 
 when st.id in (12,13) then 'Internal - Jumeriah'
