@@ -9,7 +9,7 @@
 from {{ref("fct_order_requests")}}
 where status = 'REQUESTED'
 and product_name in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
-and departure_date >= current_date()
+and departure_date >= current_date() and warehouse = 'Dubai Warehouse'
 group by 1, 2
 
 UNION ALL
@@ -24,7 +24,7 @@ select Product,
 
 from {{ref("fct_products")}} p
 where Product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
-and p.reseller_label = 'Express' 
+and p.reseller_label = 'Express' and warehouse = 'Dubai Warehouse'
 group by 1, 2
 
 UNION ALL
@@ -44,7 +44,7 @@ select Product,
 
 from {{ref("fct_products")}} p
 where Product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
-and p.reseller_label = 'Express' 
+and p.reseller_label = 'Express' and warehouse = 'Dubai Warehouse'
 group by 1, 2
 
 UNION ALL
