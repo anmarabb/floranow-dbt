@@ -205,7 +205,7 @@ with
                 when st.stock_model in ('Reselling') then case when s.supplier_name = 'ASTRA Farms' then 'Commission Based' else 'Reselling'
                 end else st.stock_model end as stock_model,
             st.modified_stock_model,
-            st.modified_stock_model_details,
+            st.stock_label,
 
             reseller.name as Reseller,
             concat(st.stock_id, " - ", st.stock_type, " Stock - ", reseller.name  ) as full_stock_name,
