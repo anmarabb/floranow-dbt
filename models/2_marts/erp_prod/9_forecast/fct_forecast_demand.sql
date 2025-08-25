@@ -9,7 +9,8 @@
 from {{ref("fct_order_requests")}}
 where status = 'REQUESTED'
 and product_name in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
-and departure_date >= current_date() and warehouse = 'Dubai Warehouse'
+-- and departure_date >= current_date() 
+and warehouse = 'Dubai Warehouse'
 group by 1, 2
 
 UNION ALL
