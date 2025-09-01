@@ -12,7 +12,7 @@ select
     case when active = True then "active" else "inactive" end as farm_variation_status,
     mainimage. url as mainimage_url,
     color as product_color,
-    length AS stem_lengthh,
+    length AS stem_length,
     countryoforigin as vendor_region,
     producttypename as product_type_name,
     categoryname as product_category,
