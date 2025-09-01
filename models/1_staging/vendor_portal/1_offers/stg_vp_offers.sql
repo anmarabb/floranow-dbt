@@ -31,6 +31,7 @@ select
     case when farmsnapshot.active = True then "active" else "inactive" end as farm_status,
     DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY) AS number_of_days,
     maxdailyfulfillmentquantity * DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY) AS total_offered_quantity,
+    farmcatalogvariationsnapshot.mainimage.url as mainimage_url,
 
 
 from {{ source(var('erp_source'), 'vp_offers') }}
