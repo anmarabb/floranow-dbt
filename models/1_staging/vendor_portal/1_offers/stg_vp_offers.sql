@@ -33,6 +33,7 @@ select
     DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY) AS number_of_days,
     maxdailyfulfillmentquantity * DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY) AS total_offered_quantity,
     farmcatalogvariationsnapshot.mainimage.url as mainimage_url,
+    round(SAFE_CAST(NULLIF(REGEXP_REPLACE(TRIM(price), r'[^0-9.\-]', ''),'') AS FLOAT64) * maxdailyfulfillmentquantity * DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY),2) as total_offer_price,
 
 
 from {{ source(var('erp_source'), 'vp_offers') }}
