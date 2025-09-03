@@ -1,2 +1,2 @@
 select *
-from {{ref("stg_vp_offers")}}
+from {{ref("int_vp_offers")}}
