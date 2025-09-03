@@ -27,7 +27,10 @@ select
     farmsnapshot. currency as currency,
     vendorsnapshot. name as Vendor,
     farmcatalogvariationsnapshot.mainimage.url as mainimage_url,
-
+    case when vendorsnapshot.active = True then "active" else "inactive" end as vendor_status,
+    case when farmcatalogvariationsnapshot.active = True then "active" else "inactive" end as variation_status,
+    case when farmsnapshot.active = True then "active" else "inactive" end as farm_status,
+    case when active = True then "active" else "inactive" end as offer_status,
 
 
 from {{ source(var('erp_source'), 'vp_offers') }}
