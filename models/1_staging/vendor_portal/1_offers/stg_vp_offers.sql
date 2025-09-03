@@ -26,14 +26,8 @@ select
     -- farmsnapshot.active as farm_active_status,
     farmsnapshot. currency as currency,
     vendorsnapshot. name as Vendor,
-    case when vendorsnapshot.active = True then "active" else "inactive" end as vendor_status,
-    case when farmcatalogvariationsnapshot.active = True then "active" else "inactive" end as variation_status,
-    case when farmsnapshot.active = True then "active" else "inactive" end as farm_status,
-    case when active = True then "active" else "inactive" end as offer_status,
-    DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY) AS number_of_days,
-    maxdailyfulfillmentquantity * DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY) AS total_offered_quantity,
     farmcatalogvariationsnapshot.mainimage.url as mainimage_url,
-    round(SAFE_CAST(NULLIF(REGEXP_REPLACE(TRIM(price), r'[^0-9.\-]', ''),'') AS FLOAT64) * maxdailyfulfillmentquantity * DATE_DIFF(DATE(validityto), DATE(validityfrom), DAY),2) as total_offer_price,
+
 
 
 from {{ source(var('erp_source'), 'vp_offers') }}
