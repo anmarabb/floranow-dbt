@@ -9,3 +9,4 @@ sources:
       - name: vp_confirmed_order_items
       - name: vp_farm_catalog_variations
       - name: vp_vendors
+      - name: vp_rejected_order_items
