@@ -29,6 +29,7 @@ SELECT
   number_of_days,
   is_new_offer,
   is_expiring_soon,
+  order_status
 
 FROM calendar c
 LEFT JOIN `dbt_prod_dwh.fct_vp_offers` o
