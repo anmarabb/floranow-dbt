@@ -9,7 +9,7 @@
 
 select o.*,
 
-       DATE_DIFF(DATE(valid_from), DATE(valid_from), DAY) AS number_of_days,
+       DATE_DIFF(DATE(valid_to), DATE(valid_from), DAY) AS number_of_days,
        max_daily_fulfillment_quantity * DATE_DIFF(DATE(valid_to), DATE(valid_from), DAY) AS total_offered_quantity,
 
        round(unit_price * max_daily_fulfillment_quantity * DATE_DIFF(DATE(valid_to), DATE(valid_from), DAY),2) as total_offer_price,
