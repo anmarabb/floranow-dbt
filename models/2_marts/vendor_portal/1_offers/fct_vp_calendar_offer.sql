@@ -4,7 +4,7 @@ WITH calendar AS (
 )
 
 SELECT 
-  c.day,
+  c.day as master_date,
   o.offer_id,
   o.offer_number,
   o.product,
