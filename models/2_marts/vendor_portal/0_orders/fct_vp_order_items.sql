@@ -4,4 +4,11 @@ select *,
        case when order_item_status = 'REJECTED' then  quantity else 0 end as rejected_quantity,
        case when order_item_status = 'CONFIRMED' then  quantity else 0 end as confirmed_quantity,
 
+       case 
+            when destination = 'AE' then 'UAE'
+            when destination = 'SA' then 'KSA'
+            when destination = 'KW' then 'Kuwait'
+       end as Market,
+
+
 from {{ref ("int_vp_order_items")}}
