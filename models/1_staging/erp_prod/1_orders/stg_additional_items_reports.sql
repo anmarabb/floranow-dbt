@@ -52,7 +52,7 @@ current_timestamp() as ingestion_timestamp,
  
 product_name,
 stem_length,
-
-
+alternatable_id,
+alternatable_type,
 
 from source as ad
