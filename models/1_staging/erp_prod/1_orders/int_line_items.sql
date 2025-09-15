@@ -548,11 +548,11 @@ case
     when li.order_source in ('Direct Supplier')  then 'Pre-Selling'
 end as selling_stage,
 
-case when li.order_type not in ('ADDITIONAL', 'EXTRA') then li.quantity - li.splitted_quantity - COALESCE(pi.incident_quantity_before_supply_stage, 0) end AS total_quantity,
+case when li.order_type not in ('ADDITIONAL', 'EXTRA') and li.origin_warehouse_id is null then li.quantity - li.splitted_quantity - COALESCE(pi.incident_quantity_before_supply_stage, 0) end AS total_quantity,
 pg.damaged_quantity AS damaged_packing_quantity,
 pg.fulfilled_quantity AS sh_received_quantity,
 case when li.order_type not in ('ADDITIONAL', 'EXTRA') then COALESCE(case when orr.quantity is not null then orr.quantity else li.quantity end, 0) end AS sh_requested_quantity,
-CASE WHEN pg.quantity > 0 THEN COALESCE(pg.quantity, 0) - COALESCE(pi.missing_packing_quantity, 0) END AS sh_packed_quantity,
+CASE WHEN pg.quantity > 0 and li.origin_warehouse_id is null THEN COALESCE(pg.quantity, 0) - COALESCE(pi.missing_packing_quantity, 0) END AS sh_packed_quantity,
 
 pi.missing_packing_quantity,
 pi.sh_incident_quantity_receiving_stage,
