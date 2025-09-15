@@ -48,6 +48,9 @@ additional_item_link,
 product_name,
 stem_length,
 
+alternatable_id,
+alternatable_type,
+
 from {{ref('int_additional_items_reports')}} as ad 
 
 )
