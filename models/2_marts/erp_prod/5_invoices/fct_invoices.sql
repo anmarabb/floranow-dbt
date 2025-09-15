@@ -143,7 +143,7 @@ case
     else 'Check My Logic' end as account_bucket,
 
 debtor_number,
-warehouse,
+case when financial_administration = 'Bulk' then 'International Trade' else warehouse end as warehouse,
 
 account_type,
 customer_type,
