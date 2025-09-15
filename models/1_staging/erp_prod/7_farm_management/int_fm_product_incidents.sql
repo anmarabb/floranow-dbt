@@ -15,6 +15,7 @@ select
 
 u.name as reported_by,
 u.account_manager as account_manager,
+u.user_category as user_category,
 
 p.Product,
 p.astra_barcode,
