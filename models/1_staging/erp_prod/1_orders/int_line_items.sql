@@ -576,6 +576,8 @@ reseller_parent.name as parent_reseller,
 warehousing_datetime,
 pod_ready_datetime,
 
+case when li.origin_warehouse_id is null then li.fulfilled_quantity else 0 end as shipment_fulfilled_quantity,
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
