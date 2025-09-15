@@ -769,5 +769,7 @@ parent_reseller,
 warehousing_datetime,
 pod_ready_datetime,
 
+shipment_fulfilled_quantity,
+
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
