@@ -14,6 +14,7 @@ select
 
 
 u.name as reported_by,
+u.account_manager as account_manager,
 
 p.Product,
 p.astra_barcode,
@@ -33,6 +34,9 @@ stt.production_date,
 
 --stt.sourceable_type,
 --stt.fm_stock_transaction_id,
+
+reported_by_id,
+
 from   {{ ref('stg_fm_product_incidents') }} as pi
 left join {{ ref('fct_fm_products') }} as p on pi.fm_product_id = p.fm_product_id
 left join  {{ ref('base_users') }} as u on pi.reported_by_id = u.id
