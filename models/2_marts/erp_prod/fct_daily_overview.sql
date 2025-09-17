@@ -230,4 +230,4 @@ select Product,
        0 as target_budget,
 -- select *
 from {{ref("int_fm_product_incidents")}} 
-where incident_type = 'DAMAGED' and incident_at > '2025-09-01'
+where incident_type = 'DAMAGED' 
