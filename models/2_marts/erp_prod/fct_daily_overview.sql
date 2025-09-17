@@ -201,3 +201,33 @@ select null as Product,
        target_budget,
 
 from {{ref("dim_customer")}} 
+
+UNION ALL
+
+select product_name as Product,
+       'ASTRA Farms' as Supplier,
+       'Saudi Arabia' as Origin,
+       sub_group as product_subcategory,
+       date(incident_at) as master_date,
+       'KSA' as financial_administration,
+       'KSA Floranow National Hub Warehouse' as warehouse,
+       null as account_manager,
+       null as user_category,
+       null as selling_stage,
+       null as reselling_sales,
+
+       0 as inventory_stock,
+       0 as inventory_value,
+       incident_quantity * fob_price as Damaged,
+       0 as gross_revenue, 
+       0 as credit_note, 
+       0 as auto_gross_revenue,
+       0 as auto_credit_note,
+       0 as total_cost,
+       0 as sales_target,
+       0 as payment_amount,
+       0 as collection_target,
+       0 as target_budget,
+-- select *
+from {{ref("fct_fm_product_incidents")}} 
+where incident_type = 'DAMAGED'
