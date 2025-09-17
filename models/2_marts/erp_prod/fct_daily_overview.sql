@@ -204,15 +204,15 @@ from {{ref("dim_customer")}}
 
 UNION ALL
 
-select product_name as Product,
+select Product,
        'ASTRA Farms' as Supplier,
        'Saudi Arabia' as Origin,
        sub_group as product_subcategory,
        date(incident_at) as master_date,
        'KSA' as financial_administration,
        'KSA Floranow National Hub Warehouse' as warehouse,
-       null as account_manager,
-       null as user_category,
+       account_manager,
+       user_category,
        null as selling_stage,
        null as reselling_sales,
 
@@ -229,5 +229,5 @@ select product_name as Product,
        0 as collection_target,
        0 as target_budget,
 -- select *
-from {{ref("fct_fm_product_incidents")}} 
-where incident_type = 'DAMAGED'
+from {{ref("int_fm_product_incidents")}} 
+where incident_type = 'DAMAGED' and incident_at > '2025-09-01'
