@@ -10,3 +10,8 @@ union all
 
 select *
 from {{ref("stg_vp_rejected_order_items")}}
+
+union all
+
+select *
+from {{ref("stg_vp_canceled_order_items")}}
