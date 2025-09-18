@@ -31,4 +31,5 @@ select
     offernumber as offer_number,
 
 
-from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
+
+from {{ source(var('erp_source'), 'vp_canceled_order_items') }}
