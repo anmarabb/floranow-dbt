@@ -30,8 +30,8 @@ select
     vendorname as Vendor,
     offernumber as offer_number,
 
-    null as ordered_at,
-    null as confirmed_at,
+    cast(null as date) as ordered_at,
+    cast(null as date) as confirmed_at,
     date(rejectedat) as rejected_at,
 
 
