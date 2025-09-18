@@ -29,9 +29,10 @@ select
     farmname as Farm,
     vendorname as Vendor,
     offernumber as offer_number,
+
     date(createdat) as ordered_at,
     date(confirmedat) as confirmed_at,
-    null as rejected_at,
+    cast(null as date) as rejected_at,
 
 
 from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
