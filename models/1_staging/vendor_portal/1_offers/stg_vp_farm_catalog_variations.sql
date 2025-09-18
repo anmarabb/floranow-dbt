@@ -22,7 +22,7 @@ select
     date(updatedat) as updated_at,
     headsize AS head_size,
     minimumbudheight AS minimum_bud_height,
-    CAST(quality AS INT64) as quality,
+    quality,
     age AS age,
     vendorname as Vendor,
     farmname as Farm,
