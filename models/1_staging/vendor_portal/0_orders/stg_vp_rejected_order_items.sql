@@ -24,7 +24,7 @@ select
     SAFE_CAST(NULLIF(REGEXP_REPLACE(TRIM(CAST(unitfobprice AS STRING)),r'[^0-9.\-]',''),'') AS FLOAT64) AS unit_fob_price,
     -- unitfobprice as unit_fob_price,
     CAST(quantity AS INT64) as quantity,
-    status as order_item_status,
+    'REJECTED' as order_item_status,
     ordertype as order_type,
     farmname as Farm,
     vendorname as Vendor,
