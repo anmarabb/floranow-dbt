@@ -30,5 +30,9 @@ select
     vendorname as Vendor,
     offernumber as offer_number,
 
+    null as ordered_at,
+    null as confirmed_at,
+    date(rejectedat) as rejected_at,
+
 
 from {{ source(var('erp_source'), 'vp_rejected_order_items') }}
