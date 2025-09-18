@@ -4,14 +4,31 @@ select
     _id as order_item_id,
 
 
+    -- FK
+    orderid as order_id,
+    farmid as farm_id,
+    floranowfarmid as floranow_farm_id,
+    vendorid as vendor_id,
+    floranowvendorid as floranow_vendor_id,
+
+
     -- Data 
-    orderitemnumber as order_item_number,
-    quantity,
-    unitfobprice as unit_fob_price,
-    cancelstatus as cancel_status,
-    createdat as created_at,
+    ordernumber as order_number,
+    destination,
+    customerdebtornumber as debtor_number,
+    customername as Customer,
+    productname as Product,
+    currency,
+    departuredate as departure_date,
+    SAFE_CAST(NULLIF(REGEXP_REPLACE(TRIM(CAST(price AS STRING)),r'[^0-9.\-]',''),'') AS FLOAT64) AS unit_price,
+    SAFE_CAST(NULLIF(REGEXP_REPLACE(TRIM(CAST(unitfobprice AS STRING)),r'[^0-9.\-]',''),'') AS FLOAT64) AS unit_fob_price,
+    -- unitfobprice as unit_fob_price,
+    CAST(quantity AS INT64) as quantity,
+    status as order_item_status,
+    ordertype as order_type,
+    farmname as Farm,
+    vendorname as Vendor,
+    offernumber as offer_number,
 
 
-
-
-from {{ source(var('erp_source'), 'vp_canceled_order_items') }}
+from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
