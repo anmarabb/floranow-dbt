@@ -33,6 +33,7 @@ select
     date(createdat) as ordered_at,
     date(confirmedat) as confirmed_at,
     cast(null as date) as rejected_at,
+    cast(null as date) as cancelled_at,
 
 
 from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
