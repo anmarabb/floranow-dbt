@@ -45,17 +45,17 @@ SELECT
   variation,
 
   CASE
-    WHEN date >= CURRENT_DATE() THEN
+    WHEN date > CURRENT_DATE() THEN
       SUM(
         CASE
-          WHEN date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) THEN COALESCE(daily_variation_all, 0)
+          WHEN date > DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) THEN COALESCE(daily_variation_all, 0)
           ELSE 0 END) OVER (PARTITION BY Product ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) ELSE NULL END AS carry_until_yesterday,
 
   CASE
-    WHEN date >= CURRENT_DATE() THEN
+    WHEN date > CURRENT_DATE() THEN
       SUM(
         CASE
-          WHEN date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
+          WHEN date > DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
           THEN COALESCE(daily_variation_all, 0)
           ELSE 0
         END
@@ -67,8 +67,7 @@ SELECT
     ELSE NULL
   END AS running_variation,
 
-  DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS carry_reference_date
 
 FROM calc
-
+-- WHERE date >= CURRENT_DATE()   
 ORDER BY Product, date
