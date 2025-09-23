@@ -1,63 +1,74 @@
- select Product,
-       date(departure_date) as date, 
-       sum(quantity) as requested_quantity,
-       0 as coming_quantity,
-       0 as remaining_quantity,
-       0 as actual_quantity,
-       0 as forecast_quantity,
+WITH f AS (
+select
+    Product,
+    date,
+    sum(coalesce(requested_quantity, 0))  as requested_quantity,
+    sum(coalesce(coming_quantity, 0))     as coming_quantity,
+    sum(coalesce(remaining_quantity, 0) ) as remaining_quantity,
+    sum(coalesce(actual_quantity, 0) )    as actual_quantity,
+    sum(coalesce(forecast_quantity, 0))   as forecast_quantity
+  from {{ ref("int_forecast_demand") }}
+  group by 1,2
+  ),
+calc AS (
+  SELECT
+    Product,
+    date,
+    requested_quantity,
+    coming_quantity,
+    remaining_quantity,
+    actual_quantity,
+    forecast_quantity,
 
-from {{ref("fct_order_requests")}}
-where status = 'REQUESTED'
-and product_name in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
--- and departure_date >= current_date() 
-and warehouse = 'Dubai Warehouse'
-group by 1, 2
+    (requested_quantity + coming_quantity + remaining_quantity) AS total_received_qty,
 
-UNION ALL
+    (requested_quantity + coming_quantity + remaining_quantity - forecast_quantity) AS daily_variation_all,
 
-select Product,
-       date(departure_date) as date, 
-       0 as requested_quantity,
-       sum(coming_quantity) as coming_quantity,
-       0 as remaining_quantity,
-       0 as actual_quantity,
-       0 as forecast_quantity,
+    CASE
+      WHEN date >= CURRENT_DATE() THEN (requested_quantity + coming_quantity + remaining_quantity - forecast_quantity)
+      ELSE NULL END AS variation,
 
-from {{ref("fct_products")}} p
-where Product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
-and p.reseller_label = 'Express' and warehouse = 'Dubai Warehouse'
-group by 1, 2
+    DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS yday_date,
+  FROM f
+)
 
-UNION ALL
+SELECT
+  Product,
+  date,
+  requested_quantity,
+  coming_quantity,
+  remaining_quantity,
+  actual_quantity,
+  forecast_quantity,
+  total_received_qty,
 
-select Product,
-       current_date() as date, 
-       0 as requested_quantity,
-       0 as coming_quantity,
-       sum(case 
-                when p.Stock = 'Inventory Stock' 
-                and live_stock = 'Live Stock' 
-                and p.modified_stock_model in ('Reselling', 'SCaaS', 'TBF', 'Internal') 
-                and flag_1 in ('scaned_flag', 'scaned_good') then remaining_quantity else 0 
-            end) as remaining_quantity,
-       0 as actual_quantity,
-       0 as forecast_quantity,
+  variation,
 
-from {{ref("fct_products")}} p
-where Product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
-and p.reseller_label = 'Express' and warehouse = 'Dubai Warehouse'
-group by 1, 2
+  CASE
+    WHEN date >= CURRENT_DATE() THEN
+      SUM(
+        CASE
+          WHEN date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) THEN COALESCE(daily_variation_all, 0)
+          ELSE 0 END) OVER (PARTITION BY Product ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) ELSE NULL END AS carry_until_yesterday,
 
-UNION ALL
+  CASE
+    WHEN date >= CURRENT_DATE() THEN
+      SUM(
+        CASE
+          WHEN date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
+          THEN COALESCE(daily_variation_all, 0)
+          ELSE 0
+        END
+      ) OVER (
+        PARTITION BY Product
+        ORDER BY date
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+      )
+    ELSE NULL
+  END AS running_variation,
 
-select Product,
-       date(date) as date, 
-       0 as requested_quantity,
-       0 as coming_quantity,
-       0 as remaining_quantity,
-       sum(actual) as actual_quantity,
-       sum(forecast) as forecast_quantity,
+  DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS carry_reference_date
 
-
-from {{ref("stg_forecast_demand")}}
-group by 1, 2
+FROM calc
+WHERE date >= CURRENT_DATE()   
+ORDER BY Product, date
