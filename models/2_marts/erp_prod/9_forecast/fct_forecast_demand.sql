@@ -70,5 +70,5 @@ SELECT
   DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS carry_reference_date
 
 FROM calc
-WHERE date >= CURRENT_DATE()   
+
 ORDER BY Product, date
