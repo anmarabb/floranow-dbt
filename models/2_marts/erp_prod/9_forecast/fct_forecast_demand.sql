@@ -59,5 +59,5 @@ select Product,
        sum(forecast) as forecast_quantity,
 
 
-from {{ref("stg_demand_forecast")}}
+from {{ref("stg_forecast_demand")}}
 group by 1, 2
