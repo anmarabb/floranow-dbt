@@ -362,6 +362,31 @@ with
 
             selling_stage,
             product_color,
+
+            case 
+                when trading_model = 'Pre-Selling' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'Astra Farm' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Pre-Sale)'
+
+                when trading_model = 'Re-Selling (Express)' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'Astra Farm' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Re-Sale)'
+
+                when trading_model = 'Pre-Selling' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'Astra Farm' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Pre-Sale)'
+
+                when trading_model = 'Re-Selling (Express)' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'Astra Farm' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Re-Sale)'
+
+                when user_category = 'SuperMarkets' then 'SuperMarkets'
+
+                when warehouse like '%Project%' then 'SCaaS'
+
+                when order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier = 'Astra Farm' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform (Astra)'
+
+                when order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier = 'Astra Farm' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Astra)'
+
+            end as sales_channels,
         
         from {{ ref("int_invoice_items") }} as ii
     )
