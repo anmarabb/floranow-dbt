@@ -387,6 +387,9 @@ with
                 and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Astra)'
 
             end as sales_channels,
+
+            inventory_damaged_quantity,
+            inventory_damaged_cost,
         
         from {{ ref("int_invoice_items") }} as ii
     )
