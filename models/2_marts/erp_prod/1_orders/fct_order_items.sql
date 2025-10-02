@@ -774,5 +774,23 @@ shipment_fulfilled_quantity,
 inventory_damaged_quantity,
 inventory_damaged_cost,
 
+case when order_source = 'Direct Supplier' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' and warehouse not like '%Project%' and customer_category != 'SuperMarkets' then 'Platform(Pre-Sale)' 
+             
+     when order_source = 'Express Inventory' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' and warehouse not like '%Project%' and customer_category != 'SuperMarkets' then 'Platform(Re-Sale)'
+
+     when order_source = 'Direct Supplier' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' and warehouse not like '%Project%' and customer_category != 'SuperMarkets' then 'Offline (Pre-Sale)'
+
+     when order_source = 'Express Inventory' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' and warehouse not like '%Project%' and customer_category != 'SuperMarkets' then 'Offline (Re-Sale)'
+
+     when customer_category = 'SuperMarkets' then 'SuperMarkets'
+
+     when warehouse like '%Project%' then 'SCaaS'
+
+     when order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier = 'ASTRA Farms'  and warehouse not like '%Project%' and customer_category != 'SuperMarkets' then 'Platform (Astra)'
+
+     when order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier = 'ASTRA Farms' and warehouse not like '%Project%' and customer_category != 'SuperMarkets' then 'Offline (Astra)'
+
+end as sales_channels,
+
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
