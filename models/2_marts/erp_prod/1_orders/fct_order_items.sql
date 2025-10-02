@@ -771,5 +771,8 @@ pod_ready_datetime,
 
 shipment_fulfilled_quantity,
 
+inventory_damaged_quantity,
+inventory_damaged_cost,
+
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
