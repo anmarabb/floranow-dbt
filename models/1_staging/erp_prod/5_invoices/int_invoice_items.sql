@@ -248,6 +248,9 @@ end as base_metric_usd,
 selling_stage,
 li.product_color,
 
+li.inventory_damaged_quantity,
+li.inventory_damaged_cost,
+
 current_timestamp() as insertion_timestamp,
 
 from {{ ref('stg_invoice_items') }} as ii
