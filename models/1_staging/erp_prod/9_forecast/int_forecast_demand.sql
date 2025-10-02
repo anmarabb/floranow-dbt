@@ -1,4 +1,4 @@
- select Product,
+ select product_name as Product,
        date(departure_date) as date, 
        sum(quantity) as requested_quantity,
        0 as coming_quantity,
@@ -6,8 +6,8 @@
        0 as actual_quantity,
        0 as forecast_quantity,
 
-from {{ref("fct_order_requests")}}
-where status = 'REQUESTED'
+from {{ref("int_order_requests")}}
+where status = 'REQUESTED' and reseller_label = 'Express' 
 and product_name in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
 -- and departure_date >= current_date() 
 and warehouse = 'Dubai Warehouse'
