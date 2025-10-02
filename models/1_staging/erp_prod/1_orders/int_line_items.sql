@@ -43,6 +43,9 @@ productIncidents as
        sum(case when pi.stage = 'RECEIVING' and after_sold = False and pi.incident_type = 'EXTRA' then pi.quantity end) AS extra_quantity_receiving_stage,
        sum(case when pi.incidentable_type = 'ProductLocation' and  pi.incident_type != 'EXTRA' then pi.quantity end) AS incident_quantity_in_warehouse,
         
+       sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' and after_sold = false then pi.quantity else 0 end) as inventory_damaged_quantity,
+       sum(case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' and after_sold = false then pi.quantity * li.unit_landed_cost else 0 end) as inventory_damaged_cost,
+
         from {{ ref('stg_product_incidents') }} as pi  
         left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
         where li.customer_id not in (1289,1470,2816,11123)
@@ -577,6 +580,9 @@ warehousing_datetime,
 pod_ready_datetime,
 
 case when li.origin_warehouse_id is null then li.fulfilled_quantity else 0 end as shipment_fulfilled_quantity,
+
+inventory_damaged_quantity,
+inventory_damaged_cost,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
