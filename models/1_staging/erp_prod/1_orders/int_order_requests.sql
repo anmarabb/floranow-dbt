@@ -2,6 +2,7 @@ select orr.*,
        s.supplier_name as Supplier,
        s.supplier_region, 
        w.warehouse_name as warehouse, 
+       u.reseller_label,
 
 from {{ref("stg_order_requests")}} as orr
 left join {{ref("stg_feed_sources")}} fs on fs.feed_source_id = orr.feed_source_id
