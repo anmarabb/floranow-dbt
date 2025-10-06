@@ -48,20 +48,26 @@
                 FROM data
 
             ),
-            flags as (
-  select product_name,
-         departure_date,
-         sum(in_stock_quantity) as daily_qoh,
-         first_value(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between unbounded preceding and unbounded following) as first_batch_qoh,
-         max(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between 1 following and unbounded following) as max_future_qoh,
-         case when max(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between 1 following and unbounded following) is null then 0
-              when first_value(sum(in_stock_quantity)) over (partition by product_name order by departure_date rows between unbounded preceding and unbounded following) > max(sum(in_stock_quantity)) 
-              over (partition by product_name order by departure_date rows between 1 following and unbounded following) then 1 else 0
-         end as fifo_flag
-
-  from {{ref("int_products")}}
-  where Stock = 'Inventory Stock' and live_stock = 'Live Stock' and modified_stock_model in ('Reselling', 'SCaaS', 'TBF', 'Internal') and flag_1 in ('scaned_flag', 'scaned_good') 
-  group by product_name, departure_date
+flags as(            
+with d as (select product_name, departure_date, product_category, sum(in_stock_quantity) as in_stock_quantity,
+      from {{ ref('int_products')}}
+          WHERE Stock = 'Inventory Stock' AND live_stock = 'Live Stock' AND stock_label in ('Reselling', 'SCaaS', 'FaaS - TBF', 'Hotels', 'Weddings & Events', 'Supermarket')
+          AND flag_1 IN ('scaned_flag', 'scaned_good')
+      group by 1,2,3),
+ordered AS (
+  SELECT
+    product_name,
+    departure_date,
+    in_stock_quantity,
+    -- أول كمية حسب أقدم تاريخ لنفس المنتج
+    FIRST_VALUE(in_stock_quantity) OVER ( PARTITION BY product_name ORDER BY departure_date ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS first_qty,
+    ROW_NUMBER() OVER (PARTITION BY product_name ORDER BY departure_date) AS rn
+  FROM d
+)
+SELECT product_name, departure_date, 
+       CASE WHEN rn > 1 AND first_qty > 0 AND in_stock_quantity > first_qty THEN 1 ELSE 0 END AS fifo_flag
+FROM ordered
+ORDER BY product_name, departure_date
 ),
 express_data as (
     select p.product_id, 
