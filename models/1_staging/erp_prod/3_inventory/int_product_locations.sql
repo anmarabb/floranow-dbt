@@ -56,6 +56,14 @@ pl.locationable_type,
 product_color,
 unit_price,
 
+modified_expired_at,
+active_in_stock_quantity,
+expired_stock_quantity,
+
+p.unit_fob_price,
+p.unit_landed_cost,
+pl.remaining_quantity * p.unit_price as remaining_value,
+
 
 from {{ ref('stg_product_locations') }} as pl
 left join {{ ref('stg_locations')}} as loc on pl.location_id=loc.location_id
