@@ -45,4 +45,13 @@ product_color,
 unit_price,
 location_remaining_quantity * unit_price as location_remaining_value,
 
+modified_expired_at,
+active_in_stock_quantity,
+expired_stock_quantity,
+
+unit_fob_price,
+unit_landed_cost,
+remaining_value,
+
+
 from  {{ref('int_product_locations')}} as pl
