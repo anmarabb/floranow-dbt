@@ -192,6 +192,14 @@ account_manager,
 user_category,
 reseller_label,
 
+case 
+    when stock_label in ('Reselling', 'Ignore', 'Weddings & Events') and Supplier != 'ASTRA Farms' and warehouse not like '%Project%' then 'Re-Sale'
+    when stock_label in ('Supermarket') then 'Supermarket'    
+    when stock_label in ('SCaaS') then 'SCaaS'
+    when stock_label in ('Faas - TBF') then 'Faas - TBF'
+    when Supplier = 'ASTRA Farms' and warehouse not like '%Project%' and stock_label not in ('Supermarket') then 'Astra'   
+end as damage_driver,
+
 current_timestamp() as insertion_timestamp, 
 
 
