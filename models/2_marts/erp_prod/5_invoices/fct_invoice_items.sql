@@ -1,8 +1,33 @@
-with
- 
-    source as (
+with margin_drivers as
+(
+    select invoice_item_id,
+           case 
+                when trading_model = 'Pre-Selling' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Pre-Sale)'
 
-        select
+                when trading_model = 'Re-Selling (Express)' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Re-Sale)'
+
+                when trading_model = 'Pre-Selling' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Pre-Sale)'
+
+                when trading_model = 'Re-Selling (Express)' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Re-Sale)'
+
+                when user_category = 'SuperMarkets' then 'SuperMarkets'
+
+                when warehouse like '%Project%' then 'SCaaS'
+
+                when order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier = 'ASTRA Farms' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform (Astra)'
+
+                when order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier = 'ASTRA Farms' 
+                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Astra)'
+
+            end as sales_channels,
+    from {{ ref("int_invoice_items") }}
+)
+select
 
         case 
     when invoice_item_status not in ('APPROVED') then 'Filter Out' 
@@ -213,7 +238,7 @@ with
             account_manager,
             warehouse,
 
-            invoice_item_id,
+            ii.invoice_item_id,
             drop_id,  -- concat(customer.debtor_number,ii.delivery_date)
 
             source_type,  -- ERP, Florisft
@@ -363,40 +388,32 @@ with
             selling_stage,
             product_color,
 
+            md.sales_channels,
             case 
-                when trading_model = 'Pre-Selling' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Pre-Sale)'
+                when sales_channels = 'Platform(Pre-Sale)' then 'Samer'
+                when sales_channels = 'Platform(Re-Sale)' then 'Samer'
+                when sales_channels = 'Platform (Astra)' then 'Samer'
 
-                when trading_model = 'Re-Selling (Express)' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Re-Sale)'
+                when sales_channels = 'Offline (Pre-Sale)' and financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'Offline (Pre-Sale)' and financial_administration = 'KSA' then 'Faisal'
+                when sales_channels = 'Offline (Re-Sale)' and financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'Offline (Re-Sale)' and financial_administration = 'KSA' then 'Faisal'
+                when sales_channels = 'Offline (Astra)' and financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'Offline (Astra)' and financial_administration = 'KSA' then 'Faisal'
 
-                when trading_model = 'Pre-Selling' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Pre-Sale)'
+                when sales_channels = 'SuperMarkets' and financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'SuperMarkets' and financial_administration = 'KSA' then 'Faisal'
 
-                when trading_model = 'Re-Selling (Express)' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Re-Sale)'
-
-                when user_category = 'SuperMarkets' then 'SuperMarkets'
-
-                when warehouse like '%Project%' then 'SCaaS'
-
-                when order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier = 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform (Astra)'
-
-                when order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier = 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Astra)'
-
-            end as sales_channels,
+                when sales_channels = 'SCaaS' and financial_administration = 'KSA' then 'Mutaz'
+                
+            end as sales_channel_owner,
 
             inventory_damaged_quantity,
             inventory_damaged_cost,
         
         from {{ ref("int_invoice_items") }} as ii
-    )
+        left join margin_drivers md on ii.invoice_item_id = md.invoice_item_id
 
-select *
-from
-    source
 
     -- where invoice_type != 'credit note' and generation_type !='MANUAL'
     
