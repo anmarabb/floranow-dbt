@@ -25,6 +25,8 @@ with margin_drivers as
                 and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Astra)'
 
             end as sales_channels,
+
+
     from {{ ref("int_invoice_items") }}
 )
 select
@@ -407,6 +409,14 @@ select
                 when sales_channels = 'SCaaS' and financial_administration = 'KSA' then 'Mutaz'
                 
             end as sales_channel_owner,
+
+            case 
+                when sales_channels in ('Platform(Re-Sale)', 'Offline (Re-Sale)') then 'Re-Sale'
+                when sales_channels = 'SuperMarkets' then 'Supermarket'    
+                when sales_channels = 'SCaaS' then 'SCaaS'
+                -- when 'Faas - TBF'
+                when sales_channels in ('Platform (Astra)', 'Offline (Astra)') then 'Astra'   
+            end as matching_driver,
 
             inventory_damaged_quantity,
             inventory_damaged_cost,
