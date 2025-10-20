@@ -10,5 +10,6 @@ left join {{ref ("int_line_items")}} cli on cli.parent_line_item_id = li.line_it
 
 where cli.customer_type = 'retail' and t.warehouse = 'Dubai Warehouse' 
 and t.reseller_label = 'Express'
-and t.product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red')
+and t.product in ('Rose Ever Red', 'Rose Athena', 'Chrysanthemum Spray Pina Colada', 'Gypsophila Xlence', 'Rose Madam Red', 'Ruscus',
+'Rose Upper Class','Rose Icebreaker Ns', 'Rose Revival')
 group by 1,2,3
