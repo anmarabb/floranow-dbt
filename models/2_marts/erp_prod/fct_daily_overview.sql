@@ -54,7 +54,7 @@ select Product,
        0 as target_budget,
 
 from {{ref("fct_product_incidents")}} pi
-WHERE master_report_filter = 'inventory_dmaged' and after_sold = false
+WHERE master_report_filter = 'inventory_dmaged' and after_sold = false and stock_label is not null
 
 UNION ALL
 
