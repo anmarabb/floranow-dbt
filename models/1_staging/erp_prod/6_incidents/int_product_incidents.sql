@@ -161,7 +161,7 @@ customer.account_manager,
 customer.user_category,
 customer.reseller_label,
 
-case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' and after_sold = false then pi.quantity * li.unit_landed_cost else 0 end as inventory_damaged_cost,
+case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' and after_sold = false and p.stock_label is not null then pi.quantity * li.unit_landed_cost else 0 end as inventory_damaged_cost,
 
 current_timestamp() as insertion_timestamp,
 
