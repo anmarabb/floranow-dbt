@@ -187,7 +187,7 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
 
 --customer
     user.name as user,
-    case when li.reseller_id is not null then  'Reseller' else customer.name  end as customer,
+    customer.name as customer,
     customer.country,
     customer.financial_administration,
     customer.account_manager,
