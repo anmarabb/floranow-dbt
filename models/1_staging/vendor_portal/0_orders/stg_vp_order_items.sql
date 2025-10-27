@@ -34,6 +34,6 @@ select
     cast(null as date) as confirmed_at,
     cast(null as date) as rejected_at,
     cast(null as date) as cancelled_at,
-    null as reason,
+    cast(null as STRING) as reason,
 
 from {{ source(var('erp_source'), 'vp_order_items') }}
