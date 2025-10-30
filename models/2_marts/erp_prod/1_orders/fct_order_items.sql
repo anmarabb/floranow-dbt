@@ -791,6 +791,7 @@ case when order_source = 'Direct Supplier' and order_type in ('ONLINE', 'IN_SHOP
      when order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier = 'ASTRA Farms' and warehouse not like '%Project%' and customer_category != 'SuperMarkets' then 'Offline (Astra)'
 
 end as sales_channels,
+has_children,
 
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
