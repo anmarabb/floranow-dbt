@@ -584,6 +584,12 @@ case when li.origin_warehouse_id is null then li.fulfilled_quantity else 0 end a
 inventory_damaged_quantity,
 inventory_damaged_cost,
 
+CASE WHEN EXISTS (
+      SELECT 1 
+      FROM `floranow`.`dbt_prod_stg`.`stg_line_items` AS c
+      WHERE c.parent_line_item_id = li.line_item_id
+    ) THEN TRUE ELSE FALSE END AS has_children,
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
