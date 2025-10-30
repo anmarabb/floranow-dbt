@@ -125,6 +125,8 @@ COALESCE (bi.unpacked_quantity,0) as unpacked_quantity,
 COALESCE (pi.incident_shortge_qunatity,0) as incident_shortge_qunatity,
 bi.order_status,
 
+case when li.state != 'CANCELLED' then total_price_include_tax else 0 end as confirmed_total_price,
+
 from   {{ ref('stg_fm_orders') }} as o
 left join {{ ref('fct_fm_products') }} as p on o.fm_product_id = p.fm_product_id
 left join prep_order as fmso on fmso.fm_order_id = o.fm_order_id
