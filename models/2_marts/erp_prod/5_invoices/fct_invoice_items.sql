@@ -421,7 +421,13 @@ select
             inventory_damaged_quantity,
             inventory_damaged_cost,
 
-            master_name,
+            case 
+                when master_name in ('Grandiose', 'Kibsons') and generation_type = 'AUTO' then 'Grandiose + Kibsons (Auto)'
+                when master_name in ('Grandiose', 'Kibsons') and generation_type = 'MANUAL' then 'Grandiose + Kibsons (Manual)'
+                when master_name in ('Spinneys') then 'Spinneys'
+                when master_name in ('Maf') then 'MAF'
+                else 'Other'
+                end as supermarkets_subcategory,
         
         from {{ ref("int_invoice_items") }} as ii
         left join margin_drivers md on ii.invoice_item_id = md.invoice_item_id
