@@ -420,6 +420,8 @@ select
 
             inventory_damaged_quantity,
             inventory_damaged_cost,
+
+            master_name,
         
         from {{ ref("int_invoice_items") }} as ii
         left join margin_drivers md on ii.invoice_item_id = md.invoice_item_id
