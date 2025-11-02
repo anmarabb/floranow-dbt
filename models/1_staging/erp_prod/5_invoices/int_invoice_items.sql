@@ -251,7 +251,12 @@ li.product_color,
 li.inventory_damaged_quantity,
 li.inventory_damaged_cost,
 
-customer.master_name,
+case   
+    when customer.master_name = 'Master Grandiose' then 'Grandiose'
+    when customer.master_name = 'MA-Spinneys' then 'Spinneys'
+    when customer.master_name = 'Master-KIBSONS' then 'Kibsons'
+    when customer.master_name = 'Master- Maf' then 'Maf'
+else null end as master_name,
 
 current_timestamp() as insertion_timestamp,
 
