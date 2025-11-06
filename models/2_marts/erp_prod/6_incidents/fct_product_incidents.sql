@@ -203,6 +203,7 @@ inventory_damaged_cost,
 
 current_timestamp() as insertion_timestamp, 
 
+new_data,
 
 from {{ref('int_product_incidents')}} as pi 
 
