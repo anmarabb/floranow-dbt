@@ -165,6 +165,8 @@ case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' and after_sold
 
 current_timestamp() as insertion_timestamp,
 
+0 as new_data,
+
 from {{ ref('stg_product_incidents')}} as pi
 left join {{ref('int_line_items')}} as li on pi.line_item_id = li.line_item_id
 
@@ -335,5 +337,7 @@ null as reseller_label,
 allocated_damage_cost as inventory_damaged_cost,
 
 current_timestamp() as insertion_timestamp,
+
+1 as new_data,
 
     FROM {{ ref('stg_astra_incidents')}}
