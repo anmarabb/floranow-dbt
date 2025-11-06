@@ -28,7 +28,7 @@ li.master_shipment,
 
 
 case when li.line_item_id is not null then 'Line Item ID' else null end as line_item_id_check,
-case when p.line_item_id is not null then 'Product ID' else null end as product_id_check,
+-- case when p.line_item_id is not null then 'Product ID' else null end as product_id_check,
 
 
 concat( "https://erp.floranow.com/products/", ad.product_id) as product_link,
@@ -39,7 +39,7 @@ concat( "https://erp.floranow.com/additional_items_reports/", ad.additional_item
 
 
 from  {{ref('stg_additional_items_reports')}} as ad
-left join {{ ref('stg_products') }} as p on p.product_id = ad.product_id 
+-- left join {{ ref('stg_products') }} as p on cast(p.product_id as int) = cast(ad.product_id as int)
 left join {{ ref('int_line_items')}} as li on ad.line_item_id = li.line_item_id
 left join {{ref('base_users')}} as reported_by on reported_by.id = ad.reported_by_id
 left join {{ref('base_users')}} as rejected_by on rejected_by.id = ad.rejected_by_id
