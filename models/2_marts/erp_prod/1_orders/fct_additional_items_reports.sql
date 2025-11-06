@@ -39,7 +39,7 @@ departure_date,
 master_shipment,
 
 line_item_id_check,
-product_id_check,
+-- product_id_check,
 
 product_link,
 line_item_link,
