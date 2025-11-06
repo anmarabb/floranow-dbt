@@ -75,7 +75,7 @@ warehouse_sales_share AS (
 final_allocation AS (
     SELECT
         share.incident_id,
-        share.incident_date,
+        share.incident_date as date,
         share.warehouse_name,
         share.product_id,
         share.fob_unit_price,
