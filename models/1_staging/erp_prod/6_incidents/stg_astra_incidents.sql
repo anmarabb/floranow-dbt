@@ -19,7 +19,6 @@ monthly_warehouse_sales AS (
     SELECT
         DATE_TRUNC(Created_date, MONTH) AS order_month_start,
         warehouse_name,
-        -- استخدام confirmed_total_price لحساب الوزن (القيمة المالية لإجمالي المبيعات)
         SUM(confirmed_total_price) AS warehouse_monthly_sales_value
     FROM `dbt_prod_dwh.fct_fm_orders`
     GROUP BY 1, 2
@@ -38,14 +37,10 @@ incident_sales_volume AS (
         all_warehouses.warehouse_name, 
         COALESCE(pur.warehouse_monthly_sales_value, 0) AS warehouse_monthly_sales_value
     FROM base_incidents inc
-
-    -- الخطوة أ: جلب قائمة فريدة بكل المستودعات التي لدينا
     CROSS JOIN (
         SELECT DISTINCT warehouse_name
         FROM `dbt_prod_dwh.fct_fm_orders`
     ) AS all_warehouses
-
-    -- الخطوة ب: ربط كل حادث بكل مستودع بناءً على الشهر
     LEFT JOIN monthly_warehouse_sales pur
         ON inc.incident_month_start = pur.order_month_start
         AND all_warehouses.warehouse_name = pur.warehouse_name
@@ -63,16 +58,13 @@ warehouse_sales_share AS (
         warehouse_name,
         warehouse_monthly_sales_value,
 
-        -- إجمالي قيمة المبيعات الكلية على مستوى جميع المستودعات في شهر الحادث
         SUM(warehouse_monthly_sales_value) OVER (PARTITION BY incident_id) AS total_company_monthly_sales,
-
-        -- حساب النسبة المئوية للمبيعات (وزن التوزيع)
         warehouse_monthly_sales_value / NULLIF(SUM(warehouse_monthly_sales_value) OVER (PARTITION BY incident_id), 0) AS sales_percentage_share
     FROM incident_sales_volume
 ),
 
--- 5. التوزيع الأولي للتلف على المستودعات (الحساب الأولي قبل تصحيح التقريب)
-initial_allocation AS (
+-- 5. الحساب الكسري والتحضير للباقي الأكبر
+largest_remainder_prep AS (
     SELECT
         share.incident_id,
         share.incident_date,
@@ -80,64 +72,43 @@ initial_allocation AS (
         share.product_id,
         share.fob_unit_price,
         share.incident_total_cost,
-        share.total_company_monthly_sales,
         share.damage_quantity AS incident_total_damage_quantity,
         share.sales_percentage_share,
+        share.total_company_monthly_sales AS total_company_monthly_sales_value,
+        share.warehouse_monthly_sales_value,
 
-        -- الكمية المقربة والموزعة
-        CAST(ROUND(share.damage_quantity * share.sales_percentage_share) AS INT) AS initial_allocated_quantity,
+        -- 1. الحساب الكسري للكمية (المرشح للتوزيع)
+        share.damage_quantity * share.sales_percentage_share AS fractional_quantity,
         
-        -- التكلفة المحسوبة بناءً على الكمية المقربة (لأن الكمية هي الأساس)
-        ROUND(CAST(ROUND(share.damage_quantity * share.sales_percentage_share) AS INT) * share.fob_unit_price, 2) AS initial_allocated_cost,
+        -- 2. الجزء الصحيح (التقريب الأساسي)
+        CAST(FLOOR(share.damage_quantity * share.sales_percentage_share) AS INT) AS base_allocated_quantity,
         
-        -- تمرير أعمدة المبيعات الأساسية للخطوات اللاحقة
-        share.total_company_monthly_sales AS total_company_monthly_sales_value, -- تم تغيير اسم العمود هنا لتجنب التداخل
-        share.warehouse_monthly_sales_value
+        -- 3. حساب الباقي (الكسر)
+        (share.damage_quantity * share.sales_percentage_share) - FLOOR(share.damage_quantity * share.sales_percentage_share) AS remainder,
+        
+        -- 4. إجمالي الكمية الموزعة بشكل أساسي (المجموع الذي تم فقده)
+        SUM(CAST(FLOOR(share.damage_quantity * share.sales_percentage_share) AS INT)) OVER (PARTITION BY share.incident_id) AS sum_base_allocated_quantity
+        
     FROM warehouse_sales_share share
-    -- تصفية الحالات التي ليس فيها مبيعات كلية (تجنباً للقسمة على صفر)
     WHERE share.total_company_monthly_sales IS NOT NULL AND share.total_company_monthly_sales > 0
     AND share.fob_unit_price IS NOT NULL
 ),
 
--- 6. تصحيح التقريب (Rounding Adjustment)
+-- 6. تحديد الفرق المتبقي وتعيين رتبة التعديل
 final_rounding_adjustment AS (
     SELECT
-        ial.incident_id,
-        ial.incident_date,
-        ial.warehouse_name,
-        ial.product_id,
-        ial.fob_unit_price,
-        ial.incident_total_cost,
-        ial.incident_total_damage_quantity,
-        ial.sales_percentage_share,
+        prep.*,
         
-        -- تمرير أعمدة المبيعات الأساسية
-        ial.total_company_monthly_sales_value, -- تم التصحيح
-        ial.warehouse_monthly_sales_value,
+        -- 5. تحديد الوحدات التي يجب توزيعها (الفرق المتبقي)
+        prep.incident_total_damage_quantity - prep.sum_base_allocated_quantity AS remaining_units_to_adjust,
         
-        -- حساب الفرق الإجمالي في الكمية الذي تم فقده/كسبه بسبب التقريب لكل حادث
-        ial.incident_total_damage_quantity - SUM(ial.initial_allocated_quantity) OVER (PARTITION BY ial.incident_id) AS remaining_quantity_difference,
-        
-        -- نستخدم ROW_NUMBER لتحديد المستودع صاحب أعلى نسبة مبيعات (لحل مشكلة Tie-breaker)
+        -- 6. تعيين الرتبة بناءً على الباقي الأكبر (Largest Remainder)
+        -- نستخدم الرتبة لتحديد من يحصل على وحدة إضافية (1+)
         ROW_NUMBER() OVER (
-            PARTITION BY ial.incident_id
-            ORDER BY ial.sales_percentage_share DESC
-        ) AS rn,
-        
-        -- تحديد ما إذا كان هذا هو المستودع الذي يجب أن يتحمل الفرق
-        CASE
-            WHEN 
-                ROW_NUMBER() OVER (
-                    PARTITION BY ial.incident_id
-                    ORDER BY ial.sales_percentage_share DESC
-                ) = 1
-            -- تم تكرار عملية حساب الفرق هنا
-            THEN ial.incident_total_damage_quantity - SUM(ial.initial_allocated_quantity) OVER (PARTITION BY ial.incident_id) 
-            ELSE 0
-        END AS quantity_adjustment,
-
-        ial.initial_allocated_quantity -- تمرير هذا العمود للاستخدام في CTE 7
-    FROM initial_allocation ial
+            PARTITION BY prep.incident_id
+            ORDER BY prep.remainder DESC, prep.sales_percentage_share DESC
+        ) AS remainder_rank
+    FROM largest_remainder_prep prep
 ),
 
 -- 7. التوزيع النهائي (Final Allocation)
@@ -151,19 +122,30 @@ final_allocation AS (
         adj.incident_total_cost,
         adj.incident_total_damage_quantity,
         adj.sales_percentage_share,
+        adj.total_company_monthly_sales_value AS total_company_monthly_sales, 
+        adj.warehouse_monthly_sales_value,
         
-        -- الكمية الموزعة النهائية = الكمية الأولية + تعديل التقريب (سواء كان موجباً أو سالباً)
-        adj.initial_allocated_quantity + adj.quantity_adjustment AS allocated_damage_quantity,
+        -- الكمية الموزعة النهائية
+        -- (الكمية الأساسية + 1 إذا كانت رتبته أقل أو تساوي عدد الوحدات المتبقية للتعديل)
+        adj.base_allocated_quantity + 
+        CASE 
+            WHEN adj.remainder_rank <= adj.remaining_units_to_adjust 
+            THEN 1 
+            ELSE 0 
+        END AS allocated_damage_quantity,
         
-        -- التكلفة الموزعة النهائية = الكمية الموزعة النهائية * سعر الوحدة
-        ROUND((adj.initial_allocated_quantity + adj.quantity_adjustment) * adj.fob_unit_price, 2) AS allocated_damage_cost,
+        -- التكلفة الموزعة النهائية (الكمية النهائية * سعر الوحدة)
+        ROUND((adj.base_allocated_quantity + 
+        CASE 
+            WHEN adj.remainder_rank <= adj.remaining_units_to_adjust 
+            THEN 1 
+            ELSE 0 
+        END) * adj.fob_unit_price, 2) AS allocated_damage_cost
         
-        adj.total_company_monthly_sales_value AS total_company_monthly_sales, -- تم حل الخطأ هنا
-        adj.warehouse_monthly_sales_value -- تم حل الخطأ هنا
-
-    FROM final_rounding_adjustment adj -- تم تغيير المصدر إلى adj لتبسيط الوصول إلى الأعمدة المصححة
+    FROM final_rounding_adjustment adj
+    -- نحذف السجلات التي تكون فيها الكمية الموزعة النهائية والتكلفة الموزعة صفرًا
+    WHERE (adj.base_allocated_quantity + CASE WHEN adj.remainder_rank <= adj.remaining_units_to_adjust THEN 1 ELSE 0 END) > 0
 )
 
 SELECT * FROM final_allocation
-
 -- where incident_id in (17208, 17209)
