@@ -188,152 +188,152 @@ left join {{ref('stg_invoice_items')}} as ii on ii.invoice_item_id=pi.credit_not
 
 select * from source
 
--- union all
+union all
 
--- SELECT
---         incident_id as product_incident_id,
+SELECT
+        incident_id as product_incident_id,
 
---         NULL AS line_item_id,
---         NULL AS incidentable_id, 
---         NULL AS credit_note_item_id, 
---         NULL AS accountable_id,
---         NULL AS location_id, 
---         NULL AS inventory_cycle_check_id, 
+        NULL AS line_item_id,
+        NULL AS incidentable_id, 
+        NULL AS credit_note_item_id, 
+        NULL AS accountable_id,
+        NULL AS location_id, 
+        NULL AS inventory_cycle_check_id, 
 
---         incident_date as incident_at,
---         NULL AS deleted_at,
---         NULL AS updated_at,
+        incident_date as incident_at,
+        NULL AS deleted_at,
+        NULL AS updated_at,
 
---         'DAMAGED' AS incident_type,
---         NULL AS incidentable_type,
---         NULL AS accountable_type,
---         'INVENTORY' AS stage, 
+        'DAMAGED' AS incident_type,
+        NULL AS incidentable_type,
+        NULL AS accountable_type,
+        'INVENTORY' AS stage, 
 
---         NULL AS reported_by_id,
+        NULL AS reported_by_id,
 
---         NULL AS credited, 
---         false AS after_sold, 
+        NULL AS credited, 
+        false AS after_sold, 
 
---         NULL AS status, 
---         NULL AS note,
---         NULL AS reason,
-
-
---         -- allocated_damage_quantity as quantity,               
---         NULL AS valid_quantity,
---         NULL AS accounted_quantity,
+        NULL AS status, 
+        NULL AS note,
+        NULL AS reason,
 
 
---         'Incident' AS record_type,
-
---         'Inventory Dmaged' AS incident_report,
---         'inventory_dmaged' AS master_report_filter,
---         current_timestamp() as insertion_timestamp,
-
---         allocated_damage_quantity as incident_quantity,
---         allocated_damage_quantity as incident_quantity_without_extra,
---         NULL as extra_quantity,
---         allocated_damage_quantity as incident_quantity_inventory_dmaged,
+        -- allocated_damage_quantity as quantity,               
+        NULL AS valid_quantity,
+        NULL AS accounted_quantity,
 
 
---         allocated_damage_cost as incident_cost,  -- damage, spoilage
---         allocated_damage_cost as incident_cost_without_extra,
---         NULL as extra_cost,
---         allocated_damage_cost as incident_cost_inventory_dmaged,
+        'Incident' AS record_type,
 
---         case when incident_id is not null  then 1 else 0 end as incidents_count,
---         case when incident_id is not null  then 1 else 0 end as incidents_count_without_extra,
---         null as extra_count,
---         case when incident_id is not null then 1 else 0 end as incidents_count_inventory_dmaged,
+        'Inventory Dmaged' AS incident_report,
+        'inventory_dmaged' AS master_report_filter,
+        current_timestamp() as insertion_timestamp,
 
-
-
-
---         null as customer,
---         "ASTRA Farms" as Supplier,
---         "Saudi Arabia" as Origin,
---         null as ordered_quantity,
---         CAST(null as date) as order_date,
---         CAST(null as date) as delivery_date,
---         CAST(null as date) as departure_date,
---         stem_length,
---         "FULFILLED" as state,
---         "To Be Scoped" as fulfillment_mode,
-
---         null as li_record_type_details,
---         null as li_record_type,
---         null as order_source,
-
---         null as Reseller,
-
---         product_category,
---         product_subcategory,
---         Product,
---         null as order_type,
---         null as line_item_link,
---         null as master_shipment,
---         null as Shipment,
---         fob_unit_price as unit_fob_price,
---         fob_unit_price as unit_landed_cost,
---         null as order_number,
---         null as production_date_array,
+        allocated_damage_quantity as incident_quantity,
+        allocated_damage_quantity as incident_quantity_without_extra,
+        NULL as extra_quantity,
+        allocated_damage_quantity as incident_quantity_inventory_dmaged,
 
 
---         null as fob_value,
+        allocated_damage_cost as incident_cost,  -- damage, spoilage
+        allocated_damage_cost as incident_cost_without_extra,
+        NULL as extra_cost,
+        allocated_damage_cost as incident_cost_inventory_dmaged,
 
---         null as reported_by,
---         null as type_reason,
+        case when incident_id is not null  then 1 else 0 end as incidents_count,
+        case when incident_id is not null  then 1 else 0 end as incidents_count_without_extra,
+        null as extra_count,
+        case when incident_id is not null then 1 else 0 end as incidents_count_inventory_dmaged,
 
---         allocated_damage_quantity * fob_unit_price as incident_fob_value,
 
---         null as currency,
---         null as fob_currency,
---         null as customer_id,
---         null as ordering_stock_type,
---         null as feed_source_name,
---         fob_unit_price as unit_price,
---         null as selling_stage,
+
+
+        null as customer,
+        "ASTRA Farms" as Supplier,
+        "Saudi Arabia" as Origin,
+        null as ordered_quantity,
+        CAST(null as date) as order_date,
+        CAST(null as date) as delivery_date,
+        CAST(null as date) as departure_date,
+        stem_length,
+        "FULFILLED" as state,
+        "To Be Scoped" as fulfillment_mode,
+
+        null as li_record_type_details,
+        null as li_record_type,
+        null as order_source,
+
+        null as Reseller,
+
+        product_category,
+        product_subcategory,
+        Product,
+        null as order_type,
+        null as line_item_link,
+        null as master_shipment,
+        null as Shipment,
+        fob_unit_price as unit_fob_price,
+        fob_unit_price as unit_landed_cost,
+        null as order_number,
+        null as production_date_array,
+
+
+        null as fob_value,
+
+        null as reported_by,
+        null as type_reason,
+
+        allocated_damage_quantity * fob_unit_price as incident_fob_value,
+
+        null as currency,
+        null as fob_currency,
+        null as customer_id,
+        null as ordering_stock_type,
+        null as feed_source_name,
+        fob_unit_price as unit_price,
+        null as selling_stage,
 
 
      
---        'User' as Accountable,
+       'User' as Accountable,
 
 
---         warehouse_name as warehouse,
---         null as warehouse_country,
---         null as box_label,
+        warehouse_name as warehouse,
+        null as warehouse_country,
+        null as box_label,
 
 
--- concat( "https://erp.floranow.com/fm/product_incidents/", incident_id) as incidents_link,
+concat( "https://erp.floranow.com/fm/product_incidents/", incident_id) as incidents_link,
 
--- "KSA" as financial_administration,
--- null as debtor_number,
+"KSA" as financial_administration,
+null as debtor_number,
 
--- null as invoice_item_id,
+null as invoice_item_id,
 
--- 'check' as pi_record_type,
+'check' as pi_record_type,
 
--- null as Stock,
--- null as stock_model_details,
--- null as stock_model,
--- null as full_stock_name,
--- null as modified_stock_model,
--- null as stock_label,
+null as Stock,
+null as stock_model_details,
+null as stock_model,
+null as full_stock_name,
+null as modified_stock_model,
+null as stock_label,
 
--- null as NCR,
-
-
--- null as reseller_type,
+null as NCR,
 
 
--- 'Direct Damage' AS damage_type,
+null as reseller_type,
 
--- null as account_manager,
--- null as user_category,
--- null as reseller_label,
 
--- allocated_damage_cost as inventory_damaged_cost,
+'Direct Damage' AS damage_type,
 
--- current_timestamp() as insertion_timestamp,
+null as account_manager,
+null as user_category,
+null as reseller_label,
 
---     FROM {{ ref('stg_astra_incidents')}}
+allocated_damage_cost as inventory_damaged_cost,
+
+current_timestamp() as insertion_timestamp,
+
+    FROM {{ ref('stg_astra_incidents')}}
