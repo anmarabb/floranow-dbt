@@ -279,7 +279,7 @@ case
     shipments_status,          --DRAFT, PACKED, WAREHOUSED, CANCELED, MISSING
     master_shipments_status,   --DRAFT, PACKED, OPENED, WAREHOUSED, CANCELED, MISSING
     master_shipment,
-    order_payloads_status,   -- true, false, null
+    -- order_payloads_status,   -- true, false, null
     master_shipment_id,
     shipment_id,
 
@@ -527,7 +527,7 @@ source_id_check,
 product_id,
 product_link,
 parent_line_item_link,
-order_offer_id,
+-- order_offer_id,
 offer_id_check,
 
 reseller_id_check,
