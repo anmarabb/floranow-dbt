@@ -259,8 +259,8 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
 
 
 --order_payloads
-    opl.offer_id as order_offer_id,
-    opl.status as order_payloads_status,
+    -- opl.offer_id as order_offer_id,
+    -- opl.status as order_payloads_status,
 
 
 --shipments
@@ -593,7 +593,7 @@ CASE WHEN EXISTS (
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
-left join {{ref('stg_order_payloads')}} as opl on li.order_payload_id = opl.order_payload_id
+-- left join {{ref('stg_order_payloads')}} as opl on li.order_payload_id = opl.order_payload_id
 left join {{ref('stg_invoice_items')}} as ii on ii.line_item_id=li.line_item_id and ii.invoice_item_type = 'invoice'
 -- left join {{ref('stg_invoice_items')}} as ii2 on ii2.line_item_id=li.line_item_id and ii2.invoice_item_type = 'credit note'
 left join {{ref('stg_invoices')}} as i on li.invoice_id = i.invoice_header_id
