@@ -2,7 +2,15 @@
 with
 
 source as ( 
-        
+    with stock_data as (
+    select product_incident_id, 
+           st.stock_label,
+
+    from {{ ref('stg_product_incidents') }} as pi
+    left join {{ ref('int_line_items') }} as li on pi.line_item_id = li.line_item_id
+    left join {{ ref('int_products') }} as p on p.line_item_id = coalesce(li.parent_line_item_id, li.line_item_id)
+         join {{ ref('base_stocks') }} as st on st.stock_id = p.stock_id and st.reseller_id = p.reseller_id
+    )    
 select     
 
         pi.* EXCEPT(quantity),
@@ -19,7 +27,7 @@ select
         case when incident_type ='EXTRA'  then pi.quantity * li.unit_landed_cost else 0 end as extra_cost,
         case when master_report_filter = 'inventory_dmaged' then pi.quantity * li.unit_landed_cost else 0 end as incident_cost_inventory_dmaged,
 
-        case when product_incident_id is not null  then 1 else 0 end as incidents_count,
+        case when pi.product_incident_id is not null  then 1 else 0 end as incidents_count,
         case when incident_type !='EXTRA'  then 1 else 0 end as incidents_count_without_extra,
         case when incident_type ='EXTRA'  then 1 else 0 end as extra_count,
         case when master_report_filter = 'inventory_dmaged' then 1 else 0 end as incidents_count_inventory_dmaged,
@@ -135,7 +143,7 @@ p.stock_model_details,
 p.stock_model,
 p.full_stock_name,
 p.modified_stock_model,
-p.stock_label,
+sd.stock_label,
 
 concat('NCR-', FORMAT_TIMESTAMP('%y%m%d', li.departure_date), '-', li.shipment_id) as NCR,
 
@@ -161,7 +169,7 @@ customer.account_manager,
 customer.user_category,
 customer.reseller_label,
 
-case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' and after_sold = false and p.stock_label is not null then pi.quantity * li.unit_landed_cost else 0 end as inventory_damaged_cost,
+case when pi.stage = 'INVENTORY' and pi.incident_type = 'DAMAGED' and after_sold = false and sd.stock_label is not null then pi.quantity * li.unit_landed_cost else 0 end as inventory_damaged_cost,
 
 current_timestamp() as insertion_timestamp,
 
@@ -185,6 +193,8 @@ left join {{ref('base_warehouses')}} as w2 on w2.warehouse_id = customer.warehou
 
 
 left join {{ref('stg_invoice_items')}} as ii on ii.invoice_item_id=pi.credit_note_item_id 
+
+left join stock_data sd on pi.product_incident_id = sd.product_incident_id
 
     )
 
@@ -320,7 +330,7 @@ null as stock_model_details,
 null as stock_model,
 null as full_stock_name,
 null as modified_stock_model,
-null as stock_label,
+"Astra" as stock_label,
 
 null as NCR,
 
