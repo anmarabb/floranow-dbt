@@ -5,6 +5,11 @@ source as (
     with stock_data as (
     select product_incident_id, 
            st.stock_label,
+           st.stock_name as Stock, 
+           p.stock_model_details,
+           p.stock_model,
+           p.full_stock_name,
+           p.modified_stock_model,
 
     from {{ ref('stg_product_incidents') }} as pi
     left join {{ ref('int_line_items') }} as li on pi.line_item_id = li.line_item_id
@@ -138,11 +143,11 @@ end as pi_record_type,
 
 
 
-p.Stock,
-p.stock_model_details,
-p.stock_model,
-p.full_stock_name,
-p.modified_stock_model,
+sd.Stock,
+sd.stock_model_details,
+sd.stock_model,
+sd.full_stock_name,
+sd.modified_stock_model,
 sd.stock_label,
 
 concat('NCR-', FORMAT_TIMESTAMP('%y%m%d', li.departure_date), '-', li.shipment_id) as NCR,
