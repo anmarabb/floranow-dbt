@@ -35,6 +35,7 @@ select
     cast(null as date) as rejected_at,
     date(cancelledat) as cancelled_at,
     cast(null as STRING) as reason,
+    cast(null as STRING) as rejection_type,
 
 
 
