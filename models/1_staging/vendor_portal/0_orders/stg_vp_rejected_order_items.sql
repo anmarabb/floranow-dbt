@@ -35,6 +35,6 @@ select
     date(rejectedat) as rejected_at,
     cast(null as date) as cancelled_at,
     reason,
-
+    case when reason = 'cutoff time has passed' then 'AUTO' else 'MANUAL' END AS rejection_type,
 
 from {{ source(var('erp_source'), 'vp_rejected_order_items') }}
