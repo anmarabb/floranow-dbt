@@ -197,7 +197,8 @@ case
     when stock_label in ('Supermarket') then 'Supermarket'    
     when stock_label in ('SCaaS') then 'SCaaS'
     when stock_label in ('Faas - TBF') then 'Faas - TBF'
-    when Supplier = 'ASTRA Farms' and warehouse not like '%Project%' and stock_label not in ('Supermarket') then 'Astra'   
+    when Supplier = 'ASTRA Farms' and warehouse not like '%Project%' and stock_label not in ('Supermarket') then 'Astra' 
+    else 'Other' 
 end as damage_driver,
 inventory_damaged_cost,
 
