@@ -415,7 +415,8 @@ select
                 when sales_channels = 'SuperMarkets' then 'Supermarket'    
                 when sales_channels = 'SCaaS' then 'SCaaS'
                 -- when 'Faas - TBF'
-                when sales_channels in ('Platform (Astra)', 'Offline (Astra)') then 'Astra'   
+                when sales_channels in ('Platform (Astra)', 'Offline (Astra)') then 'Astra'
+                else 'Other'   
             end as matching_driver,
 
             inventory_damaged_quantity,
