@@ -328,13 +328,7 @@ dispatched_status,
     case when fulfillment_mode not in ('Purchase Order For Inventory','Customer Sales Order From Shop') and fulfillment_status_details not in ('1. Not Fulfilled - (Investigate)','2. Fulfilled - with Full Item Incident') then pod_status else null end as pod_status2, 
     
 
-   case 
-        when fulfillment_status_details like '%Not Fulfilled%' then 'Not Fulfilled' 
-        when fulfillment_status_details in ('2. Fulfilled - with Full Item Incident') then 'Fulfilled Full Incident'
-        when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is null then 'Fulfilled Not Dispatched'
-        when fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
-        else 'cheak'
-        end as order_status,
+    order_status,
         
 
 
@@ -792,6 +786,28 @@ case when order_source = 'Direct Supplier' and order_type in ('ONLINE', 'IN_SHOP
 
 end as sales_channels,
 has_children,
+
+case
+when master_shipments_status in ('DRAFT' ) then '1. Not Received - Draft'
+when master_shipments_status in ( 'PACKED' ) then '2. Not Received - Packed (Comming Soon)'
+when master_shipments_status  in ( 'OPENED' ) then '3. Received - Work In Progress'
+when master_shipments_status  in ('WAREHOUSED' ) then '4. Received - Work Done'
+else '5. Not Shipment'
+end as shipment_progress,
+
+case 
+    when location = 'null' and master_shipments_status in ('DRAFT') then '1. Not Received (Draft Master Shipments)'
+    when location = 'null' and master_shipments_status in ('PACKED') and shipments_status not in ('MISSING') then '2. Not Received (Packed Master Shipments)'
+    when location = 'null' and shipments_status in ('MISSING') then '3. Not Received (Full Missing Shipments)'
+    
+    when location = 'null' and master_shipments_status in ('OPENED') and shipments_status in ('PACKED') and  order_status = 'Not Fulfilled' then '4. Received Not Scanned (Work in Progress)'
+
+    when location = 'null' and shipments_status in ('PACKED', 'WAREHOUSED') and fulfillment_status_details = '2. Fulfilled - with Full Item Incident' then '5. Received Full Incident'
+    when location = 'null' and fulfillment_status_details = '3. Fulfilled - with Process Breakdown' then '6. Received and Fulfilled without Scanned to Location'
+    when location = 'loc'  then '7. Received On Location'
+    when location = 'pod'  then '7. Received On POD'
+    else '8. To Be Scoped'
+    end as orders_progress,
 
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
