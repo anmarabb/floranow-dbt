@@ -590,6 +590,14 @@ CASE WHEN EXISTS (
       WHERE c.parent_line_item_id = li.line_item_id
     ) THEN TRUE ELSE FALSE END AS has_children,
 
+   case 
+        when li.fulfillment_status_details like '%Not Fulfilled%' then 'Not Fulfilled' 
+        when li.fulfillment_status_details in ('2. Fulfilled - with Full Item Incident') then 'Fulfilled Full Incident'
+        when li.fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is null then 'Fulfilled Not Dispatched'
+        when li.fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
+        else 'check'
+        end as order_status,
+
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
 left join {{ref('stg_order_requests')}} as orr on li.order_request_id = orr.id
