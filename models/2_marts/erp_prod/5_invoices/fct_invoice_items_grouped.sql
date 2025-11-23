@@ -24,5 +24,6 @@ select
        credit_note,
        delivery_charge_amount,
        master_date,
-       inv_items_reprot_filter,                  
+       inv_items_reprot_filter,
+       matching_driver,                  
 from {{ref("fct_invoice_items")}}
