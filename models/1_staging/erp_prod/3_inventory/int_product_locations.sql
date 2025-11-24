@@ -8,6 +8,37 @@ with product_incidents as (
     where incidentable_type = 'ProductLocation' and deleted_at is null
     group by incidentable_id
 
+), products as(
+    select product_id,
+           concat( "https://erp.floranow.com/products/", p.product_id) as product_link,
+           p.product_name as Product,
+           p.product_subcategory,
+           p.product_category,
+           p.departure_date,
+           p.warehouse,
+           p.order_type,
+           p.Supplier,
+           p.stem_length,
+           p.remaining_quantity,
+           p.sold_quantity,
+           p.incident_quantity_inventory_dmaged,
+           p.incident_quantity_inventory_stage,
+           p.Reseller,
+
+           p.live_stock,
+        --    p.report_filter,
+           p.full_stock_name,
+           p.number,
+           product_color,
+           unit_price,
+
+           modified_expired_at,
+        --    active_in_stock_quantity,
+        --    expired_stock_quantity,
+
+           p.unit_fob_price,
+           p.unit_landed_cost,
+    from {{ ref('int_products')}} as p --on pl.locationable_id = p.product_id
 ),
 
  source as (
@@ -25,7 +56,7 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
  p.product_subcategory,
  p.product_category,
  p.departure_date,
- p.days_until_expiry,
+--  p.days_until_expiry,
  
  p.warehouse,
  p.order_type,
@@ -45,7 +76,7 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
  p.Reseller,
 
 p.live_stock,
-p.report_filter,
+-- p.report_filter,
 p.full_stock_name,
 p.number,
 
@@ -57,8 +88,8 @@ product_color,
 unit_price,
 
 modified_expired_at,
-active_in_stock_quantity,
-expired_stock_quantity,
+-- active_in_stock_quantity,
+-- expired_stock_quantity,
 
 p.unit_fob_price,
 p.unit_landed_cost,
@@ -69,7 +100,7 @@ from {{ ref('stg_product_locations') }} as pl
 left join {{ ref('stg_locations')}} as loc on pl.location_id=loc.location_id
 left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
 
-left join {{ ref('fct_products')}} as p on pl.locationable_id = p.product_id
+left join products as p on pl.locationable_id = p.product_id
 
 left join product_incidents as pi on pl.product_location_id = pi.incidentable_id
 --left join {{ ref('stg_picking_products')}} as pick on pick.product_location_id = pl.product_location_id
