@@ -50,6 +50,7 @@ item_count,
 
 
     FORMAT_TIMESTAMP('%H:%M', window_starts_at, 'Asia/Dubai') AS window_start_time_dubai_tz,
+    FORMAT_TIMESTAMP('%H:%M', window_starts_at) AS window_start_time,
 
     delivery_at,
 
