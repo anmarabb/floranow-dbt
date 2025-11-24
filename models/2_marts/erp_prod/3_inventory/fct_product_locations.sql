@@ -5,7 +5,7 @@ Product,
 product_category,
 product_subcategory,
 departure_date,
-days_until_expiry,
+-- days_until_expiry,
 
 warehouse,
 Location,
@@ -30,7 +30,7 @@ incident_quantity_inventory_stage,
 Reseller,
 
 live_stock,
-report_filter,
+-- report_filter,
 full_stock_name,
 locationable_id,
 
@@ -46,8 +46,8 @@ unit_price,
 location_remaining_quantity * unit_price as location_remaining_value,
 
 modified_expired_at,
-active_in_stock_quantity,
-expired_stock_quantity,
+-- active_in_stock_quantity,
+-- expired_stock_quantity,
 
 unit_fob_price,
 unit_landed_cost,
