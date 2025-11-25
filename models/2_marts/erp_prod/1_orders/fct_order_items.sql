@@ -809,5 +809,7 @@ case
     else '8. To Be Scoped'
     end as orders_progress,
 
+    sold_quantity,
+
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
