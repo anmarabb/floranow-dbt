@@ -70,7 +70,7 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
  pl.updated_at,
 
  p.remaining_quantity,
- p.sold_quantity,
+ IF(ROW_NUMBER() OVER (PARTITION BY p.product_id ORDER BY pl.product_location_id) = 1,p.sold_quantity,0) AS sold_quantity,
  p.incident_quantity_inventory_dmaged,
  p.incident_quantity_inventory_stage,
  p.Reseller,
