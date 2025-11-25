@@ -91,6 +91,15 @@ package_line_items as (
 
     FROM {{ ref('stg_package_line_items') }}
     GROUP BY 1
+),
+
+sold_items AS (
+  SELECT
+    parent_line_item_id,
+    SUM(quantity) AS sold_quantity
+  FROM {{ ref('stg_line_items') }}
+  WHERE parent_line_item_id IS NOT NULL
+  GROUP BY parent_line_item_id
 )
 
 SELECT
@@ -597,6 +606,7 @@ CASE WHEN EXISTS (
         when li.fulfillment_status_details not like '%Not Fulfilled%' and  li.dispatched_at is not null then 'Dispatched'
         else 'check'
         end as order_status,
+    si.sold_quantity,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -642,3 +652,4 @@ left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.numbe
 left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
 left join invoice_details ind on ind.line_item_id = li.line_item_id
 LEFT JOIN package_line_items pg on li.line_item_id = pg.line_item_id 
+left join sold_items si ON si.parent_line_item_id = li.line_item_id
