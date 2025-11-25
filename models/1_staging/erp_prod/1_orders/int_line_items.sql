@@ -100,6 +100,16 @@ sold_items AS (
   FROM {{ ref('stg_line_items') }}
   WHERE parent_line_item_id IS NOT NULL
   GROUP BY parent_line_item_id
+),
+express_parent_flag AS (
+  SELECT
+    li.line_item_id,
+    1 AS parent_is_express
+  FROM {{ ref('stg_line_items') }} li
+  JOIN {{ ref('stg_line_items') }} p
+  left join `dbt_prod_stg.base_users` as reseller on reseller.id = p.reseller_id
+    ON li.parent_line_item_id = p.line_item_id
+   AND reseller_label = 'Express'
 )
 
 SELECT
@@ -607,6 +617,8 @@ CASE WHEN EXISTS (
         else 'check'
         end as order_status,
     si.sold_quantity,
+    ef.parent_is_express,
+
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -653,3 +665,4 @@ left join PackageLineItems on li.line_item_id = PackageLineItems.line_item_id
 left join invoice_details ind on ind.line_item_id = li.line_item_id
 LEFT JOIN package_line_items pg on li.line_item_id = pg.line_item_id 
 left join sold_items si ON si.parent_line_item_id = li.line_item_id
+left join express_parent_flag ef on li.line_item_id = ef.line_item_id
