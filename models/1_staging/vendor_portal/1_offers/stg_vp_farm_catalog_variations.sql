@@ -26,5 +26,6 @@ select
     age AS age,
     vendorsnapshot.name as Vendor,
     farmsnapshot.name as Farm,
+    CAST(JSON_EXTRACT_SCALAR(boxconfigurations, '$[0].packingRate') AS INT64) AS packing_rate,
 
 from {{ source(var('erp_source'), 'vp_farm_catalog_variations') }}
