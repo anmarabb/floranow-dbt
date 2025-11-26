@@ -24,7 +24,7 @@ select
     minimumbudheight AS minimum_bud_height,
     quality,
     age AS age,
-    vendorname as Vendor,
-    farmname as Farm,
+    vendorsnapshot.name as Vendor,
+    farmsnapshot.name as Farm,
 
 from {{ source(var('erp_source'), 'vp_farm_catalog_variations') }}
