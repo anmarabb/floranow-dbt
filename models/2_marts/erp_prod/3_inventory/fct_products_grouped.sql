@@ -80,6 +80,7 @@ select product,
        warehouse,
        supplier,
        origin,
+       'Reselling' as stock_model,
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 30 THEN quantity ELSE 0 END) as i_last_30d_sold_quantity,
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) as i_last_7d_sold_quantity, 
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 3 THEN quantity ELSE 0 END) as i_last_3d_sold_quantity, 
@@ -221,7 +222,7 @@ left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.wareh
 left join last_year_demand lyd on lyd.Product = p.Product and lyd.warehouse = p.warehouse and lyd.Supplier = p.Supplier
 full outer join invoices_data id on id.Product = p.Product and id.warehouse = p.warehouse and id.Supplier = p.Supplier and p.Origin = id.Origin
 
-where  stock_model in ('Reselling', 'Commission Based', 'Internal - Project X')
+where COALESCE(p.stock_model, id.stock_model) in ('Reselling', 'Commission Based', 'Internal - Project X') 
 
 --and p.Product = 'Rose Ever Red'
 --and p.warehouse='Dubai Warehouse'
