@@ -275,6 +275,7 @@ delivery_time_window.delivery_time,
 
         unit_landed_cost * fulfilled_quantity as fulfilled_value,
         origin_line_item_id,
+        unit_fob_price,
         
         from {{ source(var('erp_source'), 'line_items') }} as li
          where li.deleted_at is null 
