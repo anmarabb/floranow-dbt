@@ -433,6 +433,8 @@ ed.li_order_date,
 ed.express_remaining_quantity,
 
 p.reseller_label,
+origin_departure_date,
+origin_unit_landed_cost,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
