@@ -87,7 +87,7 @@ select product,
        AS i_last_7d_sold_quantity_normal
 
 from {{ref('fct_invoice_items')}}
-where invoice_header_type = 'invoice'
+where record_type = 'Invoice - AUTO' and inv_items_reprot_filter = 'Floranow Sales'
 group by 1,2,3
 )
 
