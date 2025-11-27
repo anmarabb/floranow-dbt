@@ -80,6 +80,7 @@ select product,
        supplier,
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 30 THEN quantity ELSE 0 END) as i_last_30d_sold_quantity,
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) as i_last_7d_sold_quantity, 
+       SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 3 THEN quantity ELSE 0 END) as i_last_3d_sold_quantity, 
 
 from {{ref('fct_invoice_items')}}
 where invoice_header_type = 'invoice'
@@ -202,7 +203,7 @@ sum(incident_quantity_receiving_stage) as incident_quantity_receiving_stage,
 
 sum(id.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
 sum(id.i_last_7d_sold_quantity) as i_last_7d_sold_quantity,
-
+sum(id.i_last_3d_sold_quantity) as i_last_3d_sold_quantity,
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
