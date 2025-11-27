@@ -619,6 +619,9 @@ CASE WHEN EXISTS (
     si.sold_quantity,
     ef.parent_is_express,
 
+    origin_li.departure_date  as origin_departure_date,
+    origin_li.unit_price  as origin_unit_price,
+    origin_li.unit_landed_cost  as origin_unit_landed_cost,
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
@@ -666,3 +669,4 @@ left join invoice_details ind on ind.line_item_id = li.line_item_id
 LEFT JOIN package_line_items pg on li.line_item_id = pg.line_item_id 
 left join sold_items si ON si.parent_line_item_id = li.line_item_id
 left join express_parent_flag ef on li.line_item_id = ef.line_item_id
+LEFT JOIN {{ref('stg_line_items')}} origin_li ON li.origin_line_item_id = origin_li.line_item_id
