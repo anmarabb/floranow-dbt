@@ -264,7 +264,9 @@ case
 
     incident_quantity_inventory_dmaged,
     incident_quantity_inventory_stage,
+
         last_30d_incident_quantity_inventory_dmaged,
+        last_7d_incident_quantity_inventory_dmaged,
 
 
     incidents_quantity_location,
