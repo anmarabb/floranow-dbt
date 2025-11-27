@@ -73,6 +73,17 @@ FROM {{ref('fct_products')}}
 where  stock_model in ('Reselling', 'Commission Based', 'Internal - Project X')
 --where year_month_departure_date = "2023-08-01" and warehouse = "Jouf WareHouse" and Product = 'Spray Rose Vanessa'
 GROUP BY 1, 2, 3
+),
+invoices_data as (
+select product,
+       warehouse,
+       supplier,
+       SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 30 THEN quantity ELSE 0 END) as i_last_30d_sold_quantity,
+       SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) as i_last_7d_sold_quantity, 
+
+from {{ref('fct_invoice_items')}}
+where invoice_header_type = 'invoice'
+group by 1,2,3
 )
 
 select
@@ -138,8 +149,7 @@ sum(last_year_30d_sold_quantity) as last_year_30d_sold_quantity,
 sum(last_year_7d_sold_quantity) as last_year_7d_sold_quantity,
 sum(last_year_next_7d_sold_quantity) as last_year_next_7d_sold_quantity,
 sum(i_sold_quantity) as i_sold_quantity,
-sum(i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
-sum(i_last_7d_sold_quantity) as i_last_7d_sold_quantity,
+
 sum(i_last_year_30d_sold_quantity) as i_last_year_30d_sold_quantity,
 sum(i_last_year_7d_sold_quantity) as i_last_year_7d_sold_quantity,
 sum(i_last_year_next_7d_sold_quantity) as i_last_year_next_7d_sold_quantity,
@@ -190,11 +200,15 @@ sum(first_departure_requested_quantity) as first_departure_requested_quantity,
 
 sum(incident_quantity_receiving_stage) as incident_quantity_receiving_stage,
 
+sum(id.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
+sum(id.i_last_7d_sold_quantity) as i_last_7d_sold_quantity,
+
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
 left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin and  p.Supplier = ow.Supplier
 left join last_year_demand lyd on lyd.Product = p.Product and lyd.warehouse = p.warehouse and lyd.Supplier = p.Supplier
+left join invoices_data id on id.Product = p.Product and id.warehouse = p.warehouse and id.Supplier = p.Supplier
 
 where  stock_model in ('Reselling', 'Commission Based', 'Internal - Project X')
 
