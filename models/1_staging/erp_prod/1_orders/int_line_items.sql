@@ -121,7 +121,7 @@ COALESCE(PackageLineItems.pli_fulfilled_quantity,0) * li.raw_unit_fob_price as r
 (COALESCE(PackageLineItems.packed_quantity,0) - COALESCE(PackageLineItems.pli_missing_quantity,0)) as supplied_quantity,
  PackageLineItems.packages_count,
 
-li.* EXCEPT(persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type, invoice_number),
+li.* EXCEPT(unit_fob_price, persona,order_type,delivery_date, departure_date,quantity,invoice_id,product_subcategory, product_category, li_record_type_details,li_record_type, invoice_number),
 
 
 case 
@@ -620,8 +620,9 @@ CASE WHEN EXISTS (
     ef.parent_is_express,
 
     origin_li.departure_date  as origin_departure_date,
-    origin_li.unit_price  as origin_unit_price,
+    origin_li.unit_fob_price  as origin_unit_fob_price,
     origin_li.unit_landed_cost  as origin_unit_landed_cost,
+
 
 from {{ref('stg_line_items')}} as li
 left join {{ ref('stg_products') }} as p on p.line_item_id = li.line_item_id 
