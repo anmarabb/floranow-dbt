@@ -548,6 +548,7 @@ li.packing_list_fob_price,
 reseller.reseller_label,
 origin_departure_date,
 origin_unit_landed_cost,
+origin_unit_fob_price,
 li.parent_line_item_id,
 
         from {{ ref('stg_products')}} as p
