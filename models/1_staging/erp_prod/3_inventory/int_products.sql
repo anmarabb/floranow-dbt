@@ -548,7 +548,7 @@ li.packing_list_fob_price,
 reseller.reseller_label,
 origin_departure_date,
 origin_unit_landed_cost,
-
+li.parent_line_item_id,
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
