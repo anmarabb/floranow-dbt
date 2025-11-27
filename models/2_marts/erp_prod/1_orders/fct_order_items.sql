@@ -812,7 +812,7 @@ case
     sold_quantity,
     parent_is_express,
     origin_departure_date,
-    origin_unit_price,
+    origin_unit_fob_price,
     origin_unit_landed_cost,
 
 from {{ref('int_line_items')}} as li 
