@@ -48,27 +48,7 @@
                 FROM data
 
             ),
-flags as(            
-with d as (select product_name, departure_date, product_category, sum(in_stock_quantity) as in_stock_quantity,
-      from {{ ref('int_products')}}
-          WHERE Stock = 'Inventory Stock' AND live_stock = 'Live Stock' AND stock_label in ('Reselling', 'SCaaS', 'FaaS - TBF', 'Hotels', 'Weddings & Events', 'Supermarket')
-          AND flag_1 IN ('scaned_flag', 'scaned_good')
-      group by 1,2,3),
-ordered AS (
-  SELECT
-    product_name,
-    departure_date,
-    in_stock_quantity,
-    -- أول كمية حسب أقدم تاريخ لنفس المنتج
-    FIRST_VALUE(in_stock_quantity) OVER ( PARTITION BY product_name ORDER BY departure_date ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS first_qty,
-    ROW_NUMBER() OVER (PARTITION BY product_name ORDER BY departure_date) AS rn
-  FROM d
-)
-SELECT product_name, departure_date, 
-       CASE WHEN rn > 1 AND first_qty > 0 AND in_stock_quantity > first_qty THEN 1 ELSE 0 END AS fifo_flag
-FROM ordered
-ORDER BY product_name, departure_date
-),
+
 express_data as (
     select p.product_id, 
         --    date(cli.created_at) as order_date,
@@ -444,7 +424,7 @@ packing_list_fob_price,
 modified_stock_model,
 stock_label,
 
-f.fifo_flag,
+-- f.fifo_flag,
 
 -- ed.order_date as express_order_date,
 ed.fulfilled_quantity as total_fulfilled_quantity_express, 
@@ -457,7 +437,7 @@ p.reseller_label,
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
 left join requested_orders as ro on ro.product_id = p.product_id
-left join flags f on p.product_name = f.product_name and p.departure_date = f.departure_date
+-- left join flags f on p.product_name = f.product_name and p.departure_date = f.departure_date
 left join express_data ed on ed.product_id = p.product_id
 --where p.product_id = 268380
 --where shipment_id =30798
