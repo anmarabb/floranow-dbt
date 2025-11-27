@@ -811,6 +811,9 @@ case
 
     sold_quantity,
     parent_is_express,
+    origin_departure_date,
+    origin_unit_price,
+    origin_unit_landed_cost,
 
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
