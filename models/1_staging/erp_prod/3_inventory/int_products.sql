@@ -27,6 +27,9 @@ with
                     sum(case when incident_type ='DAMAGED' then pi.quantity else 0 end) as toat_damaged_quantity,
 
                         SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 30 AND  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' and after_sold = false then pi.quantity ELSE 0 END) as last_30d_incident_quantity_inventory_dmaged,
+                        
+                        SUM(CASE WHEN DATE_DIFF(CURRENT_DATE(), date(pi.incident_at), DAY) <= 7 AND  pi.stage = 'INVENTORY' and incident_type ='DAMAGED' and after_sold = false then pi.quantity ELSE 0 END) as last_7d_incident_quantity_inventory_dmaged,
+
                         sum(case when incident_type !='EXTRA' and after_sold = False and pi.stage = 'RECEIVING' then  pi.quantity else 0 end) as incident_quantity_receiving_stage,
                         sum(case when incident_type !='EXTRA'  and pi.stage = 'PACKING' then  pi.quantity else 0 end) as incident_quantity_packing_stage,
                         sum(case when incident_type not in ('DAMAGED','EXTRA') and pi.stage = 'INVENTORY'  then pi.quantity else 0 end) as incident_quantity_inventory_stage,
@@ -335,6 +338,8 @@ with
             pi.last_30d_incidents_quantity,
             pi.last_30d_incident_quantity_inventory_dmaged,
 
+            pi.last_7d_incident_quantity_inventory_dmaged,
+
             pi.incidents_quantity_location,
             pi.toat_damaged_quantity,
             pi.incident_quantity_inventory_dmaged,
@@ -541,6 +546,7 @@ li.local_supplier_name,
 li.packing_list_fob_price,
 
 reseller.reseller_label,
+
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
