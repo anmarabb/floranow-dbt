@@ -102,7 +102,7 @@ left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
 
 left join products as p on pl.locationable_id = p.product_id
 
-join product_incidents as pi on pl.product_location_id = pi.incidentable_id
+left join product_incidents as pi on pl.product_location_id = pi.incidentable_id
 --left join {{ ref('stg_picking_products')}} as pick on pick.product_location_id = pl.product_location_id
 
 
