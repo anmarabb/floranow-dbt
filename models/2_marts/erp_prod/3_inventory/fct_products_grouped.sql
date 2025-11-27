@@ -155,7 +155,7 @@ sum(i_last_year_30d_sold_quantity) as i_last_year_30d_sold_quantity,
 sum(i_last_year_7d_sold_quantity) as i_last_year_7d_sold_quantity,
 sum(i_last_year_next_7d_sold_quantity) as i_last_year_next_7d_sold_quantity,
 sum(last_30d_incident_quantity_inventory_dmaged) as last_30d_incident_quantity_inventory_dmaged,
-
+sum(last_7d_incident_quantity_inventory_dmaged) as last_7d_incident_quantity_inventory_dmaged,
 
 
 sum(item_sold) as item_sold,
@@ -200,6 +200,8 @@ max(first_request_departure_date) as first_request_departure_date,
 sum(first_departure_requested_quantity) as first_departure_requested_quantity,
 
 sum(incident_quantity_receiving_stage) as incident_quantity_receiving_stage,
+
+
 
 sum(id.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
 sum(id.i_last_7d_sold_quantity) as i_last_7d_sold_quantity,
