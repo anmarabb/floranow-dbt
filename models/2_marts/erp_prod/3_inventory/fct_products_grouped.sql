@@ -79,6 +79,7 @@ invoices_data as (
 select product,
        warehouse,
        supplier,
+       origin,
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 30 THEN quantity ELSE 0 END) as i_last_30d_sold_quantity,
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) as i_last_7d_sold_quantity, 
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 3 THEN quantity ELSE 0 END) as i_last_3d_sold_quantity, 
@@ -88,14 +89,14 @@ select product,
 
 from {{ref('fct_invoice_items')}}
 where record_type = 'Invoice - AUTO' and inv_items_reprot_filter = 'Floranow Sales'
-group by 1,2,3
+group by 1,2,3,4
 )
 
 select
-p.Product,
-p.warehouse,
-p.Supplier,
-max(p.Origin) as Origin,
+COALESCE(p.product, id.product)     AS product,
+COALESCE(p.warehouse, id.warehouse) AS warehouse,
+COALESCE(p.supplier, id.supplier)   AS supplier,
+max(COALESCE(p.origin,   id.origin)) as Origin,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
 avg(md.i_avg_monthly_demand) as i_avg_monthly_demand,
@@ -207,18 +208,18 @@ sum(incident_quantity_receiving_stage) as incident_quantity_receiving_stage,
 
 
 
-sum(id.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
-sum(id.i_last_7d_sold_quantity) as i_last_7d_sold_quantity,
-sum(id.i_last_3d_sold_quantity) as i_last_3d_sold_quantity,
+max(id.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
+max(id.i_last_7d_sold_quantity) as i_last_7d_sold_quantity,
+max(id.i_last_3d_sold_quantity) as i_last_3d_sold_quantity,
 
-sum(i_last_7d_sold_quantity_promo) as i_last_7d_sold_quantity_promo,
-sum(i_last_7d_sold_quantity_normal) as i_last_7d_sold_quantity_normal,
+max(i_last_7d_sold_quantity_promo) as i_last_7d_sold_quantity_promo,
+max(i_last_7d_sold_quantity_normal) as i_last_7d_sold_quantity_normal,
 
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
 left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin and  p.Supplier = ow.Supplier
 left join last_year_demand lyd on lyd.Product = p.Product and lyd.warehouse = p.warehouse and lyd.Supplier = p.Supplier
-left join invoices_data id on id.Product = p.Product and id.warehouse = p.warehouse and id.Supplier = p.Supplier
+full outer join invoices_data id on id.Product = p.Product and id.warehouse = p.warehouse and id.Supplier = p.Supplier and p.Origin = id.Origin
 
 where  stock_model in ('Reselling', 'Commission Based', 'Internal - Project X')
 
