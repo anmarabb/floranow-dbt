@@ -220,7 +220,7 @@ from {{ref('fct_products')}} as p
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
 left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin and  p.Supplier = ow.Supplier
 left join last_year_demand lyd on lyd.Product = p.Product and lyd.warehouse = p.warehouse and lyd.Supplier = p.Supplier
-full outer join invoices_data id on id.Product = p.Product and id.warehouse = p.warehouse and id.Supplier = p.Supplier and p.Origin = id.Origin
+full outer join invoices_data id on id.Product = p.Product and id.warehouse = p.warehouse and id.Supplier = p.Supplier and p.Origin = id.Origin and p.stock_model = id.stock_model
 
 where COALESCE(p.stock_model, id.stock_model) in ('Reselling', 'Commission Based', 'Internal - Project X') 
 
