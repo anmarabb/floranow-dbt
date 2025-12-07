@@ -53,5 +53,7 @@ unit_fob_price,
 unit_landed_cost,
 remaining_value,
 
+days_until_expiry,
+
 
 from  {{ref('int_product_locations')}} as pl
