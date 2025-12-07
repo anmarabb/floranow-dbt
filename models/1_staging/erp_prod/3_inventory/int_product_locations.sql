@@ -100,13 +100,13 @@ from {{ ref('stg_product_locations') }} as pl
 left join {{ ref('stg_locations')}} as loc on pl.location_id=loc.location_id
 left join {{ ref('stg_sections')}} as sec on sec.section_id = loc.section_id
 
-left join products as p on pl.locationable_id = p.product_id
+ join products as p on pl.locationable_id = p.product_id
 
 left join product_incidents as pi on pl.product_location_id = pi.incidentable_id
 --left join {{ ref('stg_picking_products')}} as pick on pick.product_location_id = pl.product_location_id
 
 
-where pl.locationable_type = "Product" and pl.deleted_at is null
+where pl.locationable_type = "Product" and pl.deleted_at is null 
  
 )
 select 
