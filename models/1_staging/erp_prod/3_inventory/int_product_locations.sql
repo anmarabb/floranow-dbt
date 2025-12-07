@@ -38,6 +38,9 @@ with product_incidents as (
 
            p.unit_fob_price,
            p.unit_landed_cost,
+
+           DATE_DIFF(modified_expired_at, CURRENT_DATE(), DAY) AS days_until_expiry,
+
     from {{ ref('int_products')}} as p --on pl.locationable_id = p.product_id
 ),
 
@@ -56,7 +59,7 @@ concat( "https://erp.floranow.com/product_locations/", pl.product_location_id) a
  p.product_subcategory,
  p.product_category,
  p.departure_date,
---  p.days_until_expiry,
+ p.days_until_expiry,
  
  p.warehouse,
  p.order_type,
