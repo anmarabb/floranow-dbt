@@ -37,5 +37,10 @@ select
     cast(null as STRING) as reason,
     cast(null as STRING) as rejection_type,
 
+    case when ordertype = 'OFFLINE' then 'AUTO'
+         when ordertype = 'ONLINE' and confirmedbycutoff = true then 'AUTO'
+         when ordertype = 'ONLINE' and confirmedbycutoff in (null, false) then 'MANUAL'
+         end as confirmation_type,
+
 
 from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
