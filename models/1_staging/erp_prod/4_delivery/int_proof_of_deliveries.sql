@@ -36,7 +36,7 @@ pod.delivered_at,
 pod.window_starts_at,
 
 
-customer.name as Customer,
+customer.name as customer,
 customer.Warehouse,
 customer.Country,
 customer.account_manager,
