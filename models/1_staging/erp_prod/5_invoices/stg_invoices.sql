@@ -125,7 +125,8 @@ end as payment_status,
 
 financial_administration,
 
-current_timestamp() as ingestion_timestamp
+current_timestamp() as ingestion_timestamp,
+is_stamped,
 
  
 from source as i 
