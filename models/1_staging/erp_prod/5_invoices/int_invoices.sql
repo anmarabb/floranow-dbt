@@ -1,4 +1,3 @@
-
 with 
 
 
@@ -217,9 +216,16 @@ CASE WHEN invoice_header_status = 'Draft' THEN total_amount_without_tax ELSE 0 E
 
 current_timestamp() as insertion_timestamp, 
 
+pod.pod_status,
+dispatched_by.name as dispatched_by,
+
 from {{ ref('stg_invoices')}} as i
 left join {{ ref('base_users') }} as printed_by on printed_by.id = i.printed_by_id
 left join {{ ref('base_users') }} as customer on customer.id = i.customer_id
+
+left join {{ ref('stg_proof_of_deliveries') }} as pod on pod.proof_of_delivery_id = i.proof_of_delivery_id
+left join {{ ref('base_users') }} as dispatched_by on dispatched_by.id = pod.dispatched_by_id
+
 left join invoice_items as ii on ii.invoice_header_id = i.invoice_header_id
 left join prep_payments as prep_payments on prep_payments.invoice_header_id = i.invoice_header_id
 
