@@ -2,11 +2,11 @@ select
        i.invoice_header_id,
        i.pod_status,
        i.invoice_number , 
-    --    i.is_stamped,
+       i.is_stamped,
        i.date_invoice_header_created_at ,
        i.invoice_header_printed_at,
        i.invoice_header_status,
-    --    i.proof_of_delivery_id
+       i.proof_of_delivery_id,
        i.printed_by,
        i.dispatched_by,
     --    attached_by.name as attached_by,
