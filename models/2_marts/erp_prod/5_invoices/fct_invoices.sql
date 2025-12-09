@@ -247,6 +247,9 @@ gross_revenue - delivery_charge_amount as total_gross,
 
 draft_invoice_amount,
 
+pod_status,
+dispatched_by,
+
 from {{ref('int_invoices')}} as i
 )
 
