@@ -250,6 +250,8 @@ draft_invoice_amount,
 pod_status,
 dispatched_by,
 
+is_stamped,
+
 from {{ref('int_invoices')}} as i
 )
 
