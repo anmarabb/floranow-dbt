@@ -12,6 +12,7 @@ lateral flatten(input => categorization) json
 
 
 
+
 {% if execute %}
 {% set results_list = results.columns [e].values ( ) %}
 {% else %}
