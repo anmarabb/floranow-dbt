@@ -13,7 +13,7 @@ source_type,
 ids_count,
 pod_status,
 
-
+order_number,
 customer_name as customer,
 warehouse,
 country,
