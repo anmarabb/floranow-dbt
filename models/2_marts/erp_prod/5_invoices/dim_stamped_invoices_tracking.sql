@@ -10,6 +10,7 @@ select
        i.printed_by,
        i.dispatched_by,
        attached_by.name as attached_by,
+       
 
 from {{ref('fct_invoices')}} as i
 left join {{ref('stg_attachment_references')}} ar on CAST(i.invoice_header_id AS string)= ar.record_id
