@@ -6,6 +6,7 @@ count (*) as item_count ,
 min(created_at) as order_date,
 sum(fulfilled_quantity) as fulfilled_quantity,
 sum(fulfilled_value) as fulfilled_value,
+max(order_number) as order_number,
 from {{ ref('stg_line_items') }}
 group by proof_of_delivery_id
  ),
@@ -50,6 +51,7 @@ split_by.name as split_by,
 skipped_by.name as skipped_by,
 
 li.item_count, 
+li.order_number,
 
 i.invoice_count,
 i.financial_administration,
