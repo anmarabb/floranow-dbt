@@ -39,7 +39,8 @@ select
 
     case when ordertype = 'OFFLINE' then 'AUTO'
          when ordertype = 'ONLINE' and confirmedbycutoff = true then 'AUTO'
-         when ordertype = 'ONLINE' and confirmedbycutoff in (null, false) then 'MANUAL'
+         when ordertype = 'ONLINE' and confirmedbycutoff is null then 'MANUAL'
+         when ordertype = 'ONLINE' and confirmedbycutoff = false then 'MANUAL'
          end as confirmation_type,
 
 from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
