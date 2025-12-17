@@ -7,6 +7,7 @@ select
     -- FK
     orderid as order_id,
     -- purchaseOrderId as purchase_order_id,  -- TODO: Uncomment when field is added to source data
+    cast(null as string) as purchase_order_id,  -- TODO: Remove when field is added to source data
     farmid as farm_id,
     floranowfarmid as floranow_farm_id,
     vendorid as vendor_id,

@@ -9,16 +9,12 @@ with order_items as (
 
     union all
 
-    select 
-        *,
-        cast(null as string) as purchase_order_id  -- TODO: Remove when field is added to staging tables
+    select *
     from {{ref("stg_vp_rejected_order_items")}}
 
     union all
 
-    select 
-        *,
-        cast(null as string) as purchase_order_id  -- TODO: Remove when field is added to staging tables
+    select *
     from {{ref("stg_vp_canceled_order_items")}}
 )
 
