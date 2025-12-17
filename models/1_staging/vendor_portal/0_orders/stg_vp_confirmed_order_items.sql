@@ -6,6 +6,7 @@ select
 
     -- FK
     orderid as order_id,
+    purchaseOrderId as purchase_order_id,
     farmid as farm_id,
     floranowfarmid as floranow_farm_id,
     vendorid as vendor_id,
