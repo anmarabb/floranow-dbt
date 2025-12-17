@@ -114,3 +114,4 @@ sources:
       - name: client_status_summary
       - name: forecast_demand
       - name: attachment_references
+      - name: product_visibility_unified
