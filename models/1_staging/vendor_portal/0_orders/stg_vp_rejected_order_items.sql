@@ -39,4 +39,13 @@ select
     case when reason = 'cutoff time has passed' then 'AUTO' else 'MANUAL' END AS rejection_type,
     cast(null as STRING) as confirmation_type,
 
+    -- consigneeName as consignee_name,
+    -- consigneeCutOffStage as consignee_cut_off_stage,
+    -- POE as point_of_entry,
+    -- consigneeAddressLine1 as consignee_address_line_1,
+    -- consigneeAddressLine2 as consignee_address_line_2,
+    -- consigneeCountry as consignee_country,
+    -- consigneeRegion as consignee_region,
+    -- consigneePhoneNumber as consignee_phone_number,
+
 from {{ source(var('erp_source'), 'vp_rejected_order_items') }}
