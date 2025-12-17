@@ -43,13 +43,13 @@ select
          when ordertype = 'ONLINE' and confirmedbycutoff = false then 'MANUAL'
          end as confirmation_type,
 
-    -- consigneeName as consignee_name,
-    -- consigneeCutOffStage as consignee_cut_off_stage,
-    -- POE as point_of_entry,
-    -- consigneeAddressLine1 as consignee_address_line_1,
-    -- consigneeAddressLine2 as consignee_address_line_2,
-    -- consigneeCountry as consignee_country,
-    -- consigneeRegion as consignee_region,
-    -- consigneePhoneNumber as consignee_phone_number,
+    consigneeName as consignee_name,
+    consigneeCutOffStage as consignee_cut_off_stage,
+    POE as point_of_entry,
+    consigneeAddressLine1 as consignee_address_line_1,
+    consigneeAddressLine2 as consignee_address_line_2,
+    consigneeCountry as consignee_country,
+    consigneeRegion as consignee_region,
+    consigneePhoneNumber as consignee_phone_number,
 
 from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
