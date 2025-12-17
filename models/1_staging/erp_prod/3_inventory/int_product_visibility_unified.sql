@@ -39,6 +39,6 @@ select
     end as potential_value_risk
 
 from product_visibility as pv
-left join products as p on pv.product_id = p.product_id
+left join products as p on pv.erp_product_id = p.product_id
 left join line_items as li on p.line_item_id = li.line_item_id
 
