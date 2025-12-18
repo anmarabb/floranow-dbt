@@ -17,7 +17,7 @@ select
     -- Data 
     ordernumber as order_number,
     destination,
-    cast(null as INT64) as warehouse_id,  -- TODO: Remove when field is added to source data
+    warehouse as warehouse_id,  -- TODO: Remove when field is added to source data
     customerdebtornumber as debtor_number,
     customername as Customer,
     productname as Product,
