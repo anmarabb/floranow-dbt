@@ -31,14 +31,9 @@ select
     pv.*,
     p.product_name as Product,
     p.in_stock_quantity,
-    li.unit_fob_price,
-    case 
-        when coalesce(p.visible, false) = false then 
-            p.in_stock_quantity * coalesce(li.unit_fob_price, 0)
-        else 0
-    end as potential_value_risk
+    -- li.unit_fob_price,
 
 from product_visibility as pv
 left join products as p on pv.erp_product_id = p.product_id
-left join line_items as li on p.line_item_id = li.line_item_id
+-- left join line_items as li on p.line_item_id = li.line_item_id
 
