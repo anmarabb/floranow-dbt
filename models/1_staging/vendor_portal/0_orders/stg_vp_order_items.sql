@@ -16,6 +16,7 @@ select
     -- Data 
     ordernumber as order_number,
     destination,
+    warehouse as warehouse_id,
     customerdebtornumber as debtor_number,
     customername as Customer,
     productname as Product,
