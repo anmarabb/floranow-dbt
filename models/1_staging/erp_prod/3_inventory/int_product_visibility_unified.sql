@@ -38,7 +38,7 @@ select
     p.departure_date,
     origin_fs.feed_source_name as origin_feed_name,
     pla.item_location,
-    case when p.product_expired_at is not null then DATE_DIFF(p.product_expired_at, CURRENT_DATE(), DAY) else null end as remaining_days_to_expiry
+    case when p.product_expired_at is not null then DATE_DIFF(date(p.product_expired_at), CURRENT_DATE(), DAY) else null end as remaining_days_to_expiry
 
 from product_visibility as pv
 left join products as p on pv.erp_product_id = p.product_id
