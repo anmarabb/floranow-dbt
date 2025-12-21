@@ -144,6 +144,7 @@ residual,
 
 mtd_orders,
 mtd_orders_affected,
+ytd_orders,
 
 order_blocked_status,
 
