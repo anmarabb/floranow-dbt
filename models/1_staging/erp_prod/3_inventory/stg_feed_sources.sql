@@ -15,14 +15,24 @@ fs.floranow_feed_id,
 fs.availability_type,
 
 case 
-    when fs.feed_type = 0 then 'direct_link'
-    when fs.feed_type = 1 then 'reselling'
-    when fs.feed_type = 2 then 'grower_portal_feed'
-    when fs.feed_type = 3 then 'imported'
-    else 'cheak'
-    end as feed_type,
+     WHEN fs.feed_type = 0 THEN 'direct_link'
+     WHEN fs.feed_type = 1 THEN 'reselling'
+     WHEN fs.feed_type = 2 THEN 'grower_portal_feed'
+     WHEN fs.feed_type = 3 THEN 'imported'
+     WHEN fs.feed_type = 4 THEN 'farm'
+     WHEN fs.feed_type = 5 THEN 'import_sheet_feed'
+     WHEN fs.feed_type = 6 THEN 'vendor_portal_feed'
+end as feed_type,
 
-
+CASE
+     WHEN fs.service_provider = 0 THEN 'florisoft'
+     WHEN fs.service_provider = 1 THEN 'axerrio'
+     WHEN fs.service_provider = 2 THEN 'grower_portal'
+     WHEN fs.service_provider = 3 THEN 'floranow_erp'
+     WHEN fs.service_provider = 4 THEN 'farm_management'
+     WHEN fs.service_provider = 5 THEN 'import_sheet'
+     WHEN fs.service_provider = 6 THEN 'vendor_portal'
+END AS service_provider_name,
 
  
 
