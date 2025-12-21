@@ -45,3 +45,4 @@ left join products as p on pv.erp_product_id = p.product_id
 left join {{ ref('base_warehouses') }} as w on pv.warehouse_id = w.warehouse_id
 left join {{ ref('stg_feed_sources') }} as origin_fs on p.origin_feed_source_id = origin_fs.feed_source_id
 left join product_locations_agg as pla on p.product_id = pla.product_id
+
