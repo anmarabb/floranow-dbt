@@ -116,6 +116,7 @@ ytd_gross_revenue,
 ytd_credit_note,
 lytd_gross_revenue,
 lytd_credit_note,
+number_of_invoices_2025,
 
 
 m_1_remaining,

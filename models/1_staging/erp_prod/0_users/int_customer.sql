@@ -63,6 +63,11 @@ invoice AS
         sum (lytd_gross_revenue) as lytd_gross_revenue,
         sum (lytd_credit_note) as lytd_credit_note,
 
+        count(DISTINCT case 
+            when EXTRACT(YEAR FROM date(i.invoice_header_printed_at)) = 2025 
+            then i.invoice_header_id 
+            else null 
+        end) as number_of_invoices_2025,
 
         
 
@@ -235,6 +240,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     i.ytd_credit_note,
     i.lytd_gross_revenue,
     i.lytd_credit_note,
+    i.number_of_invoices_2025,
 
     i.total_gross_revenue_per_customer,
     i.total_credit_note_per_customer,
