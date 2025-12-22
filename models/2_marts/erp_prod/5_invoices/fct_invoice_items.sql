@@ -279,7 +279,7 @@ select
             creditable_type,
 
             -- dim
-            financial_administration,  -- Market
+            ii.financial_administration,  -- Market
             customer,
             --company_name,
             user_category,  -- Segment
@@ -446,17 +446,17 @@ select
                 when sales_channels = 'Platform(Re-Sale)' then 'Samer'
                 when sales_channels = 'Platform (Astra)' then 'Samer'
 
-                when sales_channels = 'Offline (Pre-Sale)' and financial_administration = 'UAE' then 'Mercy'
-                when sales_channels = 'Offline (Pre-Sale)' and financial_administration = 'KSA' then 'Faisal'
-                when sales_channels = 'Offline (Re-Sale)' and financial_administration = 'UAE' then 'Mercy'
-                when sales_channels = 'Offline (Re-Sale)' and financial_administration = 'KSA' then 'Faisal'
-                when sales_channels = 'Offline (Astra)' and financial_administration = 'UAE' then 'Mercy'
-                when sales_channels = 'Offline (Astra)' and financial_administration = 'KSA' then 'Faisal'
+                when sales_channels = 'Offline (Pre-Sale)' and ii.financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'Offline (Pre-Sale)' and ii.financial_administration = 'KSA' then 'Faisal'
+                when sales_channels = 'Offline (Re-Sale)' and ii.financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'Offline (Re-Sale)' and ii.financial_administration = 'KSA' then 'Faisal'
+                when sales_channels = 'Offline (Astra)' and ii.financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'Offline (Astra)' and ii.financial_administration = 'KSA' then 'Faisal'
 
-                when sales_channels = 'SuperMarkets' and financial_administration = 'UAE' then 'Mercy'
-                when sales_channels = 'SuperMarkets' and financial_administration = 'KSA' then 'Faisal'
+                when sales_channels = 'SuperMarkets' and ii.financial_administration = 'UAE' then 'Mercy'
+                when sales_channels = 'SuperMarkets' and ii.financial_administration = 'KSA' then 'Faisal'
 
-                when sales_channels = 'SCaaS' and financial_administration = 'KSA' then 'Mutaz'
+                when sales_channels = 'SCaaS' and ii.financial_administration = 'KSA' then 'Mutaz'
                 
             end as sales_channel_owner,
 
