@@ -241,8 +241,9 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
     
 
 -- plis.supplier_name as parent_supplier,
-    case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end as Supplier,
-    case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end as supplier_region, --Origin
+    -- Use root supplier from int_root_supplier (traces back through origin_line_item_id for transfer cases)
+    coalesce(rs.root_supplier, case when li.parent_line_item_id is not null then plis.supplier_name else lis.supplier_name end) as Supplier,
+    coalesce(rs.root_origin, case when li.parent_line_item_id is not null then plis.supplier_region else lis.supplier_region end) as supplier_region, --Origin
 
 
    -- sh.Supplier as shipment_Supplier,
@@ -662,6 +663,7 @@ left join {{ref('dim_date')}}  as date on date.dim_date = date(li.created_at)
 left join {{ref('stg_delivery_windows')}}  as win on  CAST(li.delivery_window_id AS INT64) = win.id
 left join productIncidents as pi on pi.line_item_id = li.line_item_id
 left join {{ref('int_fm_orders')}}  as fmo on  fmo.buyer_order_number = li.number
+left join {{ref('int_root_supplier')}} as rs on li.line_item_id = rs.line_item_id
 
 -- left join {{ref ("stg_line_items")}} cli on cli.parent_line_item_id = li.line_item_id
 

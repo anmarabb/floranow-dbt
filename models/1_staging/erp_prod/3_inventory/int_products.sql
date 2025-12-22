@@ -184,8 +184,10 @@ with
             
 
             
-            os.supplier_name as Supplier, --orginal supplier form product table.
-            os.supplier_region as Origin,
+            -- Use root supplier from int_root_supplier (traces back through origin_line_item_id for transfer cases)
+            -- Falls back to original supplier from product table if no line_item_id
+            coalesce(rs.root_supplier, os.supplier_name) as Supplier,
+            coalesce(rs.root_origin, os.supplier_region) as Origin,
             
             --s.supplier_region as Origin,
 
@@ -581,6 +583,7 @@ li.parent_line_item_id,
 
         left join {{ref('base_warehouses')}} as w on w.warehouse_id = st.warehouse_id
         left join line_items_inv_sold as liis on liis.product_id = p.product_id
+        left join {{ref('int_root_supplier')}} as rs on p.line_item_id = rs.line_item_id
       --  left join {{ref('base_warehouses')}} as w on w.warehouse_id = customer.warehouse_id
 
         left join package_line_items as pli on li.line_item_id = pli.line_item_id
