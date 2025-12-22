@@ -58,6 +58,23 @@ with margin_drivers as
 
 
     from {{ ref("int_invoice_items") }}
+),
+sales_channel_targets as (
+    select 'Offline (Astra)' as sales_channel, 'UAE' as financial_administration, 0.36 as target_margin_percentage
+    union all select 'Offline (Astra)', 'KSA', 0.27
+    union all select 'Offline (Pre-Sale)', 'UAE', 0.26
+    union all select 'Offline (Pre-Sale)', 'KSA', 0.25
+    union all select 'Offline (Re-Sale)', 'UAE', 0.26
+    union all select 'Offline (Re-Sale)', 'KSA', 0.25
+    union all select 'Platform (Astra)', 'UAE', 0.36
+    union all select 'Platform (Astra)', 'KSA', 0.27
+    union all select 'Platform(Pre-Sale)', 'UAE', 0.36
+    union all select 'Platform(Pre-Sale)', 'KSA', 0.31
+    union all select 'Platform(Re-Sale)', 'UAE', 0.36
+    union all select 'Platform(Re-Sale)', 'KSA', 0.31
+    union all select 'SCaaS', 'KSA', 0.22
+    union all select 'SuperMarkets', 'UAE', 0.29
+    union all select 'SuperMarkets', 'KSA', 0.32
 )
 select
 
@@ -363,6 +380,9 @@ select
             when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) >= 0.26 and (auto_gross_revenue + auto_credit_note - total_cost)/gross_revenue < 0.35 then 'Risky'
             when (auto_gross_revenue + auto_credit_note - total_cost)/if(gross_revenue = 0,1,gross_revenue) >= 0.35 then 'Healthy' end as Flag2,
 
+            -- Target margin percentage by sales channel and financial administration (for aggregation)
+            tgt.target_margin_percentage,
+
             current_timestamp() as insertion_timestamp,
             city,
             currency,
@@ -462,6 +482,8 @@ select
         
         from {{ ref("int_invoice_items") }} as ii
         left join margin_drivers md on ii.invoice_item_id = md.invoice_item_id
+        left join sales_channel_targets tgt on md.sales_channels = tgt.sales_channel 
+            and ii.financial_administration = tgt.financial_administration
 
 
     -- where invoice_type != 'credit note' and generation_type !='MANUAL'
