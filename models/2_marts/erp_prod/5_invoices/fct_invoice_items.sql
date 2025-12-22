@@ -3,26 +3,56 @@ with margin_drivers as
     select invoice_item_id,
            case 
                 when trading_model = 'Pre-Selling' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Pre-Sale)'
+                and (
+                    (invoice_header_type = 'invoice' and generation_type = 'AUTO')
+                    OR 
+                    invoice_header_type = 'credit note'
+                )
+                and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Pre-Sale)'
 
                 when trading_model = 'Re-Selling (Express)' and order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Re-Sale)'
+                and (
+                    (invoice_header_type = 'invoice' and generation_type = 'AUTO')
+                    OR 
+                    invoice_header_type = 'credit note'
+                )
+                and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform(Re-Sale)'
 
                 when trading_model = 'Pre-Selling' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Pre-Sale)'
+                and (
+                    (invoice_header_type = 'invoice' and generation_type = 'AUTO')
+                    OR 
+                    invoice_header_type = 'credit note'
+                )
+                and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Pre-Sale)'
 
                 when trading_model = 'Re-Selling (Express)' and order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier != 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Re-Sale)'
+                and (
+                    (invoice_header_type = 'invoice' and generation_type = 'AUTO')
+                    OR 
+                    invoice_header_type = 'credit note'
+                )
+                and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Re-Sale)'
 
                 when user_category = 'SuperMarkets' then 'SuperMarkets'
 
                 when warehouse like '%Project%' then 'SCaaS'
 
                 when order_type in ('ONLINE', 'IN_SHOP', 'PICKED_ORDER') and supplier = 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform (Astra)'
+                and (
+                    (invoice_header_type = 'invoice' and generation_type = 'AUTO')
+                    OR 
+                    invoice_header_type = 'credit note'
+                )
+                and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Platform (Astra)'
 
                 when order_type in ('OFFLINE', 'STANDING', 'ADDITIONAL') and supplier = 'ASTRA Farms' 
-                and generation_type = 'AUTO' and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Astra)'
+                and (
+                    (invoice_header_type = 'invoice' and generation_type = 'AUTO')
+                    OR 
+                    invoice_header_type = 'credit note'
+                )
+                and warehouse not like '%Project%' and user_category != 'SuperMarkets' then 'Offline (Astra)'
 
             end as sales_channels,
 
