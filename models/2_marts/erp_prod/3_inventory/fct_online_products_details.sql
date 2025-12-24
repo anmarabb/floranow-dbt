@@ -33,6 +33,11 @@ select
     p.departure_date,
     p.product_expired_at,
     p.product_created_at,
+    case 
+        when p.product_expired_at is not null 
+        then DATE_DIFF(date(p.product_expired_at), CURRENT_DATE(), DAY) 
+        else null 
+    end as remaining_days_to_expiry,
     
     -- Warehouse information
     w.warehouse_name as warehouse,
@@ -54,4 +59,3 @@ left join products as p on opd.erp_product_id = p.product_id
 left join {{ ref('base_stocks') }} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
 left join {{ ref('base_warehouses') }} as w on st.warehouse_id = w.warehouse_id
 left join {{ ref('stg_feed_sources') }} as origin_fs on p.origin_feed_source_id = origin_fs.feed_source_id
-
