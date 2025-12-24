@@ -33,6 +33,7 @@ sources:
       - name: shipment_documents
 
       - name: products
+      - name: online_products
       - name: product_locations
       - name: product_movements
       - name: stock_movements
