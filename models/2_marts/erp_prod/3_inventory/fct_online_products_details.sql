@@ -30,7 +30,7 @@ select
     p.color as product_color,
     
     -- Product dates
-    p.departure_date,
+    -- p.departure_date,
     p.product_expired_at,
     p.product_created_at,
     
