@@ -61,6 +61,7 @@ select
     
     -- Feed Source information
     origin_fs.feed_source_name as origin_feed_source_name,
+    out_fs.feed_source_name as out_feed_source_name
 
 
 
@@ -69,5 +70,6 @@ left join products as p on op.erp_product_id = p.product_id
 left join {{ ref('base_stocks') }} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id
 left join {{ ref('base_warehouses') }} as w on st.warehouse_id = w.warehouse_id
 left join {{ ref('stg_feed_sources') }} as origin_fs on p.origin_feed_source_id = origin_fs.feed_source_id
+left join {{ ref('stg_feed_sources') }} as out_fs on st.out_feed_source_id = out_fs.feed_source_id
 
 
