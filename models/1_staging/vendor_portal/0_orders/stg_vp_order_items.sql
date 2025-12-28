@@ -51,4 +51,11 @@ select
     consigneePhoneNumber as consignee_phone_number,
 
 
-from {{ source(var('erp_source'), 'vp_order_items') }}
+from {{ source(var('erp_source'), 'vp_order_items') }} as op
+where op._id not in (
+    select _id from {{ source(var('erp_source'), 'vp_confirmed_order_items') }}
+    union distinct
+    select _id from {{ source(var('erp_source'), 'vp_rejected_order_items') }}
+    union distinct
+    select _id from {{ source(var('erp_source'), 'vp_canceled_order_items') }}
+)
