@@ -33,7 +33,7 @@ select
     vendorname as Vendor,
     offernumber as offer_number,
 
-    date(createdat) as ordered_at,
+    timestamp(createdat) as ordered_at,
     cast(null as date) as confirmed_at,
     cast(null as date) as rejected_at,
     date(cancelledat) as cancelled_at,
