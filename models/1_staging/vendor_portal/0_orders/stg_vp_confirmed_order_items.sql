@@ -33,9 +33,9 @@ select
     offernumber as offer_number,
 
     timestamp(createdat) as ordered_at,
-    date(confirmedat) as confirmed_at,
-    cast(null as date) as rejected_at,
-    cast(null as date) as cancelled_at,
+    timestamp(confirmedat) as confirmed_at,
+    cast(null as timestamp) as rejected_at,
+    cast(null as timestamp) as cancelled_at,
     cast(null as STRING) as reason,
     cast(null as STRING) as rejection_type,
 

@@ -34,9 +34,9 @@ select
     offernumber as offer_number,
 
     timestamp(createdat) as ordered_at,
-    cast(null as date) as confirmed_at,
-    date(rejectedat) as rejected_at,
-    cast(null as date) as cancelled_at,
+    cast(null as timestamp) as confirmed_at,
+    timestamp(rejectedat) as rejected_at,
+    cast(null as timestamp) as cancelled_at,
     reason,
     
     case when reason = 'cutoff time has passed' then 'AUTO' else 'MANUAL' END AS rejection_type,
