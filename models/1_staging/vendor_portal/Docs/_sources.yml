@@ -11,3 +11,11 @@ sources:
       - name: vp_vendors
       - name: vp_rejected_order_items
       - name: vp_purchase_order
+      - name: sh_shipments
+      - name: sh_master_shipments
+      - name: sh_line_items
+      - name: sh_packages
+      - name: sh_package_line_items
+      - name: sh_line_item_quantity_adjustments
+      - name: sh_movement_requests
+      - name: sh_movement_request_items
