@@ -2,6 +2,9 @@ select
     -- Primary Key
     id as line_item_id,
 
+    -- Foreign Keys
+    caused_by_adjustment_id,
+
     -- Order Information
     order_number,
     order_id,
