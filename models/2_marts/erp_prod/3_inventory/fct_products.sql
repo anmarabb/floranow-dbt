@@ -234,6 +234,7 @@ case
     i_sold_quantity,
     i_last_30d_sold_quantity,
     i_last_7d_sold_quantity,
+    last_3_weeks_avg_sold_quantity,
     i_last_year_30d_sold_quantity,
     i_last_year_7d_sold_quantity,
     i_last_year_next_7d_sold_quantity,
