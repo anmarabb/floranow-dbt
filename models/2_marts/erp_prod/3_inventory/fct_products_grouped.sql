@@ -82,7 +82,8 @@ select product,
        origin,
        stock_model,
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 30 THEN quantity ELSE 0 END) as i_last_30d_sold_quantity,
-       SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) as i_last_7d_sold_quantity, 
+       SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) as i_last_7d_sold_quantity,
+       SAFE_DIVIDE(SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 21 THEN quantity ELSE 0 END), 3) as i_last_3_weeks_avg_sold_quantity, 
        SUM(CASE WHEN DATE_DIFF(DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY), date(invoice_header_printed_at), DAY) <= 3 THEN quantity ELSE 0 END) as i_last_3d_sold_quantity, 
        SUM(CASE WHEN (LOWER(feed_source_name) LIKE '%flash%' OR LOWER(feed_source_name) LIKE '%promo%') AND DATE_DIFF(DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY), DATE(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) AS i_last_7d_sold_quantity_promo,
        SUM(CASE WHEN ((feed_source_name IS NULL) OR (LOWER(feed_source_name) NOT LIKE '%flash%' AND LOWER(feed_source_name) NOT LIKE '%promo%')) AND DATE_DIFF(DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY), DATE(invoice_header_printed_at), DAY) <= 7 THEN quantity ELSE 0 END) 
@@ -211,6 +212,7 @@ sum(incident_quantity_receiving_stage) as incident_quantity_receiving_stage,
 
 max(id.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
 max(id.i_last_7d_sold_quantity) as i_last_7d_sold_quantity,
+max(id.i_last_3_weeks_avg_sold_quantity) as i_last_3_weeks_avg_sold_quantity,
 max(id.i_last_3d_sold_quantity) as i_last_3d_sold_quantity,
 
 max(i_last_7d_sold_quantity_promo) as i_last_7d_sold_quantity_promo,
