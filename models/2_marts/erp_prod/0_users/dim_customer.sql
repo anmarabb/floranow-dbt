@@ -143,6 +143,7 @@ days_since_last_drop,
 residual,
 
 
+order_count,
 mtd_orders,
 mtd_orders_affected,
 ytd_orders,
