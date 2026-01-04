@@ -5,8 +5,8 @@ with produced_quantity as
   (
 
     select
-    sub_group,
-    color,
+    INITCAP(sub_group) as sub_group,
+    LOWER(color) as color,
     week_number,
     sum(produced_quantity) as produced_quantity,
 
@@ -19,8 +19,8 @@ with produced_quantity as
   
     (
     select    
-    sub_group,
-    color,
+    INITCAP(sub_group) as sub_group,
+    LOWER(color) as color,
     --week_number,
     sum(available_quantity) as available_quantity,
 
@@ -34,8 +34,8 @@ with produced_quantity as
   
     (
     select    
-    sub_group,
-    color,
+    INITCAP(sub_group) as sub_group,
+    LOWER(color) as color,
     week_number,
     sum(inbound_quantity) as inbound_quantity,
 

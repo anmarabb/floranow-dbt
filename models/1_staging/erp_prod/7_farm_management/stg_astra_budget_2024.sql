@@ -2,7 +2,7 @@
 
 SELECT
 
-    sub_group,
+    INITCAP(sub_group) as sub_group,
     LOWER(color) as color,
     CONCAT(CAST(year AS STRING), ' - week ', CAST((week) AS STRING)) AS week_number,
      budget_quantity,
@@ -13,8 +13,8 @@ SELECT
 
 
 CASE
-    WHEN sub_group IN ('Alstroemeria', 'Aster', 'Cycas', 'Eucalyptus', 'Eustoma', 'Liatris', 'Gerbera', 'Trachelium', 'Sunflower', 'Statice', 'Solidago', 'Ruscus', 'Lily Or Double', 'Lily Or', 'Lily LA', 'Chrysanthemum Santini', 'Chrysanthemum Single', 'Chrysanthemum Spray') THEN 'Contract'
-    WHEN sub_group IN ('Antirrhinum', 'Carnation', 'Dianthus barbatus', 'Gypsophila', 'Rose', 'Spray Rose', 'Celosia', 'Greeneries') THEN 'Out Of Contract'
+    WHEN UPPER(sub_group) IN ('ALSTROEMERIA', 'ASTER', 'CYCAS', 'EUCALYPTUS', 'EUSTOMA', 'LIATRIS', 'GERBERA', 'TRACHELIUM', 'SUNFLOWER', 'STATICE', 'SOLIDAGO', 'RUSCUS', 'LILY OR DOUBLE', 'LILY OR', 'LILY LA', 'CHRYSANTHEMUM SANTINI', 'CHRYSANTHEMUM SINGLE', 'CHRYSANTHEMUM SPRAY') THEN 'Contract'
+    WHEN UPPER(sub_group) IN ('ANTIRRHINUM', 'CARNATION', 'DIANTHUS BARBATUS', 'GYPSOPHILA', 'ROSE', 'SPRAY ROSE', 'CELOSIA', 'GREENERIES') THEN 'Out Of Contract'
     ELSE 'Unknown'
   END AS contract_status,
 
