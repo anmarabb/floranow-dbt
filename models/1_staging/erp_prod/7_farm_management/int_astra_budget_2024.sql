@@ -55,7 +55,7 @@ COALESCE(p.available_quantity, 0) AS available_quantity,
 COALESCE(inbound.inbound_quantity, 0) AS inbound_quantity,
 
 FROM  {{ref('stg_astra_budget_2024')}} as db
-left join produced_quantity as boxitems on UPPER(boxitems.sub_group) = UPPER(db.sub_group) and LOWER(boxitems.color) = LOWER(db.color) and  boxitems.week_number = db.week_number
-left join available_quantity as p on UPPER(p.sub_group) = UPPER(db.sub_group) and LOWER(p.color) = LOWER(db.color)
-left join inbound_quantity as inbound on UPPER(inbound.sub_group) = UPPER(db.sub_group) and LOWER(inbound.color) = LOWER(db.color) and  inbound.week_number = db.week_number
+left join produced_quantity as boxitems on boxitems.sub_group = db.sub_group and boxitems.color = db.color and  boxitems.week_number = db.week_number
+left join available_quantity as p on p.sub_group = db.sub_group and p.color = db.color
+left join inbound_quantity as inbound on inbound.sub_group = db.sub_group and inbound.color = db.color and  inbound.week_number = db.week_number
 
