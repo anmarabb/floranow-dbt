@@ -86,6 +86,7 @@ u.deleted_at,
 
 --move_item
     mi_total_order_value_per_customer,
+    mi_total_order_value_per_customer_2025,
     mi_residual,
     mi_credit_balance,
     mi_debit_balance,
@@ -144,6 +145,7 @@ residual,
 
 
 order_count,
+order_count_2025,
 mtd_orders,
 mtd_orders_affected,
 ytd_orders,

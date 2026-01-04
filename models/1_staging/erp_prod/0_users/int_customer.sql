@@ -4,6 +4,7 @@ WITH line_items AS
         customer_id,
         MAX(li.order_date) AS customers_last_order_date,
         DATE_DIFF(CURRENT_DATE(), DATE(MAX(li.order_date)), DAY) as days_since_last_order,
+        count (DISTINCT case when EXTRACT(YEAR FROM date(li.order_date)) = 2025 then li.order_number else null end) as order_count_2025,
         count (DISTINCT li.order_number) as order_count,
         count( DISTINCT case when  date_diff(date(delivery_date) , current_date() , MONTH) = 0 then order_number else null end) as mtd_orders,
         count ( DISTINCT case when  date_diff(date(delivery_date) , current_date() , MONTH) = 0 then order_with_incidents else null end) as mtd_orders_affected,
@@ -118,6 +119,7 @@ move_items AS
         sum( case when mi.entry_type = 'CREDIT' then mi.residual else 0 end) as mi_credit_balance,
         sum(mi.residual) as mi_residual,
         sum(mi.total_debits) as mi_total_order_value_per_customer, --with VAT
+        sum(case when EXTRACT(YEAR FROM date(mi.date)) = 2025 then mi.total_debits else 0 end) as mi_total_order_value_per_customer_2025,
         sum(mi.collectible_amount) as collectible_amount,
 
         sum(mi.m_1_remaining) as m_1_remaining,
@@ -212,6 +214,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
 
     li.customers_last_order_date,
     li.order_count,
+    li.order_count_2025,
     li.mtd_orders,
     li.mtd_orders_affected,
     li.ytd_orders,
@@ -249,6 +252,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     i.total_tax_per_customer,
 
     mi.mi_total_order_value_per_customer,
+    mi.mi_total_order_value_per_customer_2025,
     
 
     mi.mi_credit_balance,
