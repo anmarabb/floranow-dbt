@@ -61,6 +61,21 @@ when p.product_name like '%Strelitzia Leaves%' THEN 'Greeneries'
 when p.product_name like '%Cycas%' THEN 'Cycas' 
 when p.sub_group = 'Gerbera Mini' then 'Gerbera'
 
+when p.product_name like '%Carnation Apple Jack%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Britney%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Cappucino%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation League Marrone%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Snow Storm%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Tonic Golem%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Holly%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Alcazar%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Novia%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Royal Damascus%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Sel Ice%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Julia%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Latin Kleos%' THEN 'Carnation Premium'
+when p.product_name like '%Carnation Fresh Love%' THEN 'Carnation Premium'
+
 when p.sub_group is null then p.main_group
 else p.sub_group
 end as sub_group,
