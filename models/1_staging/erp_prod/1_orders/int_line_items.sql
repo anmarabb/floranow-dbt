@@ -206,6 +206,7 @@ case when li.li_record_type_details in ('Reseller Purchase Order For Inventory')
 
 --customer
     user.name as user,
+    user.created_at as account_creation_date,
     customer.name as customer,
     customer.country,
     customer.financial_administration,
