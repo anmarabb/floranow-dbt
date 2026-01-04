@@ -15,8 +15,6 @@ select
 
 
 --dim
-    main_group,
-    sub_group,
     properties,
     categorization,
     product_name,
