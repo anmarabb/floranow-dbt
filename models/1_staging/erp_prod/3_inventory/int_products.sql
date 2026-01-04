@@ -58,6 +58,7 @@ with
                     count(li.line_item_id) as item_sold,
                     count(distinct li.customer_id) as customer_ordered,
                     sum(li.quantity) as sold_quantity, 
+                    sum(case when customer.internal = true then li.quantity else 0 end) as internal_moved_quantity,
                     sum(li.missing_quantity + li.damaged_quantity) as child_incident_quantity,
 
 
@@ -74,6 +75,7 @@ with
 
                     from {{ ref('stg_line_items')}} as li
                     left join {{ ref('stg_products')}} as p on p.line_item_id = li.parent_line_item_id
+                    left join {{ ref('base_users')}} as customer on customer.id = li.customer_id
 
                     --where p.product_id=149074
                 group by 1
@@ -311,6 +313,7 @@ with
         --line_items_sold
             lis.item_sold,
             lis.sold_quantity,
+            lis.internal_moved_quantity,
             lis.child_incident_quantity,
 
             lis.last_30d_sold_quantity,

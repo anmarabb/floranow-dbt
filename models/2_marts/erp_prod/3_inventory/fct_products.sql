@@ -219,6 +219,7 @@ case
     
 --line_items_sold
     sold_quantity,
+    internal_moved_quantity,
     last_30d_sold_quantity,
     last_7d_sold_quantity,
     last_year_30d_sold_quantity,
