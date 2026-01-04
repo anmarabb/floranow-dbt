@@ -2,8 +2,8 @@
 
 SELECT
 
-    INITCAP(sub_group) as sub_group,
-    LOWER(color) as color,
+    sub_group,
+    color,
     CONCAT(CAST(year AS STRING), ' - week ', CAST((week) AS STRING)) AS week_number,
      budget_quantity,
    -- week,
