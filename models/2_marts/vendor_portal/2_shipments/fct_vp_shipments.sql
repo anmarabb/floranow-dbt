@@ -14,8 +14,8 @@ select
     concat("https://erp.floranow.com/vendor_portal/shipments/", shipment_id) as shipment_link,
     
     -- Status & State
-    state,
-    master_shipment_state,
+    state as shipment_status,
+    master_shipment_state as master_shipment_status,
     
     -- Location Information
     origin,
