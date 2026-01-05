@@ -95,9 +95,9 @@ group by 1,2,3,4,5
 )
 
 select
-COALESCE(p.product, id.product)     AS product_name,
+COALESCE(p.product, id.product)     AS Product,
 COALESCE(p.warehouse, id.warehouse) AS warehouse,
-COALESCE(p.supplier, id.supplier)   AS supplier_name,
+COALESCE(p.supplier, id.supplier)   AS Supplier,
 max(COALESCE(p.origin,   id.origin)) as Origin,
 
 avg(md.avg_monthly_demand) as avg_monthly_demand,
