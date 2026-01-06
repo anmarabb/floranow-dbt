@@ -262,6 +262,16 @@ select
                 else date(invoice_header_printed_at)
             end as master_date,
 
+            -- Master Date (ISO Week Format: Dec 1, 2025 to Dec 7, 2025 (week 49))
+            concat(
+                FORMAT_DATE('%b %e, %Y', DATE_TRUNC(DATE(invoice_header_printed_at), WEEK(MONDAY))),
+                ' to ',
+                FORMAT_DATE('%b %e, %Y', DATE_ADD(DATE_TRUNC(DATE(invoice_header_printed_at), WEEK(MONDAY)), INTERVAL 6 DAY)),
+                ' (week ',
+                cast(EXTRACT(ISOWEEK FROM invoice_header_printed_at) as string),
+                ')'
+            ) as master_date_iso_week,
+
             -- This represents the total monetary value deducted from the Gross
             -- Revenue for a specific period, such as a month, due to the issuance of
             -- credit notes. Credit notes are typically issued when a customer returns
