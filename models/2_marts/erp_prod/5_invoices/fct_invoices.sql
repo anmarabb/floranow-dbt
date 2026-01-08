@@ -10,6 +10,7 @@ case
     when debtor_number = '132008' then 'Intercompany Sales'
     when customer_type = 'reseller' then 'Intercompany Sales'
     when debtor_number = '130188' then 'Intercompany Sales'
+    when debtor_number = '13200801' then 'Intercompany Sales'
     else 'Floranow Sales'
     end as reprot_filter,
     
