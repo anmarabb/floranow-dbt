@@ -815,6 +815,7 @@ case
     origin_departure_date,
     origin_unit_fob_price,
     origin_unit_landed_cost,
+    li.received_at,
 
 from {{ref('int_line_items')}} as li 
 left join quantity_tracking qt on li.line_item_id = qt.line_item_id
