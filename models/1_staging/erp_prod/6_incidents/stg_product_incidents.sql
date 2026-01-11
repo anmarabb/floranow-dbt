@@ -106,6 +106,7 @@ select
     
 current_timestamp() as ingestion_timestamp,
 
+case when after_sold = false then quantity else 0 end as incident_quantity_before_sold,
 
 
 

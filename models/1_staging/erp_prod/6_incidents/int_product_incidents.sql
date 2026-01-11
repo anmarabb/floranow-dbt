@@ -180,6 +180,8 @@ current_timestamp() as insertion_timestamp,
 
 0 as new_data,
 
+incident_quantity_before_sold,
+
 from {{ ref('stg_product_incidents')}} as pi
 left join {{ref('int_line_items')}} as li on pi.line_item_id = li.line_item_id
 
@@ -354,5 +356,6 @@ allocated_damage_cost as inventory_damaged_cost,
 current_timestamp() as insertion_timestamp,
 
 1 as new_data,
+0 as incident_quantity_before_sold,
 
     FROM {{ ref('stg_astra_incidents')}}
