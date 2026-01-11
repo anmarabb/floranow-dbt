@@ -624,7 +624,7 @@ CASE WHEN EXISTS (
     origin_li.departure_date  as origin_departure_date,
     origin_li.unit_fob_price  as origin_unit_fob_price,
     origin_li.unit_landed_cost  as origin_unit_landed_cost,
-    received_at,
+    li.received_at,
 
 
 from {{ref('stg_line_items')}} as li
