@@ -356,6 +356,6 @@ allocated_damage_cost as inventory_damaged_cost,
 current_timestamp() as insertion_timestamp,
 
 1 as new_data,
-0 as incident_quantity_before_sold,
+-- 0 as incident_quantity_before_sold,
 
     FROM {{ ref('stg_astra_incidents')}}
