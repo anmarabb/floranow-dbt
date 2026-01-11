@@ -558,8 +558,8 @@ origin_unit_landed_cost,
 origin_unit_fob_price,
 li.parent_line_item_id,
 
-li.order_date,
-li.received_at,
+-- li.order_date,
+-- li.received_at,
 
         from {{ ref('stg_products')}} as p
         left join {{ ref('base_stocks')}} as st on p.stock_id = st.stock_id and p.reseller_id = st.reseller_id

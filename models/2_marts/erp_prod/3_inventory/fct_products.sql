@@ -440,8 +440,8 @@ origin_unit_landed_cost,
 origin_unit_fob_price,
 parent_line_item_id,
 
-li.order_date,
-li.received_at,
+-- li.order_date,
+-- li.received_at,
 
 from {{ref('int_products')}} as p 
 left join future_orders as fo on fo.product_id = p.product_id
