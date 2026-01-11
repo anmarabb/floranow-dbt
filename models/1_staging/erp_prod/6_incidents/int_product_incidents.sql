@@ -249,7 +249,7 @@ SELECT
         'inventory_dmaged' AS master_report_filter,
         current_timestamp() as insertion_timestamp,
 
-        incident_quantity_before_sold,
+        0 as incident_quantity_before_sold,
 
         allocated_damage_quantity as incident_quantity,
         allocated_damage_quantity as incident_quantity_without_extra,
