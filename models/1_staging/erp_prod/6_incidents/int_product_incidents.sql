@@ -180,7 +180,7 @@ current_timestamp() as insertion_timestamp,
 
 0 as new_data,
 
-incident_quantity_before_sold,
+-- incident_quantity_before_sold,
 
 from {{ ref('stg_product_incidents')}} as pi
 left join {{ref('int_line_items')}} as li on pi.line_item_id = li.line_item_id
