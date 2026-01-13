@@ -1,4 +1,5 @@
-WITH 
+with data as(
+    WITH 
 -- Union of all quantity events by creation date
 quantity_events AS (
     /* 1. ORDERED (parent line items - initial order quantity) */
@@ -135,7 +136,6 @@ quantity_events AS (
 )
 
 -- Final aggregation with calculated remaining quantity
-daily_quantities AS (
     SELECT
         p.product_id,
         p.Product AS product,
@@ -161,7 +161,7 @@ daily_quantities AS (
             ),
             0
         ) AS daily_net_change
-    FROM {{ ref('stg_daily_demand_base') }} p
+    FROM {{ ref('fct_products') }} p
     LEFT JOIN quantity_events qe ON qe.product_id = p.product_id
     WHERE p.Product IS NOT NULL AND p.warehouse IS NOT NULL AND qe.event_date IS NOT NULL
     GROUP BY p.product_id, p.Product, p.warehouse, qe.event_date
@@ -182,7 +182,7 @@ SELECT
     released,
     daily_net_change,
     SUM(daily_net_change) OVER (PARTITION BY product_id ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_remaining_quantity
-FROM daily_quantities
+FROM data
 where date > '2023-01-01'
 ORDER BY warehouse, product, date
 
