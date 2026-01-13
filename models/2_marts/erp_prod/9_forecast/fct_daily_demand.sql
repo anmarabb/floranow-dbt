@@ -1,19 +1,18 @@
 SELECT 
-    product_id,
-    product,
-    warehouse,
-    date,
-    ordered,
-    sold,
-    incidents,
-    cumulative_remaining_quantity
-FROM {{ ref('fct_daily_quantity_events') }}
-WHERE product_id IN (
-    SELECT product_id 
-    FROM {{ ref('stg_daily_demand_base') }}
-)
-    AND product IS NOT NULL
-    AND warehouse IS NOT NULL
-    AND date IS NOT NULL
-ORDER BY warehouse, product, date
+    qe.product_id,
+    base.product,
+    qe.warehouse,
+    qe.date,
+    qe.ordered,
+    qe.sold,
+    qe.incidents,
+    qe.cumulative_remaining_quantity,
+    base.age,
+    base.product_category
+FROM {{ ref('fct_daily_quantity_events') }} qe
+INNER JOIN {{ ref('stg_daily_demand_base') }} base ON base.product_id = qe.product_id
+WHERE qe.product IS NOT NULL
+    AND qe.warehouse IS NOT NULL
+    AND qe.date IS NOT NULL
+ORDER BY qe.warehouse, base.product, qe.date
 
