@@ -135,20 +135,54 @@ quantity_events AS (
 )
 
 -- Final aggregation with calculated remaining quantity
+daily_quantities AS (
+    SELECT
+        p.product_id,
+        p.Product AS product,
+        p.warehouse,
+        qe.event_date AS date,
+        SUM(COALESCE(qe.ordered_quantity, 0)) AS ordered,
+        SUM(COALESCE(qe.incident_quantity, 0)) AS incidents,
+        SUM(COALESCE(qe.returned_quantity, 0)) AS returned,
+        SUM(COALESCE(qe.extra_quantity, 0)) AS extra,
+        SUM(COALESCE(qe.child_sold_quantity, 0)) AS sold,
+        SUM(COALESCE(qe.reserved_quantity, 0)) AS reserved,
+        SUM(COALESCE(qe.released_quantity, 0)) AS released,
+        GREATEST(
+            COALESCE(
+                SUM(qe.ordered_quantity)
+                - SUM(qe.incident_quantity)
+                - SUM(qe.extra_quantity)
+                - SUM(qe.child_sold_quantity)
+                + SUM(qe.returned_quantity)
+                - SUM(qe.reserved_quantity)
+                - SUM(qe.released_quantity),
+                0
+            ),
+            0
+        ) AS daily_net_change
+    FROM {{ ref('stg_daily_demand_base') }} p
+    LEFT JOIN quantity_events qe ON qe.product_id = p.product_id
+    WHERE p.Product IS NOT NULL AND p.warehouse IS NOT NULL AND qe.event_date IS NOT NULL
+    GROUP BY p.product_id, p.Product, p.warehouse, qe.event_date
+)
+
+-- Add cumulative remaining quantity
 SELECT
-    p.Product AS product,
-    p.warehouse,
-    qe.event_date AS date,
-    SUM(COALESCE(qe.ordered_quantity, 0)) AS ordered,
-    SUM(COALESCE(qe.incident_quantity, 0)) AS incidents,
-    SUM(COALESCE(qe.returned_quantity, 0)) AS returned,
-    SUM(COALESCE(qe.extra_quantity, 0)) AS extra,
-    SUM(COALESCE(qe.child_sold_quantity, 0)) AS sold,
-    SUM(COALESCE(qe.reserved_quantity, 0)) AS reserved,
-    SUM(COALESCE(qe.released_quantity, 0)) AS released,
-FROM {{ ref('fct_products') }} p
-LEFT JOIN quantity_events qe ON qe.product_id = p.product_id
-WHERE p.Product IS NOT NULL AND p.warehouse IS NOT NULL AND qe.event_date IS NOT NULL
-GROUP BY p.Product, p.warehouse, qe.event_date
-ORDER BY p.warehouse, p.Product, qe.event_date
+    product_id,
+    product,
+    warehouse,
+    date,
+    ordered,
+    incidents,
+    returned,
+    extra,
+    sold,
+    reserved,
+    released,
+    daily_net_change,
+    SUM(daily_net_change) OVER (PARTITION BY product_id ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_remaining_quantity
+FROM daily_quantities
+where date > '2023-01-01'
+ORDER BY warehouse, product, date
 
