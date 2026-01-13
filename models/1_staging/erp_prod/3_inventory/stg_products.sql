@@ -101,10 +101,8 @@ concat( "https://erp.floranow.com/products/", p.id) as product_link,
 
 
 current_timestamp() as ingestion_timestamp,
- 
 
-
-
+permalink,
 
 from source as p
 --where CONCAT('SKU_', LOWER(TO_HEX(MD5(product_name))))='SKU_c9ca13deb2644bebb2e567c45fc13b9c'
