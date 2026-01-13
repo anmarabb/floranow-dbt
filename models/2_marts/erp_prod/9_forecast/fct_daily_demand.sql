@@ -6,6 +6,7 @@ SELECT
     qe.ordered,
     qe.sold,
     qe.incidents,
+    qe.warehoused,
     qe.cumulative_remaining_quantity,
     base.age,
     base.product_category
