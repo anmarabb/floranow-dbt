@@ -143,6 +143,24 @@ with
     from {{ref("stg_line_items")}} li
     group by 1
 
+ ),
+ product_taxon_age as (
+    select 
+        p.product_id,
+        t.age as taxon_age
+    from {{ ref('stg_products') }} as p
+    inner join {{ source('marketplace_prod_master', 'spree_taxons') }} as t
+        on lower(t.permalink) in (
+            lower(p.permalink),
+            lower(regexp_replace(p.permalink, r'/[^/]+$', '')),
+            lower(regexp_replace(regexp_replace(p.permalink, r'/[^/]+$', ''), r'/[^/]+$', ''))
+        )
+    where p.permalink is not null 
+        and t.age is not null
+    qualify row_number() over (
+        partition by p.product_id 
+        order by length(t.permalink) desc, array_length(split(t.permalink, '/')) desc
+    ) = 1
  )
 
             
@@ -532,6 +550,7 @@ case when   st.stock_status = 'visible'
             end as online_item,
 li.financial_administration,
 product_color,
+pta.taxon_age,
 
 
 
@@ -597,6 +616,8 @@ li.parent_line_item_id,
         left join package_line_items as pli on li.line_item_id = pli.line_item_id
 
         left join line_item_packed py on p.line_item_id = py.line_item_id
+
+        left join product_taxon_age as pta on p.product_id = pta.product_id
 
 
     

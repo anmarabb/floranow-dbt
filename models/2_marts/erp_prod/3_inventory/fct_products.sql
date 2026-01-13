@@ -440,6 +440,8 @@ origin_unit_landed_cost,
 origin_unit_fob_price,
 parent_line_item_id,
 
+taxon_age,
+
 -- li.order_date,
 -- li.received_at,
 
