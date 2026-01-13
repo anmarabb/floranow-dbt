@@ -148,19 +148,7 @@ quantity_events AS (
         SUM(COALESCE(qe.child_sold_quantity, 0)) AS sold,
         SUM(COALESCE(qe.reserved_quantity, 0)) AS reserved,
         SUM(COALESCE(qe.released_quantity, 0)) AS released,
-        GREATEST(
-            COALESCE(
-                SUM(qe.ordered_quantity)
-                - SUM(qe.incident_quantity)
-                - SUM(qe.extra_quantity)
-                - SUM(qe.child_sold_quantity)
-                + SUM(qe.returned_quantity)
-                - SUM(qe.reserved_quantity)
-                - SUM(qe.released_quantity),
-                0
-            ),
-            0
-        ) AS daily_net_change
+    
     FROM {{ ref('fct_products') }} p
     LEFT JOIN quantity_events qe ON qe.product_id = p.product_id
     WHERE p.Product IS NOT NULL AND p.warehouse IS NOT NULL AND qe.event_date IS NOT NULL
@@ -180,8 +168,8 @@ SELECT
     sold,
     reserved,
     released,
-    daily_net_change,
-    SUM(daily_net_change) OVER (PARTITION BY product_id ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_remaining_quantity
+    COALESCE(ordered - incidents - extra - sold + returned - reserved - released,0) as daily_net_change,
+    SUM(COALESCE(ordered - incidents - extra - sold + returned - reserved - released,0)) OVER (PARTITION BY product_id ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_remaining_quantity,
 FROM data
 where date > '2023-01-01'
 ORDER BY warehouse, product, date
