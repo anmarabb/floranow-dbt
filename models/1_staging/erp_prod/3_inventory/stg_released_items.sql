@@ -1,8 +1,8 @@
 WITH source AS (
     SELECT * 
     FROM {{ source(var('erp_source'), 'released_items') }} AS rel
-    WHERE rel.deleted_at IS NULL
-        AND rel.__hevo__marked_deleted IS NOT TRUE
+    -- WHERE rel.deleted_at IS NULL
+    --     AND rel.__hevo__marked_deleted IS NOT TRUE
 )
 SELECT 
     -- Primary Key
@@ -17,7 +17,7 @@ SELECT
     -- Dates
     rel.created_at AS released_at,
     rel.updated_at,
-    rel.deleted_at,
+    -- rel.deleted_at,
     
     -- Facts
     rel.quantity,

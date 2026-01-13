@@ -1,8 +1,8 @@
 WITH source AS (
     SELECT * 
     FROM {{ source(var('erp_source'), 'reserved_items') }} AS ri
-    WHERE ri.deleted_at IS NULL
-        AND ri.__hevo__marked_deleted IS NOT TRUE
+    -- WHERE ri.deleted_at IS NULL
+    --     AND ri.__hevo__marked_deleted IS NOT TRUE
 )
 SELECT 
     -- Primary Key
@@ -17,7 +17,7 @@ SELECT
     -- Dates
     ri.created_at AS reserved_at,
     ri.updated_at,
-    ri.deleted_at,
+    -- ri.deleted_at,
     
     -- Facts
     ri.quantity,
