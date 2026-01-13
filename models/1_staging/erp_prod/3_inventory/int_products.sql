@@ -97,7 +97,8 @@ with
                       pl.locationable_id,
                       sum(pl.quantity) as location_quantity,
                       sum(pl.remaining_quantity) as remaining_quantity,
-                      count(product_location_id) as location_count,
+                      count(pl.product_location_id) as location_count,
+                      min(pl.created_at) as estimated_arrival_date,
 
                       from {{ ref('stg_product_locations')}} AS pl    
                       LEFT JOIN {{ ref('stg_locations')}} AS loc ON pl.location_id = loc.location_id
@@ -246,6 +247,7 @@ with
            pl.location_quantity,
            pl.remaining_quantity as location_remaining_quantity,
            pl.location_count,
+           pl.estimated_arrival_date,
            -- pl.product_location_id,
            -- pl.location_id,
            -- pl.locationable_id,
@@ -277,6 +279,7 @@ with
 
             li.received_quantity,
             li.source_line_item_id,
+            li.warehoused_quantity,
 
             
             --li.inventory_quantity,

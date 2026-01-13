@@ -173,6 +173,7 @@ case
     --dim
 
     --date
+        estimated_arrival_date,
   
     --fct
         location_quantity,
@@ -210,6 +211,7 @@ case
     ordered_quantity,
         last_30d_ordered_quantity,
     received_quantity,
+    warehoused_quantity,
 
     inventory_product_quantity,
     
