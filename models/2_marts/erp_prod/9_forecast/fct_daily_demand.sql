@@ -11,11 +11,7 @@ WITH daily_demand_data AS (
         base.age,
         base.product_category
     FROM {{ ref('fct_daily_quantity_events') }} qe
-    INNER JOIN {{ ref('stg_daily_demand_base') }} base 
-        ON base.product_id = qe.product_id
-    WHERE qe.product IS NOT NULL
-        AND qe.warehouse IS NOT NULL
-        AND qe.date IS NOT NULL
+    INNER JOIN {{ ref('stg_daily_demand_base') }} base ON base.product_id = qe.product_id AND base.warehouse = qe.warehouse
     GROUP BY qe.warehouse, base.product, qe.date, base.age, base.product_category
 )
 
