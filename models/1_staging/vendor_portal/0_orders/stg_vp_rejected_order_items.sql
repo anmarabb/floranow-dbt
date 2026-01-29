@@ -40,7 +40,7 @@ select
     reason,
     
     case when reason = 'cutoff time has passed' then 'AUTO' else 'MANUAL' END AS rejection_type,
-    cast(null as STRING) as confirmation_type,
+    case when reason = 'cutoff time has passed' then 'SYSTEM' else 'VENDOR' END as confirmation_type,
 
     consigneeName as consignee_name,
     consigneeCutOffStage as consignee_cut_off_stage,

@@ -39,10 +39,10 @@ select
     cast(null as STRING) as reason,
     cast(null as STRING) as rejection_type,
 
-    case when ordertype = 'OFFLINE' then 'AUTO'
-         when ordertype = 'ONLINE' and confirmedbycutoff = true then 'AUTO'
-         when ordertype = 'ONLINE' and confirmedbycutoff is null then 'MANUAL'
-         when ordertype = 'ONLINE' and confirmedbycutoff = false then 'MANUAL'
+    case when ordertype = 'OFFLINE' then 'SYSTEM'
+         when ordertype = 'ONLINE' and confirmedbycutoff = true then 'SYSTEM'
+         when ordertype = 'ONLINE' and confirmedbycutoff is null then 'VENDOR'
+         when ordertype = 'ONLINE' and confirmedbycutoff = false then 'VENDOR'
          end as confirmation_type,
 
     consigneeName as consignee_name,
