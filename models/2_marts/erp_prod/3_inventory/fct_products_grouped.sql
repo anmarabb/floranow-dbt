@@ -92,6 +92,50 @@ select product,
 from {{ref('fct_invoice_items')}}
 where record_type = 'Invoice - AUTO' and inv_items_reprot_filter = 'Floranow Sales'
 group by 1,2,3,4,5
+),
+
+-- CTE: Next coming stock date per Product + Warehouse + Supplier (AFTER current_departure_date)
+next_coming_stock as (
+    SELECT 
+        fp.Product,
+        fp.warehouse,
+        fp.Supplier,
+        MAX(ow3.current_departure_date) as order_arrival_date,
+        MIN(CASE 
+            WHEN fp.departure_date > COALESCE(ow3.current_departure_date, CURRENT_DATE())
+            THEN fp.departure_date 
+            ELSE NULL 
+        END) as next_coming_date
+    FROM {{ref('fct_products')}} fp
+    LEFT JOIN {{ref('fct_spree_offering_windows')}} ow3 
+        ON ow3.warehouse = fp.warehouse 
+        AND fp.Origin = ow3.Origin 
+        AND fp.Supplier = ow3.Supplier
+    WHERE fp.coming_quantity > 0
+      AND fp.stock_model in ('Reselling', 'Commission Based', 'Internal - Project X')
+    GROUP BY fp.Product, fp.warehouse, fp.Supplier
+),
+
+-- CTE: Coming stock available before current_departure_date
+coming_by_departure as (
+    SELECT 
+        fp.Product,
+        fp.warehouse,
+        fp.Supplier,
+        MAX(ow2.current_departure_date) as dept_date,
+        SUM(CASE 
+            WHEN fp.departure_date <= ow2.current_departure_date 
+            THEN fp.coming_quantity 
+            ELSE 0 
+        END) as coming_before_departure
+    FROM {{ref('fct_products')}} fp
+    LEFT JOIN {{ref('fct_spree_offering_windows')}} ow2 
+        ON ow2.warehouse = fp.warehouse 
+        AND fp.Origin = ow2.Origin 
+        AND fp.Supplier = ow2.Supplier
+    WHERE fp.coming_quantity > 0
+      AND fp.stock_model in ('Reselling', 'Commission Based', 'Internal - Project X')
+    GROUP BY fp.Product, fp.warehouse, fp.Supplier
 )
 
 select
@@ -218,11 +262,243 @@ max(id.i_last_3d_sold_quantity) as i_last_3d_sold_quantity,
 max(i_last_7d_sold_quantity_promo) as i_last_7d_sold_quantity_promo,
 max(i_last_7d_sold_quantity_normal) as i_last_7d_sold_quantity_normal,
 
+-- ORDER RECOMMENDATION CALCULATIONS --
+
+-- Next coming date
+MAX(ncs.next_coming_date) as next_coming_date,
+
+-- 1. Daily Demand
+SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) as daily_demand,
+
+-- 2. Trend Factor (capped 0.5 to 2.0)
+LEAST(2.0, GREATEST(0.5, 
+    COALESCE(
+        SAFE_DIVIDE(
+            SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7),
+            SAFE_DIVIDE(max(id.i_last_30d_sold_quantity), 30)
+        ),
+        1.0
+    )
+)) as trend_factor,
+
+-- 3. Seasonality (capped 0.5 to 3.0)
+LEAST(3.0, GREATEST(0.5,
+    COALESCE(
+        SAFE_DIVIDE(
+            sum(i_last_year_next_7d_sold_quantity),
+            NULLIF(sum(i_last_year_7d_sold_quantity), 0)
+        ), 
+        1.0
+    )
+)) as seasonality,
+
+-- 4. Adjusted Demand
+SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) 
+* LEAST(2.0, GREATEST(0.5, 
+    COALESCE(
+        SAFE_DIVIDE(
+            SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7),
+            SAFE_DIVIDE(max(id.i_last_30d_sold_quantity), 30)
+        ),
+        1.0
+    )
+))
+* LEAST(3.0, GREATEST(0.5,
+    COALESCE(
+        SAFE_DIVIDE(
+            sum(i_last_year_next_7d_sold_quantity),
+            NULLIF(sum(i_last_year_7d_sold_quantity), 0)
+        ), 
+        1.0
+    )
+)) as adjusted_demand,
+
+-- 5. Coverage Days (from order arrival to next coming stock)
+LEAST(
+    COALESCE(max(shelf_life_days), 7),
+    COALESCE(
+        DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+        COALESCE(max(shelf_life_days), 7)
+    )
+) as coverage_days,
+
+-- 6. Safety Stock
+1.28 
+* (SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) * 0.3)
+* SQRT(
+    LEAST(
+        COALESCE(max(shelf_life_days), 7),
+        COALESCE(
+            DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+            COALESCE(max(shelf_life_days), 7)
+        )
+    )
+) as safety_stock,
+
+-- 7. Total Need
+(
+    SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) 
+    * LEAST(2.0, GREATEST(0.5, 
+        COALESCE(
+            SAFE_DIVIDE(
+                SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7),
+                SAFE_DIVIDE(max(id.i_last_30d_sold_quantity), 30)
+            ),
+            1.0
+        )
+    ))
+    * LEAST(3.0, GREATEST(0.5,
+        COALESCE(
+            SAFE_DIVIDE(
+                sum(i_last_year_next_7d_sold_quantity),
+                NULLIF(sum(i_last_year_7d_sold_quantity), 0)
+            ), 
+            1.0
+        )
+    ))
+    * LEAST(
+        COALESCE(max(shelf_life_days), 7),
+        COALESCE(
+            DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+            COALESCE(max(shelf_life_days), 7)
+        )
+    )
+)
++ (
+    1.28 
+    * (SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) * 0.3)
+    * SQRT(
+        LEAST(
+            COALESCE(max(shelf_life_days), 7),
+            COALESCE(
+                DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+                COALESCE(max(shelf_life_days), 7)
+            )
+        )
+    )
+) as total_need,
+
+-- 8. Available Stock
+sum(in_stock_quantity) + COALESCE(MAX(cbd.coming_before_departure), 0) as available_stock,
+
+-- 9. Order Quantity
+GREATEST(0,
+    (
+        SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) 
+        * LEAST(2.0, GREATEST(0.5, 
+            COALESCE(
+                SAFE_DIVIDE(
+                    SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7),
+                    SAFE_DIVIDE(max(id.i_last_30d_sold_quantity), 30)
+                ),
+                1.0
+            )
+        ))
+        * LEAST(3.0, GREATEST(0.5,
+            COALESCE(
+                SAFE_DIVIDE(
+                    sum(i_last_year_next_7d_sold_quantity),
+                    NULLIF(sum(i_last_year_7d_sold_quantity), 0)
+                ), 
+                1.0
+            )
+        ))
+        * LEAST(
+            COALESCE(max(shelf_life_days), 7),
+            COALESCE(
+                DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+                COALESCE(max(shelf_life_days), 7)
+            )
+        )
+    )
+    + (
+        1.28 
+        * (SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) * 0.3)
+        * SQRT(
+            LEAST(
+                COALESCE(max(shelf_life_days), 7),
+                COALESCE(
+                    DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+                    COALESCE(max(shelf_life_days), 7)
+                )
+            )
+        )
+    )
+    - (sum(in_stock_quantity) + COALESCE(MAX(cbd.coming_before_departure), 0))
+) as order_quantity,
+
+-- 10. Recommendation
+CASE 
+    WHEN max(ow.current_departure_date) IS NULL THEN 'NO WINDOW'
+    WHEN (
+        (
+            SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) 
+            * LEAST(2.0, GREATEST(0.5, 
+                COALESCE(
+                    SAFE_DIVIDE(
+                        SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7),
+                        SAFE_DIVIDE(max(id.i_last_30d_sold_quantity), 30)
+                    ),
+                    1.0
+                )
+            ))
+            * LEAST(3.0, GREATEST(0.5,
+                COALESCE(
+                    SAFE_DIVIDE(
+                        sum(i_last_year_next_7d_sold_quantity),
+                        NULLIF(sum(i_last_year_7d_sold_quantity), 0)
+                    ), 
+                    1.0
+                )
+            ))
+            * LEAST(
+                COALESCE(max(shelf_life_days), 7),
+                COALESCE(
+                    DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+                    COALESCE(max(shelf_life_days), 7)
+                )
+            )
+        )
+        + (
+            1.28 
+            * (SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) * 0.3)
+            * SQRT(
+                LEAST(
+                    COALESCE(max(shelf_life_days), 7),
+                    COALESCE(
+                        DATE_DIFF(MAX(ncs.next_coming_date), max(ow.current_departure_date), DAY),
+                        COALESCE(max(shelf_life_days), 7)
+                    )
+                )
+            )
+        )
+        - (sum(in_stock_quantity) + COALESCE(MAX(cbd.coming_before_departure), 0))
+    ) > 0 THEN 'ORDER'
+    ELSE 'SKIP'
+END as recommendation,
+
+-- 11. Days of Supply
+SAFE_DIVIDE(
+    sum(in_stock_quantity) + COALESCE(MAX(cbd.coming_before_departure), 0),
+    SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7) 
+    * LEAST(2.0, GREATEST(0.5, 
+        COALESCE(
+            SAFE_DIVIDE(
+                SAFE_DIVIDE(max(id.i_last_7d_sold_quantity), 7),
+                SAFE_DIVIDE(max(id.i_last_30d_sold_quantity), 30)
+            ),
+            1.0
+        )
+    ))
+) as days_of_supply
+
 from {{ref('fct_products')}} as p 
 left join monthly_demand md on md.Product = p.Product and md.warehouse = p.warehouse and p.Supplier = md.Supplier
 left join  {{ref('fct_spree_offering_windows')}} as ow on ow.warehouse = p.warehouse  and p.Origin = ow.Origin and  p.Supplier = ow.Supplier
 left join last_year_demand lyd on lyd.Product = p.Product and lyd.warehouse = p.warehouse and lyd.Supplier = p.Supplier
 full outer join invoices_data id on id.Product = p.Product and id.warehouse = p.warehouse and id.Supplier = p.Supplier and p.Origin = id.Origin and p.stock_model = id.stock_model
+left join next_coming_stock ncs on ncs.Product = COALESCE(p.Product, id.product) and ncs.warehouse = COALESCE(p.warehouse, id.warehouse) and ncs.Supplier = COALESCE(p.Supplier, id.supplier)
+left join coming_by_departure cbd on cbd.Product = COALESCE(p.Product, id.product) and cbd.warehouse = COALESCE(p.warehouse, id.warehouse) and cbd.Supplier = COALESCE(p.Supplier, id.supplier)
 
 where COALESCE(p.stock_model, id.stock_model) in ('Reselling', 'Commission Based', 'Internal - Project X') 
 
