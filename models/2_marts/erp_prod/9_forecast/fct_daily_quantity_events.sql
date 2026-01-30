@@ -185,7 +185,7 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        ii.quantity AS invoiced_quantity
+        sum(ii.quantity)AS invoiced_quantity,
     FROM {{ ref('stg_products') }} p
     INNER JOIN {{ ref('stg_line_items') }} cli on cli.parent_line_item_id = p.line_item_id
     INNER JOIN {{ ref('stg_invoice_items') }} ii ON ii.line_item_id = cli.line_item_id
