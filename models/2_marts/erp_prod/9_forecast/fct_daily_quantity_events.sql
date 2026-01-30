@@ -188,7 +188,7 @@ quantity_events AS (
         ii.quantity AS invoiced_quantity
     FROM {{ ref('stg_products') }} p
     INNER JOIN {{ ref('stg_line_items') }} cli on cli.parent_line_item_id = p.line_item_id
-    INNER JOIN {{ ref('stg_invoice_items') }} ii ON ii.line_item_id = li.line_item_id
+    INNER JOIN {{ ref('stg_invoice_items') }} ii ON ii.line_item_id = cli.line_item_id
     WHERE p.line_item_id IS NOT NULL
     GROUP BY p.product_id, p.line_item_id, ii.invoice_item_created_at
 )
