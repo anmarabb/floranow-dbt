@@ -1,13 +1,25 @@
-            
-            
-            WITH future_orders as (
+{{
+  config(
+    materialized='incremental',
+    unique_key='product_id'
+  )
+}}
+
+with base_products as (
+    select * from {{ ref('int_products') }}
+    {% if is_incremental() %}
+    where updated_at > (select coalesce(max(updated_at), '1900-01-01') from {{ this }})
+    {% endif %}
+),
+
+future_orders as (
                 WITH CTE AS (
                 SELECT 
                     departure_date,
                     warehouse,
                     product_id,
                     DENSE_RANK() OVER (PARTITION BY warehouse,product_name ORDER BY departure_date) AS departure_rank,
-                from {{ ref('int_products')}} as p
+                from base_products as p
                 WHERE departure_date >= CURRENT_DATE() --and product_name like '%Rose Athena%' and warehouse ='Riyadh Warehouse'
 
                             )
@@ -56,7 +68,7 @@ express_data as (
            sum(p.remaining_quantity) as express_remaining_quantity,
            sum(li.fulfilled_quantity) as fulfilled_quantity, 
            sum(cli.ordered_quantity) as withdrown_quantity,
-    from {{ref("int_products")}} p
+    from base_products p
     left join {{ref ("base_stocks")}} s on p.stock_id = s.stock_id
     left join {{ref ("int_line_items")}} li on li.line_item_id = p.line_item_id
     left join{{ref ("int_line_items")}} cli on cli.parent_line_item_id = li.line_item_id and cli.customer_type != 'retail'
@@ -392,7 +404,8 @@ ordering_stock_type,
 line_item_state,
 online_item,
 stock_type,
-current_timestamp() as insertion_timestamp, 
+current_timestamp() as insertion_timestamp,
+p.updated_at,
 number,
 financial_administration,
 
@@ -447,7 +460,7 @@ taxon_age,
 -- li.order_date,
 -- li.received_at,
 
-from {{ref('int_products')}} as p 
+from base_products as p 
 left join future_orders as fo on fo.product_id = p.product_id
 left join requested_orders as ro on ro.product_id = p.product_id
 -- left join flags f on p.product_name = f.product_name and p.departure_date = f.departure_date
