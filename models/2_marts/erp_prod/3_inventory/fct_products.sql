@@ -11,8 +11,7 @@
 --     where updated_at > (select coalesce(max(updated_at), '1900-01-01') from {{ this }})
 --     {% endif %}
 -- ),
-
-future_orders as (
+with future_orders as (
                 WITH CTE AS (
                 SELECT 
                     departure_date,
