@@ -1,16 +1,3 @@
--- {{
---   config(
---     materialized='incremental',
---     unique_key='product_id'
---   )
--- }}
-
--- with base_products as (
---     select * from {{ ref('int_products') }}
---     {% if is_incremental() %}
---     where updated_at > (select coalesce(max(updated_at), '1900-01-01') from {{ this }})
---     {% endif %}
--- ),
 with future_orders as (
                 WITH CTE AS (
                 SELECT 
