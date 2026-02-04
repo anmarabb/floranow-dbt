@@ -58,7 +58,7 @@ coming_by_departure as (
 )
 
 select
-    p.product_cleaned,
+    p.product,
     p.warehouse,
 
     max(inv.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
@@ -164,4 +164,4 @@ left join ow_by_pw ow on ow.Product = p.Product and ow.warehouse = p.warehouse
 left join next_coming_stock ncs on ncs.Product = p.Product and ncs.warehouse = p.warehouse
 left join coming_by_departure cbd on cbd.Product = p.Product and cbd.warehouse = p.warehouse
 where p.stock_model in ('Reselling', 'Commission Based', 'Internal - Project X')
-group by p.product_cleaned, p.warehouse
+group by p.product, p.warehouse
