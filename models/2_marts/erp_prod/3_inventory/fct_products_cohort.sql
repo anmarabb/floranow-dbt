@@ -72,7 +72,7 @@ select
     sum(p.coming_quantity) as coming_quantity,
     max(p.taxon_age) as taxon_age,
     min(ow.current_departure_date) as current_departure_date,
-    min(ncs.next_coming_date) as next_coming_date,
+    min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end) as next_coming_date,
     max(cbd.coming_before_departure) as coming_before_departure,
 
     max(inv.i_last_year_7d_sold_quantity) as i_last_year_7d_sold_quantity,
@@ -98,7 +98,7 @@ select
     least(
         coalesce(max(p.taxon_age), 7),
         coalesce(
-            date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day),
+            date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day),
             coalesce(max(p.taxon_age), 7)
         )
     ) as coverage_days,
@@ -106,9 +106,11 @@ select
     1.28
     * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3)
     * sqrt(
-        least(
-            coalesce(max(p.taxon_age), 7),
-            coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))
+        greatest(1,
+            least(
+                coalesce(max(p.taxon_age), 7),
+                coalesce(date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))
+            )
         )
     ) as safety_stock,
 
@@ -116,11 +118,11 @@ select
         safe_divide(max(inv.i_last_7d_sold_quantity), 7)
         * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0)
         * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0)
-        * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))
+        * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))
     )
     + (
         1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3)
-        * sqrt(least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))
+        * sqrt(greatest(1, least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))))
     )
     as total_need,
 
@@ -131,11 +133,11 @@ select
             safe_divide(max(inv.i_last_7d_sold_quantity), 7)
             * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0)
             * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0)
-            * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))
+            * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))
         )
         + (
             1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3)
-            * sqrt(least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))
+            * sqrt(greatest(1, least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))))
         )
         - (sum(p.in_stock_quantity) + coalesce(max(cbd.coming_before_departure), 0))
     ) as order_quantity,
@@ -143,8 +145,8 @@ select
     case
         when min(ow.current_departure_date) is null then 'NO WINDOW'
         when (
-            (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0) * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0) * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))
-            + (1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3) * sqrt(least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))))
+            (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0) * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0) * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))
+            + (1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3) * sqrt(greatest(1, least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(case when ncs.next_coming_date > ow.current_departure_date then ncs.next_coming_date end), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))))
             - (sum(p.in_stock_quantity) + coalesce(max(cbd.coming_before_departure), 0))
         ) > 0 then 'ORDER'
         else 'SKIP'
