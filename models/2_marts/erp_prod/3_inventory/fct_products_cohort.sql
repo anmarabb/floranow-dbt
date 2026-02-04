@@ -11,7 +11,9 @@ invoices_by_pw as (
         safe_divide(sum(case when date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) < 20 and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) >= -1 then quantity else 0 end), 3) as i_last_3_weeks_avg_sold_quantity,
         sum(case when date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) < 2 and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) >= -1 then quantity else 0 end) as i_last_3d_sold_quantity,
         sum(case when (lower(feed_source_name) like '%flash%' or lower(feed_source_name) like '%promo%') and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) < 6 and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) >= -1 then quantity else 0 end) as i_last_7d_sold_quantity_promo,
-        sum(case when ((feed_source_name is null) or (lower(feed_source_name) not like '%flash%' and lower(feed_source_name) not like '%promo%')) and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) < 6 and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) >= -1 then quantity else 0 end) as i_last_7d_sold_quantity_normal
+        sum(case when ((feed_source_name is null) or (lower(feed_source_name) not like '%flash%' and lower(feed_source_name) not like '%promo%')) and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) < 6 and date_diff(date_sub(current_date(), interval 1 day), date(invoice_header_printed_at), day) >= -1 then quantity else 0 end) as i_last_7d_sold_quantity_normal,
+        sum(case when date_diff(date_sub(date_sub(current_date(), interval 1 day), interval 1 year), date(invoice_header_printed_at), day) between 0 and 6 then quantity else 0 end) as i_last_year_7d_sold_quantity,
+        sum(case when date_diff(date(invoice_header_printed_at), date_sub(current_date(), interval 1 year), day) between 0 and 6 then quantity else 0 end) as i_last_year_next_7d_sold_quantity
     from {{ ref('fct_invoice_items') }}
     where record_type = 'Invoice - AUTO'
       and inv_items_reprot_filter = 'Floranow Sales'
@@ -68,13 +70,13 @@ select
 
     sum(p.in_stock_quantity) as in_stock_quantity,
     sum(p.coming_quantity) as coming_quantity,
-    max(p.shelf_life_days) as shelf_life_days,
-    max(ow.current_departure_date) as current_departure_date,
-    max(ncs.next_coming_date) as next_coming_date,
+    max(p.taxon_age) as taxon_age,
+    min(ow.current_departure_date) as current_departure_date,
+    min(ncs.next_coming_date) as next_coming_date,
     max(cbd.coming_before_departure) as coming_before_departure,
 
-    sum(p.i_last_year_7d_sold_quantity) as i_last_year_7d_sold_quantity,
-    sum(p.i_last_year_next_7d_sold_quantity) as i_last_year_next_7d_sold_quantity,
+    max(inv.i_last_year_7d_sold_quantity) as i_last_year_7d_sold_quantity,
+    max(inv.i_last_year_next_7d_sold_quantity) as i_last_year_next_7d_sold_quantity,
 
     safe_divide(max(inv.i_last_7d_sold_quantity), 7) as daily_demand,
 
@@ -84,20 +86,20 @@ select
     ) as trend_factor,
 
     coalesce(
-        safe_divide(sum(p.i_last_year_next_7d_sold_quantity), nullif(sum(p.i_last_year_7d_sold_quantity), 0)),
+        safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)),
         1.0
     ) as seasonality,
 
     safe_divide(max(inv.i_last_7d_sold_quantity), 7)
     * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0)
-    * coalesce(safe_divide(sum(p.i_last_year_next_7d_sold_quantity), nullif(sum(p.i_last_year_7d_sold_quantity), 0)), 1.0)
+    * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0)
     as adjusted_demand,
 
     least(
-        coalesce(max(p.shelf_life_days), 7),
+        coalesce(max(p.taxon_age), 7),
         coalesce(
-            date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day),
-            coalesce(max(p.shelf_life_days), 7)
+            date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day),
+            coalesce(max(p.taxon_age), 7)
         )
     ) as coverage_days,
 
@@ -105,20 +107,20 @@ select
     * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3)
     * sqrt(
         least(
-            coalesce(max(p.shelf_life_days), 7),
-            coalesce(date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day), coalesce(max(p.shelf_life_days), 7))
+            coalesce(max(p.taxon_age), 7),
+            coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))
         )
     ) as safety_stock,
 
     (
         safe_divide(max(inv.i_last_7d_sold_quantity), 7)
         * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0)
-        * coalesce(safe_divide(sum(p.i_last_year_next_7d_sold_quantity), nullif(sum(p.i_last_year_7d_sold_quantity), 0)), 1.0)
-        * least(coalesce(max(p.shelf_life_days), 7), coalesce(date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day), coalesce(max(p.shelf_life_days), 7)))
+        * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0)
+        * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))
     )
     + (
         1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3)
-        * sqrt(least(coalesce(max(p.shelf_life_days), 7), coalesce(date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day), coalesce(max(p.shelf_life_days), 7))))
+        * sqrt(least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))
     )
     as total_need,
 
@@ -128,21 +130,21 @@ select
         (
             safe_divide(max(inv.i_last_7d_sold_quantity), 7)
             * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0)
-            * coalesce(safe_divide(sum(p.i_last_year_next_7d_sold_quantity), nullif(sum(p.i_last_year_7d_sold_quantity), 0)), 1.0)
-            * least(coalesce(max(p.shelf_life_days), 7), coalesce(date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day), coalesce(max(p.shelf_life_days), 7)))
+            * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0)
+            * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))
         )
         + (
             1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3)
-            * sqrt(least(coalesce(max(p.shelf_life_days), 7), coalesce(date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day), coalesce(max(p.shelf_life_days), 7))))
+            * sqrt(least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))
         )
         - (sum(p.in_stock_quantity) + coalesce(max(cbd.coming_before_departure), 0))
     ) as order_quantity,
 
     case
-        when max(ow.current_departure_date) is null then 'NO WINDOW'
+        when min(ow.current_departure_date) is null then 'NO WINDOW'
         when (
-            (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0) * coalesce(safe_divide(sum(p.i_last_year_next_7d_sold_quantity), nullif(sum(p.i_last_year_7d_sold_quantity), 0)), 1.0) * least(coalesce(max(p.shelf_life_days), 7), coalesce(date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day), coalesce(max(p.shelf_life_days), 7))))
-            + (1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3) * sqrt(least(coalesce(max(p.shelf_life_days), 7), coalesce(date_diff(max(ncs.next_coming_date), max(ow.current_departure_date), day), coalesce(max(p.shelf_life_days), 7)))))
+            (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * coalesce(safe_divide(safe_divide(max(inv.i_last_7d_sold_quantity), 7), safe_divide(max(inv.i_last_30d_sold_quantity), 30)), 1.0) * coalesce(safe_divide(max(inv.i_last_year_next_7d_sold_quantity), nullif(max(inv.i_last_year_7d_sold_quantity), 0)), 1.0) * least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7))))
+            + (1.28 * (safe_divide(max(inv.i_last_7d_sold_quantity), 7) * 0.3) * sqrt(least(coalesce(max(p.taxon_age), 7), coalesce(date_diff(min(ncs.next_coming_date), min(ow.current_departure_date), day), coalesce(max(p.taxon_age), 7)))))
             - (sum(p.in_stock_quantity) + coalesce(max(cbd.coming_before_departure), 0))
         ) > 0 then 'ORDER'
         else 'SKIP'
