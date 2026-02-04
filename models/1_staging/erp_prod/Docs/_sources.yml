@@ -33,6 +33,7 @@ sources:
       - name: shipment_documents
 
       - name: products
+      - name: clean_products
       - name: online_products
       - name: online_products_details
       - name: product_locations

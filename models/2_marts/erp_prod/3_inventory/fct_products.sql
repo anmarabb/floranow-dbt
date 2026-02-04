@@ -86,6 +86,7 @@ case
 --Products
     --dim
         p.product_name as Product,
+        coalesce(cp.new_product, p.product_name) as product_cleaned,
         stem_length,
         product_subcategory,
         product_category,
@@ -446,7 +447,8 @@ taxon_age,
 -- li.order_date,
 -- li.received_at,
 
-from {{ ref('int_products') }} as p 
+from {{ ref('int_products') }} as p
+left join {{ source('erp_prod_rds', 'clean_products') }} cp on cp.product_id = p.product_id
 left join future_orders as fo on fo.product_id = p.product_id
 left join requested_orders as ro on ro.product_id = p.product_id
 -- left join flags f on p.product_name = f.product_name and p.departure_date = f.departure_date
