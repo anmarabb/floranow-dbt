@@ -15,7 +15,8 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_products') }} p
     INNER JOIN {{ ref('stg_line_items') }} li ON li.line_item_id = p.line_item_id
     WHERE p.line_item_id IS NOT NULL AND li.created_at IS NOT NULL
@@ -36,7 +37,8 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_products') }} p
     INNER JOIN {{ ref('stg_line_items') }} li ON li.line_item_id = p.line_item_id
     INNER JOIN {{ ref('stg_product_incidents') }} pi ON pi.line_item_id = li.line_item_id
@@ -58,7 +60,8 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_product_incidents') }} pi
     INNER JOIN {{ ref('stg_line_items') }} child ON child.line_item_id = pi.line_item_id
     INNER JOIN {{ ref('stg_products') }} p_parent ON p_parent.line_item_id = child.parent_line_item_id
@@ -80,7 +83,8 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_line_items') }} extra
     INNER JOIN {{ ref('stg_products') }} p_source ON p_source.line_item_id = extra.source_line_item_id
     WHERE extra.order_type = 'EXTRA' AND extra.created_at IS NOT NULL AND extra.source_line_item_id IS NOT NULL
@@ -101,7 +105,8 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_products') }} p_parent
     INNER JOIN {{ ref('stg_line_items') }} li ON li.line_item_id = p_parent.line_item_id
     INNER JOIN {{ ref('stg_line_items') }} cli ON cli.parent_line_item_id = li.line_item_id
@@ -123,7 +128,8 @@ quantity_events AS (
         SUM(COALESCE(ri.net_reserved_quantity, 0)) AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_reserved_items') }} ri
     WHERE ri.status IN ('PENDING', 'PARTIALLY_RELEASED', 'PROCESSING') AND ri.reserved_at IS NOT NULL
     GROUP BY ri.product_id, DATE(ri.reserved_at)
@@ -143,7 +149,8 @@ quantity_events AS (
         0 AS reserved_quantity,
         SUM(COALESCE(rel.quantity, 0)) AS released_quantity,
         0 AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_released_items') }} rel
     WHERE rel.status = 'PENDING' AND rel.released_at IS NOT NULL
     GROUP BY rel.product_id, DATE(rel.released_at)
@@ -163,7 +170,8 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         sum(p.warehoused_quantity) AS warehoused_quantity,
-        0 AS invoiced_quantity
+        0 AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('fct_products') }} p
     WHERE p.warehoused_quantity > 0 
         AND p.estimated_arrival_date IS NOT NULL
@@ -185,12 +193,40 @@ quantity_events AS (
         0 AS reserved_quantity,
         0 AS released_quantity,
         0 AS warehoused_quantity,
-        sum(ii.quantity)AS invoiced_quantity,
+        sum(ii.quantity) AS invoiced_quantity,
+        0 AS damaged_inventory_quantity
     FROM {{ ref('stg_products') }} p
     INNER JOIN {{ ref('stg_line_items') }} cli on cli.parent_line_item_id = p.line_item_id
     INNER JOIN {{ ref('stg_invoice_items') }} ii ON ii.line_item_id = cli.line_item_id
     WHERE p.line_item_id IS NOT NULL
     GROUP BY p.product_id, p.line_item_id, ii.invoice_item_created_at
+
+    UNION ALL
+
+    /* 10. DAMAGED IN INVENTORY (subtracts from available quantity) */
+    SELECT
+        p.product_id,
+        p.line_item_id,
+        DATE(pi.incident_at) AS event_date,
+        0 AS ordered_quantity,
+        0 AS incident_quantity,
+        0 AS returned_quantity,
+        0 AS extra_quantity,
+        0 AS child_sold_quantity,
+        0 AS reserved_quantity,
+        0 AS released_quantity,
+        0 AS warehoused_quantity,
+        0 AS invoiced_quantity,
+        SUM(COALESCE(pi.quantity, 0)) AS damaged_inventory_quantity
+    FROM {{ ref('stg_products') }} p
+    INNER JOIN {{ ref('stg_line_items') }} li ON li.line_item_id = p.line_item_id
+    INNER JOIN {{ ref('stg_product_incidents') }} pi ON pi.line_item_id = li.line_item_id
+    WHERE pi.stage = 'INVENTORY' 
+        AND pi.incident_type = 'DAMAGED' 
+        AND pi.after_sold = false
+        AND p.line_item_id IS NOT NULL 
+        AND pi.incident_at IS NOT NULL
+    GROUP BY p.product_id, p.line_item_id, DATE(pi.incident_at)
 )
 
 -- Final aggregation with calculated remaining quantity
@@ -208,6 +244,7 @@ quantity_events AS (
         SUM(COALESCE(qe.released_quantity, 0)) AS released,
         SUM(COALESCE(qe.warehoused_quantity, 0)) AS warehoused,
         SUM(COALESCE(qe.invoiced_quantity, 0)) AS invoiced,
+        SUM(COALESCE(qe.damaged_inventory_quantity, 0)) AS damaged_inventory
     FROM {{ ref('fct_products') }} p
     LEFT JOIN quantity_events qe ON qe.product_id = p.product_id
     WHERE p.Product IS NOT NULL AND p.warehouse IS NOT NULL AND qe.event_date IS NOT NULL
@@ -229,6 +266,7 @@ SELECT
     reserved,
     released,
     warehoused,
+    damaged_inventory,
     COALESCE(ordered - incidents - extra - sold + returned - reserved - released,0) as daily_net_change,
     SUM(COALESCE(ordered - incidents - extra - sold + returned - reserved - released,0)) OVER (PARTITION BY product_id ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_remaining_quantity,
 FROM data
