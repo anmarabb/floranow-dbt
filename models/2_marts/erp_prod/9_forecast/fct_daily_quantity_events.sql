@@ -254,7 +254,7 @@ quantity_events AS (
 -- Add cumulative remaining quantity
 SELECT
     product_id,
-    product,
+    product as Product,
     warehouse,
     date,
     ordered,
