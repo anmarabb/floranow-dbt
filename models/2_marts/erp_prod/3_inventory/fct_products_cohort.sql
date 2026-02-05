@@ -58,7 +58,7 @@ coming_by_departure as (
 )
 
 select
-    p.product as product_name,
+    p.product as Product,
     p.warehouse,
 
     max(inv.i_last_30d_sold_quantity) as i_last_30d_sold_quantity,
