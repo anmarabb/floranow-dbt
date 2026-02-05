@@ -1,4 +1,4 @@
-select * except(product, warehouse), 
+select * except(product), 
        product as Product,
        case when date >= date_trunc(current_date(), month) then date_trunc(current_date(), month) else null end as period_start
 
