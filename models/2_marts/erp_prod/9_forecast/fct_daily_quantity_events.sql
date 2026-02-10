@@ -269,6 +269,7 @@ SELECT
     damaged_inventory,
     COALESCE(ordered - incidents - extra - sold + returned - reserved - released,0) as daily_net_change,
     SUM(COALESCE(ordered - incidents - extra - sold + returned - reserved - released,0)) OVER (PARTITION BY product_id ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_remaining_quantity,
+    CASE WHEN EXTRACT(YEAR FROM date) = 2025 THEN date ELSE NULL END AS date_2025,
 FROM data
 where date > '2023-01-01'
 ORDER BY warehouse, product, date
