@@ -1,3 +1,9 @@
+-- Set model as table and increase timeout to 20 minutes
+{{ config(
+    materialized='table',
+    timeout=1000
+) }}
+
 WITH color_list AS (  
 SELECT lower('Light Purple') as color 
  UNION ALL SELECT lower('Peach') as color 
