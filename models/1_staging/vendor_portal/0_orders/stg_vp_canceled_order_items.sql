@@ -23,6 +23,7 @@ select
     productname as Product,
     currency,
     departuredate as departure_date,
+    cast(null as DATE) as placement_date,
     SAFE_CAST(NULLIF(REGEXP_REPLACE(TRIM(CAST(price AS STRING)),r'[^0-9.\-]',''),'') AS FLOAT64) AS unit_price,
     SAFE_CAST(NULLIF(REGEXP_REPLACE(TRIM(CAST(unitfobprice AS STRING)),r'[^0-9.\-]',''),'') AS FLOAT64) AS unit_fob_price,
     -- unitfobprice as unit_fob_price,
