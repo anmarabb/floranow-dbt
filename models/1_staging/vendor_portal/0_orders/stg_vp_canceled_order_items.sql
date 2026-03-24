@@ -41,7 +41,7 @@ select
     cast(null as STRING) as reason,
     
     cast(null as STRING) as rejection_type,
-    cast(null as STRING) as confirmation_type,
+    'CANCELLED' as confirmation_type,
 
     consigneeName as consignee_name,
     consigneeCutOffStage as consignee_cut_off_stage,
