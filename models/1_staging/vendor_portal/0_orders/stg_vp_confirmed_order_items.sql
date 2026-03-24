@@ -28,7 +28,7 @@ select
     -- unitfobprice as unit_fob_price,
     CAST(quantity AS INT64) as quantity,
     'CONFIRMED' as order_item_status,
-    ordertype as order_type,
+    case when isstandingorder = true then 'STANDING' else ordertype end as order_type,
     farmname as Farm,
     vendorname as Vendor,
     offernumber as offer_number,
@@ -40,11 +40,11 @@ select
     cast(null as STRING) as reason,
     cast(null as STRING) as rejection_type,
 
-    case when ordertype = 'OFFLINE' then 'SYSTEM'
-         when ordertype = 'ONLINE' and confirmedbycutoff = true then 'SYSTEM'
-         when ordertype = 'ONLINE' and confirmedbycutoff is null then 'VENDOR'
-         when ordertype = 'ONLINE' and confirmedbycutoff = false then 'VENDOR'
+    case when confirmedbycutoff = true then 'SYSTEM'
+         when confirmedbycutoff is null then 'VENDOR'
+         when confirmedbycutoff = false then 'VENDOR'
          end as confirmation_type,
+         
 
     consigneeName as consignee_name,
     consigneeCutOffStage as consignee_cut_off_stage,

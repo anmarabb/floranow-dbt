@@ -29,7 +29,7 @@ select
     -- unitfobprice as unit_fob_price,
     CAST(quantity AS INT64) as quantity,
     'REJECTED' as order_item_status,
-    ordertype as order_type,
+    case when isstandingorder = true then 'STANDING' else ordertype end as order_type,
     farmname as Farm,
     vendorname as Vendor,
     offernumber as offer_number,
