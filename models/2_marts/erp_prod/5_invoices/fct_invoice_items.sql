@@ -85,6 +85,10 @@ select
     when customer_type = 'reseller' then 'Intercompany Sales'
     when debtor_number = '130188' then 'Intercompany Sales'   
     when debtor_number = '13200801' then 'Intercompany Sales'
+    when debtor_number = 'DMMVAN2' then 'Intercompany Sales'
+    when debtor_number = 'DMMVAN6' then 'Intercompany Sales'
+    when debtor_number = 'DMMVAN7' then 'Intercompany Sales'
+    when debtor_number = 'DMMVAN4' then 'Intercompany Sales'
     else 'Floranow Sales'
     end as inv_items_reprot_filter,
 
