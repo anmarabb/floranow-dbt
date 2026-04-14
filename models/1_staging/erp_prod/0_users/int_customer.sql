@@ -2,6 +2,7 @@ WITH line_items AS
 (
     SELECT 
         customer_id,
+        MIN(li.order_date) AS customers_first_order_date,
         MAX(li.order_date) AS customers_last_order_date,
         DATE_DIFF(CURRENT_DATE(), DATE(MAX(li.order_date)), DAY) as days_since_last_order,
         count (DISTINCT case when EXTRACT(YEAR FROM date(li.order_date)) = 2025 then li.order_number else null end) as order_count_2025,
@@ -212,6 +213,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
 
 
 
+    li.customers_first_order_date,
     li.customers_last_order_date,
     li.order_count,
     li.order_count_2025,
