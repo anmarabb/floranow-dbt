@@ -8,6 +8,7 @@ WITH line_items AS
         count (DISTINCT case when EXTRACT(YEAR FROM date(li.order_date)) = 2025 then li.order_number else null end) as order_count_2025,
         count (DISTINCT li.order_number) as order_count,
         sum(li.potential_revenue) as potential_revenue,
+        count(DISTINCT li.proof_of_delivery_id) as number_of_deliveries,
         count( DISTINCT case when  date_diff(date(delivery_date) , current_date() , MONTH) = 0 then order_number else null end) as mtd_orders,
         count ( DISTINCT case when  date_diff(date(delivery_date) , current_date() , MONTH) = 0 then order_with_incidents else null end) as mtd_orders_affected,
         count( DISTINCT case 
@@ -217,6 +218,7 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     li.customers_first_order_date,
     li.customers_last_order_date,
     li.potential_revenue,
+    li.number_of_deliveries,
     li.order_count,
     li.order_count_2025,
     li.mtd_orders,
