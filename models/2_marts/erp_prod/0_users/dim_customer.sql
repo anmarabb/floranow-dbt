@@ -72,6 +72,7 @@ u.deleted_at,
 --invoice
     customers_first_order_date,
     customers_last_order_date,
+    potential_revenue,
     customer_acquisition_date,
     customers_last_purchase_date,
     customer_lifespan,
