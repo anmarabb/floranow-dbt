@@ -121,6 +121,7 @@ concat(customer.debtor_number,i.items_collection_date) as drop_id,
     customer.user_validity_filter,
     --customer.company_name,
     customer.user_aging_type,
+    customer.route_name,
 
     case 
         when mi.company_id = 3 then 'Bloomax Flowers LTD'

@@ -149,6 +149,7 @@ case
 
 debtor_number,
 case when financial_administration = 'Bulk' then 'International Trade' else warehouse end as warehouse,
+route_name,
 
 account_type,
 customer_type,

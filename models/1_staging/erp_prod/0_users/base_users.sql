@@ -251,6 +251,8 @@ u.label as reseller_label,
 
 master_user.master_name,
 
+r.route_name,
+
 current_timestamp() as ingestion_timestamp,
 
   from {{ source(var('erp_source'), 'users') }} as u
@@ -264,3 +266,4 @@ current_timestamp() as ingestion_timestamp,
   left join {{ ref('stg_warehouses') }} as w on w.warehouse_id = u.warehouse_id 
   left join {{ ref('stg_companies') }} as com on com.id = u.company_id 
   left join master_user on u.id = master_user.user_id
+  left join {{ ref('stg_routes') }} as r on r.route_id = u.route_id
