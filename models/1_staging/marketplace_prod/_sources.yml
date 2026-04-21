@@ -1,6 +1,6 @@
 version: 2
 sources: 
-  - name: marketplace_prod_master
+  - name: marketplace_prod_master_rds
     database: floranow
     tables:
       - name: spree_users
