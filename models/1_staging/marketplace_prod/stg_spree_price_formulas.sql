@@ -40,4 +40,4 @@ seller_id,
 
 
 
-from {{ source(var('mkp_source'), 'spree_price_formulas') }}
+from {{ source(var('marketplace_prod_master_rds'), 'spree_price_formulas') }}

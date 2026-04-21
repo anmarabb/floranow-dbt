@@ -1,5 +1,5 @@
 With source as (
- select * from {{ source(var('mkp_source'), 'spree_vendors') }}
+ select * from {{ source(var('marketplace_prod_master_rds'), 'spree_vendors') }}
 )
 select 
 *,
