@@ -150,7 +150,7 @@ with
         p.product_id,
         t.age as taxon_age
     from {{ ref('stg_products') }} as p
-    inner join {{ source('mkp_source', 'spree_taxons') }} as t
+    inner join {{ source('marketplace_prod_master_rds', 'spree_taxons') }} as t
         on lower(t.permalink) in (
             lower(p.permalink),
             lower(regexp_replace(p.permalink, r'/[^/]+$', '')),
