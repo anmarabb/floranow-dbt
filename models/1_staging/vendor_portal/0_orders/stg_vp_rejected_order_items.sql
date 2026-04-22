@@ -31,6 +31,7 @@ select
     'REJECTED' as order_item_status,
     case when isstandingorder = true then 'STANDING' else ordertype end as order_type,
     farmname as Farm,
+    farmgroup as farm_group,
     vendorname as Vendor,
     offernumber as offer_number,
 
