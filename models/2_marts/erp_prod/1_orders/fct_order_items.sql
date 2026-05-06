@@ -223,6 +223,7 @@ stock_order_ids,
     li.ordered_quantity,
     li.fulfilled_quantity,
     li.received_quantity,
+    li.received_events_count,
     li.splitted_quantity,
     
     li.replaced_quantity,

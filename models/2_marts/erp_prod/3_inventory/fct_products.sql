@@ -210,6 +210,8 @@ case
     ordered_quantity,
         last_30d_ordered_quantity,
     received_quantity,
+    received_at,
+    received_events_count,
     warehoused_quantity,
 
     inventory_product_quantity,

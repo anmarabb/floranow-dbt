@@ -278,6 +278,8 @@ with
             ordered_quantity.last_30d_ordered_quantity,
 
             li.received_quantity,
+            li.received_at,
+            li.received_events_count,
             li.source_line_item_id,
             li.warehoused_quantity,
 

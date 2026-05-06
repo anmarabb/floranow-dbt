@@ -63,7 +63,6 @@ With source as
                 li.split_at,
                 li.returned_at,
                 li.updated_at,
-                li.received_at,
 
                 li.color as colour,
 
@@ -128,7 +127,6 @@ With source as
                 --quantity
                     li.quantity,
                     li.fulfilled_quantity, 
-                    li.received_quantity,
                     --li.inventory_quantity, -- Not used
                     li.missing_quantity, --
                     li.damaged_quantity, --
@@ -248,6 +246,14 @@ delivery_time_window.delivery_window_id,
 delivery_time_window.delivery_time,
 --delivery_time_window.start_time,
 --delivery_time_window.end_time,
+
+
+-- received_info: ARRAY<STRUCT<received_at TIMESTAMP, received_quantity INT64>>
+-- A line item can be received in multiple batches; we expose the first receiving
+-- timestamp, the total received quantity across all events, and the event count.
+(SELECT MIN(ri.received_at)       FROM UNNEST(li.received_info) AS ri) AS received_at,
+(SELECT SUM(ri.received_quantity) FROM UNNEST(li.received_info) AS ri) AS received_quantity,
+ARRAY_LENGTH(li.received_info) AS received_events_count,
 
 
         REGEXP_EXTRACT(permalink, r'/([^/]+)') AS product_category , --flowers, greeneries
