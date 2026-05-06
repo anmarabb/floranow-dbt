@@ -212,6 +212,14 @@ case
     received_quantity,
     received_at,
     received_events_count,
+    -- Dissociated receiving events (1st, 2nd, 3rd) + residual for 4+
+    received_at_1,
+    received_quantity_1,
+    received_at_2,
+    received_quantity_2,
+    received_at_3,
+    received_quantity_3,
+    residual_received_info,
     warehoused_quantity,
 
     inventory_product_quantity,

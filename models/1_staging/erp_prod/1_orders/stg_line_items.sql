@@ -248,12 +248,18 @@ delivery_time_window.delivery_time,
 --delivery_time_window.end_time,
 
 
--- received_info: ARRAY<STRUCT<received_at TIMESTAMP, received_quantity INT64>>
--- A line item can be received in multiple batches; we expose the first receiving
--- timestamp, the total received quantity across all events, and the event count.
-(SELECT MIN(ri.received_at)       FROM UNNEST(li.received_info) AS ri) AS received_at,
-(SELECT SUM(ri.received_quantity) FROM UNNEST(li.received_info) AS ri) AS received_quantity,
-ARRAY_LENGTH(li.received_info) AS received_events_count,
+-- received_info is a JSON STRING column shaped like:
+--   [{"received_at":"2025-03-29T00:00:00.000Z","received_quantity":10}, ...]
+-- We parse it once into a sorted ARRAY<STRUCT>; the outer SELECT then dissociates
+-- the array into per-event columns (received_at_1..3 + residual) and re-derives
+-- the aggregates from the same sorted array. SAFE_CAST guards against bad rows.
+ARRAY(
+    SELECT AS STRUCT
+        SAFE_CAST(JSON_VALUE(elem, '$.received_at')       AS TIMESTAMP) AS received_at,
+        SAFE_CAST(JSON_VALUE(elem, '$.received_quantity') AS INT64)     AS received_quantity
+    FROM UNNEST(JSON_EXTRACT_ARRAY(li.received_info)) AS elem
+    ORDER BY SAFE_CAST(JSON_VALUE(elem, '$.received_at') AS TIMESTAMP)
+) AS received_events_sorted,
 
 
         REGEXP_EXTRACT(permalink, r'/([^/]+)') AS product_category , --flowers, greeneries
@@ -291,15 +297,44 @@ ARRAY_LENGTH(li.received_info) AS received_events_count,
 
 
 
-select 
+select
 
-*,
+li.* EXCEPT(received_events_sorted),
 
 
 --JASON extraction
 --li.Properties, 
 --li.categorization,
 --li.tags,
+
+
+-- Aggregates derived from received_info (sorted array of receiving events)
+li.received_events_sorted[SAFE_OFFSET(0)].received_at AS received_at,
+(SELECT SUM(e.received_quantity) FROM UNNEST(li.received_events_sorted) e) AS received_quantity,
+ARRAY_LENGTH(li.received_events_sorted) AS received_events_count,
+
+-- Dissociated receiving events: 1st, 2nd, 3rd batch
+li.received_events_sorted[SAFE_OFFSET(0)].received_at       AS received_at_1,
+li.received_events_sorted[SAFE_OFFSET(0)].received_quantity AS received_quantity_1,
+li.received_events_sorted[SAFE_OFFSET(1)].received_at       AS received_at_2,
+li.received_events_sorted[SAFE_OFFSET(1)].received_quantity AS received_quantity_2,
+li.received_events_sorted[SAFE_OFFSET(2)].received_at       AS received_at_3,
+li.received_events_sorted[SAFE_OFFSET(2)].received_quantity AS received_quantity_3,
+
+-- Residual: every receiving event from the 4th onward, kept as paired
+-- (received_at, received_quantity) entries serialized to JSON so the at/qty
+-- pairing is preserved. Same shape as the source received_info column.
+TO_JSON_STRING(
+    ARRAY(
+        SELECT AS STRUCT
+            e.received_at,
+            e.received_quantity
+        FROM UNNEST(li.received_events_sorted) e WITH OFFSET o
+        WHERE o >= 3
+        ORDER BY e.received_at
+    )
+) AS residual_received_info,
+
 
 current_timestamp() as ingestion_timestamp, 
 

@@ -280,6 +280,14 @@ with
             li.received_quantity,
             li.received_at,
             li.received_events_count,
+            -- Dissociated receiving events (1st, 2nd, 3rd) + residual for 4+
+            li.received_at_1,
+            li.received_quantity_1,
+            li.received_at_2,
+            li.received_quantity_2,
+            li.received_at_3,
+            li.received_quantity_3,
+            li.residual_received_info,
             li.source_line_item_id,
             li.warehoused_quantity,
 
