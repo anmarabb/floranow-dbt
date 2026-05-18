@@ -284,17 +284,17 @@ case when i.customer_acquisition_date is not null then i.customer_acquisition_da
     ct.warehouse as master_warehouse_name,
 
     co.payment_term as collection_payment_term,
-    co.total_receivable,
-    co.up_to_120_days,
-    co.collection_target,
-    -- Aging buckets arrive as STRING (Google-Sheet style, e.g. '1,234.56'); strip
-    -- commas, trim, treat empty as NULL, and SAFE_CAST to NUMERIC for downstream math.
-    safe_cast(nullif(trim(replace(co.total_receivable,  ',', '')), '') as numeric) as total_receivable,
-    safe_cast(nullif(trim(replace(co.up_to_30_days,     ',', '')), '') as numeric) as up_to_30_days,
-    safe_cast(nullif(trim(replace(co.`31_to_60_days`,   ',', '')), '') as numeric) as from_31_to_60_days,
-    safe_cast(nullif(trim(replace(co.`61_to_90_days`,   ',', '')), '') as numeric) as from_61_to_90_days,
-    safe_cast(nullif(trim(replace(co.`91_to_120_days`,  ',', '')), '') as numeric) as from_91_to_120_days,
-    safe_cast(nullif(trim(replace(co.collection_target, ',', '')), '') as numeric) as collection_target,
+    -- Aging buckets arrive in mixed types (STRING with Google-Sheet style commas
+    -- like '1,234.56', INT64, or NUMERIC). We cast each to STRING first so REPLACE
+    -- works uniformly, strip commas, trim, treat empty as NULL, then SAFE_CAST to
+    -- NUMERIC for downstream math.
+    safe_cast(nullif(trim(replace(cast(co.total_receivable   as string), ',', '')), '') as numeric) as total_receivable,
+    safe_cast(nullif(trim(replace(cast(co.up_to_30_days      as string), ',', '')), '') as numeric) as up_to_30_days,
+    safe_cast(nullif(trim(replace(cast(co.`31_to_60_days`    as string), ',', '')), '') as numeric) as from_31_to_60_days,
+    safe_cast(nullif(trim(replace(cast(co.`61_to_90_days`    as string), ',', '')), '') as numeric) as from_61_to_90_days,
+    safe_cast(nullif(trim(replace(cast(co.`91_to_120_days`   as string), ',', '')), '') as numeric) as from_91_to_120_days,
+    safe_cast(nullif(trim(replace(cast(co.up_to_120_days     as string), ',', '')), '') as numeric) as up_to_120_days,
+    safe_cast(nullif(trim(replace(cast(co.collection_target  as string), ',', '')), '') as numeric) as collection_target,
 
     CASE WHEN zoc.id IS NOT NULL THEN 1 ELSE 0 END AS is_zero_order
 
