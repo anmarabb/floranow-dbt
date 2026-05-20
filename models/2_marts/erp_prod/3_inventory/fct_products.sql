@@ -450,6 +450,8 @@ p.reseller_label,
 origin_departure_date,
 origin_unit_landed_cost,
 origin_unit_fob_price,
+origin_received_at,
+origin_received_quantity,
 parent_line_item_id,
 
 taxon_age,

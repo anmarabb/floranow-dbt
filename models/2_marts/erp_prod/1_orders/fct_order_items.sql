@@ -830,6 +830,8 @@ case
     origin_departure_date,
     origin_unit_fob_price,
     origin_unit_landed_cost,
+    origin_received_at,
+    origin_received_quantity,
     li.received_at,
 
 from {{ref('int_line_items')}} as li 
