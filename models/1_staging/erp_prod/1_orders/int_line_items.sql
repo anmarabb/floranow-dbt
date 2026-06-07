@@ -587,7 +587,7 @@ case when li.origin_warehouse_id is null then damaged_quantity_receiving_stage e
 case when li.origin_warehouse_id is null then pi.extra_quantity_receiving_stage end AS extra_quantity_receiving_stage,
 case when ad.creation_stage = 'PACKING' and li.origin_warehouse_id is null then ad.quantity END AS packing_additional_quantity,
 case when ad.creation_stage = 'INVENTORY' then ad.quantity END AS inventory_additional_quantity,
-case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then ordered_quantity END as extra_packing_quantity,
+case when li.order_type = 'EXTRA' and li.creation_stage = 'PACKING' then li.quantity END as extra_packing_quantity,
 
 case when li.shipment_id is not null and li.warehoused_quantity > 0 then li.warehoused_quantity else 0 end as shipment_quantity,
 
