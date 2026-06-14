@@ -204,6 +204,7 @@ SELECT
 
         when li.days_since_last_order  > 30 then 'Churned'
         else 'Prospect'
+        
     end as client_engagement_status,
 
 
