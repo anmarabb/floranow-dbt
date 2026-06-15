@@ -203,7 +203,7 @@ SELECT
         when i.days_since_last_drop > 7 and i.days_since_last_drop  <= 30 then 'Inactive'
 
         when li.days_since_last_order  > 30 then 'Churned'
-        else 'Prospect'
+        else 'Never Ordered'
     end as client_engagement_status,
 
 
