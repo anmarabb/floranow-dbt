@@ -50,7 +50,7 @@ productIncidents as
 
         from {{ ref('stg_product_incidents') }} as pi  
         left join {{ref('stg_line_items')}} as li on pi.line_item_id = li.line_item_id
-        where li.customer_id not in (1289,1470,2816,11123)
+        -- where li.customer_id not in (1289,1470,2816,11123)
         group by pi.line_item_id
 
       ),
