@@ -59,7 +59,7 @@ when p.product_name like '%Dracaena Massangeana Leaves%' THEN 'Greeneries'
 when p.product_name like '%Strelitzia Leaves%' THEN 'Greeneries' 
 
 when p.product_name like '%Cycas%' THEN 'Cycas' 
-when p.sub_group = 'Gerbera Mini' then 'Gerbera'
+when p.sub_group = 'Gerbera Mini' then 'Gerbera Mini'
 
 when p.product_name like '%Carnation Apple Jack%' THEN 'Carnation Premium'
 when p.product_name like '%Carnation Britney%' THEN 'Carnation Premium'
