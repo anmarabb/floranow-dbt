@@ -19,3 +19,6 @@ sources:
       - name: sh_line_item_quantity_adjustments
       - name: sh_movement_requests
       - name: sh_movement_request_items
+      - name: vp_rfqs
+      - name: vp_farm_rfqs
+      - name: vp_order_request
