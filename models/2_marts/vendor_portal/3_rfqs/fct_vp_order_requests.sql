@@ -1,2 +1,2 @@
 select *
-from {{ ref('stg_vp_order_request') }}
+from {{ ref('stg_vp_order_requests') }}

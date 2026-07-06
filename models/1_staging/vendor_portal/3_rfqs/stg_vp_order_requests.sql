@@ -39,4 +39,4 @@ select
     specificoffer as specific_offer,
     resolvedoffer as resolved_offer,
 
-from {{ source(var('erp_source'), 'vp_order_request') }}
+from {{ source(var('erp_source'), 'vp_order_requests') }}
