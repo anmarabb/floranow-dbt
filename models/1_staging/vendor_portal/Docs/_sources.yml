@@ -21,4 +21,4 @@ sources:
       - name: sh_movement_request_items
       - name: vp_rfqs
       - name: vp_farm_rfqs
-      - name: vp_order_request
+      - name: vp_order_requests
