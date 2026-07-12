@@ -15,6 +15,7 @@ case
     when debtor_number = 'DMMVAN6' then 'Intercompany Sales'
     when debtor_number = 'DMMVAN7' then 'Intercompany Sales'
     when debtor_number = 'DMMVAN4' then 'Intercompany Sales'
+    when debtor_number = 'DMMVAN5' then 'Intercompany Sales'
     else 'Floranow Sales'
     end as reprot_filter,
     
