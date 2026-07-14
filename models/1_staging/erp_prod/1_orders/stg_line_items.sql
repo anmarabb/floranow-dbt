@@ -172,6 +172,7 @@ With source as
 
 
         case 
+            when li.order_type = 'IMPORT_INVENTORY' then 'Import Inventory'
             when  li.ordering_stock_type is null then 'Direct Supplier'
             when  li.ordering_stock_type is not null then 'Express Inventory'
             else 'To Be Scoped'

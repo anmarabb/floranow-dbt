@@ -72,7 +72,7 @@ select
     case 
         when Stock = 'Inventory Stock' 
         and live_stock = 'Live Stock' 
-        and stock_label in ('Reselling', 'SCaaS', 'FaaS - TBF', 'Hotels', 'Weddings & Events', 'Supermarket') 
+        and stock_label in ('Reselling', 'SCaaS', 'FaaS', 'Hotels', 'Weddings & Events', 'Supermarket') 
         and flag_1 in ('scaned_flag', 'scaned_good') 
         then 'Current Inventory' 
 
