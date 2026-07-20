@@ -30,6 +30,7 @@ select
     accountable_type,
     Accountable,
     customer,
+    origin_customer,
     Supplier,
     Origin,
 

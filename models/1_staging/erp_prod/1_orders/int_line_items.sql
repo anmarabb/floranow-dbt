@@ -628,6 +628,7 @@ CASE WHEN EXISTS (
     origin_li.unit_landed_cost  as origin_unit_landed_cost,
     origin_li.received_at as origin_received_at,
     origin_li.received_quantity as origin_received_quantity,
+    origin_customer.name as origin_customer,
 
 
 from {{ref('stg_line_items')}} as li
@@ -678,3 +679,4 @@ LEFT JOIN package_line_items pg on li.line_item_id = pg.line_item_id
 left join sold_items si ON si.parent_line_item_id = li.line_item_id
 left join express_parent_flag ef on li.line_item_id = ef.line_item_id
 LEFT JOIN {{ref('stg_line_items')}} origin_li ON li.origin_line_item_id = origin_li.line_item_id
+left join {{ref('base_users')}} as origin_customer on origin_customer.id = origin_li.customer_id

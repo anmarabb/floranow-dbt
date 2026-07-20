@@ -590,6 +590,7 @@ origin_unit_landed_cost,
 origin_unit_fob_price,
 origin_received_at,
 origin_received_quantity,
+origin_customer,
 li.parent_line_item_id,
 
 -- li.order_date,

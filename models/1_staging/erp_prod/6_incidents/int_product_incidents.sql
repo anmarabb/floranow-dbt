@@ -42,6 +42,7 @@ select
 
 
         li.customer,
+        li.origin_customer,
         li.Supplier,
         li.supplier_region as Origin,
         li.ordered_quantity,
@@ -272,6 +273,7 @@ SELECT
 
 
         null as customer,
+        null as origin_customer,
         "ASTRA Farms" as Supplier,
         "Saudi Arabia" as Origin,
         null as ordered_quantity,
