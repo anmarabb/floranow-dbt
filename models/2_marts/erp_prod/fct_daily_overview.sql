@@ -24,6 +24,7 @@ select Product,
        0 as payment_amount,
        0 as collection_target,
        0 as target_budget,
+       0 as delivery_charge_amount,
 
 from {{ref("fct_products")}} p
 WHERE report_filter is not null --and stock_model_details in ('Reselling', 'Internal - Riyadh Project X', 'Internal - Dammam Project X', 'Internal - Jeddah Project X', 'Commission Based - Astra Express')
@@ -56,6 +57,7 @@ select Product,
        0 as payment_amount,
        0 as collection_target,
        0 as target_budget,
+       0 as delivery_charge_amount,
 
 from {{ref("fct_product_incidents")}} pi
 WHERE master_report_filter = 'inventory_dmaged' and after_sold = false and stock_label is not null
@@ -89,6 +91,7 @@ select Product,
        0 as payment_amount,
        0 as collection_target,
        0 as target_budget,
+       delivery_charge_amount,
 
 from {{ref("stg_daily_overview")}} 
 WHERE inv_items_reprot_filter = 'Floranow Sales'
@@ -121,6 +124,7 @@ select null as Product,
        0 as payment_amount,
        0 as collection_target,
        0 as target_budget,
+       0 as delivery_charge_amount,
 
 from {{ref("fct_budget")}}
 
@@ -152,6 +156,7 @@ select null as Product,
        payment_amount,
        0 as collection_target,
        0 as target_budget,
+       0 as delivery_charge_amount,
 
 from {{ref("fct_payments")}} 
 
@@ -183,6 +188,7 @@ select null as Product,
        0 as payment_amount,
        monthly_budget as collection_target,
        0 as target_budget,
+       0 as delivery_charge_amount,
 
 from {{ref("fct_collection")}} 
 
@@ -214,6 +220,7 @@ select null as Product,
        0 as payment_amount,
        0 as collection_target,
        target_budget,
+       0 as delivery_charge_amount,
 
 from {{ref("dim_customer")}} 
 
@@ -245,6 +252,7 @@ select Product,
        0 as payment_amount,
        0 as collection_target,
        0 as target_budget,
+       0 as delivery_charge_amount,
 -- select *
 from {{ref("int_fm_product_incidents")}} 
 where incident_type = 'DAMAGED' 
