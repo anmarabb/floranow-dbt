@@ -20,8 +20,6 @@ select
 
 current_timestamp() as ingestion_timestamp,
 
- 
-
 
 
 
