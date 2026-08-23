@@ -25,8 +25,7 @@ select
     v.mainimage.url as mainimage_url,
     v.color as product_color,
     v.length AS stem_length,
-    coalesce(coo_by_code.country_name, v.countryoforigin) as vendor_region,
-    farm_origin.country_name as farm_origin_country,
+    farm_origin.country_name as vendor_region,
     v.producttypename as product_type_name,
     v.categoryname as product_category,
     CAST(v.moq AS INT64) AS minimum_ordered_quantity,
@@ -42,7 +41,5 @@ select
     CAST(JSON_EXTRACT_SCALAR(v.boxconfigurations, '$[0].packingRate') AS INT64) AS packing_rate,
 
 from {{ source(var('erp_source'), 'vp_farm_catalog_variations') }} as v
-left join prep_countries as coo_by_code
-    on upper(trim(v.countryoforigin)) = coo_by_code.code
 left join prep_countries as farm_origin
     on upper(trim(v.farmsnapshot.origin)) = farm_origin.code
